@@ -1,21 +1,24 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import svgrPlugin from "vite-plugin-svgr";
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+import svgrPlugin from 'vite-plugin-svgr';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  server: {
-    port: 3000,
-    proxy: {
-      "/api": "Enter your backend host with port",
-    },
-  },
-  plugins: [
-    react(),
-    svgrPlugin({
-      svgrOptions: {
-        icon: true,
-      },
-    }),
-  ],
+	server: {
+		port: 3000,
+		proxy: {
+			'/api': {
+				target: 'http://localhost:8000',
+				changeOrigin: true,
+				rewrite: (path) => (path.startsWith('/api') ? path : `/api${path}`),
+			},
+		},
+	},
+	plugins: [
+		react(),
+		svgrPlugin({
+			svgrOptions: {
+				icon: true,
+			},
+		}),
+	],
 });
