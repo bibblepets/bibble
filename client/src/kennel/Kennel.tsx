@@ -6,7 +6,7 @@ const Kennel = () => {
 
 	useEffect(() => {
 		axios
-			.get('/api')
+			.get('/api/users')
 			.then((response) => {
 				setMessage(response.data);
 			})
