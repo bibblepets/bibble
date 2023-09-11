@@ -15,5 +15,5 @@ app.get('/api', (req: Request, res: Response) => {
 app.use('/api/users', userRoutes);
 
 app.listen(port, () => {
-	console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+	console.log(`⚡️[server]: Server is alive at http://localhost:${port}`);
 });
