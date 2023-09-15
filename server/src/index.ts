@@ -1,18 +1,21 @@
-import express, { Express, Request, Response } from 'express';
-import userRoutes from './routes/users';
+import { Express } from 'express';
 
 require('dotenv').config();
 require('./mongodb/db');
 
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const authRouter = require('./routes/auth.route');
+
 const app: Express = express();
-const port = process.env.SERVER_PORT;
+const SERVER_PORT = process.env.SERVER_PORT;
 
-app.get('/api', (req: Request, res: Response) => {
-  res.send('from Server!');
-});
+app.use(express.json());
+app.use(cookieParser());
+app.use('/api/auth', authRouter);
 
-app.use('/api/users', userRoutes);
-
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is alive at http://localhost:${port}`);
+app.listen(SERVER_PORT, () => {
+  console.log(
+    `⚡️[server]: Server is alive at http://localhost:${SERVER_PORT}`
+  );
 });
