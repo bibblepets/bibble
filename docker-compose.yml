@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  client:
+  bibble-client:
     image: client:bibble
     container_name: client
     build:
@@ -14,7 +14,7 @@ services:
     networks:
       - bibble-network
 
-  server:
+  bibble-server:
     image: server:bibble
     container_name: server
     build:
