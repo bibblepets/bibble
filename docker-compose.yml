@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  bibble-client:
+    image: client:bibble
+    container_name: client
+    build:
+      context: ./client
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./client:/usr/src/app # Mount the client source code directory as a volume
+      - /usr/src/app/node_modules # Mount the node_modules ONLY IN CONTAINER
+    networks:
+      - bibble-network
+
+  bibble-server:
+    image: server:bibble
+    container_name: server
+    build:
+      context: ./server
+    ports:
+      - '8000:8000'
+    logging:
+      driver: json-file
+    volumes:
+      - ./server:/usr/src/app # Mount the server source code directory as a volume
+      - /usr/src/app/node_modules # Mount the node_modules ONLY IN CONTAINER
+    networks:
+      - bibble-network
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - bibble-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - '80:80' # Expose Nginx on port 80
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf # Mount the Nginx configuration file
+    networks:
+      - bibble-network
+    depends_on:
+      - client # Wait until Client app container is up
+      - server # Wait until Server app container is up
+
+networks:
+  bibble-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
