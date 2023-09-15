@@ -51,8 +51,8 @@ services:
     networks:
       - bibble-network
     depends_on:
-      - client # Wait until Client app container is up
-      - server # Wait until Server app container is up
+      - bibble-client # Wait until Client app container is up
+      - bibble-server # Wait until Server app container is up
 
 networks:
   bibble-network:
