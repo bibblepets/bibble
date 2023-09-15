@@ -1,2 +1,2 @@
 build:
-	docker build -t bibble-server .
+	docker build -t server:bibble .

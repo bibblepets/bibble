@@ -2,21 +2,21 @@ version: '3'
 
 services:
   client:
-    image: bibble-client
-    container_name: bibble-client
+    image: client:bibble
+    container_name: client
     build:
       context: ./client
     ports:
       - '3000:3000'
     volumes:
-      - ./client:/app # Mount the client source code directory as a volume
+      - ./client:/usr/src/app # Mount the client source code directory as a volume
       - /usr/src/app/node_modules # Mount the node_modules ONLY IN CONTAINER
     networks:
       - bibble-network
 
   server:
-    image: bibble-server
-    container_name: bibble-server
+    image: server:bibble
+    container_name: server
     build:
       context: ./server
     ports:
@@ -24,7 +24,7 @@ services:
     logging:
       driver: json-file
     volumes:
-      - ./server:/app # Mount the server source code directory as a volume
+      - ./server:/usr/src/app # Mount the server source code directory as a volume
       - /usr/src/app/node_modules # Mount the node_modules ONLY IN CONTAINER
     networks:
       - bibble-network
@@ -32,8 +32,8 @@ services:
       - mongo
 
   mongo:
-    image: mongo
-    container_name: bibble-mongo
+    image: mongo:latest
+    container_name: mongo
     ports:
       - '27017:27017'
     volumes:
@@ -43,7 +43,7 @@ services:
 
   nginx:
     image: nginx:latest
-    container_name: bibble-nginx
+    container_name: nginx
     ports:
       - '80:80' # Expose Nginx on port 80
     volumes:

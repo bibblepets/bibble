@@ -1,2 +1,2 @@
 build:
-	docker build -t bibble-client .
+	docker build -t client:bibble .
