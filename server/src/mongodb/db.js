@@ -10,8 +10,8 @@ mongoose
   .then(() => {
     console.log('MongoDB connection successful');
   })
-  .catch((e) => {
-    console.error('Connection error', e.message);
+  .catch((error) => {
+    console.error('Connection error', error.message);
   });
 
 const db = mongoose.connection;

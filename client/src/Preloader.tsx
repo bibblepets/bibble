@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { fetchCurrentUser } from './features/user/authSlice';
+import { checkAuthStatus } from './features/authSlice';
 import { store } from './store';
 
 const Preloader = () => {
   useEffect(() => {
-    store.dispatch(fetchCurrentUser());
+    store.dispatch(checkAuthStatus());
   }, []);
 
   return null;
