@@ -16,7 +16,7 @@ const COOKIE_OPTIONS = {
 const checkAuthStatus = async (req: Request, res: Response) => {
   const token = req.cookies.authToken;
   if (!token) {
-    return res.json({ success: false });
+    return res.json({ isAuthenticated: false, message: 'User not logged in.' });
   }
 
   try {
@@ -29,14 +29,14 @@ const checkAuthStatus = async (req: Request, res: Response) => {
           SECRET_JWT_CODE
         );
         res.cookie('authToken', token, COOKIE_OPTIONS);
-        return { success: true, token, currentUser: user };
+        return { isAuthenticated: true, token, currentUser: user };
       })
       .catch((error: Error) => {
-        return { success: false, message: error.message };
+        return { isAuthenticated: false, message: error.message };
       });
     return res.json(response);
   } catch (error: any) {
-    return res.json({ success: false, message: error.message });
+    return res.json({ isAuthenticated: false, message: error.message });
   }
 };
 
@@ -48,7 +48,10 @@ const authenticateUser = async (req: Request, res: Response) => {
   } else if (type === 'login') {
     return await loginUser(req, res);
   } else {
-    return res.json({ success: false, message: 'Invalid request type.' });
+    return res.json({
+      isAuthenticated: false,
+      message: 'Invalid request type.'
+    });
   }
 };
 
@@ -57,7 +60,7 @@ const registerUser = async (req: Request, res: Response) => {
 
   if (!name || !email || !password) {
     return res.json({
-      success: false,
+      isAuthenticated: false,
       message: 'Please enter name, email and password.'
     });
   }
@@ -73,10 +76,10 @@ const registerUser = async (req: Request, res: Response) => {
         SECRET_JWT_CODE
       );
       res.cookie('authToken', token, COOKIE_OPTIONS);
-      return res.json({ success: true, token, currentUser: user });
+      return res.json({ isAuthenticated: true, token, currentUser: user });
     })
     .catch((error: Error) => {
-      return res.json({ success: false, message: error.message });
+      return res.json({ isAuthenticated: false, message: error.message });
     });
 };
 
@@ -85,7 +88,7 @@ const loginUser = async (req: Request, res: Response) => {
 
   if (!email || !password) {
     return res.json({
-      success: false,
+      isAuthenticated: false,
       message: 'Please enter email and password.'
     });
   }
@@ -93,11 +96,11 @@ const loginUser = async (req: Request, res: Response) => {
   const response = await User.findOne({ email: email })
     .then((user: IUser) => {
       if (!user) {
-        return { success: false, message: 'User not found.' };
+        return { isAuthenticated: false, message: 'User not found.' };
       }
 
       if (!compareSync(password, user.password)) {
-        return { success: false, message: 'Wrong password.' };
+        return { isAuthenticated: false, message: 'Wrong password.' };
       }
 
       const token = jwt.sign(
@@ -106,10 +109,10 @@ const loginUser = async (req: Request, res: Response) => {
       );
       res.cookie('authToken', token, COOKIE_OPTIONS);
 
-      return { success: true, token, currentUser: user };
+      return { isAuthenticated: true, token, currentUser: user };
     })
     .catch((error: Error) => {
-      return { success: false, message: error.message };
+      return { isAuthenticated: false, message: error.message };
     });
 
   return res.json(response);
@@ -117,7 +120,11 @@ const loginUser = async (req: Request, res: Response) => {
 
 const logoutUser = (req: Request, res: Response) => {
   res.clearCookie('authToken', COOKIE_OPTIONS);
-  return res.json({ success: true, message: 'Logged out successfully' });
+
+  return res.json({
+    isAuthenticated: true,
+    message: 'Logged out successfully'
+  });
 };
 
 module.exports = {
