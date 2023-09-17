@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { authenticateUser } from '../features/authSlice';
+import { registerUser } from '../features/authSlice';
 import { store } from '../store';
 
 const Register = () => {
@@ -11,8 +11,8 @@ const Register = () => {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
-      const credentials = { type: 'register', name, email, password };
-      store.dispatch(authenticateUser(credentials));
+      const credentials = { name, email, password };
+      store.dispatch(registerUser(credentials));
     },
     [email, password]
   );

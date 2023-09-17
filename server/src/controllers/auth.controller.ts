@@ -15,44 +15,25 @@ const COOKIE_OPTIONS = {
 
 const checkAuthStatus = async (req: Request, res: Response) => {
   const token = req.cookies.authToken;
+
   if (!token) {
     return res.json({ isAuthenticated: false, message: 'User not logged in.' });
   }
 
-  try {
-    const decoded = jwt.verify(token, SECRET_JWT_CODE);
+  const decoded = jwt.verify(token, SECRET_JWT_CODE);
 
-    const response = await User.findById(decoded.id)
-      .then((user: IUser) => {
-        const token = jwt.sign(
-          { id: user._id, email: user.email },
-          SECRET_JWT_CODE
-        );
-        res.cookie('authToken', token, COOKIE_OPTIONS);
-        return { isAuthenticated: true, token, currentUser: user };
-      })
-      .catch((error: Error) => {
-        return { isAuthenticated: false, message: error.message };
-      });
-    return res.json(response);
-  } catch (error: any) {
-    return res.json({ isAuthenticated: false, message: error.message });
-  }
-};
-
-const authenticateUser = async (req: Request, res: Response) => {
-  const { type } = req.body;
-
-  if (type === 'register') {
-    return await registerUser(req, res);
-  } else if (type === 'login') {
-    return await loginUser(req, res);
-  } else {
-    return res.json({
-      isAuthenticated: false,
-      message: 'Invalid request type.'
+  await User.findById(decoded.id)
+    .then((user: IUser) => {
+      const token = jwt.sign(
+        { id: user._id, email: user.email },
+        SECRET_JWT_CODE
+      );
+      res.cookie('authToken', token, COOKIE_OPTIONS);
+      res.json({ isAuthenticated: true, token, currentUser: user });
+    })
+    .catch((error: Error) => {
+      res.json({ isAuthenticated: false, message: error.message });
     });
-  }
 };
 
 const registerUser = async (req: Request, res: Response) => {
@@ -76,10 +57,10 @@ const registerUser = async (req: Request, res: Response) => {
         SECRET_JWT_CODE
       );
       res.cookie('authToken', token, COOKIE_OPTIONS);
-      return res.json({ isAuthenticated: true, token, currentUser: user });
+      res.json({ isAuthenticated: true, token, currentUser: user });
     })
     .catch((error: Error) => {
-      return res.json({ isAuthenticated: false, message: error.message });
+      res.json({ isAuthenticated: false, message: error.message });
     });
 };
 
@@ -93,14 +74,14 @@ const loginUser = async (req: Request, res: Response) => {
     });
   }
 
-  const response = await User.findOne({ email: email })
+  await User.findOne({ email })
     .then((user: IUser) => {
       if (!user) {
-        return { isAuthenticated: false, message: 'User not found.' };
+        res.json({ isAuthenticated: false, message: 'User not found.' });
       }
 
       if (!compareSync(password, user.password)) {
-        return { isAuthenticated: false, message: 'Wrong password.' };
+        res.json({ isAuthenticated: false, message: 'Wrong password.' });
       }
 
       const token = jwt.sign(
@@ -109,26 +90,25 @@ const loginUser = async (req: Request, res: Response) => {
       );
       res.cookie('authToken', token, COOKIE_OPTIONS);
 
-      return { isAuthenticated: true, token, currentUser: user };
+      res.json({ isAuthenticated: true, token, currentUser: user });
     })
     .catch((error: Error) => {
-      return { isAuthenticated: false, message: error.message };
+      res.json({ isAuthenticated: false, message: error.message });
     });
-
-  return res.json(response);
 };
 
-const logoutUser = (req: Request, res: Response) => {
+const logoutUser = (_req: Request, res: Response) => {
   res.clearCookie('authToken', COOKIE_OPTIONS);
 
-  return res.json({
-    isAuthenticated: true,
+  res.json({
+    isAuthenticated: false,
     message: 'Logged out successfully'
   });
 };
 
 module.exports = {
   checkAuthStatus,
-  authenticateUser,
+  registerUser,
+  loginUser,
   logoutUser
 };

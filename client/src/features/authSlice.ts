@@ -30,18 +30,23 @@ export const checkAuthStatus = createAsyncThunk(
     return response.data;
   }
 );
-export const authenticateUser = createAsyncThunk(
-  '/authSlice/authenticateUser',
-  async (credentials: {
-    type: string;
-    name?: string;
-    email: string;
-    password: string;
-  }) => {
-    const response = await axios.post('/api/auth/authenticate', credentials);
+
+export const registerUser = createAsyncThunk(
+  '/authSlice/registerUser',
+  async (credentials: { name: string; email: string; password: string }) => {
+    const response = await axios.post('api/auth/register', credentials);
     return response.data;
   }
 );
+
+export const loginUser = createAsyncThunk(
+  '/authSlice/loginUser',
+  async (credentials: { email: string; password: string }) => {
+    const response = await axios.post('api/auth/login', credentials);
+    return response.data;
+  }
+);
+
 export const logoutUser = createAsyncThunk(
   '/authSlice/logoutUser',
   async () => {
@@ -71,18 +76,33 @@ export const authSlice = createSlice({
         state.status = 'ERROR';
         state.error = action.error.message;
       })
-      .addCase(authenticateUser.pending, (state) => {
+      .addCase(registerUser.pending, (state) => {
         state.status = 'LOADING';
         state.error = undefined;
       })
-      .addCase(authenticateUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
         state.isAuthenticated = action.payload.isAuthenticated;
         state.currentUser = action.payload.currentUser;
         state.token = action.payload.token;
         state.message = action.payload.message;
       })
-      .addCase(authenticateUser.rejected, (state, action) => {
+      .addCase(registerUser.rejected, (state, action) => {
+        state.status = 'ERROR';
+        state.error = action.error.message;
+      })
+      .addCase(loginUser.pending, (state) => {
+        state.status = 'LOADING';
+        state.error = undefined;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        state.isAuthenticated = action.payload.isAuthenticated;
+        state.currentUser = action.payload.currentUser;
+        state.token = action.payload.token;
+        state.message = action.payload.message;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       })

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { authenticateUser } from '../features/authSlice';
+import { loginUser } from '../features/authSlice';
 import { store } from '../store';
 
 const Login = () => {
@@ -10,8 +10,8 @@ const Login = () => {
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
-      const credentials = { type: 'login', email, password };
-      store.dispatch(authenticateUser(credentials));
+      const credentials = { email, password };
+      store.dispatch(loginUser(credentials));
     },
     [email, password]
   );
