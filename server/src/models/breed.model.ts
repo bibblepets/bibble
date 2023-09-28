@@ -6,11 +6,11 @@ const mongoose = require("mongoose");
 const sizes = ["Small", "Medium", "Large"];
 
 export interface IBreed {
-    _id: Schema.Types.ObjectId;
-    name: string;
-    size: string;
-    species: string;
-    isHypoallergenic: boolean;
+  _id: Schema.Types.ObjectId;
+  name: string;
+  size: string;
+  species: string;
+  isHypoallergenic: boolean;
 }
 
 const breedSchema = new Schema(

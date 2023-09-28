@@ -7,29 +7,29 @@ const listingSaleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscrip
 const mediaTypes = ['image', 'video'];
 
 export interface IListing {
-    _id: Schema.Types.ObjectId;
-    listerId: Schema.Types.ObjectId;
-    price: number;
-    description: string;
-    itemType: string;
-    saleType: string;
-    media: { type: string, url: string }[];
-    createdAt: Date;
-    updatedAt: Date;
+  _id: Schema.Types.ObjectId;
+  listerId: Schema.Types.ObjectId;
+  price: number;
+  description: string;
+  itemType: string;
+  saleType: string;
+  media: { type: string, url: string }[];
+  createdAt: Date;
+  updatedAt: Date;
 }
   
 const ListingSchema = new Schema(
-    {
-        listerId: { type: Schema.Types.ObjectId, immutable: true, ref: 'User', required: true },
-        price: { type: Number, required: true },
-        description: { type: String, required: true },
-        itemType: { type: String, enum: listingItemTypes, required: true },
-        saleType: { type: String, enum: listingSaleTypes, required: true },
-        createdAt: { type: Date, immutable: true, default: () => Date.now() },
-        updatedAt: { type: Date, default: () => Date.now() },
-        media: [{ type: { type: String, enum: mediaTypes }, url: String }]
-    },
-    { collection: 'listings' }
+  {
+    listerId: { type: Schema.Types.ObjectId, immutable: true, ref: 'User', required: true },
+    price: { type: Number, required: true },
+    description: { type: String, required: true },
+    itemType: { type: String, enum: listingItemTypes, required: true },
+    saleType: { type: String, enum: listingSaleTypes, required: true },
+    createdAt: { type: Date, immutable: true, default: () => Date.now() },
+    updatedAt: { type: Date, default: () => Date.now() },
+    media: [{ type: { type: String, enum: mediaTypes }, url: String }]
+  },
+  { collection: 'listings' }
 );
 
 module.exports = mongoose.model('Listing', ListingSchema);
