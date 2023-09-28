@@ -43,7 +43,7 @@ const createItem = async (req: Request) => {
 }
 
 const createPet = async (req: Request) => {
-  const { animalType, gender, birthdate } = req.body;
+  const { animalType, originId, gender, birthdate } = req.body;
   const { name } : { name?: string } = req.body;
 
   return await createAnimal(req)
@@ -53,6 +53,7 @@ const createPet = async (req: Request) => {
       return await Pet.create({
         animalId: createdAnimal._id,
         animalType,
+        originId,
         name,
         gender,
         birthdate,
@@ -77,11 +78,10 @@ const createAnimal = async (req: Request) => {
 }
 
 const createDog = async (req: Request) => {
-  const { breedId, originId, weight, isMicrochipped, isNeutered, isPottyTrained } = req.body;
+  const { breedId, weight, isMicrochipped, isNeutered, isPottyTrained } = req.body;
 
   return await Dog.create({
     breedId,
-    originId,
     weight,
     isMicrochipped,
     isNeutered,
@@ -145,7 +145,7 @@ const getPet = async (req: Request) => {
       req.params.id = pet.animalId.toString();
       req.params.animalType = pet.animalType;
 
-      return { item: { pet: pet, animal: await getAnimal(req) }};
+      return { pet: pet, animal: await getAnimal(req) };
     })
     .catch((error: Error) => {
       let message = 'Error retrieving Pet:\n' + error.message;
@@ -167,7 +167,7 @@ const getDog = async (req: Request) => {
   return await Dog.findById(id)
     .then((dog: IDog) => {
       console.log('Dog retrieved successfully: ' + dog);
-      return { animal: dog };
+      return dog;
     })
     .catch((error: Error) => {
       let message = 'Error retrieving Dog:\n' + error.message;
