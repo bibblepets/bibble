@@ -11,7 +11,6 @@ export interface IDog {
   originId: Schema.Types.ObjectId;
   weight: number;
   haircoat: string;
-  avsLicense: string;
   isMicrochipped: boolean;
   isHdbApproved: boolean;
   isNeutered: boolean;
@@ -25,7 +24,6 @@ const DogSchema = new Schema(
     originId: { type: Schema.Types.ObjectId, immutable: true, ref: 'Country', required: true },
     weight: { type: Number, required: true },
     haircoat: { type: String, enum: hairCoats, required: true },
-    avsLicense: { type: String, required: true },
     isMicrochipped: { type: Boolean, required: true },
     isHdbApproved: { type: Boolean, required: true },
     isNeutered: { type: Boolean, required: true },
