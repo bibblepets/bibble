@@ -18,8 +18,8 @@ const PetSchema = new Schema(
   {
     animalId: { type: Schema.Types.ObjectId, immutable: true, refPath: 'animalType', required: true },
     name: { type: String, required: false },
-    animalType: { type: String, enum: petAnimals, required: true },
-    gender: { type: String, enum: genders, required: false },
+    animalType: { type: String, enum: petAnimals, immutable: true, required: true },
+    gender: { type: String, enum: genders, immutable: true, required: false },
     birthdate: { type: Date, required: true }
   },
   { collection: 'pets' }
