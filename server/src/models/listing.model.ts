@@ -9,6 +9,7 @@ const mediaTypes = ['image', 'video'];
 export interface IListing {
   _id: Schema.Types.ObjectId;
   listerId: Schema.Types.ObjectId;
+  itemId: Schema.Types.ObjectId;
   price: number;
   description: string;
   itemType: string;
@@ -20,7 +21,8 @@ export interface IListing {
   
 const ListingSchema = new Schema(
   {
-    listerId: { type: Schema.Types.ObjectId, immutable: true, ref: 'User', required: true },
+    listerId: { type: Schema.Types.ObjectId, immutable: true, required: true },
+    itemId: { type: Schema.Types.ObjectId, immutable: true, refPath: 'itemType', required: true },
     price: { type: Number, required: true },
     description: { type: String, required: true },
     itemType: { type: String, enum: listingItemTypes, required: true },

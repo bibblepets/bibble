@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 
 export interface IDog {
   _id: Schema.Types.ObjectId;
-  petId: Schema.Types.ObjectId;
   breedId: Schema.Types.ObjectId;
   originId: Schema.Types.ObjectId;
   weight: number;
@@ -15,7 +14,6 @@ export interface IDog {
 
 const DogSchema = new Schema(
   {
-    petId: { type: Schema.Types.ObjectId, immutable: true, ref: 'Pet', required: true },
     breedId: { type: Schema.Types.ObjectId, immutable: true, ref: 'Breed', required: true },
     originId: { type: Schema.Types.ObjectId, immutable: true, ref: 'Country', required: true },
     weight: { type: Number, required: true },

@@ -7,18 +7,18 @@ const genders = ['Male', 'Female'];
 
 export interface IPet {
   _id: Schema.Types.ObjectId;
-  listingId: Schema.Types.ObjectId;
+  animalId: Schema.Types.ObjectId;
   name?: string;
-  animal: string;
+  animalType: string;
   gender: string;
   birthdate: Date;
 }
 
 const PetSchema = new Schema(
   {
-    listingId: { type: Schema.Types.ObjectId, immutable: true, ref: 'Listing', required: true },
+    animalId: { type: Schema.Types.ObjectId, immutable: true, refPath: 'animalType', required: true },
     name: { type: String, required: false },
-    animal: { type: String, enum: petAnimals, required: true },
+    animalType: { type: String, enum: petAnimals, required: true },
     gender: { type: String, enum: genders, required: false },
     birthdate: { type: Date, required: true }
   },
