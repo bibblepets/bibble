@@ -4,7 +4,10 @@ import pfp from '../../../assets/dog8.jpeg';
 const ListingCard = () => {
   return (
     <div className="flex flex-col items-center gap-4">
-      <img className="rounded-3xl" src={placeholder} />
+      <img
+        className="rounded-3xl transition hover:scale-105 cursor-pointer"
+        src={placeholder}
+      />
       <div className="flex flex-col items-center gap-2">
         <a className="text-neutral-800">Golden Retriever</a>
         <a className="text-neutral-500">$300</a>
