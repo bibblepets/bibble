@@ -10,7 +10,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="sticky w-full top-0 z-50">
+    <nav className="sticky w-full top-0 z-40">
       <div className="flex flex-row px-8 justify-between items-center pt-4 pb-6 bg-white rounded-b-3xl">
         <Logo />
         <NavTabGroup tabs={tabs} />

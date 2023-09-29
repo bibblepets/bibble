@@ -2,7 +2,7 @@ import logo from '../../../assets/logo.png';
 
 const Logo = () => {
   return (
-    <a href="/">
+    <a href="/" className="w-64">
       <img className="h-[20px]" src={logo} alt="bibble-logo" />
     </a>
   );
