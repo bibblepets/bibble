@@ -1,9 +1,9 @@
-import { ObjectId, Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 
 const mongoose = require('mongoose');
 
 export interface IUser {
-  _id: ObjectId;
+  _id: Schema.Types.ObjectId;
   name: string;
   email: string;
   password: string;
@@ -14,13 +14,7 @@ export interface IUser {
 const UserSchema = new Schema(
   {
     name: { type: String, required: true },
-    email: {
-      type: String,
-      unique: true,
-      required: true,
-      lowercase: true,
-      trim: true
-    },
+    email: { type: String, unique: true, lowercase: true, trim: true, required: true },
     password: { type: String, required: true },
     createdAt: { type: Date, immutable: true, default: () => Date.now() },
     updatedAt: { type: Date, default: () => Date.now() }
