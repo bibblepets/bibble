@@ -9,9 +9,9 @@ interface PageLayoutProps {
 const KennelLayout: React.FC<PageLayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col items-center">
-      <div className="max-w-[2000px]">
+      <div className="w-full max-w-[2000px]">
         <Navbar />
-        <main className="mt-8">{children}</main>
+        <main className="min-h-screen mt-4">{children}</main>
         <Footer />
       </div>
     </div>

@@ -10,8 +10,8 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="sticky w-full top-0 max-w-[2000px]">
-      <div className="flex flex-row px-8 justify-between items-center pt-4 pb-6 bg-white">
+    <nav className="sticky w-full top-0 z-50">
+      <div className="flex flex-row px-8 justify-between items-center pt-4 pb-6 bg-white rounded-b-3xl">
         <Logo />
         <NavTabGroup tabs={tabs} />
         <UserMenu tabs={tabs} />

@@ -45,7 +45,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
         <div className="flex justify-end w-[75px]">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="border rounded-full shadow:md hover:shadow-xl active:scale-95 transform transition-transform duration-300"
+            className="border rounded-full shadow-md hover:shadow-xl active:scale-95 transition duration-300"
           >
             <Bars3Icon className="h-5 w-5 m-2" aria-hidden="true" />
           </button>
