@@ -2,10 +2,11 @@ import { ChangeEvent, useCallback } from 'react';
 import { BiLogoGoogle, BiLogoLinkedin } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/logo-icon.png';
-import { registerUser } from '../../features/authSlice';
+import { registerUser, selectIsAuthenticated } from '../../features/authSlice';
 import {
   closeRegisterModal,
   openLoginModal,
+  resetRegisterModal,
   selectIsRegisterModalOpen,
   selectRegisterModalEmail,
   selectRegisterModalName,
@@ -18,6 +19,7 @@ import { store } from '../../store';
 import BaseModal from './BaseModal';
 
 const RegisterModal = () => {
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const isOpen = useSelector(selectIsRegisterModalOpen);
   const name = useSelector(selectRegisterModalName);
   const email = useSelector(selectRegisterModalEmail);
@@ -50,7 +52,12 @@ const RegisterModal = () => {
 
   const onSubmit = useCallback(() => {
     store.dispatch(registerUser({ name, email, password }));
-  }, [store, name, email, password]);
+
+    if (isAuthenticated) {
+      store.dispatch(resetRegisterModal());
+      store.dispatch(closeRegisterModal());
+    }
+  }, [store, isAuthenticated, name, email, password]);
 
   const onToggle = useCallback(() => {
     store.dispatch(closeRegisterModal());
