@@ -10,9 +10,7 @@ import {
 import Preloader from './Preloader';
 import ModalProvider from './components/modals/ModalProvider';
 import './index.css';
-import Kennel from './modules/kennel/Kennel';
-import Module2 from './modules/module2/Module2';
-import Module3 from './modules/module3/Module3';
+import Kennel from './modules/Kennel';
 import { store } from './store';
 
 const router = createBrowserRouter([
@@ -23,14 +21,6 @@ const router = createBrowserRouter([
   {
     path: '/explore',
     element: <Kennel />
-  },
-  {
-    path: '/module2',
-    element: <Module2 />
-  },
-  {
-    path: '/module3',
-    element: <Module3 />
   }
 ]);
 

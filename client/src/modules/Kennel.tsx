@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { logoutUser, selectCurrentUser } from '../../features/authSlice';
-import KennelLayout from '../../layouts/KennelLayout';
-import { store } from '../../store';
+import Searchbar from '../components/kennel/Searchbar';
+import ListingGrid from '../components/kennel/listings/ListingGrid';
+import { logoutUser, selectCurrentUser } from '../features/authSlice';
+import KennelLayout from '../layouts/KennelLayout';
+import { store } from '../store';
 
 const Kennel = () => {
   const isAuthenticated = useSelector(selectCurrentUser);
@@ -15,11 +17,8 @@ const Kennel = () => {
   return (
     <>
       <KennelLayout>
-        <main className="flex items-center justify-center h-[100vh]">
-          {isAuthenticated
-            ? `${currentUser?.name} is logged in`
-            : 'Not logged in'}
-        </main>
+        <Searchbar />
+        <ListingGrid />
       </KennelLayout>
     </>
   );

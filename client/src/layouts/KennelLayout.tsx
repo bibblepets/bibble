@@ -1,5 +1,6 @@
 import React from 'react';
-import Navbar from '../components/kennel/Navbar';
+import Footer from '../components/kennel/footer/Footer';
+import Navbar from '../components/kennel/navbar/Navbar';
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -7,17 +8,13 @@ interface PageLayoutProps {
 
 const KennelLayout: React.FC<PageLayoutProps> = ({ children }) => {
   return (
-    <>
-      <Navbar />
-
-      {children}
-
-      <footer className="absolute w-full bottom-0">
-        <div className="flex justify-center border border-lime-500">
-          Footer Component
-        </div>
-      </footer>
-    </>
+    <div className="flex flex-col items-center">
+      <div className="max-w-[2000px]">
+        <Navbar />
+        <main className="mt-8">{children}</main>
+        <Footer />
+      </div>
+    </div>
   );
 };
 
