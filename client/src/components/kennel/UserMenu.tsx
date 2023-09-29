@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import pfp from '../../assets/dog8.jpeg';
 import { logoutUser, selectIsAuthenticated } from '../../features/authSlice';
+import { openLoginModal, openRegisterModal } from '../../features/modalsSlice';
 import { store } from '../../store';
 
 interface UserMenuProps {
@@ -38,7 +39,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
   if (!isAuthenticated) {
     return (
       <>
-        <div className="pl-12">
+        <div className="flex justify-end w-[75px]">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="border rounded-full shadow:md hover:shadow-xl active:scale-95 transform transition-transform duration-300"
@@ -57,20 +58,32 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
               aria-orientation="vertical"
               aria-labelledby="options-menu"
             >
+              {tabs.map((tab, index) => (
+                <a
+                  key={index}
+                  href={tab.path}
+                  className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  role="menuitem"
+                >
+                  {tab.name}
+                </a>
+              ))}
+
+              <hr className="m-4" />
+
               <button
-                onClick={() => alert('TODO: Implement register')}
-                className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                role="menuitem"
-              >
-                Register
-              </button>
-              <hr className="mx-4" />
-              <button
-                onClick={() => alert('TODO: Implement login')}
+                onClick={() => store.dispatch(openLoginModal())}
                 className="block px-4 py-3 w-full text-sm text-left transition leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
                 Login
+              </button>
+              <button
+                onClick={() => store.dispatch(openRegisterModal())}
+                className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Register
               </button>
             </div>
           </div>
