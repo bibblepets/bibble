@@ -52,12 +52,9 @@ const RegisterModal = () => {
 
   const onSubmit = useCallback(() => {
     store.dispatch(registerUser({ name, email, password }));
-
-    if (isAuthenticated) {
-      store.dispatch(resetRegisterModal());
-      store.dispatch(closeRegisterModal());
-    }
-  }, [store, isAuthenticated, name, email, password]);
+    store.dispatch(resetRegisterModal());
+    store.dispatch(closeRegisterModal());
+  }, [store, name, email, password]);
 
   const onToggle = useCallback(() => {
     store.dispatch(closeRegisterModal());

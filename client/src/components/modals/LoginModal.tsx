@@ -42,12 +42,9 @@ const LoginModal = () => {
 
   const onSubmit = useCallback(() => {
     store.dispatch(loginUser({ email, password }));
-
-    if (isAuthenticated) {
-      store.dispatch(resetLoginModal());
-      store.dispatch(closeLoginModal());
-    }
-  }, [store, isAuthenticated, email, password]);
+    store.dispatch(resetLoginModal());
+    store.dispatch(closeLoginModal());
+  }, [store, email, password]);
 
   const onToggle = useCallback(() => {
     store.dispatch(closeLoginModal());
