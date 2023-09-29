@@ -16,7 +16,9 @@ const Kennel = () => {
     <>
       <KennelLayout>
         <main className="flex items-center justify-center h-[100vh]">
-          Hello Kennel
+          {isAuthenticated
+            ? `${currentUser?.name} is logged in`
+            : 'Not logged in'}
         </main>
       </KennelLayout>
     </>

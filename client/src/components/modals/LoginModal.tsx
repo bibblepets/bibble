@@ -1,21 +1,46 @@
-import { useCallback } from 'react';
+import { ChangeEvent, useCallback } from 'react';
 import { BiLogoGoogle, BiLogoLinkedin } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/logo-icon.png';
+import { loginUser } from '../../features/authSlice';
 import {
   closeLoginModal,
   openRegisterModal,
-  selectIsLoginModalOpen
+  selectIsLoginModalOpen,
+  selectLoginModalEmail,
+  selectLoginModalPassword,
+  updateLoginModalEmail,
+  updateLoginModalPassword
 } from '../../features/modalsSlice';
 import { store } from '../../store';
 import BaseModal from './BaseModal';
 
 const LoginModal = () => {
   const isOpen = useSelector(selectIsLoginModalOpen);
+  const email = useSelector(selectLoginModalEmail);
+  const password = useSelector(selectLoginModalPassword);
+
+  const onChangeEmail = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      store.dispatch(updateLoginModalEmail(e.target.value));
+    },
+    [store]
+  );
+
+  const onChangePassword = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      store.dispatch(updateLoginModalPassword(e.target.value));
+    },
+    [store]
+  );
 
   const onClose = useCallback(() => {
     store.dispatch(closeLoginModal());
   }, [store]);
+
+  const onSubmit = useCallback(() => {
+    store.dispatch(loginUser({ email, password }));
+  }, [store, email, password]);
 
   const onToggle = useCallback(() => {
     store.dispatch(closeLoginModal());
@@ -32,12 +57,22 @@ const LoginModal = () => {
         <div className="flex flex-col gap-4 w-full">
           <div className="flex flex-col gap-2">
             <a className="text-sm text-neutral-500">Email</a>
-            <input className="border rounded-lg p-2" type="text" />
+            <input
+              className="border rounded-lg p-2 text-sm"
+              type="text"
+              value={email}
+              onChange={onChangeEmail}
+            />
           </div>
 
           <div className="flex flex-col gap-2">
             <a className="text-sm text-neutral-500">Password</a>
-            <input className="border rounded-lg p-2" type="password" />
+            <input
+              className="border rounded-lg p-2 text-sm"
+              type="password"
+              value={password}
+              onChange={onChangePassword}
+            />
           </div>
         </div>
 
@@ -55,7 +90,10 @@ const LoginModal = () => {
           </a>
         </div>
 
-        <button className="bg-sky-500 text-white w-full font-semibold text-sm rounded-lg p-3 transition hover:bg-opacity-70 hover:shadow-inner">
+        <button
+          onClick={onSubmit}
+          className="bg-sky-500 text-white w-full font-semibold text-sm rounded-lg p-3 transition hover:bg-opacity-70 hover:shadow-inner"
+        >
           Sign in
         </button>
 

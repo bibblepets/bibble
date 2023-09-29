@@ -1,25 +1,56 @@
-import { useCallback } from 'react';
+import { ChangeEvent, useCallback } from 'react';
 import { BiLogoGoogle, BiLogoLinkedin } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/logo-icon.png';
+import { registerUser } from '../../features/authSlice';
 import {
   closeRegisterModal,
   openLoginModal,
-  selectIsRegisterModalOpen
+  selectIsRegisterModalOpen,
+  selectRegisterModalEmail,
+  selectRegisterModalName,
+  selectRegisterModalPassword,
+  updateRegisterModalEmail,
+  updateRegisterModalName,
+  updateRegisterModalPassword
 } from '../../features/modalsSlice';
 import { store } from '../../store';
 import BaseModal from './BaseModal';
 
 const RegisterModal = () => {
   const isOpen = useSelector(selectIsRegisterModalOpen);
+  const name = useSelector(selectRegisterModalName);
+  const email = useSelector(selectRegisterModalEmail);
+  const password = useSelector(selectRegisterModalPassword);
+
+  const onChangeName = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      store.dispatch(updateRegisterModalName(e.target.value));
+    },
+    [store]
+  );
+
+  const onChangeEmail = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      store.dispatch(updateRegisterModalEmail(e.target.value));
+    },
+    [store]
+  );
+
+  const onChangePassword = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      store.dispatch(updateRegisterModalPassword(e.target.value));
+    },
+    [store]
+  );
 
   const onClose = useCallback(() => {
     store.dispatch(closeRegisterModal());
   }, [store]);
 
   const onSubmit = useCallback(() => {
-    alert('Register not implemented yet');
-  }, []);
+    store.dispatch(registerUser({ name, email, password }));
+  }, [store, name, email, password]);
 
   const onToggle = useCallback(() => {
     store.dispatch(closeRegisterModal());
@@ -36,17 +67,32 @@ const RegisterModal = () => {
         <div className="flex flex-col gap-4 w-full">
           <div className="flex flex-col gap-2">
             <a className="text-sm text-neutral-500">Full Name</a>
-            <input className="border rounded-lg p-2" type="text" />
+            <input
+              className="border rounded-lg p-2 text-sm"
+              type="text"
+              value={name}
+              onChange={onChangeName}
+            />
           </div>
 
           <div className="flex flex-col gap-2">
             <a className="text-sm text-neutral-500">Email</a>
-            <input className="border rounded-lg p-2" type="text" />
+            <input
+              className="border rounded-lg p-2 text-sm"
+              type="text"
+              value={email}
+              onChange={onChangeEmail}
+            />
           </div>
 
           <div className="flex flex-col gap-2">
             <a className="text-sm text-neutral-500">Password</a>
-            <input className="border rounded-lg p-2" type="password" />
+            <input
+              className="border rounded-lg p-2 text-sm"
+              type="password"
+              value={password}
+              onChange={onChangePassword}
+            />
           </div>
         </div>
 
