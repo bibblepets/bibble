@@ -2,8 +2,8 @@ import { Schema } from 'mongoose';
 
 const mongoose = require('mongoose');
 
-const listingItemTypes = ['Pet']; // Add more types here: 'Service', 'Product', etc.
-const listingSaleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
+const itemTypes = ['Pet']; // Add more types here: 'Service', 'Product', etc.
+const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
 const mediaTypes = ['image', 'video'];
 
 export interface IListing {
@@ -25,8 +25,8 @@ const ListingSchema = new Schema(
     itemId: { type: Schema.Types.ObjectId, immutable: true, refPath: 'itemType', required: true },
     price: { type: Number, required: true },
     description: { type: String, required: true },
-    itemType: { type: String, enum: listingItemTypes, immutable: true, required: true },
-    saleType: { type: String, enum: listingSaleTypes, immutable: true, required: true },
+    itemType: { type: String, enum: itemTypes, immutable: true, required: true },
+    saleType: { type: String, enum: saleTypes, immutable: true, required: true },
     createdAt: { type: Date, immutable: true, default: () => Date.now() },
     updatedAt: { type: Date, default: () => Date.now() },
     media: [{ type: { type: String, enum: mediaTypes }, url: String }]

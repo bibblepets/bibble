@@ -10,8 +10,12 @@ const Dog = require('../models/dog.model');
 const createListing = async (req: Request, res: Response) => {
   const { listerId, price, description, itemType, saleType, media } = req.body;
 
-  await createItem(req)
+  await createItem(req, res)
     .then(async (response: any) => {
+      if (!response) {
+        return ;
+      }
+      
       const createdItem = response.item;
 
       await Listing.create({
@@ -24,30 +28,36 @@ const createListing = async (req: Request, res: Response) => {
         media
       })
         .then((listing: IListing) => {
-          console.log('Listing created successfully: ' + listing);
+          console.log('Listing created successfully:', listing._id.toString());
           return res.json({ listing: listing, item: createdItem });
         })
-        .catch((error: Error) => {
-          let message = 'Error creating Listing:\n' + error.message;
-          return res.json({ message: message });
+        .catch(async (error: Error) => {
+          req.params.id = createdItem[itemType.toLowerCase()]._id.toString();
+          req.params.itemType = itemType;
+          await deleteItem(req);
+
+          return res.status(500).json({ message: error });
         });
     });
 }
 
-const createItem = async (req: Request) => {
+const createItem = async (req: Request, res: Response) => {
   const { itemType } = req.body;
 
   if (itemType === 'Pet') {
-    return await createPet(req);
+    return await createPet(req, res);
   }
 }
 
-const createPet = async (req: Request) => {
+const createPet = async (req: Request, res: Response) => {
   const { animalType, originId, gender, birthdate } = req.body;
   const { name } : { name?: string } = req.body;
 
-  return await createAnimal(req)
+  return await createAnimal(req, res)
     .then(async (response: any) => {
+      if (!response) {
+        return ;
+      }
       const createdAnimal = response.animal;
 
       return await Pet.create({
@@ -59,25 +69,29 @@ const createPet = async (req: Request) => {
         birthdate,
       })
         .then((pet: IPet) => {
-          console.log('Pet created successfully: ' + pet);
+          console.log('Pet created successfully:', pet._id.toString());
           return { item: { pet: pet, animal: createdAnimal }};
         })
-        .catch((error: Error) => {
-          let message = 'Error creating Pet:\n' + error.message;
-          throw new Error(message);
+        .catch(async (error: Error) => {
+          req.params.id = createdAnimal._id.toString();
+          req.params.animalType = animalType;
+          await deleteAnimal(req);
+
+          let message = 'Error creating Pet: ' + error.message;
+          res.status(500).json({ message: message });
         });
     });
 }
 
-const createAnimal = async (req: Request) => {
+const createAnimal = async (req: Request, res: Response) => {
   const { animalType } = req.body;
 
   if (animalType === 'Dog') {
-    return await createDog(req)
+    return await createDog(req, res)
   }
 }
 
-const createDog = async (req: Request) => {
+const createDog = async (req: Request, res: Response) => {
   const { breedId, weight, isMicrochipped, isNeutered, isPottyTrained } = req.body;
 
   return await Dog.create({
@@ -88,12 +102,12 @@ const createDog = async (req: Request) => {
     isPottyTrained
   })
     .then((dog: IDog) => {
-      console.log('Dog created successfully: ' + dog);
+      console.log('Dog created successfully:', dog._id.toString());
       return { animal: dog };
     })
     .catch((error: Error) => {
-      let message = 'Error creating Dog:\n' + error.message;
-      throw new Error(message);
+      let message = 'Error creating Dog: ' + error.message;
+      res.status(500).json({ message: message });
     });
 }
 
@@ -104,8 +118,8 @@ const getAllListings = async (req: Request, res: Response) => {
       return res.json({ listings: listings });
     })
     .catch((error: Error) => {
-      let message = 'Error retrieving Listings:\n' + error.message;
-      return res.json({ message: message });
+      let message = 'Error retrieving Listings: ' + error.message;
+      return res.status(500).json({ message: message });
     });
 }
 
@@ -114,64 +128,64 @@ const getListing = async (req: Request, res: Response) => {
 
   await Listing.findById(id)
     .then(async (listing: IListing) => {
-      console.log('Listing retrieved successfully: ' + listing);
+      console.log('Listing retrieved successfully:', listing._id.toString());
 
       req.params.id = listing.itemId.toString();
       req.params.itemType = listing.itemType;
 
-      return res.json({ listing: listing, item: await getItem(req) });
+      return res.json({ listing: listing, item: await getItem(req, res) });
     })
     .catch((error: Error) => {
-      let message = 'Error retrieving Listing:\n' + error.message;
-      return res.json({ message: message });
+      let message = 'Error retrieving Listing: ' + error.message;
+      return res.status(500).json({ message: message });
     });
 }
 
-const getItem = async (req: Request) => {
+const getItem = async (req: Request, res: Response) => {
   const { itemType } = req.params;
 
   if (itemType === 'Pet') {
-    return await getPet(req);
+    return await getPet(req, res);
   }
 }
 
-const getPet = async (req: Request) => {
+const getPet = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   return await Pet.findById(id)
     .then(async (pet: IPet) => {
-      console.log('Pet retrieved successfully: ' + pet);
+      console.log('Pet retrieved successfully:', pet._id.toString());
 
       req.params.id = pet.animalId.toString();
       req.params.animalType = pet.animalType;
 
-      return { pet: pet, animal: await getAnimal(req) };
+      return { pet: pet, animal: await getAnimal(req, res) };
     })
     .catch((error: Error) => {
-      let message = 'Error retrieving Pet:\n' + error.message;
-      throw new Error(message);
+      let message = 'Error retrieving Pet: ' + error.message;
+      return res.status(500).json({ message: message });
     });
 }
 
-const getAnimal = async (req: Request) => {
+const getAnimal = async (req: Request, res: Response) => {
   const { animalType } = req.params;
 
   if (animalType === 'Dog') {
-    return await getDog(req);
+    return await getDog(req, res);
   }
 }
 
-const getDog = async (req: Request) => {
+const getDog = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   return await Dog.findById(id)
     .then((dog: IDog) => {
-      console.log('Dog retrieved successfully: ' + dog);
+      console.log('Dog retrieved successfully:', dog._id.toString());
       return dog;
     })
     .catch((error: Error) => {
       let message = 'Error retrieving Dog:\n' + error.message;
-      throw new Error(message);
+      return res.status(500).json({ message: message });
     });
 }
 
@@ -185,7 +199,7 @@ const updateListing = async (req: Request, res: Response) => {
     media
   }, { new: true })
     .then(async (updatedListing: IListing) => {
-      console.log('Listing updated successfully:', updatedListing);
+      console.log('Listing updated successfully:', updatedListing._id.toString());
       
       req.params.id = updatedListing.itemId.toString();
       req.params.itemType = updatedListing.itemType;
@@ -215,7 +229,7 @@ const updatePet = async (req: Request) => {
     birthdate
   }, { new: true })
     .then(async (updatedPet: IPet) => {
-      console.log('Pet updated successfully:', updatedPet);
+      console.log('Pet updated successfully:', updatedPet._id.toString());
 
       req.params.id = updatedPet.animalId.toString();
       req.params.animalType = updatedPet.animalType;
@@ -247,7 +261,7 @@ const updateDog = async (req: Request) => {
     isPottyTrained
   }, { new: true })
     .then((updatedDog: IDog) => {
-      console.log('Dog updated successfully:', updatedDog);
+      console.log('Dog updated successfully:', updatedDog._id.toString());
       return { animal: updatedDog };
     })
     .catch((error: Error) => {
@@ -261,7 +275,7 @@ const deleteListing = async (req: Request, res: Response) => {
 
   await Listing.findByIdAndDelete(id)
     .then(async (deletedListing: IListing) => {
-      console.log('Listing deleted successfully:', deletedListing);
+      console.log('Listing deleted successfully:', deletedListing._id.toString());
 
       req.params.id = deletedListing.itemId.toString();
       req.params.itemType = deletedListing.itemType;
@@ -287,7 +301,7 @@ const deletePet = async (req: Request) => {
 
   return await Pet.findByIdAndDelete(id)
     .then(async (deletedPet: IPet) => {
-      console.log('Pet deleted successfully:', deletedPet);
+      console.log('Pet deleted successfully:', deletedPet._id.toString());
 
       req.params.id = deletedPet.animalId.toString();
       req.params.animalType = deletedPet.animalType;
@@ -313,7 +327,7 @@ const deleteDog = async (req: Request) => {
 
   return await Dog.findByIdAndDelete(id)
     .then((deletedDog: IDog) => {
-      console.log('Dog deleted successfully:', deletedDog);
+      console.log('Dog deleted successfully:', deletedDog._id.toString());
       return { animal: deletedDog };
     })
     .catch((error: Error) => {
