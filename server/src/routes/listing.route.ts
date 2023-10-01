@@ -27,10 +27,14 @@ const router = Router();
  * Required fields according to the type of Animal:
  * Pet Type: Dog
  * @param {string} breedId - The ID of the breed of the dog
+ * @param {string} size - The size of the dog (either "Small", "Medium" or "Large" ONLY)
  * @param {number} weight - The weight of the dog
+ * @param {string} hairCoat - The hair coat of the dog (either "Double", "Silky", "Wire", "Curly", "Hairless", "Long", "Medium" or "Short" ONLY)
+ * @param {boolean} isHypoallergenic - Whether the dog is hypoallergenic
  * @param {boolean} isMicrochipped - Whether the dog is microchipped
  * @param {boolean} isNeutered - Whether the dog is neutered
  * @param {boolean} isPottyTrained - Whether the dog is potty trained
+ * @param {boolean} isHdbApproved - Whether the dog is HDB approved
  * 
  * Pet Type: Cat (yet to be implemented...)
  * 
