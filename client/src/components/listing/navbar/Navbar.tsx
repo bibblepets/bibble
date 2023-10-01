@@ -2,8 +2,8 @@ import Logo from './Logo';
 
 const Navbar = () => {
   return (
-    <nav className="absolute w-full top-0 z-40">
-      <div className="flex flex-row px-8 justify-between items-center p-6 bg-white rounded-b-3xl">
+    <nav className="fixed w-full top-0 z-40">
+      <div className="flex flex-row px-8 justify-between items-center p-6 bg-white">
         <Logo />
         <div className="flex gap-4">
           <button

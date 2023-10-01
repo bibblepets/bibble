@@ -27,11 +27,11 @@ const Footer = () => {
   }, [stages, pathname, navigate]);
 
   if (pathname === '') {
-    return null;
+    return <a className="fixed w-full bottom-0 z-40 bg-white h-[84px]" />;
   }
 
   return (
-    <footer className="absolute w-full bottom-0">
+    <footer className="fixed w-full bottom-0 z-40">
       <hr className="border-gray-200 border-b-4" />
       <div className="flex justify-between bg-white">
         <button onClick={onBack} className="px-8 py-3 m-4 underline">
