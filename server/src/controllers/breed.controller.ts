@@ -12,23 +12,10 @@ const createBreed = async (req: Request, res: Response) => {
 }
 
 const createDogBreed = async (req: Request, res: Response) => {
-  const { name, size, hairCoat, isHypoallergenic, isHdbApproved } = req.body;
-
-  if (
-    typeof hairCoat === 'undefined'
-    || typeof isHypoallergenic === 'undefined' 
-    || typeof isHdbApproved === 'undefined'
-    )
-  {
-    return res.json({ message: 'Please enter hairCoat, isHypoallergenic and isHdbApproved.' });
-  }
+  const { name } = req.body;
 
   await DogBreed.create({
-    name,
-    size,
-    hairCoat,
-    isHypoallergenic,
-    isHdbApproved
+    name
   })
     .then((dogBreed: IDogBreed) => {
       console.log('Dog Breed created successfully: ' + dogBreed._id.toString());

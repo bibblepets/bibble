@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { IUser } from '../models/user/user.model';
 
 const jwt = require('jsonwebtoken');
-const User = require('../models/user.model');
+const User = require('../models/user/user.model');
 
 const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
 
