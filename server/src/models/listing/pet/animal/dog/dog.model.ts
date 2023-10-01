@@ -33,4 +33,6 @@ const DogSchema = new Schema(
   { collection: 'dogs' }
 );
 
-module.exports = mongoose.model('Dog', DogSchema);
+const Dog = mongoose.model('Dog', DogSchema);
+
+module.exports = { Dog, sizes, hairCoats };

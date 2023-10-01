@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const itemTypes = ['Pet']; // Add more types here: 'Service', 'Product', etc.
 const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
-const mediaTypes = ['image', 'video'];
+const mediaTypes = ['image']; // Add more types here: 'video', etc.
 
 export interface IListing {
   _id: Schema.Types.ObjectId;
@@ -34,5 +34,7 @@ const ListingSchema = new Schema(
   { collection: 'listings' }
 );
 
-module.exports = mongoose.model('Listing', ListingSchema);
+const Listing = mongoose.model('Listing', ListingSchema);
+
+module.exports = { Listing, itemTypes, saleTypes, mediaTypes };
   
