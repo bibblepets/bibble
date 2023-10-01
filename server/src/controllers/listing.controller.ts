@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { IListing } from '../models/listing.model';
-import { IPet } from '../models/pet.model';
-import { IDog } from '../models/dog.model';
+import { IListing } from '../models/listing/listing.model';
+import { IPet } from '../models/listing/pet/pet.model';
+import { IDog } from '../models/listing/pet/animal/dog/dog.model';
 
-const Listing = require('../models/listing.model');
-const Pet = require('../models/pet.model');
-const Dog = require('../models/dog.model');
+const Listing = require('../models/listing/listing.model');
+const Pet = require('../models/listing/pet/pet.model');
+const Dog = require('../models/listing/pet/animal/dog/dog.model');
 
 const createListing = async (req: Request, res: Response) => {
   const { listerId, price, description, itemType, saleType, media } = req.body;

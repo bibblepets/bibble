@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { IBreed } from '../models/breed.model';
+import { IDogBreed } from '../models/listing/pet/animal/dog/dogBreed.model';
 
-const Breed = require('../models/breed.model');
+const DogBreed = require('../models/listing/pet/animal/dog/dogBreed.model');
 
 const createBreed = async (req: Request, res: Response) => {
   const { animal } = req.body;
@@ -12,7 +12,7 @@ const createBreed = async (req: Request, res: Response) => {
 }
 
 const createDogBreed = async (req: Request, res: Response) => {
-  const { name, size, animal, hairCoat, isHypoallergenic, isHdbApproved } = req.body;
+  const { name, size, hairCoat, isHypoallergenic, isHdbApproved } = req.body;
 
   if (
     typeof hairCoat === 'undefined'
@@ -23,32 +23,19 @@ const createDogBreed = async (req: Request, res: Response) => {
     return res.json({ message: 'Please enter hairCoat, isHypoallergenic and isHdbApproved.' });
   }
 
-  await Breed.create({
+  await DogBreed.create({
     name,
     size,
-    animal,
     hairCoat,
     isHypoallergenic,
     isHdbApproved
   })
-    .then((breed: IBreed) => {
-      console.log(`${breed.animal} Breed created successfully: ` + breed);
-      return res.json({ breed: breed });
+    .then((dogBreed: IDogBreed) => {
+      console.log('Dog Breed created successfully: ' + dogBreed._id.toString());
+      return res.json({ breed: dogBreed });
     })
     .catch((error: Error) => {
-      let message = 'Error creating Breed:\n' + error.message;
-      return res.json({ message: message });
-    });
-}
-
-const getAllBreeds = async (req: Request, res: Response) => {
-  await Breed.find()
-    .then((breeds: IBreed[]) => {
-      console.log('Breeds retrieved successfully: ' + breeds);
-      return res.json({ breeds: breeds });
-    })
-    .catch((error: Error) => {
-      let message = 'Error retrieving Breeds:\n' + error.message;
+      let message = 'Error creating Breed: ' + error.message;
       return res.json({ message: message });
     });
 }
@@ -56,19 +43,24 @@ const getAllBreeds = async (req: Request, res: Response) => {
 const getBreedsByAnimal = async (req: Request, res: Response) => {
   const { animal } = req.params;
 
-  await Breed.find({ animal: animal })
-    .then((breeds: IBreed[]) => {
-      console.log('Breeds retrieved successfully: ' + breeds);
-      return res.json({ breeds: breeds });
+  if (animal === 'Dog') {
+    return await getDogBreeds(req, res);
+  }
+}
+
+const getDogBreeds = async (req: Request, res: Response) => {
+  await DogBreed.find({})
+    .then((dogBreeds: IDogBreed[]) => {
+      console.log('Dog Breeds retrieved successfully: ' + dogBreeds.length);
+      return res.json({ breeds: dogBreeds });
     })
     .catch((error: Error) => {
-      let message = 'Error retrieving Breeds:\n' + error.message;
+      let message = 'Error retrieving Dog Breeds: ' + error.message;
       return res.json({ message: message });
     });
 }
 
 module.exports = {
   createBreed,
-  getAllBreeds,
   getBreedsByAnimal
 }

@@ -1,6 +1,6 @@
 import { compareSync, hashSync } from 'bcrypt';
 import { Request, Response } from 'express';
-import { IUser } from '../models/user.model';
+import { IUser } from '../models/user/user.model';
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
