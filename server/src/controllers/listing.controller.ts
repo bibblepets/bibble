@@ -92,11 +92,16 @@ const createAnimal = async (req: Request, res: Response) => {
 }
 
 const createDog = async (req: Request, res: Response) => {
-  const { breedId, weight, isMicrochipped, isNeutered, isPottyTrained } = req.body;
+  const { breedIds, weight, isMixedBreed, isMicrochipped, isNeutered, isPottyTrained } = req.body;
+
+  if (isMixedBreed && breedIds.length <= 1) {
+    return res.status(400).json({ message: 'Mixed breed dogs must have at least 2 breeds.' });
+  }
 
   return await Dog.create({
-    breedId,
+    breedIds,
     weight,
+    isMixedBreed,
     isMicrochipped,
     isNeutered,
     isPottyTrained
@@ -114,7 +119,7 @@ const createDog = async (req: Request, res: Response) => {
 const getAllListings = async (req: Request, res: Response) => {
   await Listing.find()
     .then(async (listings: IListing[]) => {
-      console.log('Listings retrieved successfully: ' + listings);
+      console.log('Listings retrieved successfully: [\n' + listings.map((listing: IListing) => listing._id.toString()).join(',\n') + '\n]');
       return res.json({ listings: listings });
     })
     .catch((error: Error) => {
