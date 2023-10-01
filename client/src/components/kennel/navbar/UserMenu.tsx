@@ -45,7 +45,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
         <div className="flex justify-end w-64">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="border rounded-full shadow-md hover-shadow-lg active:scale-95 transition duration-300"
+            className="border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300"
           >
             <Bars3Icon className="h-5 w-5 m-2" aria-hidden="true" />
           </button>
@@ -100,19 +100,19 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
       <div className="flex flex-row items-center gap-4 w-64">
         <a
           href="/listing"
-          className="border rounded-full shadow-md hover-shadow-lg active:scale-95 transition duration-300 text-sm px-4 py-2 text-neutral-500"
+          className="border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm px-4 py-2 text-neutral-500"
         >
           Make a listing
         </a>
         <a
           href="/messages"
-          className="border rounded-full shadow-md hover-shadow-lg active:scale-95 transition duration-300"
+          className="border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300"
         >
           <BellIcon className="h-5 w-5 m-2" aria-hidden="true" />
         </a>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="border rounded-2xl shadow-md hover-shadow-lg active:scale-95 transition duration-300"
+          className="border rounded-2xl shadow-md hover:scale-95 active:scale-95 transition duration-300"
         >
           <img className="h-8 w-8 rounded-full" src={pfp} />
         </button>
