@@ -4,6 +4,8 @@ const Medical = () => {
   return (
     <ListingLayout>
       <div>Medical</div>
+      <div>Weight</div>
+      <div>Is Neutered</div>
     </ListingLayout>
   );
 };

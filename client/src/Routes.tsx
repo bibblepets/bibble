@@ -2,7 +2,6 @@ import { Navigate, createBrowserRouter } from 'react-router-dom';
 import Kennel from './modules/kennel/Kennel';
 import ListingDetails from './modules/kennel/ListingDetails';
 import Biology from './modules/listing/Biology';
-import Geography from './modules/listing/Geography';
 import Legal from './modules/listing/Legal';
 import Listing from './modules/listing/Listing';
 import Media from './modules/listing/Media';
@@ -30,8 +29,8 @@ export const router = createBrowserRouter([
     element: <Biology />
   },
   {
-    path: '/listing/geography',
-    element: <Geography />
+    path: '/listing/biography',
+    element: <Biography />
   },
   {
     path: '/listing/medical',
