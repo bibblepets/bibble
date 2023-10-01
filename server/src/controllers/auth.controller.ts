@@ -90,7 +90,7 @@ const loginUser = async (req: Request, res: Response) => {
       }
 
       if (!compareSync(password, user.password)) {
-        res.json({ message: 'Incorrect password.' });
+        return res.status(401).json({ message: 'Incorrect password.' });
       }
 
       const token = jwt.sign(
