@@ -7,7 +7,6 @@ import Legal from './modules/listing/Legal';
 import Listing from './modules/listing/Listing';
 import Media from './modules/listing/Media';
 import Medical from './modules/listing/Medical';
-import SaleType from './modules/listing/SaleType';
 
 export const router = createBrowserRouter([
   {
@@ -25,10 +24,6 @@ export const router = createBrowserRouter([
   {
     path: '/listing',
     element: <Listing />
-  },
-  {
-    path: '/listing/sale-type',
-    element: <SaleType />
   },
   {
     path: '/listing/biology',
