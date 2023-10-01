@@ -43,7 +43,7 @@ const BirthdateSelect = () => {
             onClick={toggleDate}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-sm font-medium">Date</a>
+            <a className="text-sm font-medium text-gray-500">Date</a>
             {isDateOpen ? (
               <ChevronUpIcon className="w-4 h-4" />
             ) : (
@@ -80,7 +80,7 @@ const BirthdateSelect = () => {
             onClick={toggleMonth}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-sm font-medium">Month</a>
+            <a className="text-sm font-medium text-gray-500">Month</a>
             {isMonthOpen ? (
               <ChevronUpIcon className="w-4 h-4" />
             ) : (
@@ -122,7 +122,7 @@ const BirthdateSelect = () => {
             onClick={toggleYear}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-sm font-medium">Year</a>
+            <a className="text-sm font-medium text-gray-500">Year</a>
             {isYearOpen ? (
               <ChevronUpIcon className="w-4 h-4" />
             ) : (
