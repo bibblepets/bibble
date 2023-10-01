@@ -425,16 +425,12 @@ const validateListing = (req: Request, res: Response) => {
 }
 
 const validatePet = async (req: Request, res: Response) => {
-  const { animalType, originId, gender, birthdate } = req.body;
+  const { animalType, gender, birthdate } = req.body;
 
   if (!animalType) {
     return res.status(400).json({ message: 'Missing animalType' });
   }
 
-  if (!originId) {
-    return res.status(400).json({ message: 'Missing originId' });
-  }
-  
   if (!petTypes.includes(animalType)) {
     return res.status(400).json({ message: 'Invalid animalType: `' + animalType + '`' });
   }
@@ -460,11 +456,6 @@ const validatePet = async (req: Request, res: Response) => {
 
 const validateDog = (req: Request, res: Response) => {
   const { size, weight, hairCoat, isHypoallergenic, isMicrochipped, isNeutered, isPottyTrained, isHdbApproved } = req.body;
-  const { breedIds } : { breedIds: string[] } = req.body;
-
-  if (!breedIds) {
-    return res.status(400).json({ message: 'Missing breedIds' });
-  }
 
   if (!size) {
     return res.status(400).json({ message: 'Missing size' });
