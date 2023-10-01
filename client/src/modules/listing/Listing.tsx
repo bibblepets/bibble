@@ -34,6 +34,99 @@ const dummyListings = [
     species: 'Dog',
     breed: 'Siberian Husky',
     saleType: 'Sale'
+  },
+  {
+    species: 'Dog',
+    breed: 'Golden Retriever',
+    saleType: 'Sale',
+    imgSrc: dogImg
+  },
+  {
+    species: 'Dog',
+    breed: 'Poodle',
+    saleType: 'Adoption'
+  },
+  {
+    species: 'Cat',
+    breed: 'British Shorthair',
+    saleType: 'Sale'
+  },
+  {
+    species: 'Cat',
+    breed: 'Street Cat',
+    saleType: 'Sale'
+  },
+  {
+    species: 'Dog',
+    breed: 'Maltipoo',
+    saleType: 'Adoption'
+  },
+  {
+    species: 'Dog',
+    breed: 'Siberian Husky',
+    saleType: 'Sale'
+  },
+  {
+    species: 'Dog',
+    breed: 'Golden Retriever',
+    saleType: 'Sale',
+    imgSrc: dogImg
+  },
+  {
+    species: 'Dog',
+    breed: 'Poodle',
+    saleType: 'Adoption'
+  },
+  {
+    species: 'Cat',
+    breed: 'British Shorthair',
+    saleType: 'Sale'
+  },
+  {
+    species: 'Cat',
+    breed: 'Street Cat',
+    saleType: 'Sale'
+  },
+  {
+    species: 'Dog',
+    breed: 'Maltipoo',
+    saleType: 'Adoption'
+  },
+  {
+    species: 'Dog',
+    breed: 'Siberian Husky',
+    saleType: 'Sale'
+  },
+  {
+    species: 'Dog',
+    breed: 'Golden Retriever',
+    saleType: 'Sale',
+    imgSrc: dogImg
+  },
+  {
+    species: 'Dog',
+    breed: 'Poodle',
+    saleType: 'Adoption'
+  },
+  {
+    species: 'Cat',
+    breed: 'British Shorthair',
+    saleType: 'Sale'
+  },
+  {
+    species: 'Cat',
+    breed: 'Street Cat',
+    saleType: 'Sale'
+  },
+  {
+    species: 'Dog',
+    breed: 'Maltipoo',
+    saleType: 'Adoption'
+  },
+  {
+    species: 'Dog',
+    breed: 'Siberian Husky',
+    saleType: 'Sale'
   }
 ];
 
@@ -43,15 +136,15 @@ const Listing = () => {
   return (
     <>
       <ListingLayout>
-        <div className="flex justify-center items-center p-20">
-          <div className="flex flex-col gap-8 w-[780px]">
+        <div className="flex flex-col justify-center w-[780px] h-full">
+          <div className="flex flex-col gap-8 w-[780px] overflow-hidden">
             <h1 className="text-3xl font-medium">Welcome back, Titus</h1>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 h-full overflow-hidden">
               <a className="font-medium">Listings</a>
 
               {listings.length > 0 ? (
-                <div className="flex flex-col gap-4 max-h-[256px] overflow-auto">
+                <div className="flex flex-col gap-4 overflow-auto">
                   {listings.map((listing, index) => (
                     <ListingRow
                       key={index}
