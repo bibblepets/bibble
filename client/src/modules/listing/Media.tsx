@@ -1,9 +1,14 @@
+import ListingStage from '../../components/listing/listing/ListingStage';
+import MediaUpload from '../../components/listing/media/MediaUpload';
 import ListingLayout from '../../layouts/ListingLayout';
 
 const Media = () => {
   return (
     <ListingLayout>
-      <div>Media</div>
+      {/* MEDIA */}
+      <ListingStage title="Media" subtitle="Lets see them!">
+        <MediaUpload />
+      </ListingStage>
     </ListingLayout>
   );
 };
