@@ -7,18 +7,18 @@ const genders = ['Male', 'Female'];
 
 export interface IPet {
   _id: Schema.Types.ObjectId;
-  animalId: Schema.Types.ObjectId;
-  originId: Schema.Types.ObjectId;
+  animal: Schema.Types.ObjectId;
+  origin: Schema.Types.ObjectId;
   name?: string;
   animalType: string;
   gender: string;
   birthdate: Date;
 }
 
-const PetSchema = new Schema(
+const petSchema = new Schema(
   {
-    animalId: { type: Schema.Types.ObjectId, immutable: true, refPath: 'animalType', required: true },
-    originId: { type: Schema.Types.ObjectId, immutable: true, ref: 'Country', required: true },
+    animal: { type: Schema.Types.ObjectId, immutable: true, refPath: 'animalType', required: true, autopopulate: true },
+    origin: { type: Schema.Types.ObjectId, immutable: true, ref: 'Country', required: true, autopopulate: true },
     name: { type: String, required: false },
     animalType: { type: String, enum: petTypes, immutable: true, required: true },
     gender: { type: String, enum: genders, required: false },
@@ -27,6 +27,8 @@ const PetSchema = new Schema(
   { collection: 'pets' }
 );
 
-const Pet = mongoose.model('Pet', PetSchema);
+petSchema.plugin(require('mongoose-autopopulate'));
+
+const Pet = mongoose.model('Pet', petSchema);
 
 module.exports = { Pet, petTypes, genders };

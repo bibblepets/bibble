@@ -10,7 +10,7 @@ const router = Router();
  * @access Public
  * 
  * Required fields according to Listing:
- * @param {string} listerId - The ID of the user who created the listing
+ * @param {string} lister - The ID of the user who created the listing
  * @param {number} price - The price of the listing
  * @param {string} description - The description of the listing
  * @param {string} itemType - The type of item being listed (either "Pet", "Service" or "Product" ONLY)
@@ -19,14 +19,15 @@ const router = Router();
  * 
  * Required fields according to the type of Item being listed:
  * Item Type: Pet
- * @param {string} originId - The ID of the origin country of the animal
+ * @param {string} origin - The ID of the origin country of the animal
  * @param {string} animalType - The type of animal (either "Dog", "Cat", "Rabbit", "Guinea Pig", "Hamster", "Gerbil", "Mouse", "Chinchilla" ONLY)
  * @param {string} gender - The gender of the animal (either "Male" or "Female" ONLY)
  * @param {string} birthdate - The birthdate of the animal
  * 
  * Required fields according to the type of Animal:
  * Pet Type: Dog
- * @param {string} breedId - The ID of the breed of the dog
+ * @param {array} breeds - The ID of the breed of the dog
+ * @param {array} vaccines - The ID of the vaccine of the dog
  * @param {string} size - The size of the dog (either "Small", "Medium" or "Large" ONLY)
  * @param {number} weight - The weight of the dog
  * @param {string} hairCoat - The hair coat of the dog (either "Double", "Silky", "Wire", "Curly", "Hairless", "Long", "Medium" or "Short" ONLY)
@@ -57,7 +58,7 @@ router.post("/", ListingController.createListing);
  * @access Public
  * @returns {array} An array of all listings in the format { listing: <Listing>, item: <Item> }
  */
-router.get("/", ListingController.getAllListings);
+// router.get("/", ListingController.getAllListings);
 
 /**
  * @route GET /api/listings/get/:id
@@ -66,7 +67,7 @@ router.get("/", ListingController.getAllListings);
  * @param {string} id - The ID of the listing to retrieve
  * @returns {object} The retrieved listing in the format { listing: <Listing>, item: <Item> }
  */
-router.get("/:id", ListingController.getListing);
+// router.get("/:id", ListingController.getListing);
 
 /**
  * @route PUT /api/listings/update/:id
@@ -104,7 +105,7 @@ router.get("/:id", ListingController.getListing);
  * 
  * @returns {object} The updated listing in the format { listing: <Listing>, item: <Item> }
  */
-router.put("/:id", ListingController.updateListing);
+// router.put("/:id", ListingController.updateListing);
 
 /**
  * @route DELETE /api/listings/delete/:id
