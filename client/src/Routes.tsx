@@ -1,5 +1,6 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import Kennel from './modules/kennel/Kennel';
+import ListingDetails from './modules/kennel/ListingDetails';
 import Biology from './modules/listing/Biology';
 import Geography from './modules/listing/Geography';
 import Legal from './modules/listing/Legal';
@@ -48,5 +49,9 @@ export const router = createBrowserRouter([
   {
     path: '/listing/legal',
     element: <Legal />
+  },
+  {
+    path: '/kennel/details',
+    element: <ListingDetails />
   }
 ]);
