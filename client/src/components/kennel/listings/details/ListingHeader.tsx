@@ -1,3 +1,4 @@
+import { HeartIcon, ShareIcon } from '@heroicons/react/24/outline';
 import placeholder from '../../../../assets/dog1.jpeg';
 
 const ListingHeader = () => {
@@ -10,8 +11,28 @@ const ListingHeader = () => {
           <h1 className="text-3xl font-bold">Listing Title</h1>
           <p className="text-lg">Listing Description</p>
         </div>
-        <div className="flex place-self-end gap-2">
-          'SHARE' 'HEART'
+        <div className="flex place-self-end gap-4">
+          <button className="flex items-center gap-2 text-neutral-700">
+            {true ? (
+              <>
+                <HeartIcon className="w-4 h-4 fill-red-500" />
+                <label className="font-light text-sm">UNFAVORITE</label>
+              </>
+              
+            ) : (
+              <>
+                <HeartIcon className="w-4 h-4 fill-neutral-700" />
+                <label className="font-light text-sm">FAVOURITE</label>
+              </>
+            )}
+          </button>
+
+          <hr className="w-px h-6 bg-neutral-200" />
+
+          <button className="flex items-center gap-2 text-neutral-700">
+            <ShareIcon className="w-4 h-4 text-neutral-700" />
+            <label className="font-light text-sm">SHARE</label>
+          </button>
         </div>
       </div>
 
