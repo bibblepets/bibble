@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
-import { IDogBreed } from '../models/listing/pet/animal/dog/dogBreed.model';
+import { IDogBreed } from '../models/listing/pet/animal/dog/dog-breed.model';
 
-const DogBreed = require('../models/listing/pet/animal/dog/dogBreed.model');
+const DogBreed = require('../models/listing/pet/animal/dog/dog-breed.model');
 
 const createBreed = async (req: Request, res: Response) => {
   const { animal } = req.body;
-  
+
   if (animal === 'Dog') {
     return await createDogBreed(req, res);
   }
-}
+};
 
 const createDogBreed = async (req: Request, res: Response) => {
   const { name } = req.body;
@@ -25,7 +25,7 @@ const createDogBreed = async (req: Request, res: Response) => {
       let message = 'Error creating Breed: ' + error.message;
       return res.json({ message: message });
     });
-}
+};
 
 const getBreedsByAnimal = async (req: Request, res: Response) => {
   const { animal } = req.params;
@@ -33,7 +33,7 @@ const getBreedsByAnimal = async (req: Request, res: Response) => {
   if (animal === 'Dog') {
     return await getDogBreeds(req, res);
   }
-}
+};
 
 const getDogBreeds = async (req: Request, res: Response) => {
   await DogBreed.find({})
@@ -45,9 +45,9 @@ const getDogBreeds = async (req: Request, res: Response) => {
       let message = 'Error retrieving Dog Breeds: ' + error.message;
       return res.json({ message: message });
     });
-}
+};
 
 module.exports = {
   createBreed,
   getBreedsByAnimal
-}
+};
