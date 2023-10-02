@@ -6,6 +6,7 @@ import { IDog } from '../models/listing/pet/animal/dog/dog.model';
 const { Listing } = require('../models/listing/listing.model');
 const { Pet } = require('../models/listing/pet/pet.model');
 const { Dog } = require('../models/listing/pet/animal/dog/dog.model');
+const handleError = require('./error-handler');
 
 const createListing = async (req: Request, res: Response) => {
   try {
@@ -417,27 +418,6 @@ const deleteDog = async (req: Request) => {
       console.log('Error deleting Dog:');
       throw error;
     });
-};
-
-const handleError = async (req: Request, res: Response, error: any) => {
-  const errors = [];
-
-  if (error.name === 'ValidationError') {
-    errors.push(
-      Object.keys(error.errors).map((key: string) => error.errors[key].message)
-    );
-  }
-
-  if (error.name == 'CastError') {
-    errors.push(error.message);
-    return res.status(400).json({ message: error.message });
-  }
-
-  if (errors.length > 0) {
-    return res.status(400).json({ message: errors.join('\n') });
-  }
-
-  throw error;
 };
 
 module.exports = {
