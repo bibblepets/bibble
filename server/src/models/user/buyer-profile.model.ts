@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 
 export interface IBuyerProfile {
   _id: Schema.Types.ObjectId;
-  profileId: Schema.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 
@@ -18,7 +17,6 @@ export interface IBuyerProfile {
 
 const buyerProfileSchema = new Schema(
   {
-    profileId: { type: Schema.Types.ObjectId, required: true },
     createdAt: { type: Date, immutable: true, default: () => Date.now() },
     updatedAt: { type: Date, default: () => Date.now() },
 
