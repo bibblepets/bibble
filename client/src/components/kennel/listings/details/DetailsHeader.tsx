@@ -1,7 +1,7 @@
 import { HeartIcon, ShareIcon } from '@heroicons/react/24/outline';
 import placeholder from '../../../../assets/dog1.jpeg';
 
-const ListingHeader = () => {
+const DetailsHeader = () => {
   const images = [placeholder, placeholder, placeholder, placeholder];
   return (
     <>
@@ -15,8 +15,8 @@ const ListingHeader = () => {
           <button className="flex items-center gap-2 text-neutral-700">
             {true ? (
               <>
-                <HeartIcon className="w-4 h-4 fill-red-500" />
-                <label className="font-light text-sm">UNFAVORITE</label>
+                <HeartIcon className="w-4 h-4 fill-red-400" />
+                <label className="font-light text-sm">FAVOURITED</label>
               </>
               
             ) : (
@@ -60,4 +60,4 @@ const ListingHeader = () => {
   );
 };
 
-export default ListingHeader;
+export default DetailsHeader;

@@ -1,5 +1,7 @@
-import { UserCircleIcon, CheckBadgeIcon } from "@heroicons/react/24/outline";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
+import { CheckBadgeIcon } from "@heroicons/react/24/solid";
 import MapCard from "./MapCard";
+import profilePic from "../../../../assets/dog8.jpeg";
 
 const ListerInfo = () => {
   const getDateJoined = () => {
@@ -34,7 +36,7 @@ const ListerInfo = () => {
     <>
       {/* Divider */}
       <div className="flex items-center gap-1">
-        <UserCircleIcon className="w-6 h-6 text-neutral-400" />{' '}
+        <UserCircleIcon className="w-6 h-6 text-neutral-500" />{' '}
         <hr className="grow" />
       </div>
 
@@ -44,7 +46,7 @@ const ListerInfo = () => {
           {/* Lister Banner */}
           <div className="flex flex-rows items-center gap-4">
             <div className="ml-1 aspect-square">
-              {/* <Avatar src={lister.image} large /> */}
+              <img src={profilePic} className="object-cover w-24 h-24 rounded-full" />
             </div>
             <div className="grid grid-rows-2 gap-0">
               <div className="flex items-center gap-1">
@@ -61,8 +63,8 @@ const ListerInfo = () => {
           </div>
 
           {/* Lister Description */}
-          <div className="">
-            <p>{'INSERT PROFILE BIO'}</p>
+          <div className="ml-1">
+            <p>{'Lorem ipsum, INSERT PROFILE BIO'}</p>
           </div>
 
           <div className="w-1/3 self-center">
