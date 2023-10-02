@@ -3,18 +3,9 @@ import { IListing } from '../models/listing/listing.model';
 import { IPet } from '../models/listing/pet/pet.model';
 import { IDog } from '../models/listing/pet/animal/dog/dog.model';
 
-const {
-  Listing,
-  itemTypes,
-  saleTypes,
-  mediaTypes
-} = require('../models/listing/listing.model');
-const { Pet, petTypes, genders } = require('../models/listing/pet/pet.model');
-const {
-  Dog,
-  sizes,
-  hairCoats
-} = require('../models/listing/pet/animal/dog/dog.model');
+const { Listing } = require('../models/listing/listing.model');
+const { Pet } = require('../models/listing/pet/pet.model');
+const { Dog } = require('../models/listing/pet/animal/dog/dog.model');
 
 const createListing = async (req: Request, res: Response) => {
   try {
@@ -42,9 +33,11 @@ const createListing = async (req: Request, res: Response) => {
           req.params.itemType = itemType;
           await deleteItem(req);
 
-          console.log('Error creating Listing:\n' + error.message);
-          return handleError(req, res, error);
+          throw error;
         });
+    }).catch(async (error: any) => {
+      console.log('Error creating Listing:');
+      return handleError(req, res, error);
     });
   } catch (error: any) {
     console.log('Unforeseen error creating Listing:\n' + error.message);
