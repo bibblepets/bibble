@@ -10,6 +10,7 @@ export interface IBuyerProfile {
   // Buyer's profile
   firstName: string;
   lastName: string;
+  favouriteListings?: Schema.Types.ObjectId[];
   profilePic?: string;
   contactNumber?: string;
   bio?: string;
@@ -23,6 +24,7 @@ const buyerProfileSchema = new Schema(
     // Buyer's profile
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
+    favouriteListings: [{ type: Schema.Types.ObjectId, ref: 'Listing', required: false }],
     profilePic: { type: String, required: false },
     contactNumber: { type: String, required: false },
     bio: { type: String, required: false }
