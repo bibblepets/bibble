@@ -12,7 +12,7 @@ export interface IChat {
   updatedAt: Date;
 }
 
-const ChatSchema = new Schema(
+const chatSchema = new Schema(
   {
     listingId: { type: Schema.Types.ObjectId, immutable: true, ref: "Listing", required: true },
     participantsId: [{ type: Schema.Types.ObjectId, immutable: true, ref: "ChatParticipant", required: true }],
@@ -24,4 +24,4 @@ const ChatSchema = new Schema(
   { collection: "chats" }
 );
 
-module.exports = mongoose.model("Chat", ChatSchema);
+module.exports = mongoose.model("Chat", chatSchema);

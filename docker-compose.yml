@@ -13,6 +13,8 @@ services:
       - /usr/src/app/node_modules # Mount the node_modules ONLY IN CONTAINER
     networks:
       - bibble-network
+    depends_on:
+      - bibble-server
 
   bibble-server:
     image: server:bibble

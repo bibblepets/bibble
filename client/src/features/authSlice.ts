@@ -26,27 +26,52 @@ axios.defaults.withCredentials = true;
 export const checkAuthStatus = createAsyncThunk(
   '/authSlice/checkAuthStatus',
   async () => {
-    const response = await axios.get('/api/auth/status');
-    return response.data;
+    return await axios.get('/api/auth/status')
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
-export const authenticateUser = createAsyncThunk(
-  '/authSlice/authenticateUser',
-  async (credentials: {
-    type: string;
-    name?: string;
-    email: string;
-    password: string;
-  }) => {
-    const response = await axios.post('/api/auth/authenticate', credentials);
-    return response.data;
+
+export const registerUser = createAsyncThunk(
+  '/authSlice/registerUser',
+  async (credentials: { name: string; email: string; password: string }) => {
+    return await axios.post('api/auth/register', credentials)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
+
+export const loginUser = createAsyncThunk(
+  '/authSlice/loginUser',
+  async (credentials: { email: string; password: string }) => {
+    return await axios.post('api/auth/login', credentials)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
 export const logoutUser = createAsyncThunk(
   '/authSlice/logoutUser',
   async () => {
-    const response = await axios.post('/api/auth/logout');
-    return response.data;
+    return await axios.post('/api/auth/logout')
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
 
@@ -71,18 +96,33 @@ export const authSlice = createSlice({
         state.status = 'ERROR';
         state.error = action.error.message;
       })
-      .addCase(authenticateUser.pending, (state) => {
+      .addCase(registerUser.pending, (state) => {
         state.status = 'LOADING';
         state.error = undefined;
       })
-      .addCase(authenticateUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
         state.isAuthenticated = action.payload.isAuthenticated;
         state.currentUser = action.payload.currentUser;
         state.token = action.payload.token;
         state.message = action.payload.message;
       })
-      .addCase(authenticateUser.rejected, (state, action) => {
+      .addCase(registerUser.rejected, (state, action) => {
+        state.status = 'ERROR';
+        state.error = action.error.message;
+      })
+      .addCase(loginUser.pending, (state) => {
+        state.status = 'LOADING';
+        state.error = undefined;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        state.isAuthenticated = action.payload.isAuthenticated;
+        state.currentUser = action.payload.currentUser;
+        state.token = action.payload.token;
+        state.message = action.payload.message;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       })

@@ -27,10 +27,14 @@ const router = Router();
  * Required fields according to the type of Animal:
  * Pet Type: Dog
  * @param {string} breedId - The ID of the breed of the dog
+ * @param {string} size - The size of the dog (either "Small", "Medium" or "Large" ONLY)
  * @param {number} weight - The weight of the dog
+ * @param {string} hairCoat - The hair coat of the dog (either "Double", "Silky", "Wire", "Curly", "Hairless", "Long", "Medium" or "Short" ONLY)
+ * @param {boolean} isHypoallergenic - Whether the dog is hypoallergenic
  * @param {boolean} isMicrochipped - Whether the dog is microchipped
  * @param {boolean} isNeutered - Whether the dog is neutered
  * @param {boolean} isPottyTrained - Whether the dog is potty trained
+ * @param {boolean} isHdbApproved - Whether the dog is HDB approved
  * 
  * Pet Type: Cat (yet to be implemented...)
  * 
@@ -45,7 +49,7 @@ const router = Router();
  * 
  * @returns {object} The created listing in the format { listing: <Listing>, item: <Item> }
  */
-router.post("/create", ListingController.createListing);
+router.post("/", ListingController.createListing);
 
 /**
  * @route GET /api/listings/get_all
@@ -53,7 +57,7 @@ router.post("/create", ListingController.createListing);
  * @access Public
  * @returns {array} An array of all listings in the format { listing: <Listing>, item: <Item> }
  */
-router.get("/get_all", ListingController.getAllListings);
+router.get("/", ListingController.getAllListings);
 
 /**
  * @route GET /api/listings/get/:id
@@ -62,7 +66,7 @@ router.get("/get_all", ListingController.getAllListings);
  * @param {string} id - The ID of the listing to retrieve
  * @returns {object} The retrieved listing in the format { listing: <Listing>, item: <Item> }
  */
-router.get("/get/:id", ListingController.getListing);
+router.get("/:id", ListingController.getListing);
 
 /**
  * @route PUT /api/listings/update/:id
@@ -100,7 +104,7 @@ router.get("/get/:id", ListingController.getListing);
  * 
  * @returns {object} The updated listing in the format { listing: <Listing>, item: <Item> }
  */
-router.put("/update/:id", ListingController.updateListing);
+router.put("/:id", ListingController.updateListing);
 
 /**
  * @route DELETE /api/listings/delete/:id
@@ -109,6 +113,6 @@ router.put("/update/:id", ListingController.updateListing);
  * @param {string} id - The ID of the listing to delete
  * @returns {object} The deleted listing in the format { listing: <Listing>, item: <Item> }
  */
-router.delete("/delete/:id", ListingController.deleteListing);
+router.delete("/:id", ListingController.deleteListing);
 
 module.exports = router;
