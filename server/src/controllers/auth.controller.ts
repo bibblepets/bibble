@@ -1,9 +1,9 @@
 import { compareSync, hashSync } from 'bcrypt';
 import { Request, Response } from 'express';
-import { IUser } from '../models/user.model';
+import { IUser } from '../models/user/user.model';
 
 const jwt = require('jsonwebtoken');
-const User = require('../models/user.model');
+const User = require('../models/user/user.model');
 
 const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
 
@@ -17,7 +17,7 @@ const checkAuthStatus = async (req: Request, res: Response) => {
   const token = req.cookies.authToken;
 
   if (!token) {
-    return res.json({ isAuthenticated: false, message: 'User not logged in.' });
+    return res.status(401).json({ message: 'User is not logged in.'});
   }
 
   const decoded = jwt.verify(token, SECRET_JWT_CODE);
@@ -28,11 +28,12 @@ const checkAuthStatus = async (req: Request, res: Response) => {
         { id: user._id, email: user.email },
         SECRET_JWT_CODE
       );
-      res.cookie('authToken', token, COOKIE_OPTIONS);
-      res.json({ isAuthenticated: true, token, currentUser: user });
+      return res
+        .cookie('authToken', token, COOKIE_OPTIONS)
+        .json({ isAuthenticated: true, token, currentUser: user });
     })
-    .catch((error: Error) => {
-      res.json({ isAuthenticated: false, message: error.message });
+    .catch((error: any) => {
+      return res.status(500).json({ message: error.message });
     });
 };
 
@@ -40,10 +41,15 @@ const registerUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
-    return res.json({
-      isAuthenticated: false,
-      message: 'Please enter name, email and password.'
-    });
+    return res.status(400).json({ message: 'Please enter all fields.' });
+  }
+
+  if (!validateEmail(email)) {
+    return res.status(400).json({ message: 'Please enter a valid email address.' });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({ message: 'Password must be at least 6 characters long.' });
   }
 
   await User.create({
@@ -56,11 +62,13 @@ const registerUser = async (req: Request, res: Response) => {
         { id: user._id, email: user.email },
         SECRET_JWT_CODE
       );
-      res.cookie('authToken', token, COOKIE_OPTIONS);
-      res.json({ isAuthenticated: true, token, currentUser: user });
+      return res.cookie('authToken', token, COOKIE_OPTIONS).json({ isAuthenticated: true, token, currentUser: user });
     })
-    .catch((error: Error) => {
-      res.json({ isAuthenticated: false, message: error.message });
+    .catch((error: any) => {
+      if (error.code === 11000) {
+        return res.status(409).json({ message: 'Email already exists.' });
+      }
+      return res.status(500).json({ message: error.message });
     });
 };
 
@@ -68,32 +76,34 @@ const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.json({
-      isAuthenticated: false,
-      message: 'Please enter email and password.'
-    });
+    return res.status(400).json({ message: 'Please enter all fields.' });
+  }
+
+  if (!validateEmail(email)) {
+    return res.status(400).json({ message: 'Please enter a valid email address.' });
   }
 
   await User.findOne({ email })
     .then((user: IUser) => {
       if (!user) {
-        res.json({ isAuthenticated: false, message: 'User not found.' });
+        return res.status(404).json({ message: 'User not found.' });
       }
 
       if (!compareSync(password, user.password)) {
-        res.json({ isAuthenticated: false, message: 'Wrong password.' });
+        return res.status(401).json({ message: 'Incorrect password.' });
       }
 
       const token = jwt.sign(
         { id: user._id, email: user.email },
         SECRET_JWT_CODE
       );
-      res.cookie('authToken', token, COOKIE_OPTIONS);
-
-      res.json({ isAuthenticated: true, token, currentUser: user });
+      
+      return res
+        .cookie('authToken', token, COOKIE_OPTIONS)
+        .json({ isAuthenticated: true, token, currentUser: user });
     })
-    .catch((error: Error) => {
-      res.json({ isAuthenticated: false, message: error.message });
+    .catch((error: any) => {
+      return res.status(500).json({ message: error.message });
     });
 };
 
@@ -104,6 +114,11 @@ const logoutUser = (_req: Request, res: Response) => {
     isAuthenticated: false,
     message: 'Logged out successfully'
   });
+};
+
+const validateEmail = (email: string) => {
+  return RegExp(/^(([^<>()[\]\\.,;:\s@"]+\.?)|(".+"))@(([a-zA-Z\d-]+\.)+[a-zA-Z]{2,})$/)
+    .exec(String(email).toLowerCase());
 };
 
 module.exports = {

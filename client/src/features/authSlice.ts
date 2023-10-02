@@ -26,32 +26,52 @@ axios.defaults.withCredentials = true;
 export const checkAuthStatus = createAsyncThunk(
   '/authSlice/checkAuthStatus',
   async () => {
-    const response = await axios.get('/api/auth/status');
-    return response.data;
+    return await axios.get('/api/auth/status')
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
 
 export const registerUser = createAsyncThunk(
   '/authSlice/registerUser',
   async (credentials: { name: string; email: string; password: string }) => {
-    const response = await axios.post('api/auth/register', credentials);
-    return response.data;
+    return await axios.post('api/auth/register', credentials)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
 
 export const loginUser = createAsyncThunk(
   '/authSlice/loginUser',
   async (credentials: { email: string; password: string }) => {
-    const response = await axios.post('api/auth/login', credentials);
-    return response.data;
+    return await axios.post('api/auth/login', credentials)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
 
 export const logoutUser = createAsyncThunk(
   '/authSlice/logoutUser',
   async () => {
-    const response = await axios.post('/api/auth/logout');
-    return response.data;
+    return await axios.post('/api/auth/logout')
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
 

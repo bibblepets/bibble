@@ -2,7 +2,7 @@ import { Schema } from 'mongoose';
 
 const mongoose = require('mongoose');
 
-export const petAnimals = ['Dog']; // Add other animals here: 'Cat', 'Rabbit', 'Guinea Pig', 'Hamster', 'Gerbil', 'Mouse', 'Chinchilla'
+const petTypes = ['Dog']; // Add other animals here: 'Cat', 'Rabbit', 'Guinea Pig', 'Hamster', 'Gerbil', 'Mouse', 'Chinchilla'
 const genders = ['Male', 'Female'];
 
 export interface IPet {
@@ -20,11 +20,13 @@ const PetSchema = new Schema(
     animalId: { type: Schema.Types.ObjectId, immutable: true, refPath: 'animalType', required: true },
     originId: { type: Schema.Types.ObjectId, immutable: true, ref: 'Country', required: true },
     name: { type: String, required: false },
-    animalType: { type: String, enum: petAnimals, immutable: true, required: true },
+    animalType: { type: String, enum: petTypes, immutable: true, required: true },
     gender: { type: String, enum: genders, required: false },
     birthdate: { type: Date, required: true }
   },
   { collection: 'pets' }
 );
 
-module.exports = mongoose.model('Pet', PetSchema);
+const Pet = mongoose.model('Pet', PetSchema);
+
+module.exports = { Pet, petTypes, genders };
