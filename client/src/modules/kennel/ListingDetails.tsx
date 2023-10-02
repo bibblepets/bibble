@@ -1,6 +1,7 @@
 import KennelLayout from '../../layouts/KennelLayout';
 import ItemInfo from '../../components/kennel/listings/details/ItemInfo';
 import ListerInfo from '../../components/kennel/listings/details/ListerInfo';
+import ListingHeader from '../../components/kennel/listings/details/ListingHeader';
 
 const ListingDeatils = () => {
   return (
@@ -8,7 +9,7 @@ const ListingDeatils = () => {
       <KennelLayout>
         <div className="max-w-screen-lg mx-auto my-10">
           <div className="flex flex-col gap-4">
-            <>HEADER</>
+            <ListingHeader />
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mt-6">
               <div className="lg:col-span-3">
