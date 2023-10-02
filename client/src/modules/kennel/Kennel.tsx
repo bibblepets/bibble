@@ -4,12 +4,10 @@ import KennelLayout from '../../layouts/KennelLayout';
 
 const Kennel = () => {
   return (
-    <>
-      <KennelLayout>
-        <Searchbar />
-        <ListingGrid />
-      </KennelLayout>
-    </>
+    <KennelLayout>
+      <Searchbar />
+      <ListingGrid />
+    </KennelLayout>
   );
 };
 

@@ -4,9 +4,9 @@ import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import Preloader from './Preloader';
-import { router } from './Routes';
 import ModalProvider from './components/modals/ModalProvider';
 import './index.css';
+import { router } from './router';
 import { store } from './store';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
