@@ -6,7 +6,7 @@ const Footer = () => {
   const location = useLocation();
   const pathname = location.pathname.replace(/^\/listing\/*/, '');
 
-  const stages = ['', 'biology', 'biography', 'medical', 'media', 'legal'];
+  const stages = ['', 'biology', 'biography', 'medical', 'legal', 'media'];
 
   const onBack = useCallback(() => {
     const index = stages.indexOf(pathname);
@@ -41,7 +41,7 @@ const Footer = () => {
           onClick={onNext}
           className="px-8 py-3 my-4 mx-8 rounded-lg bg-gray-800 transition hover:bg-gray-900 text-white font-semibold"
         >
-          {pathname !== 'legal' ? 'Next' : 'Finish'}
+          {pathname !== stages[stages.length - 1] ? 'Next' : 'Finish'}
         </button>
       </div>
     </footer>

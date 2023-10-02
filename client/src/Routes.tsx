@@ -37,6 +37,10 @@ export const router = createBrowserRouter([
     element: <Medical />
   },
   {
+    path: '/listing/legal',
+    element: <Legal />
+  },
+  {
     path: '/listing/media',
     element: <Media />
   },
