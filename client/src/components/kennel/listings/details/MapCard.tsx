@@ -22,8 +22,8 @@ const MapCard: React.FC<MapCardProps> = ({ location }) => {
         location
       )}&key=${GOOGLE_MAPS_API_KEY}`;
       console.log(request_url);
-      const data = await fetch(request_url).then((response) => {
-        return response
+      const data = await fetch(request_url).then(async (response) => {
+        return await response
           .json()
           .then((data: GeocodeResponse) => {
             return {
@@ -51,9 +51,9 @@ const MapCard: React.FC<MapCardProps> = ({ location }) => {
   });
 
   const center = useMemo(() => data?.coordinates, [data?.coordinates]);
-
+  
   return data && isLoaded ? (
-    <div className="h-96 bg-neutral-200 shadow-xl rounded-2xl">
+    <div className="h-96 w-full bg-neutral-200 shadow-xl rounded-2xl">
       {/* Header */}
       <div className="flex flex-rows m-4 justify-between items-center">
         <MapPinIcon className="w-4 h-4fill-neutral-500" />
