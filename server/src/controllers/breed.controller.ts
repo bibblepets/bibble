@@ -9,12 +9,14 @@ const createBreed = async (req: Request, res: Response) => {
   if (animal === 'Dog') {
     return await createDogBreed(req, res);
   }
+
+  return res.status(400).json({ message: 'Animal not supported' });
 };
 
 const createDogBreed = async (req: Request, res: Response) => {
   const { name } = req.body;
 
-  await DogBreed.create({
+  return await DogBreed.create({
     name
   })
     .then((dogBreed: IDogBreed) => {

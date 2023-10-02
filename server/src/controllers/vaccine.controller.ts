@@ -9,13 +9,16 @@ const createVaccine = async (req: Request, res: Response) => {
   if (animal === 'Dog') {
     return await createDogVaccine(req, res);
   }
+
+  return res.status(400).json({ message: 'Animal not supported' });
 };
 
 const createDogVaccine = async (req: Request, res: Response) => {
-  const { name } = req.body;
+  const { name, isCore } = req.body;
 
   await DogVaccine.create({
-    name
+    name,
+    isCore
   })
     .then((dogVaccine: IDogVaccine) => {
       console.log(
