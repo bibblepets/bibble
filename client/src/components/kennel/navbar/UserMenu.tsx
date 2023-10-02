@@ -97,16 +97,16 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
 
   return (
     <>
-      <div className="flex flex-row items-center gap-4 w-64">
+      <div className="flex flex-row justify-end items-center gap-4 w-64">
         <a
           href="/listing"
-          className="border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm px-4 py-2 text-neutral-500"
+          className="hidden lg:block border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm px-4 py-2 text-neutral-500"
         >
           Make a listing
         </a>
         <a
           href="/messages"
-          className="border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300"
+          className="hidden lg:block border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300"
         >
           <BellIcon className="h-5 w-5 m-2" aria-hidden="true" />
         </a>
@@ -138,6 +138,21 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
                 {tab.name}
               </a>
             ))}
+            <hr className="mx-4" />
+            <a
+              href={'listing'}
+              className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+            >
+              Listings
+            </a>
+            <a
+              href={'/messages'}
+              className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+            >
+              Messages
+            </a>
             <hr className="mx-4" />
             <button
               onClick={logout}

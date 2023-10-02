@@ -13,7 +13,7 @@ const LicenseList = () => {
   const licenses = dummyLicenses;
 
   return (
-    <div className="grid grid-cols-3 gap-8">
+    <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
       {licenses.map((license, index) => (
         <div className="flex flex-row gap-4 items-center">
           <button className="p-2 rounded-lg border">

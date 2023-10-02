@@ -136,8 +136,8 @@ const Listing = () => {
   return (
     <>
       <ListingLayout>
-        <div className="flex flex-col justify-center w-[780px] h-full">
-          <div className="flex flex-col gap-8 w-[780px] overflow-hidden">
+        <div className="flex flex-col w-full md:w-[756px] justify-center h-[75vh] px-4">
+          <div className="flex flex-col flex-grow gap-8 overflow-hidden">
             <h1 className="text-3xl font-medium">Welcome back, Titus</h1>
 
             <div className="flex flex-col gap-4 h-full overflow-hidden">

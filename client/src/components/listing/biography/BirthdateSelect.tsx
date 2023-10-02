@@ -34,7 +34,7 @@ const BirthdateSelect = () => {
   }, [isYearOpen]);
 
   return (
-    <div className="flex flex-row gap-8">
+    <div className="flex flex-row justify-center gap-8">
       {/* DATE */}
       <div className="flex flex-col gap-2 w-full">
         <a className="text-sm font-light text-gray-500">Date</a>
@@ -45,9 +45,9 @@ const BirthdateSelect = () => {
           >
             <a className="text-sm font-medium text-gray-500">Date</a>
             {isDateOpen ? (
-              <ChevronUpIcon className="w-4 h-4" />
+              <ChevronUpIcon className="hidden sm:block w-4 h-4" />
             ) : (
-              <ChevronDownIcon className="w-4 h-4" />
+              <ChevronDownIcon className="hidden sm:block w-4 h-4" />
             )}
           </button>
 
@@ -82,9 +82,9 @@ const BirthdateSelect = () => {
           >
             <a className="text-sm font-medium text-gray-500">Month</a>
             {isMonthOpen ? (
-              <ChevronUpIcon className="w-4 h-4" />
+              <ChevronUpIcon className="hidden sm:block w-4 h-4" />
             ) : (
-              <ChevronDownIcon className="w-4 h-4" />
+              <ChevronDownIcon className="hidden sm:block w-4 h-4" />
             )}
           </button>
 
@@ -124,9 +124,9 @@ const BirthdateSelect = () => {
           >
             <a className="text-sm font-medium text-gray-500">Year</a>
             {isYearOpen ? (
-              <ChevronUpIcon className="w-4 h-4" />
+              <ChevronUpIcon className="hidden sm:block w-4 h-4" />
             ) : (
-              <ChevronDownIcon className="w-4 h-4" />
+              <ChevronDownIcon className="hidden sm:block w-4 h-4" />
             )}
           </button>
 

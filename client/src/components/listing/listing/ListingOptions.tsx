@@ -24,7 +24,7 @@ const ListingOptions = () => {
             <a className="text-sm font-medium">List a Pet</a>
             <ArrowRightIcon className="w-3 h-3" strokeWidth={3} />
           </div>
-          <p className="text-sm font-light text-gray-500">
+          <p className="text-sm font-light text-gray-500 whitespace-nowrap overflow-hidden">
             Create a listing for sale
           </p>
         </div>
@@ -42,7 +42,7 @@ const ListingOptions = () => {
             <a className="text-sm font-medium">List a Service</a>
             <ArrowRightIcon className="w-3 h-3" strokeWidth={3} />
           </div>
-          <p className="text-sm font-light text-gray-500">
+          <p className="text-sm font-light text-gray-500 whitespace-nowrap overflow-hidden">
             Post a subscription service
           </p>
         </div>
@@ -57,7 +57,7 @@ const ListingOptions = () => {
             <a className="text-sm font-medium">List an Adoption</a>
             <ArrowRightIcon className="w-3 h-3" strokeWidth={3} />
           </div>
-          <p className="text-sm font-light text-gray-500">
+          <p className="text-sm font-light text-gray-500 whitespace-nowrap overflow-hidden">
             Create a listing for an adoption
           </p>
         </div>
