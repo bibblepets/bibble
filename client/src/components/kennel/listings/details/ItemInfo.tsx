@@ -9,7 +9,10 @@ import {
   CheckIcon,
   XMarkIcon,
   ClipboardDocumentCheckIcon,
-  ShieldCheckIcon
+  ShieldCheckIcon,
+  ScaleIcon,
+  ArrowsPointingOutIcon,
+  ScissorsIcon
 } from '@heroicons/react/24/outline';
 
 const ItemInfo = () => {
@@ -50,8 +53,23 @@ const ItemInfo = () => {
           </div>
 
           <div className="flex items-center gap-4 pl-1">
+            <ScaleIcon className="w-4 h-4 text-neutral-700" />
+            {'INSERT WEIGHT'}
+          </div>
+
+          <div className="flex items-center gap-4 pl-1">
             <FingerPrintIcon className="w-4 h-4 text-neutral-700" />
-            {'INSERT PET BREED'}
+            {'INSERT BREEDS'}
+          </div>
+
+          <div className="flex items-center gap-4 pl-1">
+            <ArrowsPointingOutIcon className="w-4 h-4 text-neutral-700" />
+            {'INSERT SIZE'}
+          </div>
+
+          <div className="flex items-center gap-4 pl-1">
+            <ScissorsIcon className="w-4 h-4 text-neutral-700" />
+            {'INSERT HAIR COAT'}
           </div>
 
           <div className="flex items-center gap-4 pl-1">
@@ -119,15 +137,6 @@ const ItemInfo = () => {
             ) : (
               <XMarkIcon className="w-4 h-4 text-neutral-700" />
             )}
-            Mircrochipped
-          </div>
-
-          <div className="flex items-center gap-4 pl-1">
-            {true ? (
-              <CheckIcon className="w-4 h-4 text-neutral-700" />
-            ) : (
-              <XMarkIcon className="w-4 h-4 text-neutral-700" />
-            )}
             Neutered
           </div>
         </div>
@@ -147,6 +156,15 @@ const ItemInfo = () => {
               <XMarkIcon className="w-4 h-4 text-neutral-700" />
             )}
             HDB Approved
+          </div>
+
+          <div className="flex items-center gap-4 pl-1">
+            {true ? (
+              <CheckIcon className="w-4 h-4 text-neutral-700" />
+            ) : (
+              <XMarkIcon className="w-4 h-4 text-neutral-700" />
+            )}
+            Mircrochipped
           </div>
 
           <div className="flex items-center gap-4 pl-1">
