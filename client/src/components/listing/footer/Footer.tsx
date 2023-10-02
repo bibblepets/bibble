@@ -6,7 +6,16 @@ const Footer = () => {
   const location = useLocation();
   const pathname = location.pathname.replace(/^\/listing\/*/, '');
 
-  const stages = ['', 'biology', 'biography', 'medical', 'legal', 'media'];
+  const stages = [
+    '',
+    'biology',
+    'biography',
+    'medical',
+    'legal',
+    'media',
+    'price',
+    'summary'
+  ];
 
   const onBack = useCallback(() => {
     const index = stages.indexOf(pathname);
