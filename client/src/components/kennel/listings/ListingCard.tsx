@@ -1,9 +1,12 @@
 import placeholder from '../../../assets/dog1.jpeg';
 import pfp from '../../../assets/dog8.jpeg';
+import { useNavigate } from 'react-router-dom';
 
 const ListingCard = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4" onClick={() => navigate('/kennel/details')}>
       <img
         className="rounded-3xl transition hover:scale-105 cursor-pointer"
         src={placeholder}
