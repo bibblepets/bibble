@@ -7,7 +7,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 
 const authRouter = require('./routes/auth.route');
-const petListingRouter = require('./routes/pet-listing.route');
+const petListingRouter = require('./routes/petListing.route');
 
 const developerRouter = require('./routes/developer.route');
 

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 
-import { IPetListing } from '../models/listing/pet-listing.model';
+import { IPetListing } from '../models/listing/petListing.model';
 import { IDog } from '../models/listing/animal/dog/dog.model';
 
 const { handleError, mapSpeciesToFunction } = require('../utils/util');
 
-const PetListing = require('../models/listing/pet-listing.model');
+const PetListing = require('../models/listing/petListing.model');
 const Dog = require('../models/listing/animal/dog/dog.model');
 
 const createPetListing = async (req: Request, res: Response) => {
