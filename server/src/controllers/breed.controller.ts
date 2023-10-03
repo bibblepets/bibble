@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { IDogBreed } from '../models/listing/pet/animal/dog/dog-breed.model';
+import { IDogBreed } from '../models/listing/animal/dog/dog-breed.model';
 
-const DogBreed = require('../models/listing/pet/animal/dog/dog-breed.model');
+const DogBreed = require('../models/listing/animal/dog/dog-breed.model');
 
 const createBreed = async (req: Request, res: Response) => {
   const { animal } = req.body;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { IDogVaccine } from '../models/listing/pet/animal/dog/dog-vaccine.model';
+import { IDogVaccine } from '../models/listing/animal/dog/dog-vaccine.model';
 
-const DogVaccine = require('../models/listing/pet/animal/dog/dog-vaccine.model');
+const DogVaccine = require('../models/listing/animal/dog/dog-vaccine.model');
 
 const createVaccine = async (req: Request, res: Response) => {
   const { animal } = req.body;
