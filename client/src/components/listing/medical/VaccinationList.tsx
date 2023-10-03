@@ -20,7 +20,7 @@ const VaccinationList = () => {
   return (
     <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
       {vaccines.map((vaccine, index) => (
-        <div className="flex flex-row gap-4 items-center">
+        <div key={index} className="flex flex-row gap-4 items-center">
           <button className="p-2 rounded-lg border">
             <CheckIcon className="w-4 h-4" />
           </button>

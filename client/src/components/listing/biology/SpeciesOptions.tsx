@@ -10,23 +10,33 @@ import SpeciesBox from './SpeciesBox';
 const SpeciesOptions = () => {
   const species = [
     {
-      type: 'dog',
+      type: {
+        name: 'dog'
+      },
       icon: GiSittingDog
     },
     {
-      type: 'cat',
+      type: {
+        name: 'cat'
+      },
       icon: GiCat
     },
     {
-      type: 'rabbit',
+      type: {
+        name: 'rabbit'
+      },
       icon: GiRabbit
     },
     {
-      type: 'mouse',
+      type: {
+        name: 'mouse'
+      },
       icon: GiRat
     },
     {
-      type: 'bird',
+      type: {
+        name: 'bird'
+      },
       icon: GiHummingbird
     }
   ];
@@ -34,7 +44,7 @@ const SpeciesOptions = () => {
   return (
     <div className="flex flex-row justify-between">
       {species.map((species, index) => (
-        <SpeciesBox key={index} type={species.type} icon={species.icon} />
+        <SpeciesBox key={index} species={species.type} icon={species.icon} />
       ))}
     </div>
   );

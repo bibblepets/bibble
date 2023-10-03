@@ -1,11 +1,5 @@
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
+// REDUX TYPES
+// ------------------------------
 export type StatusType = 'DEFAULT' | 'LOADING' | 'SUCCESS' | 'ERROR';
 
 export type ModalType = {
@@ -22,6 +16,62 @@ export type RegisterModalType = ModalType & {
 export type LoginModalType = ModalType & {
   email: string;
   password: string;
+};
+
+// MODEL TYPES
+// ------------------------------
+
+export type User = {
+  name: string;
+  email: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export type Listing = {
+  lister: User;
+  saleType: SaleType;
+  species: Species;
+  breed: Breed;
+  origin: Country;
+  gender: Gender;
+  birthdate: Date;
+  description: string;
+  weight: number;
+  vaccinations: Vaccine[];
+  licenses: License[];
+  media: Media[];
+  price: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export type SaleType = 'SALE' | 'ADOPTION';
+
+export type Species = {
+  name: string;
+};
+
+export type Breed = {
+  name: string;
+};
+
+export type Country = {
+  name: string;
+};
+
+export type Gender = 'MALE' | 'FEMALE';
+
+export type Vaccine = {
+  name: string;
+};
+
+export type License = {
+  name: string;
+};
+
+export type Media = {
+  url: string;
 };
 
 export type GeocodeResponse = {

@@ -1,5 +1,11 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
+import {
+  selectListingBirthdate,
+  setBirthdate
+} from '../../../features/listingSlice';
+import { store } from '../../../store';
 
 const months = [
   'January',
@@ -21,6 +27,9 @@ const BirthdateSelect = () => {
   const [isMonthOpen, setMonthIsOpen] = useState(false);
   const [isYearOpen, setYearIsOpen] = useState(false);
 
+  const birthdateString = useSelector(selectListingBirthdate) || Date.now();
+  const birthdate = new Date(birthdateString);
+
   const toggleDate = useCallback(() => {
     setDateIsOpen(!isDateOpen);
   }, [isDateOpen]);
@@ -33,6 +42,41 @@ const BirthdateSelect = () => {
     setYearIsOpen(!isYearOpen);
   }, [isYearOpen]);
 
+  const date = birthdate.getDate();
+  const month = birthdate.getMonth();
+  const year = birthdate.getFullYear();
+
+  const handleDateSelected = useCallback(
+    (date: number) => {
+      const newBirthdate = new Date(birthdateString);
+      newBirthdate.setDate(date);
+
+      store.dispatch(setBirthdate(newBirthdate.toISOString()));
+      setDateIsOpen(false);
+    },
+    [store, birthdateString]
+  );
+
+  const handleMonthSelected = useCallback(
+    (month: number) => {
+      const newBirthdate = new Date(birthdateString!);
+      newBirthdate.setMonth(month);
+      store.dispatch(setBirthdate(newBirthdate.toISOString()));
+      setMonthIsOpen(false);
+    },
+    [store, birthdateString]
+  );
+
+  const handleYearSelected = useCallback(
+    (year: number) => {
+      const newBirthdate = new Date(birthdateString!);
+      newBirthdate.setFullYear(year);
+      store.dispatch(setBirthdate(newBirthdate.toISOString()));
+      setYearIsOpen(false);
+    },
+    [store, birthdateString]
+  );
+
   return (
     <div className="flex flex-row justify-center gap-8">
       {/* DATE */}
@@ -43,7 +87,7 @@ const BirthdateSelect = () => {
             onClick={toggleDate}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-sm font-medium text-gray-500">Date</a>
+            <a className="text-sm font-medium text-gray-500">{date}</a>
             {isDateOpen ? (
               <ChevronUpIcon className="hidden sm:block w-4 h-4" />
             ) : (
@@ -58,7 +102,7 @@ const BirthdateSelect = () => {
                   {[...Array(31)].map((_, index) => (
                     <li key={index}>
                       <button
-                        onClick={() => {}}
+                        onClick={() => handleDateSelected(index + 1)}
                         className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       >
                         {index + 1}
@@ -80,7 +124,7 @@ const BirthdateSelect = () => {
             onClick={toggleMonth}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-sm font-medium text-gray-500">Month</a>
+            <a className="text-sm font-medium text-gray-500">{months[month]}</a>
             {isMonthOpen ? (
               <ChevronUpIcon className="hidden sm:block w-4 h-4" />
             ) : (
@@ -96,7 +140,7 @@ const BirthdateSelect = () => {
                     (month) => (
                       <li key={month}>
                         <button
-                          onClick={() => {}}
+                          onClick={() => handleMonthSelected(month - 1)}
                           className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         >
                           {new Date(2000, month - 1, 1).toLocaleString(
@@ -122,7 +166,7 @@ const BirthdateSelect = () => {
             onClick={toggleYear}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-sm font-medium text-gray-500">Year</a>
+            <a className="text-sm font-medium text-gray-500">{year}</a>
             {isYearOpen ? (
               <ChevronUpIcon className="hidden sm:block w-4 h-4" />
             ) : (
@@ -140,7 +184,7 @@ const BirthdateSelect = () => {
                   ).map((year) => (
                     <li key={year}>
                       <button
-                        onClick={() => {}}
+                        onClick={() => handleYearSelected(year)}
                         className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       >
                         {year}
