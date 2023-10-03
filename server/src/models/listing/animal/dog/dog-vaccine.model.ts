@@ -10,7 +10,7 @@ export interface IDogVaccine {
 
 const dogVaccineSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     isCore: { type: Boolean, required: true }
   },
   { collection: "dogVaccines" }

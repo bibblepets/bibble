@@ -3,6 +3,8 @@ import { Request, Response } from 'express';
 import { IPetListing } from '../models/listing/pet-listing.model';
 import { IDog } from '../models/listing/animal/dog/dog.model';
 
+const { handleError, mapSpeciesToFunction } = require('../utils/util');
+
 const PetListing = require('../models/listing/pet-listing.model');
 const Dog = require('../models/listing/animal/dog/dog.model');
 
@@ -44,8 +46,10 @@ const createPetListing = async (req: Request, res: Response) => {
 const createAnimal = async (req: Request, res: Response) => {
   const { species } = req.body;
 
-  if (species === 'Dog') {
-    return createDog(req, res);
+  const funcToExecute = mapSpeciesToFunction(species, [createDog]);
+
+  if (funcToExecute) {
+    return await funcToExecute(req, res);
   }
 
   throw new Error(
@@ -184,8 +188,10 @@ const updatePetListingById = async (req: Request, res: Response) => {
 const updateAnimalById = async (req: Request, res: Response) => {
   const { species } = req.params;
 
-  if (species === 'Dog') {
-    return updateDogById(req, res);
+  const funcToExecute = mapSpeciesToFunction(species, [updateDogById]);
+
+  if (funcToExecute) {
+    return await funcToExecute(req, res);
   }
 
   throw new Error(
@@ -230,7 +236,9 @@ const updateDogById = async (req: Request, res: Response) => {
   )
     .then((dog: IDog) => {
       if (!dog) {
-        return res.status(404).json({ message: 'Dog for pet listing not found.' });
+        return res
+          .status(404)
+          .json({ message: 'Dog for pet listing not found.' });
       }
 
       console.log('Dog updated:', dog._id.toString());
@@ -270,8 +278,10 @@ const deletePetListingById = async (req: Request, res: Response) => {
 const deleteAnimalById = async (req: Request, res: Response) => {
   const { species } = req.params;
 
-  if (species === 'Dog') {
-    return deleteDogById(req, res);
+  const funcToExecute = mapSpeciesToFunction(species, [deleteDogById]);
+
+  if (funcToExecute) {
+    return await funcToExecute(req, res);
   }
 
   throw new Error(
@@ -285,7 +295,9 @@ const deleteDogById = async (req: Request, res: Response) => {
   return await Dog.findByIdAndDelete(id)
     .then((dog: IDog) => {
       if (!dog) {
-        return res.status(404).json({ message: 'Dog for pet listing not found.' });
+        return res
+          .status(404)
+          .json({ message: 'Dog for pet listing not found.' });
       }
       console.log('Dog deleted:', dog._id.toString());
       return dog;
@@ -295,36 +307,6 @@ const deleteDogById = async (req: Request, res: Response) => {
       console.log(error.message);
       throw error;
     });
-};
-
-const handleError = async (req: Request, res: Response, error: any) => {
-  const errors = [];
-
-  if (error.name === 'ValidationError') {
-    errors.push(
-      Object.keys(error.errors).map((key: string) => error.errors[key].message)
-    );
-  }
-
-  if (error.name == 'CastError') {
-    errors.push(error.message);
-    return res.status(400).json({ message: error.message });
-  }
-
-  if (error.code === 11000) {
-    errors.push(
-      Object.keys(error.keyValue).map(
-        (key: string) => `${key} already exists.`
-      )
-    );
-  }
-
-  if (errors.length > 0) {
-    return res.status(400).json({ message: errors.join('\n') });
-  }
-
-  console.log('Unforeseen error: ' + error.message);
-  return res.status(500).json({ message: error.message });
 };
 
 module.exports = {
