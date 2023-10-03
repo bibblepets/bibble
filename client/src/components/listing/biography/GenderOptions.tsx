@@ -1,19 +1,37 @@
+import { useCallback } from 'react';
 import { BiFemaleSign, BiMaleSign } from 'react-icons/bi';
+import { useSelector } from 'react-redux';
+import { selectListingGender, setGender } from '../../../features/listingSlice';
+import { store } from '../../../store';
+import { Gender } from '../../../types';
 
 const GenderOptions = () => {
+  const selectedGender = useSelector(selectListingGender);
+
+  const handleClick = useCallback(
+    (gender: Gender) => {
+      store.dispatch(setGender(gender));
+    },
+    [store]
+  );
+
   return (
     <div className="flex flex-row gap-8 justify-between">
       <button
-        onClick={() => alert('implement')}
-        className="flex flex-row justify-center bg-gray-500 p-4 rounded-lg items-center gap-4 w-full"
+        onClick={() => handleClick('MALE')}
+        className={`flex flex-row justify-center p-4 rounded-lg items-center gap-4 w-full transition ${
+          selectedGender === 'MALE' ? 'bg-sky-500' : 'bg-gray-500'
+        }`}
       >
         <BiMaleSign className="w-5 h-5 text-white" />
         <a className="text-sm font-light text-white">Male</a>
       </button>
 
       <button
-        onClick={() => alert('implement')}
-        className="flex flex-row justify-center bg-gray-500 p-4 rounded-lg items-center gap-4 w-full"
+        onClick={() => handleClick('FEMALE')}
+        className={`flex flex-row justify-center  p-4 rounded-lg items-center gap-4 w-full transition ${
+          selectedGender === 'FEMALE' ? 'bg-rose-500' : 'bg-gray-500'
+        }`}
       >
         <BiFemaleSign className="w-5 h-5 text-white" />
         <a className="text-sm font-light text-white">Female</a>

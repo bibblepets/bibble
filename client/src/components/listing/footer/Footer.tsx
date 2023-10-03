@@ -17,8 +17,9 @@ const Footer = () => {
     'summary'
   ];
 
+  const index = stages.indexOf(pathname);
+
   const onBack = useCallback(() => {
-    const index = stages.indexOf(pathname);
     if (index > 0) {
       navigate(
         '/listing' + (stages[index - 1] === '' ? '' : '/' + stages[index - 1])
@@ -27,7 +28,6 @@ const Footer = () => {
   }, [stages, pathname, navigate]);
 
   const onNext = useCallback(() => {
-    const index = stages.indexOf(pathname);
     if (index < stages.length - 1) {
       navigate(
         '/listing' + (stages[index + 1] === '' ? '' : '/' + stages[index + 1])
