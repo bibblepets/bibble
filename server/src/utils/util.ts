@@ -30,7 +30,7 @@ const handleError = async (req: Request, res: Response, error: any) => {
     return res.status(400).json({ message: errors.join('\n') });
   }
 
-  console.log('Unforeseen error: ' + error.message);
+  console.log('UNCHECKED ERROR')
   return res.status(500).json({ message: error.message });
 };
 

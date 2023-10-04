@@ -12,15 +12,13 @@ const createPetListing = async (req: Request, res: Response) => {
   let animal;
 
   try {
-    animal = await createAnimal(req, res);
+    animal = await createAnimal(req);
   } catch (error: any) {
     return handleError(req, res, error);
   }
 
-  const params: IPetListing = req.body;
-
   const petListing = new PetListing({
-    ...params,
+    ...req.body,
     animal: animal._id
   });
 
@@ -31,27 +29,27 @@ const createPetListing = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.log('Error creating Pet listing:');
-    console.log(error.message);
+    
     req.params.id = animal._id.toString();
-    await deleteAnimalById(req, res);
+    await deleteAnimalById(req);
+
     return handleError(req, res, error);
   }
 };
 
-const createAnimal = async (req: Request, res: Response) => {
+const createAnimal = async (req: Request) => {
   const { species } = req.body;
   const funcToExecute = mapSpeciesToFunction(species, [createDog]);
   if (funcToExecute) {
-    return await funcToExecute(req, res);
+    return await funcToExecute(req);
   }
   throw new Error(
     '`' + species + '` is not a valid enum value for path `species`.'
   );
 };
 
-const createDog = async (req: Request, res: Response) => {
-  const params: IDog = req.body;
-  const dog = new Dog(params);
+const createDog = async (req: Request) => {
+  const dog = new Dog(req.body);
 
   return await dog
     .save()
@@ -61,7 +59,6 @@ const createDog = async (req: Request, res: Response) => {
     })
     .catch((error: any) => {
       console.log('Error creating Dog:');
-      console.log(error.message);
       throw error;
     });
 };
@@ -99,10 +96,6 @@ const getPetListingById = async (req: Request, res: Response) => {
 
   return await PetListing.findById(id)
     .then(async (petListing: IPetListing) => {
-      if (!petListing) {
-        return res.status(404).json({ message: 'Pet listing not found.' });
-      }
-
       console.log('Pet listing found:', petListing._id.toString());
       return res.status(200).json(petListing);
     })
@@ -115,64 +108,47 @@ const getPetListingById = async (req: Request, res: Response) => {
 
 const updatePetListingById = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const params: IPetListing = req.body;
 
-  return await PetListing.findByIdAndUpdate(id, params, {
+  return await PetListing.findByIdAndUpdate(id, req.body, {
     new: true,
     runValidators: true
   })
     .then(async (petListing: IPetListing) => {
-      if (!petListing) {
-        return res.status(404).json({ message: 'Pet listing not found.' });
-      }
+      const updatedAnimal = await updateAnimalById(petListing, req);
+      petListing.animal = updatedAnimal;
 
       console.log('Pet listing updated:', petListing._id.toString());
-
-      req.params.id = (petListing.animal as any)._id.toString();
-      req.params.species = petListing.species;
-      await updateAnimalById(req, res);
-
       return res.status(200).json(petListing);
     })
-    .catch((error: any) => {
+    .catch(async (error: any) => {
       console.log('Error updating Pet listing:');
       console.log(error.message);
       return handleError(req, res, error);
     });
 };
 
-const updateAnimalById = async (req: Request, res: Response) => {
-  const { species } = req.params;
+const updateAnimalById = async (petListing: IPetListing, req: Request) => {
+  const { species } = req.body;
   const funcToExecute = mapSpeciesToFunction(species, [updateDogById]);
   if (funcToExecute) {
-    return await funcToExecute(req, res);
+    return await funcToExecute(petListing.animal, req);
   }
   throw new Error(
     '`' + species + '` is not a valid enum value for path `species`.'
   );
 };
 
-const updateDogById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const params: IDog = req.body;
-
-  return await Dog.findByIdAndUpdate(id, params, {
+const updateDogById = async (id: string, req: Request) => {
+  return await Dog.findByIdAndUpdate(id, req.body, {
     new: true,
     runValidators: true
   })
     .then((dog: IDog) => {
-      if (!dog) {
-        return res
-          .status(404)
-          .json({ message: 'Dog for pet listing not found.' });
-      }
-
       console.log('Dog updated:', dog._id.toString());
       return dog;
     })
     .catch((error: any) => {
       console.log('Error updating Dog:');
-      console.log(error.message);
       throw error;
     });
 };
@@ -182,17 +158,13 @@ const deletePetListingById = async (req: Request, res: Response) => {
 
   return await PetListing.findByIdAndDelete(id)
     .then(async (petListing: IPetListing) => {
-      if (!petListing) {
-        return res.status(404).json({ message: 'Pet listing not found.' });
-      }
-
       console.log('Pet listing deleted:', petListing._id.toString());
 
       req.params.id = (petListing.animal as any)._id.toString();
       req.params.species = petListing.species;
-      await deleteAnimalById(req, res);
+      await deleteAnimalById(req);
 
-      return res.status(204).json(petListing);
+      return res.status(204);
     })
     .catch((error: any) => {
       console.log('Error deleting Pet listing:');
@@ -201,36 +173,25 @@ const deletePetListingById = async (req: Request, res: Response) => {
     });
 };
 
-const deleteAnimalById = async (req: Request, res: Response) => {
+const deleteAnimalById = async (req: Request) => {
   const { species } = req.params;
-
   const funcToExecute = mapSpeciesToFunction(species, [deleteDogById]);
-
   if (funcToExecute) {
-    return await funcToExecute(req, res);
+    return await funcToExecute(req.params.id);
   }
-
   throw new Error(
     '`' + species + '` is not a valid enum value for path `species`.'
   );
 };
 
-const deleteDogById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
+const deleteDogById = async (id: string) => {
   return await Dog.findByIdAndDelete(id)
     .then((dog: IDog) => {
-      if (!dog) {
-        return res
-          .status(404)
-          .json({ message: 'Dog for pet listing not found.' });
-      }
       console.log('Dog deleted:', dog._id.toString());
       return dog;
     })
     .catch((error: any) => {
       console.log('Error deleting Dog:');
-      console.log(error.message);
       throw error;
     });
 };
