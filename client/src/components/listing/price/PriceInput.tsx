@@ -1,29 +1,33 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectListingPrice, setPrice } from '../../../features/listingSlice';
+import { store } from '../../../store';
 
-const PriceInput = () => {
-  const [price, setPrice] = useState(0);
+const PriceInput = ({ readOnly }: { readOnly?: boolean }) => {
+  const price = useSelector(selectListingPrice) || 0;
   const [sliderValue, setSliderValue] = useState(0);
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newPrice = parseFloat(event.target.value);
-    setPrice(newPrice);
+    store.dispatch(setPrice(newPrice));
     setSliderValue(newPrice);
   };
 
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSliderValue = parseFloat(event.target.value);
     setSliderValue(newSliderValue);
-    setPrice(newSliderValue);
+    store.dispatch(setPrice(newSliderValue));
   };
 
   return (
     <div className="flex flex-col items-center gap-12">
       <div className="relative">
-        <span className="absolute left-3 top-[5px] text-2xl font-extralight text-gray-500">
+        <span className="absolute left-3 top-[5px] text-lg font-extralight text-gray-500">
           $
         </span>
         <input
-          className="text-2xl text-center w-full pl-8 pr-2 py-1 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline"
+          className="text-lg text-center w-full pl-8 pr-2 py-1 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline"
+          disabled={readOnly}
           type="number"
           min="0"
           step="10"
@@ -33,7 +37,8 @@ const PriceInput = () => {
         />
       </div>
       <input
-        className="w-full"
+        className="w-5/6"
+        disabled={readOnly}
         type="range"
         min="0"
         max="10000"
@@ -50,8 +55,8 @@ const PriceInput = () => {
         {`
             input[type="range"]::-webkit-slider-thumb {
               -webkit-appearance: none;
-              width: 32px;
-              height: 32px;
+              width: 16px;
+              height: 16px;
               background-color: #0ea5e9;
               border-radius: 50%;
               cursor: pointer;

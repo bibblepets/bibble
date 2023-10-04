@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../store';
 import {
   Breed,
   Country,
@@ -106,7 +107,7 @@ const listingSlice = createSlice({
       state.medical = {
         ...state.medical,
         vaccinations: state.medical?.vaccinations?.filter(
-          (v) => v !== action.payload
+          (v) => v.name !== action.payload.name
         )
       };
     },
@@ -119,14 +120,16 @@ const listingSlice = createSlice({
     removeLicense: (state, action: PayloadAction<License>) => {
       state.legal = {
         ...state.legal,
-        licenses: state.legal?.licenses?.filter((l) => l !== action.payload)
+        licenses: state.legal?.licenses?.filter(
+          (l) => l.name !== action.payload.name
+        )
       };
     },
     addMedia: (state, action: PayloadAction<Media>) => {
       state.media = [...(state.media || []), action.payload];
     },
     removeMedia: (state, action: PayloadAction<Media>) => {
-      state.media = state.media?.filter((m) => m !== action.payload);
+      state.media = state.media?.filter((m) => m.url !== action.payload.url);
     },
     setPrice: (state, action: PayloadAction<number>) => {
       state.price = action.payload;
@@ -156,35 +159,30 @@ export const {
   reset
 } = listingSlice.actions;
 
-export const selectListing = (state: { listing: ListingState }) =>
-  state.listing;
-export const selectListingStatus = (state: { listing: ListingState }) =>
-  state.listing.status;
-export const selectListingError = (state: { listing: ListingState }) =>
-  state.listing.error;
-export const selectListingSaleType = (state: { listing: ListingState }) =>
+export const selectListing = (state: RootState) => state.listing;
+export const selectListingStatus = (state: RootState) => state.listing.status;
+export const selectListingError = (state: RootState) => state.listing.error;
+export const selectListingSaleType = (state: RootState) =>
   state.listing.listing?.saleType;
-export const selectListingSpecies = (state: { listing: ListingState }) =>
+export const selectListingSpecies = (state: RootState) =>
   state.listing.biology?.species;
-export const selectListingBreed = (state: { listing: ListingState }) =>
+export const selectListingBreed = (state: RootState) =>
   state.listing.biology?.breed;
-export const selectListingOrigin = (state: { listing: ListingState }) =>
+export const selectListingOrigin = (state: RootState) =>
   state.listing.biography?.origin;
-export const selectListingGender = (state: { listing: ListingState }) =>
+export const selectListingGender = (state: RootState) =>
   state.listing.biography?.gender;
-export const selectListingBirthdate = (state: { listing: ListingState }) =>
+export const selectListingBirthdate = (state: RootState) =>
   state.listing.biography?.birthdate;
-export const selectListingDescription = (state: { listing: ListingState }) =>
+export const selectListingDescription = (state: RootState) =>
   state.listing.biography?.description;
-export const selectListingWeight = (state: { listing: ListingState }) =>
+export const selectListingWeight = (state: RootState) =>
   state.listing.medical?.weight;
-export const selectListingVaccinations = (state: { listing: ListingState }) =>
+export const selectListingVaccinations = (state: RootState) =>
   state.listing.medical?.vaccinations;
-export const selectListingLicenses = (state: { listing: ListingState }) =>
+export const selectListingLicenses = (state: RootState) =>
   state.listing.legal?.licenses;
-export const selectListingMedia = (state: { listing: ListingState }) =>
-  state.listing.media;
-export const selectListingPrice = (state: { listing: ListingState }) =>
-  state.listing.price;
+export const selectListingMedia = (state: RootState) => state.listing.media;
+export const selectListingPrice = (state: RootState) => state.listing.price;
 
 export default listingSlice.reducer;

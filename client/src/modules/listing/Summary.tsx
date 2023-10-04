@@ -21,47 +21,47 @@ const Summary = () => {
         subtitle="Double check all their details..."
       >
         <ListingSection title="Species">
-          <SpeciesOptions />
+          <SpeciesOptions readOnly />
         </ListingSection>
 
         <ListingSection title="Breed">
-          <BreedDropdown />
+          <BreedDropdown readOnly />
         </ListingSection>
 
         <ListingSection title="Origin">
-          <OriginDropdown />
+          <OriginDropdown readOnly />
         </ListingSection>
 
         <ListingSection title="Gender">
-          <GenderOptions />
+          <GenderOptions readOnly />
         </ListingSection>
 
         <ListingSection title="Birthdate">
-          <BirthdateSelect />
+          <BirthdateSelect readOnly />
         </ListingSection>
 
         <ListingSection title="Description">
-          <DescriptionInput />
+          <DescriptionInput readOnly />
         </ListingSection>
 
         <ListingSection title="Weight">
-          <WeightInput />
+          <WeightInput readOnly />
         </ListingSection>
 
         <ListingSection title="Vaccinations">
-          <VaccinationList />
+          <VaccinationList readOnly />
         </ListingSection>
 
         <ListingSection title="Licenses">
-          <LicenseList />
+          <LicenseList readOnly />
         </ListingSection>
 
         <ListingSection title="Media">
-          <MediaUpload />
+          <MediaUpload readOnly />
         </ListingSection>
 
         <ListingSection title="Price">
-          <PriceInput />
+          <PriceInput readOnly />
         </ListingSection>
       </ListingStage>
     </ListingLayout>
