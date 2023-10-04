@@ -1,8 +1,11 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import React, { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectListingWeight, setWeight } from '../../../features/listingSlice';
+import { store } from '../../../store';
 
-const WeightInput = () => {
-  const [weight, setWeight] = useState('0');
+const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
+  const weight = useSelector(selectListingWeight) || 0;
   const [unit, setUnit] = useState('kg');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -11,7 +14,7 @@ const WeightInput = () => {
   }, [isOpen]);
 
   const handleWeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setWeight(event.target.value);
+    store.dispatch(setWeight(parseFloat(event.target.value)));
   };
 
   const convertToKg = (value: number, unit: string) => {
@@ -39,7 +42,7 @@ const WeightInput = () => {
   const formatWeight = (value: number, unit: string) => {
     switch (unit) {
       case 'kg':
-        return `${value.toFixed(1)} kg`;
+        return `${value.toFixed(1) || 0} kg`;
       case 'lbs':
         return `${value.toFixed(1)} lbs`;
       default:
@@ -51,7 +54,7 @@ const WeightInput = () => {
     setUnit(unit);
   };
 
-  const weightInKg = convertToKg(parseFloat(weight), unit);
+  const weightInKg = convertToKg(weight, unit);
   const formattedWeight = formatWeight(weightInKg, unit);
 
   return (
@@ -59,7 +62,8 @@ const WeightInput = () => {
       <div className="flex items-start gap-8">
         <div className="flex flex-col gap-2">
           <input
-            className="w-48 px-2 py-[6px] text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:shadow-outline"
+            className="w-48 p-2 text-gray-700 text-sm border border-gray-300 rounded-md focus:outline-none focus:shadow-outline"
+            disabled={readOnly}
             type="number"
             min="0"
             step="0.1"
@@ -67,19 +71,24 @@ const WeightInput = () => {
             value={weight}
             onChange={handleWeightChange}
           />
-          <div className="pl-2 text-gray-500 font-light">{formattedWeight}</div>
+          <div className="pl-2 text-gray-500 font-light text-sm">
+            {formattedWeight}
+          </div>
         </div>
 
         <div className="relative">
           <button
             onClick={toggleOpen}
+            disabled={readOnly}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
             <a className="text-sm font-medium text-gray-500">{unit}</a>
-            {isOpen ? (
+            {!readOnly && isOpen ? (
               <ChevronUpIcon className="w-4 h-4" />
-            ) : (
+            ) : !readOnly ? (
               <ChevronDownIcon className="w-4 h-4" />
+            ) : (
+              ''
             )}
           </button>
 

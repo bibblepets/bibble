@@ -6,7 +6,7 @@ import {
 } from '../../../features/listingSlice';
 import { store } from '../../../store';
 
-const DescriptionInput = () => {
+const DescriptionInput = ({ readOnly }: { readOnly?: boolean }) => {
   const description = useSelector(selectListingDescription) || '';
   const displayDescription = description.replace(/\[newline\]/g, '\n');
 
@@ -20,6 +20,7 @@ const DescriptionInput = () => {
 
   return (
     <textarea
+      disabled={readOnly}
       className="w-full px-4 py-2 text-gray-700 text-sm border rounded-lg focus:outline-none focus:shadow-outline resize-none"
       placeholder="Introduce them!"
       value={displayDescription}

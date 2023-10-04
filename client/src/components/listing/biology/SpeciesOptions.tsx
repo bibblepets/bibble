@@ -5,9 +5,11 @@ import {
   GiRat,
   GiSittingDog
 } from 'react-icons/gi';
+import { useSelector } from 'react-redux';
+import { selectListingSpecies } from '../../../features/listingSlice';
 import SpeciesBox from './SpeciesBox';
 
-const SpeciesOptions = () => {
+const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
   const species = [
     {
       type: {
@@ -40,6 +42,23 @@ const SpeciesOptions = () => {
       icon: GiHummingbird
     }
   ];
+
+  const selectedSpecies = useSelector(selectListingSpecies);
+
+  if (readOnly) {
+    return (
+      <div className="flex flex-row justify-center">
+        {selectedSpecies && (
+          <SpeciesBox
+            species={selectedSpecies}
+            icon={
+              species.find((s) => s.type.name === selectedSpecies.name)!.icon
+            }
+          />
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-row justify-between">

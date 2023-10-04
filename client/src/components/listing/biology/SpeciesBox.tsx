@@ -29,7 +29,7 @@ const SpeciesBox: React.FC<SpeciesBoxProps> = ({ species, icon: Icon }) => {
       <button
         onClick={() => onSelect(species)}
         className={`p-4 rounded-lg transition ${
-          selectedSpecies === species ? 'bg-sky-500' : 'bg-gray-500'
+          selectedSpecies?.name === species.name ? 'bg-sky-500' : 'bg-gray-500'
         }`}
       >
         <Icon className="text-white w-6 h-6" />

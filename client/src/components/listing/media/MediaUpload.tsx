@@ -4,8 +4,8 @@ import dog8 from '../../../assets/dog8.jpeg';
 
 const dummyMedia = [dog1, dog8, dog1, dog8, dog1, dog8, dog1, dog8];
 
-const MediaUpload = () => {
-  const media = dummyMedia;
+const MediaUpload = ({ readOnly }: { readOnly?: boolean }) => {
+  const media: string[] = [];
 
   return (
     <div className="flex flex-col items-center gap-8">
@@ -35,10 +35,12 @@ const MediaUpload = () => {
         </div>
       )}
 
-      <button className="flex flex-row gap-2 items-center rounded-lg bg-sky-500 px-3 py-2 text-white transition hover:scale-95 hover:opacity-80">
-        <PlusIcon className="w-4 h-4" strokeWidth={3} />
-        <a className="font-medium text-sm">New Upload</a>
-      </button>
+      {!readOnly && (
+        <button className="flex flex-row gap-2 items-center rounded-lg bg-sky-500 px-3 py-2 text-white transition hover:scale-95 hover:opacity-80">
+          <PlusIcon className="w-4 h-4" strokeWidth={3} />
+          <a className="font-medium text-sm">New Upload</a>
+        </button>
+      )}
     </div>
   );
 };

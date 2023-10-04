@@ -28,7 +28,7 @@ const dummyBreeds = [
   { name: 'Boxer' }
 ];
 
-const BreedDropdown = () => {
+const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedBreed = useSelector(selectListingBreed);
   const breeds = dummyBreeds;
@@ -46,13 +46,18 @@ const BreedDropdown = () => {
     <div className="relative">
       <button
         onClick={toggleDropdown}
-        className="flex items-center justify-between w-full px-4 p-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none"
+        disabled={readOnly}
+        className={`flex items-center justify-between w-full px-4 p-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none ${
+          readOnly && 'hover:bg-white'
+        }`}
       >
         <span>{`${selectedBreed?.name || 'Select a breed'}`}</span>
-        {isOpen ? (
+        {!readOnly && isOpen ? (
           <ChevronUpIcon className="w-4 h-4" />
-        ) : (
+        ) : !readOnly ? (
           <ChevronDownIcon className="w-4 h-4" />
+        ) : (
+          ''
         )}
       </button>
 
