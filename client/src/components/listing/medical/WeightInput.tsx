@@ -84,13 +84,16 @@ const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
         <div className="relative">
           <button
             onClick={toggleOpen}
+            disabled={readOnly}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
             <a className="text-sm font-medium text-gray-500">{unit}</a>
-            {isOpen ? (
+            {!readOnly && isOpen ? (
               <ChevronUpIcon className="w-4 h-4" />
-            ) : (
+            ) : !readOnly ? (
               <ChevronDownIcon className="w-4 h-4" />
+            ) : (
+              ''
             )}
           </button>
 

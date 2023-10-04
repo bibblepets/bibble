@@ -93,13 +93,16 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
         <div className="relative">
           <button
             onClick={toggleDate}
+            disabled={readOnly}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
             <a className="text-sm font-medium text-gray-500">{date}</a>
-            {isDateOpen ? (
-              <ChevronUpIcon className="hidden sm:block w-4 h-4" />
+            {!readOnly && isDateOpen ? (
+              <ChevronUpIcon className="w-4 h-4" />
+            ) : !readOnly ? (
+              <ChevronDownIcon className="w-4 h-4" />
             ) : (
-              <ChevronDownIcon className="hidden sm:block w-4 h-4" />
+              ''
             )}
           </button>
 
@@ -130,13 +133,17 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
         <div className="relative">
           <button
             onClick={toggleMonth}
+            disabled={readOnly}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
             <a className="text-sm font-medium text-gray-500">{months[month]}</a>
-            {isMonthOpen ? (
-              <ChevronUpIcon className="hidden sm:block w-4 h-4" />
+
+            {!readOnly && isMonthOpen ? (
+              <ChevronUpIcon className="w-4 h-4" />
+            ) : !readOnly ? (
+              <ChevronDownIcon className="w-4 h-4" />
             ) : (
-              <ChevronDownIcon className="hidden sm:block w-4 h-4" />
+              ''
             )}
           </button>
 
@@ -172,13 +179,16 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
         <div className="relative">
           <button
             onClick={toggleYear}
+            disabled={readOnly}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
             <a className="text-sm font-medium text-gray-500">{year}</a>
-            {isYearOpen ? (
-              <ChevronUpIcon className="hidden sm:block w-4 h-4" />
+            {!readOnly && isYearOpen ? (
+              <ChevronUpIcon className="w-4 h-4" />
+            ) : !readOnly ? (
+              <ChevronDownIcon className="w-4 h-4" />
             ) : (
-              <ChevronDownIcon className="hidden sm:block w-4 h-4" />
+              ''
             )}
           </button>
 
