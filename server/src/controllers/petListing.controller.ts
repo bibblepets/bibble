@@ -118,7 +118,9 @@ const updatePetListingById = async (req: Request, res: Response) => {
         return res.status(404).json({ message: 'Pet listing not found.' });
       }
 
-      const updatedAnimal = await updateAnimalById(petListing, req);
+      req.params.id = petListing.animal.toString();
+      req.params.species = petListing.species;
+      const updatedAnimal = await updateAnimalById(req);
       petListing.animal = updatedAnimal;
 
       console.log('Pet listing updated:', petListing._id.toString());
@@ -131,18 +133,19 @@ const updatePetListingById = async (req: Request, res: Response) => {
     });
 };
 
-const updateAnimalById = async (petListing: IPetListing, req: Request) => {
-  const { species } = req.body;
+const updateAnimalById = async (req: Request) => {
+  const { species } = req.params;
   const funcToExecute = mapSpeciesToFunction(species, [updateDogById]);
   if (funcToExecute) {
-    return await funcToExecute(petListing.animal, req);
+    return await funcToExecute(req);
   }
   throw new Error(
     '`' + species + '` is not a valid enum value for path `species`.'
   );
 };
 
-const updateDogById = async (id: string, req: Request) => {
+const updateDogById = async (req: Request) => {
+  const { id } = req.params;
   return await Dog.findByIdAndUpdate(id, req.body, {
     new: true,
     runValidators: true
@@ -168,7 +171,7 @@ const deletePetListingById = async (req: Request, res: Response) => {
       
       console.log('Pet listing deleted:', petListing._id.toString());
 
-      req.params.id = (petListing.animal as any)._id.toString();
+      req.params.id = petListing.animal.toString();
       req.params.species = petListing.species;
       await deleteAnimalById(req);
 
@@ -185,14 +188,16 @@ const deleteAnimalById = async (req: Request) => {
   const { species } = req.params;
   const funcToExecute = mapSpeciesToFunction(species, [deleteDogById]);
   if (funcToExecute) {
-    return await funcToExecute(req.params.id);
+    return await funcToExecute(req);
   }
   throw new Error(
     '`' + species + '` is not a valid enum value for path `species`.'
   );
 };
 
-const deleteDogById = async (id: string) => {
+const deleteDogById = async (req: Request) => {
+  const { id } = req.params;
+  
   return await Dog.findByIdAndDelete(id)
     .then((dog: IDog) => {
       console.log('Dog deleted:', dog._id.toString());
