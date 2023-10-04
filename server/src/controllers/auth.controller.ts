@@ -204,13 +204,17 @@ const updateUser = async (req: Request, res: Response) => {
           return res.status(404).json({ message: 'User not found.' });
         }
     
-        console.log('User updated:', user._id.toString());
 
-        const { buyerProfile, businessProfile } = await updateProfiles(user, req);
+        req.params.buyerProfileId = (user.buyerProfile as any)._id.toString();
+        if (user.businessProfile) {
+          req.params.businessProfileId = (user.businessProfile as any)._id.toString();
+        }
+        const {buyerProfile, businessProfile } = await updateProfiles(req);
         user.buyerProfile = buyerProfile;
         user.businessProfile = businessProfile;
-
-        return res.status(200).json(user);
+        
+        console.log('User updated:', user._id.toString());
+        return res.status(200).json(await User.findById(id));
       })
       .catch((error: any) => {
         console.log('Error updating User:');

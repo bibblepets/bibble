@@ -118,7 +118,7 @@ const updatePetListingById = async (req: Request, res: Response) => {
         return res.status(404).json({ message: 'Pet listing not found.' });
       }
 
-      req.params.id = petListing.animal.toString();
+      req.params.id = (petListing.animal as any)._id.toString();
       req.params.species = petListing.species;
       const updatedAnimal = await updateAnimalById(req);
       petListing.animal = updatedAnimal;

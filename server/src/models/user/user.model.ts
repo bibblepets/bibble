@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 export interface IUser {
   _id: Schema.Types.ObjectId;
   buyerProfile: Schema.Types.ObjectId;
-  businessProfile: Schema.Types.ObjectId;
+  businessProfile?: Schema.Types.ObjectId;
   name: string;
   email: string;
   password: string;
@@ -27,7 +27,6 @@ const userSchema = new Schema(
       ref: 'BusinessProfile',
       immutable: true,
       required: false,
-      default: null,
       autopopulate: true
     },
     name: { type: String, required: true, trim: true },

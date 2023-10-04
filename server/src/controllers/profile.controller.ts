@@ -24,7 +24,10 @@ const createProfiles = async (
   await buyerProfile
     .save()
     .then((buyerProfile: IBuyerProfile) => {
-      console.log('Buyer Profile created:', buyerProfile._id.toString());
+      console.log(
+        'Buyer Profile created:',
+        buyerProfile._id.toString()
+      );
       result['buyerProfile'] = buyerProfile;
     })
     .catch((error: any) => {
@@ -66,10 +69,7 @@ const deleteProfiles = async (
   }
 };
 
-const updateProfiles = async (user: IUser, req: Request) => {
-  const buyerProfileParams = req.body.buyerProfile;
-  const businessProfileParams = req.body.businessProfile;
-
+const updateProfiles = async (req: Request) => {
   let result: {
     buyerProfile: IBuyerProfile | undefined;
     businessProfile: IBusinessProfile | undefined;
@@ -78,54 +78,63 @@ const updateProfiles = async (user: IUser, req: Request) => {
     businessProfile: undefined
   };
 
-  if (buyerProfileParams) {
-    await BuyerProfile.findByIdAndUpdate(user.buyerProfile, {
-      ...buyerProfileParams
-    })
-      .then((updatedBuyerProfile: IBuyerProfile) => {
-        console.log(
-          'Buyer Profile updated:',
-          updatedBuyerProfile._id.toString()
-        );
-        result['buyerProfile'] = updatedBuyerProfile;
-      })
-      .catch((error: any) => {
-        console.log('Error updating Buyer Profile:');
-        console.log(error);
-        throw error;
-      });
-  } else {
-    await BuyerProfile.findById(user.buyerProfile).then(
-      (buyerProfile: IBuyerProfile) => {
-        result['buyerProfile'] = buyerProfile;
-      }
+  if (req.body.buyerProfile) {
+    await updateBuyerProfile(req).then(
+      (buyerProfile: IBuyerProfile) =>
+        (result['buyerProfile'] = buyerProfile)
     );
   }
 
-  if (businessProfileParams) {
-    await BusinessProfile.findByIdAndUpdate(user.businessProfile, {
-      ...businessProfileParams
-    })
-      .then((updatedBusinessProfile: IBusinessProfile) => {
-        console.log(
-          'Business Profile updated:',
-          updatedBusinessProfile._id.toString()
-        );
-        result['businessProfile'] = updatedBusinessProfile;
-      })
-      .catch((error: any) => {
-        console.log('Error updating Business Profile:');
-        throw error;
-      });
-  } else {
-    BusinessProfile.findById(user.businessProfile).then(
-      (businessProfile: IBusinessProfile) => {
-        result['businessProfile'] = businessProfile;
-      }
+  if (req.body.businessProfile) {
+    await updateBusinessProfile(req).then(
+      (businessProfile: IBusinessProfile) =>
+        (result['businessProfile'] = businessProfile)
     );
   }
 
   return result;
+};
+
+const updateBuyerProfile = async (req: Request) => {
+  const { buyerProfileId } = req.params;
+
+  return await BuyerProfile.findByIdAndUpdate(
+    buyerProfileId,
+    req.body.buyerProfile,
+    {
+      new: true,
+      runValidators: true
+    }
+  )
+    .then((buyerProfile: IBuyerProfile) => {
+      console.log('Buyer Profile updated:', buyerProfile._id.toString());
+      return buyerProfile;
+    })
+    .catch((error: any) => {
+      console.log('Error updating Buyer Profile:');
+      throw error;
+    });
+};
+
+const updateBusinessProfile = async (req: Request) => {
+  const { businessProfileId } = req.params;
+
+  return await BusinessProfile.findByIdAndUpdate(
+    businessProfileId,
+    req.body.businessProfile,
+    {
+      new: true,
+      runValidators: true
+    }
+  )
+    .then((businessProfile: IBusinessProfile) => {
+      console.log('Business Profile updated:', businessProfile._id.toString());
+      return businessProfile;
+    })
+    .catch((error: any) => {
+      console.log('Error updating Business Profile:');
+      throw error;
+    });
 };
 
 module.exports = {
