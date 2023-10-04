@@ -50,12 +50,9 @@ const createVaccine = async (req: Request, res: Response) => {
 };
 
 const createDogVaccine = async (req: Request, res: Response) => {
-  const { name, isCore } = req.body;
+  const params: IDogVaccine = req.body;
 
-  await DogVaccine.create({
-    name,
-    isCore
-  })
+  await DogVaccine.create(params)
     .then((dogVaccine: IDogVaccine) => {
       console.log(
         'Dog Vaccine created successfully: ' + dogVaccine._id.toString()
@@ -83,7 +80,7 @@ const getVaccinesBySpecies = async (req: Request, res: Response) => {
 };
 
 const getDogVaccines = async (req: Request, res: Response) => {
-  await DogVaccine.find({})
+  await DogVaccine.find()
     .then((dogVaccines: IDogVaccine[]) => {
       console.log('Dog Vaccines retrieved successfully: ' + dogVaccines.length);
       return res.json({ vaccines: dogVaccines });

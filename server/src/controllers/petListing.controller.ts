@@ -17,16 +17,11 @@ const createPetListing = async (req: Request, res: Response) => {
     return handleError(req, res, error);
   }
 
-  const { lister, price, description, saleType, media, species } = req.body;
+  const params: IPetListing = req.body;
 
   const petListing = new PetListing({
-    lister,
-    price,
-    description,
-    saleType,
-    media,
-    animal: animal._id,
-    species
+    ...params,
+    animal: animal._id
   });
 
   try {
@@ -45,52 +40,18 @@ const createPetListing = async (req: Request, res: Response) => {
 
 const createAnimal = async (req: Request, res: Response) => {
   const { species } = req.body;
-
   const funcToExecute = mapSpeciesToFunction(species, [createDog]);
-
   if (funcToExecute) {
     return await funcToExecute(req, res);
   }
-
   throw new Error(
     '`' + species + '` is not a valid enum value for path `species`.'
   );
 };
 
 const createDog = async (req: Request, res: Response) => {
-  const {
-    breeds,
-    vaccines,
-    origin,
-    name,
-    gender,
-    birthdate,
-    size,
-    weight,
-    hairCoat,
-    isHypoallergenic,
-    isMicrochipped,
-    isNeutered,
-    isHdbApproved,
-    avsLicenseNumber
-  } = req.body;
-
-  const dog = new Dog({
-    breeds,
-    vaccines,
-    origin,
-    name,
-    gender,
-    birthdate,
-    size,
-    weight,
-    hairCoat,
-    isHypoallergenic,
-    isMicrochipped,
-    isNeutered,
-    isHdbApproved,
-    avsLicenseNumber
-  });
+  const params: IDog = req.body;
+  const dog = new Dog(params);
 
   return await dog
     .save()
@@ -154,17 +115,12 @@ const getPetListingById = async (req: Request, res: Response) => {
 
 const updatePetListingById = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { price, description, media } = req.body;
+  const params: IPetListing = req.body;
 
-  return await PetListing.findByIdAndUpdate(
-    id,
-    {
-      price,
-      description,
-      media
-    },
-    { new: true, runValidators: true }
-  )
+  return await PetListing.findByIdAndUpdate(id, params, {
+    new: true,
+    runValidators: true
+  })
     .then(async (petListing: IPetListing) => {
       if (!petListing) {
         return res.status(404).json({ message: 'Pet listing not found.' });
@@ -187,13 +143,10 @@ const updatePetListingById = async (req: Request, res: Response) => {
 
 const updateAnimalById = async (req: Request, res: Response) => {
   const { species } = req.params;
-
   const funcToExecute = mapSpeciesToFunction(species, [updateDogById]);
-
   if (funcToExecute) {
     return await funcToExecute(req, res);
   }
-
   throw new Error(
     '`' + species + '` is not a valid enum value for path `species`.'
   );
@@ -201,39 +154,12 @@ const updateAnimalById = async (req: Request, res: Response) => {
 
 const updateDogById = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const {
-    vaccines,
-    name,
-    gender,
-    birthdate,
-    size,
-    weight,
-    hairCoat,
-    isHypoallergenic,
-    isMicrochipped,
-    isNeutered,
-    isHdbApproved,
-    avsLicenseNumber
-  } = req.body;
+  const params: IDog = req.body;
 
-  return await Dog.findByIdAndUpdate(
-    id,
-    {
-      vaccines,
-      name,
-      gender,
-      birthdate,
-      size,
-      weight,
-      hairCoat,
-      isHypoallergenic,
-      isMicrochipped,
-      isNeutered,
-      isHdbApproved,
-      avsLicenseNumber
-    },
-    { new: true, runValidators: true }
-  )
+  return await Dog.findByIdAndUpdate(id, params, {
+    new: true,
+    runValidators: true
+  })
     .then((dog: IDog) => {
       if (!dog) {
         return res

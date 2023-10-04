@@ -50,11 +50,9 @@ const createBreed = async (req: Request, res: Response) => {
 };
 
 const createDogBreed = async (req: Request, res: Response) => {
-  const { name } = req.body;
+  const params: IDogBreed = req.body;
 
-  return await DogBreed.create({
-    name
-  })
+  return await DogBreed.create(params)
     .then((dogBreed: IDogBreed) => {
       console.log('Dog Breed created successfully: ' + dogBreed._id.toString());
       return res.json({ breed: dogBreed });

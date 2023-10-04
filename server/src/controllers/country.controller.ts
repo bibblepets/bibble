@@ -4,11 +4,9 @@ import { ICountry } from '../models/country.model';
 const Country = require('../models/country.model');
 
 const createCountry = async (req: Request, res: Response ) => {
-  const { name } = req.body;
+  const params: ICountry = req.body;
 
-  await Country.create({
-    name,
-  })
+  await Country.create(params)
     .then((country: ICountry) => {
       console.log('Country created successfully: ' + country);
       return res.json({ country: country })
