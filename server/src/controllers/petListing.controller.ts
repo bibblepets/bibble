@@ -114,6 +114,10 @@ const updatePetListingById = async (req: Request, res: Response) => {
     runValidators: true
   })
     .then(async (petListing: IPetListing) => {
+      if (!petListing) {
+        return res.status(404).json({ message: 'Pet listing not found.' });
+      }
+
       const updatedAnimal = await updateAnimalById(petListing, req);
       petListing.animal = updatedAnimal;
 
@@ -158,6 +162,10 @@ const deletePetListingById = async (req: Request, res: Response) => {
 
   return await PetListing.findByIdAndDelete(id)
     .then(async (petListing: IPetListing) => {
+      if (!petListing) {
+        return res.status(404).json({ message: 'Pet listing not found.' });
+      }
+      
       console.log('Pet listing deleted:', petListing._id.toString());
 
       req.params.id = (petListing.animal as any)._id.toString();

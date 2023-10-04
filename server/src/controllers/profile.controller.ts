@@ -66,36 +66,66 @@ const deleteProfiles = async (
   }
 };
 
-const updateProfiles = async (
-  user: IUser,
-  buyerProfileParams: IBuyerProfile | undefined,
-  businessProfileParams: IBusinessProfile | undefined
-) => {
+const updateProfiles = async (user: IUser, req: Request) => {
+  const buyerProfileParams = req.body.buyerProfile;
+  const businessProfileParams = req.body.businessProfile;
+
+  let result: {
+    buyerProfile: IBuyerProfile | undefined;
+    businessProfile: IBusinessProfile | undefined;
+  } = {
+    buyerProfile: undefined,
+    businessProfile: undefined
+  };
+
   if (buyerProfileParams) {
     await BuyerProfile.findByIdAndUpdate(user.buyerProfile, {
       ...buyerProfileParams
     })
-      .then((updatedBuyerProfile: IBuyerProfile) =>
-        console.log('Buyer Profile updated:', updatedBuyerProfile._id.toString())
-      )
+      .then((updatedBuyerProfile: IBuyerProfile) => {
+        console.log(
+          'Buyer Profile updated:',
+          updatedBuyerProfile._id.toString()
+        );
+        result['buyerProfile'] = updatedBuyerProfile;
+      })
       .catch((error: any) => {
         console.log('Error updating Buyer Profile:');
         console.log(error);
         throw error;
       });
+  } else {
+    await BuyerProfile.findById(user.buyerProfile).then(
+      (buyerProfile: IBuyerProfile) => {
+        result['buyerProfile'] = buyerProfile;
+      }
+    );
   }
+
   if (businessProfileParams) {
     await BusinessProfile.findByIdAndUpdate(user.businessProfile, {
       ...businessProfileParams
     })
-      .then((updatedBusinessProfile: IBusinessProfile) =>
-        console.log('Business Profile updated:', updatedBusinessProfile._id.toString())
-      )
+      .then((updatedBusinessProfile: IBusinessProfile) => {
+        console.log(
+          'Business Profile updated:',
+          updatedBusinessProfile._id.toString()
+        );
+        result['businessProfile'] = updatedBusinessProfile;
+      })
       .catch((error: any) => {
         console.log('Error updating Business Profile:');
         throw error;
       });
+  } else {
+    BusinessProfile.findById(user.businessProfile).then(
+      (businessProfile: IBusinessProfile) => {
+        result['businessProfile'] = businessProfile;
+      }
+    );
   }
+
+  return result;
 };
 
 module.exports = {

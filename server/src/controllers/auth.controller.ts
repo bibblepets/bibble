@@ -167,8 +167,6 @@ const logoutUser = (_req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, email, password } = req.body;
-  const buyerProfileParams: IBuyerProfile = req.body.buyerProfile;
-  const businessProfileParams: IBusinessProfile = req.body.businessProfile;
 
   if (email && !validateEmail(email)) {
     return res
@@ -183,8 +181,8 @@ const updateUser = async (req: Request, res: Response) => {
   }
 
   if (
-    businessProfileParams &&
-    !validateEmail(businessProfileParams.businessEmail)
+    req.body.businessProfile &&
+    !validateEmail(req.body.businessProfile.businessEmail)
   ) {
     return res
       .status(400)
@@ -192,13 +190,6 @@ const updateUser = async (req: Request, res: Response) => {
   }
 
   try {
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
-
-    await updateProfiles(user, buyerProfileParams, businessProfileParams);
-
     await User.findByIdAndUpdate(
       id,
       {
@@ -209,11 +200,21 @@ const updateUser = async (req: Request, res: Response) => {
       { new: true, runValidators: true }
     )
       .then(async (user: IUser) => {
+        if (!user) {
+          return res.status(404).json({ message: 'User not found.' });
+        }
+    
         console.log('User updated:', user._id.toString());
+
+        const { buyerProfile, businessProfile } = await updateProfiles(user, req);
+        user.buyerProfile = buyerProfile;
+        user.businessProfile = businessProfile;
+
         return res.status(200).json(user);
       })
       .catch((error: any) => {
         console.log('Error updating User:');
+        console.log(error);
         return handleError(req, res, error);
       });
   } catch (error: any) {
