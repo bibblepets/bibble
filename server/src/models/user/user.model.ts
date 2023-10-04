@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 
 export interface IUser {
   _id: Schema.Types.ObjectId;
+  buyerProfile: Schema.Types.ObjectId;
+  businessProfile: Schema.Types.ObjectId;
   name: string;
   email: string;
   password: string;
@@ -11,10 +13,31 @@ export interface IUser {
   updatedAt: Date;
 }
 
-const UserSchema = new Schema(
+const userSchema = new Schema(
   {
-    name: { type: String, required: true },
-    email: { type: String, unique: true, lowercase: true, trim: true, required: true },
+    buyerProfile: {
+      type: Schema.Types.ObjectId,
+      ref: 'BuyerProfile',
+      immutable: true,
+      required: true,
+      autopopulate: true
+    },
+    businessProfile: {
+      type: Schema.Types.ObjectId,
+      ref: 'BusinessProfile',
+      immutable: true,
+      required: false,
+      default: null,
+      autopopulate: true
+    },
+    name: { type: String, required: true, trim: true },
+    email: {
+      type: String,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      required: true
+    },
     password: { type: String, required: true },
     createdAt: { type: Date, immutable: true, default: () => Date.now() },
     updatedAt: { type: Date, default: () => Date.now() }
@@ -22,4 +45,6 @@ const UserSchema = new Schema(
   { collection: 'users' }
 );
 
-module.exports = mongoose.model('User', UserSchema);
+userSchema.plugin(require('mongoose-autopopulate'));
+
+module.exports = mongoose.model('User', userSchema);

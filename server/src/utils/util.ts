@@ -1,5 +1,11 @@
 import { Request, Response } from 'express';
 
+const validateEmail = (email: string) => {
+  return RegExp(
+    /^(([^<>()[\]\\.,;:\s@"]+\.?)|(".+"))@(([a-zA-Z\d-]+\.)+[a-zA-Z]{2,})$/
+  ).exec(String(email).toLowerCase());
+};
+
 const handleError = async (req: Request, res: Response, error: any) => {
   const errors = [];
 
@@ -39,6 +45,7 @@ const mapSpeciesToFunction = (
 };
 
 module.exports = {
+  validateEmail,
   handleError,
   mapSpeciesToFunction
 };

@@ -6,7 +6,6 @@ export const bibbleTiers = ['Basic', 'Verified', 'Partner', 'Super'];
 
 export interface IBusinessProfile {
   _id: Schema.Types.ObjectId;
-  profileId: Schema.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 
@@ -22,12 +21,15 @@ export interface IBusinessProfile {
 
 const businessProfileSchema = new Schema(
   {
-    profileId: { type: Schema.Types.ObjectId, required: true },
     createdAt: { type: Date, immutable: true, default: () => Date.now() },
     updatedAt: { type: Date, default: () => Date.now() },
 
     // Business profile
-    bibbleTier: { type: String, enum: bibbleTiers, required: true },
+    bibbleTier: {
+      type: String,
+      enum: bibbleTiers,
+      required: true
+    },
     businessName: { type: String, required: true },
     businessPic: { type: String, required: false },
     businessBio: { type: String, required: false },
