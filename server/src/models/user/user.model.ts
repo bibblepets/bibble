@@ -6,7 +6,6 @@ export interface IUser {
   _id: Schema.Types.ObjectId;
   buyerProfile: Schema.Types.ObjectId;
   businessProfile?: Schema.Types.ObjectId;
-  name: string;
   email: string;
   password: string;
   createdAt: Date;
@@ -30,7 +29,6 @@ const userSchema = new Schema(
       autopopulate: true,
       default: null
     },
-    name: { type: String, required: true, trim: true },
     email: {
       type: String,
       unique: true,

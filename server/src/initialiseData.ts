@@ -1,18 +1,28 @@
-import { Connection } from 'mongoose';
 import { hashSync } from 'bcrypt';
-import { IUser } from './models/user/user.model';
-import { IBuyerProfile } from './models/user/buyerProfile.model';
-import { IPetListing } from './models/listing/petListing.model';
+import { Connection } from 'mongoose';
+import { ICountry } from './models/country.model';
 import { IDog } from './models/listing/animal/dog/dog.model';
 import { IDogBreed } from './models/listing/animal/dog/dogBreed.model';
 import { IDogVaccine } from './models/listing/animal/dog/dogVaccine.model';
-import { ICountry } from './models/country.model';
+import { IPetListing } from './models/listing/petListing.model';
+import { IBuyerProfile } from './models/user/buyerProfile.model';
+import { IUser } from './models/user/user.model';
 
 const User = require('./models/user/user.model');
 const BuyerProfile = require('./models/user/buyerProfile.model');
 const BusinessProfile = require('./models/user/businessProfile.model');
-const { PetListing, saleTypes, mediaTypes, speciesTypes } = require('./models/listing/petListing.model');
-const { Dog, sizes, hairCoats, genders } = require('./models/listing/animal/dog/dog.model');
+const {
+  PetListing,
+  saleTypes,
+  mediaTypes,
+  speciesTypes
+} = require('./models/listing/petListing.model');
+const {
+  Dog,
+  sizes,
+  hairCoats,
+  genders
+} = require('./models/listing/animal/dog/dog.model');
 const DogBreed = require('./models/listing/animal/dog/dogBreed.model');
 const DogVaccine = require('./models/listing/animal/dog/dogVaccine.model');
 const Country = require('./models/country.model');
@@ -27,7 +37,6 @@ const adminBuyerProfile: Omit<
 };
 
 const admin: Omit<IUser, '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile'> = {
-  name: 'Bibble Admin',
   email: 'admin@bibble.com',
   password: '123456'
 };
@@ -143,7 +152,6 @@ const initAdmin = async (): Promise<IUser> => {
     async (buyerProfile: IBuyerProfile) => {
       return await User.create({
         buyerProfile: buyerProfile._id,
-        name: admin.name,
         email: admin.email,
         password: hashSync(admin.password, 10)
       })

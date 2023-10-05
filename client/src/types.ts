@@ -8,7 +8,8 @@ export type ModalType = {
 };
 
 export type RegisterModalType = ModalType & {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 };
@@ -22,10 +23,18 @@ export type LoginModalType = ModalType & {
 // ------------------------------
 
 export type User = {
-  name: string;
   email: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  password?: string;
+  buyerProfile?: BuyerProfile;
+};
+
+export type BuyerProfile = {
+  firstName: string;
+  lastName: string;
+  favouriteListings?: string[];
+  profilePic?: string;
+  contactNumber?: string;
+  bio?: string;
 };
 
 export type Listing = {

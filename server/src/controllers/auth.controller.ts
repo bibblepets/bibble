@@ -1,9 +1,9 @@
 import { compareSync, hashSync } from 'bcrypt';
 import { Request, Response } from 'express';
-import { IUser } from '../models/user/user.model';
-import { IBuyerProfile } from '../models/user/buyerProfile.model';
-import { IBusinessProfile } from '../models/user/businessProfile.model';
 import { Model } from 'mongoose';
+import { IBusinessProfile } from '../models/user/businessProfile.model';
+import { IBuyerProfile } from '../models/user/buyerProfile.model';
+import { IUser } from '../models/user/user.model';
 
 const jwt = require('jsonwebtoken');
 const User: Model<IUser> = require('../models/user/user.model');
@@ -15,7 +15,7 @@ const {
   deleteProfiles,
   updateBuyerProfile,
   updateBusinessProfile
-} : {
+}: {
   createBuyerProfile: (req: Request) => Promise<IBuyerProfile>;
   createBusinessProfile: (req: Request) => Promise<IBusinessProfile>;
   deleteProfiles: (req: Request) => Promise<void>;
@@ -60,9 +60,13 @@ const checkAuthStatus = async (req: Request, res: Response) => {
 };
 
 const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const {
+    email,
+    password,
+    buyerProfile: { firstName, lastName }
+  } = req.body;
 
-  if (!name || !email || !password) {
+  if (!firstName || !lastName || !email || !password) {
     return res.status(400).json({ message: 'Please enter all fields.' });
   }
 
@@ -102,7 +106,6 @@ const registerUser = async (req: Request, res: Response) => {
     const user = new User({
       buyerProfile: buyerProfile._id,
       businessProfile: businessProfile?._id,
-      name,
       email,
       password: hashSync(password, 10)
     });
@@ -220,7 +223,9 @@ const updateUser = async (req: Request, res: Response) => {
       }
 
       req.params.buyerProfileId = (user.buyerProfile as any)._id.toString();
-      user.buyerProfile = await updateBuyerProfile(req).then(profile => profile._id);
+      user.buyerProfile = await updateBuyerProfile(req).then(
+        (profile) => profile._id
+      );
 
       if (user.businessProfile) {
         req.params.businessProfileId = user.businessProfile.toString();
@@ -229,10 +234,14 @@ const updateUser = async (req: Request, res: Response) => {
       if (req.body.businessProfile) {
         if (user.businessProfile) {
           console.log('Updating business profile...');
-          user.businessProfile = await updateBusinessProfile(req).then(profile => profile._id);
+          user.businessProfile = await updateBusinessProfile(req).then(
+            (profile) => profile._id
+          );
         } else {
           console.log('Creating business profile...');
-          user.businessProfile = await createBusinessProfile(req).then(profile => profile._id);
+          user.businessProfile = await createBusinessProfile(req).then(
+            (profile) => profile._id
+          );
           console.log('SHOULD NOT BE BULL ->', user.businessProfile);
         }
       }
