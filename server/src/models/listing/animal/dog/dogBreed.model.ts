@@ -9,7 +9,7 @@ export interface IDogBreed {
 
 const dogBreedSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
   },
   { collection: "dogBreeds" }
 );

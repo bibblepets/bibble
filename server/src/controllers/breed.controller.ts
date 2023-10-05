@@ -1,22 +1,58 @@
 import { Request, Response } from 'express';
-import { IDogBreed } from '../models/listing/pet/animal/dog/dog-breed.model';
+import { IDogBreed } from '../models/listing/animal/dog/dogBreed.model';
 
-const DogBreed = require('../models/listing/pet/animal/dog/dog-breed.model');
+const { handleError, mapSpeciesToFunction } = require('../utils/util');
+
+const DogBreed = require('../models/listing/animal/dog/dogBreed.model');
+
+const createBreeds = async (req: Request, res: Response) => {
+  const { species } = req.params;
+
+  const funcToExecute = mapSpeciesToFunction(species, [createDogBreeds]);
+
+  if (funcToExecute) {
+    return await funcToExecute(req, res);
+  }
+
+  return res.status(400).json({
+    message: '`' + species + '` is not a valid enum value for path `species`.'
+  });
+}
+
+const createDogBreeds = async (req: Request, res: Response) => {
+  const { breeds } = req.body;
+
+  await DogBreed.insertMany(breeds)
+    .then((dogBreeds: IDogBreed[]) => {
+      console.log(
+        'Dog Breeds created successfully: ' + dogBreeds.length.toString()
+      );
+      return res.json({ breeds: dogBreeds });
+    })
+    .catch((error: Error) => {
+      let message = 'Error creating Breeds: ' + error.message;
+      return res.status(500).json({ message: message });
+    });
+};
 
 const createBreed = async (req: Request, res: Response) => {
-  const { animal } = req.body;
+  const { species } = req.body;
 
-  if (animal === 'Dog') {
-    return await createDogBreed(req, res);
+  const funcToExecute = mapSpeciesToFunction(species, [createDogBreed]);
+
+  if (funcToExecute) {
+    return await funcToExecute(req, res);
   }
+
+  return res.status(400).json({
+    message: '`' + species + '` is not a valid enum value for path `species`.'
+  });
 };
 
 const createDogBreed = async (req: Request, res: Response) => {
-  const { name } = req.body;
+  const params: IDogBreed = req.body;
 
-  await DogBreed.create({
-    name
-  })
+  return await DogBreed.create(params)
     .then((dogBreed: IDogBreed) => {
       console.log('Dog Breed created successfully: ' + dogBreed._id.toString());
       return res.json({ breed: dogBreed });
@@ -27,12 +63,18 @@ const createDogBreed = async (req: Request, res: Response) => {
     });
 };
 
-const getBreedsByAnimal = async (req: Request, res: Response) => {
-  const { animal } = req.params;
+const getBreedsBySpecies = async (req: Request, res: Response) => {
+  const { species } = req.params;
 
-  if (animal === 'Dog') {
-    return await getDogBreeds(req, res);
+  const funcToExecute = mapSpeciesToFunction(species, [getDogBreeds]);
+
+  if (funcToExecute) {
+    return await funcToExecute(req, res);
   }
+
+  return res.status(400).json({
+    message: '`' + species + '` is not a valid enum value for path `species`.'
+  });
 };
 
 const getDogBreeds = async (req: Request, res: Response) => {
@@ -48,6 +90,7 @@ const getDogBreeds = async (req: Request, res: Response) => {
 };
 
 module.exports = {
+  createBreeds,
   createBreed,
-  getBreedsByAnimal
+  getBreedsBySpecies
 };
