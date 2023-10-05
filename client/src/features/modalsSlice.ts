@@ -11,7 +11,8 @@ const initialState: ModalsState = {
   registerModal: {
     isOpen: false,
     status: 'DEFAULT',
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: ''
   },
@@ -33,8 +34,11 @@ export const modalsSlice = createSlice({
     closeRegisterModal: (state) => {
       state.registerModal.isOpen = false;
     },
-    updateRegisterModalName: (state, action: PayloadAction<string>) => {
-      state.registerModal.name = action.payload;
+    updateRegisterModalFirstName: (state, action: PayloadAction<string>) => {
+      state.registerModal.firstName = action.payload;
+    },
+    updateRegisterModalLastName: (state, action: PayloadAction<string>) => {
+      state.registerModal.lastName = action.payload;
     },
     updateRegisterModalEmail: (state, action: PayloadAction<string>) => {
       state.registerModal.email = action.payload;
@@ -66,7 +70,8 @@ export const modalsSlice = createSlice({
 export const {
   openRegisterModal,
   closeRegisterModal,
-  updateRegisterModalName,
+  updateRegisterModalFirstName,
+  updateRegisterModalLastName,
   updateRegisterModalEmail,
   updateRegisterModalPassword,
   resetRegisterModal,
@@ -81,8 +86,10 @@ export const selectIsRegisterModalOpen = (state: RootState) =>
   state.modals.registerModal.isOpen;
 export const selectRegisterModalStatus = (state: RootState) =>
   state.modals.registerModal.status;
-export const selectRegisterModalName = (state: RootState) =>
-  state.modals.registerModal.name;
+export const selectRegisterModalFirstName = (state: RootState) =>
+  state.modals.registerModal.firstName;
+export const selectRegisterModalLastName = (state: RootState) =>
+  state.modals.registerModal.lastName;
 export const selectRegisterModalEmail = (state: RootState) =>
   state.modals.registerModal.email;
 export const selectRegisterModalPassword = (state: RootState) =>

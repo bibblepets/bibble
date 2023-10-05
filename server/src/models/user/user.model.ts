@@ -4,7 +4,6 @@ import { compareSync, hashSync } from 'bcrypt';
 import { ICreateOrUpdateBuyerProfileRequest } from './buyerProfile.model';
 import { ICreateOrUpdateBusinessProfileRequest } from './businessProfile.model';
 
-
 export interface IUser {
   _id: Schema.Types.ObjectId;
   buyerProfile: Schema.Types.ObjectId;
@@ -58,7 +57,7 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
       ref: 'BusinessProfile',
       immutable: true,
       required: false,
-      cast: 'Business Profile ID of `{VALUE}` is invalid.',
+      cast: 'Business Profile ID of `{VALUE}` is invalid.'
     },
     email: {
       type: String,
@@ -75,7 +74,7 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
         validatePassword,
         'Password must be at least 6 characters long.'
       ]
-    },
+    }
   },
   { collection: 'users', timestamps: true, versionKey: false }
 );
@@ -90,7 +89,10 @@ UserSchema.pre('save', function (next) {
 
 UserSchema.pre('findOneAndUpdate', function (next) {
   if ((this as any)._update.password) {
-    (this as any)._update.password = hashSync((this as any)._update.password, 10);
+    (this as any)._update.password = hashSync(
+      (this as any)._update.password,
+      10
+    );
   }
   next();
 });

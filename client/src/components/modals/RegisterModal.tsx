@@ -9,10 +9,12 @@ import {
   resetRegisterModal,
   selectIsRegisterModalOpen,
   selectRegisterModalEmail,
-  selectRegisterModalName,
+  selectRegisterModalFirstName,
+  selectRegisterModalLastName,
   selectRegisterModalPassword,
   updateRegisterModalEmail,
-  updateRegisterModalName,
+  updateRegisterModalFirstName,
+  updateRegisterModalLastName,
   updateRegisterModalPassword
 } from '../../features/modalsSlice';
 import { store } from '../../store';
@@ -21,13 +23,21 @@ import BaseModal from './BaseModal';
 const RegisterModal = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const isOpen = useSelector(selectIsRegisterModalOpen);
-  const name = useSelector(selectRegisterModalName);
+  const firstName = useSelector(selectRegisterModalFirstName);
+  const lastName = useSelector(selectRegisterModalLastName);
   const email = useSelector(selectRegisterModalEmail);
   const password = useSelector(selectRegisterModalPassword);
 
-  const onChangeName = useCallback(
+  const onChangeFirstName = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      store.dispatch(updateRegisterModalName(e.target.value));
+      store.dispatch(updateRegisterModalFirstName(e.target.value));
+    },
+    [store]
+  );
+
+  const onChangeLastName = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      store.dispatch(updateRegisterModalLastName(e.target.value));
     },
     [store]
   );
@@ -51,10 +61,14 @@ const RegisterModal = () => {
   }, [store]);
 
   const onSubmit = useCallback(() => {
-    store.dispatch(registerUser({ name, email, password }));
+    const buyerProfile = {
+      firstName,
+      lastName
+    };
+    store.dispatch(registerUser({ email, password, buyerProfile }));
     store.dispatch(resetRegisterModal());
     store.dispatch(closeRegisterModal());
-  }, [store, name, email, password]);
+  }, [store, email, password, firstName, lastName]);
 
   const onToggle = useCallback(() => {
     store.dispatch(closeRegisterModal());
@@ -69,14 +83,26 @@ const RegisterModal = () => {
           Register your account
         </a>
         <div className="flex flex-col gap-4 w-full">
-          <div className="flex flex-col gap-2">
-            <a className="text-sm text-neutral-500">Full Name</a>
-            <input
-              className="border rounded-lg p-2 text-sm"
-              type="text"
-              value={name}
-              onChange={onChangeName}
-            />
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col gap-2">
+              <a className="text-sm text-neutral-500">First Name</a>
+              <input
+                className="border rounded-lg p-2 text-sm"
+                type="text"
+                value={firstName}
+                onChange={onChangeFirstName}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <a className="text-sm text-neutral-500">Last Name</a>
+              <input
+                className="border rounded-lg p-2 text-sm"
+                type="text"
+                value={lastName}
+                onChange={onChangeLastName}
+              />
+            </div>
           </div>
 
           <div className="flex flex-col gap-2">

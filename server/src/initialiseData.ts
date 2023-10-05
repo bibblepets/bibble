@@ -1,3 +1,4 @@
+import { hashSync } from 'bcrypt';
 import { Connection } from 'mongoose';
 import { IUser, UserModel } from './models/user/user.model';
 import {
