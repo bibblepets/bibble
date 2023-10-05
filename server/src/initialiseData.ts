@@ -1,4 +1,5 @@
 import { Connection } from 'mongoose';
+import { hashSync } from 'bcrypt';
 import { IUser } from './models/user/user.model';
 import { IBuyerProfile } from './models/user/buyerProfile.model';
 import { IPetListing } from './models/listing/petListing.model';
@@ -144,7 +145,7 @@ const initAdmin = async (): Promise<IUser> => {
         buyerProfile: buyerProfile._id,
         name: admin.name,
         email: admin.email,
-        password: admin.password
+        password: hashSync(admin.password, 10)
       })
         .then((user: IUser) => {
           console.log('Admin initialised');
@@ -216,19 +217,18 @@ const initDogs = async (
 const initPetListings = async (admin: IUser, dogList: IDog[]) => {
   let petListings: IPetListing[] = [];
 
-  for (let i = 0; i < dogList.length; i++) {
+  for (const dog of dogList) {
     await PetListing.create({
       lister: admin._id,
       price: Math.floor(Math.random() * 10000) + 1,
       description: 'Lorem ipsum, this is a description.',
       saleType: saleTypes[Math.floor(Math.random() * saleTypes.length)],
       media: generateMedia(),
-      animal: dogList[i]._id,
+      animal: dog._id,
       species: speciesTypes[0] // Dog
     })
       .then((petListing: IPetListing) => {
         petListings.push(petListing);
-        console.log('Pet Listing created:', petListing._id.toString());
       })
       .catch((error: any) => console.log('Error creating Pet Listing:', error));
   }
