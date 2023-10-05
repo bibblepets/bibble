@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Model, Schema } from 'mongoose';
 
 const mongoose = require('mongoose');
 
@@ -76,4 +76,6 @@ const dogSchema = new Schema(
 
 dogSchema.plugin(require('mongoose-autopopulate'));
 
-module.exports = mongoose.model('Dog', dogSchema);
+const Dog: Model<IDog> = mongoose.model('Dog', dogSchema)
+
+module.exports = { Dog, sizes, hairCoats, genders };

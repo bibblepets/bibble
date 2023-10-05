@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Model, Schema } from 'mongoose';
 
 const mongoose = require('mongoose');
 
@@ -59,4 +59,6 @@ const petListingSchema = new Schema(
 
 petListingSchema.plugin(require('mongoose-autopopulate'));
 
-module.exports = mongoose.model('PetListing', petListingSchema);
+const PetListing: Model<IPetListing> = mongoose.model('PetListing', petListingSchema);
+
+module.exports = { PetListing, saleTypes, mediaTypes, speciesTypes };
