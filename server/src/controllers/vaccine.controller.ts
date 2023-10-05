@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { IDogVaccine } from '../models/listing/animal/dog/dog-vaccine.model';
+import { IDogVaccine } from '../models/listing/animal/dog/dogVaccine.model';
 
 const { handleError, mapSpeciesToFunction } = require('../utils/util');
 
-const DogVaccine = require('../models/listing/animal/dog/dog-vaccine.model');
+const DogVaccine = require('../models/listing/animal/dog/dogVaccine.model');
 
 const createVaccines = async (req: Request, res: Response) => {
   const { species } = req.params;

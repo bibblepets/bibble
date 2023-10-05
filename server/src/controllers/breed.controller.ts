@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { IDogBreed } from '../models/listing/animal/dog/dog-breed.model';
+import { IDogBreed } from '../models/listing/animal/dog/dogBreed.model';
 
 const { handleError, mapSpeciesToFunction } = require('../utils/util');
 
-const DogBreed = require('../models/listing/animal/dog/dog-breed.model');
+const DogBreed = require('../models/listing/animal/dog/dogBreed.model');
 
 const createBreeds = async (req: Request, res: Response) => {
   const { species } = req.params;
