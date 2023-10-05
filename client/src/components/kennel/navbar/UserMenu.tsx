@@ -1,8 +1,12 @@
 import { Bars3Icon, BellIcon } from '@heroicons/react/24/outline';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import pfp from '../../../assets/dog8.jpeg';
-import { logoutUser, selectIsAuthenticated } from '../../../features/authSlice';
+import paw from '../../../assets/paw.jpeg';
+import {
+  logoutUser,
+  selectCurrentUser,
+  selectIsAuthenticated
+} from '../../../features/authSlice';
 import {
   openLoginModal,
   openRegisterModal
@@ -17,6 +21,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const currentUser = useSelector(selectCurrentUser);
 
   const logout = useCallback(() => {
     store.dispatch(logoutUser());
@@ -114,7 +119,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
           onClick={() => setIsOpen(!isOpen)}
           className="border rounded-2xl shadow-md hover:scale-95 active:scale-95 transition duration-300"
         >
-          <img className="h-8 w-8 rounded-full" src={pfp} />
+          <img
+            className="h-8 w-8 rounded-full"
+            src={currentUser?.buyerProfile?.profilePic || paw}
+          />
         </button>
       </div>
 

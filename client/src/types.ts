@@ -26,6 +26,7 @@ export type User = {
   email: string;
   password?: string;
   buyerProfile?: BuyerProfile;
+  businessProfile?: BusinessProfile;
 };
 
 export type BuyerProfile = {
@@ -37,29 +38,50 @@ export type BuyerProfile = {
   bio?: string;
 };
 
+export type BusinessProfile = {
+  bibbleTier: string;
+  businessName: string;
+  businessPic?: string;
+  businessBio?: string;
+  businessAddress: string;
+  businessContact: string;
+  businessEmail: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type Listing = {
   lister: User;
-  saleType: SaleType;
-  species: Species;
-  breed: Breed;
-  origin: Country;
-  gender: Gender;
-  birthdate: Date;
-  description: string;
-  weight: number;
-  vaccinations: Vaccine[];
-  licenses: License[];
-  media: Media[];
   price: number;
+  description: string;
+  saleType: SaleType;
+  media: Media[];
+  animal: Animal;
+  species: Species;
   createdAt?: Date;
   updatedAt?: Date;
 };
 
-export type SaleType = 'SALE' | 'ADOPTION';
-
-export type Species = {
-  name: string;
+export type Animal = {
+  breeds: Breed[];
+  vaccines: Vaccine[];
+  origin: Country;
+  name?: string;
+  gender: string;
+  birthdate: Date;
+  size: string;
+  weight: number;
+  hairCoat: string;
+  isHypoallergenic: boolean;
+  isMicrochipped: boolean;
+  isNeutered: boolean;
+  isHdbApproved: boolean;
+  avsLicenseNumber: string;
 };
+
+export type SaleType = 'Sale' | 'Adoption';
+
+export type Species = string;
 
 export type Breed = {
   name: string;
@@ -73,6 +95,7 @@ export type Gender = 'MALE' | 'FEMALE';
 
 export type Vaccine = {
   name: string;
+  isCore: boolean;
 };
 
 export type License = {
@@ -80,8 +103,11 @@ export type License = {
 };
 
 export type Media = {
+  type: MediaType;
   url: string;
 };
+
+export type MediaType = 'Image' | 'Video';
 
 export type GeocodeResponse = {
   results: [
