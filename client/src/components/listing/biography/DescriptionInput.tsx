@@ -18,9 +18,12 @@ const DescriptionInput = ({ readOnly }: { readOnly?: boolean }) => {
     [store]
   );
 
+  if (readOnly) {
+    return <p className="text-gray text-sm">{displayDescription}</p>;
+  }
+
   return (
     <textarea
-      disabled={readOnly}
       className="w-full px-4 py-2 text-gray-700 text-sm border rounded-lg focus:outline-none focus:shadow-outline resize-none"
       placeholder="Introduce them!"
       value={displayDescription}

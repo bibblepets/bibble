@@ -33,22 +33,25 @@ const OriginDropdown = ({ readOnly }: { readOnly?: boolean }) => {
     setIsOpen(false);
   };
 
+  if (readOnly) {
+    return (
+      <a className="text-sm font-medium text-gray-700">{`${
+        selectedOrigin?.name || 'No origin selected'
+      }`}</a>
+    );
+  }
+
   return (
     <div className="relative">
       <button
         onClick={toggleDropdown}
-        disabled={readOnly}
-        className={`flex items-center justify-between w-full px-4 p-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none ${
-          readOnly && 'hover:bg-white'
-        }`}
+        className="flex items-center justify-between w-full px-4 p-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none"
       >
         <span>{`${selectedOrigin?.name || 'Select a Country'}`}</span>
-        {!readOnly && isOpen ? (
+        {isOpen ? (
           <ChevronUpIcon className="w-4 h-4" />
-        ) : !readOnly ? (
-          <ChevronDownIcon className="w-4 h-4" />
         ) : (
-          ''
+          <ChevronDownIcon className="w-4 h-4" />
         )}
       </button>
 

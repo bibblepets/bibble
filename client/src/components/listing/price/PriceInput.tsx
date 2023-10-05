@@ -19,6 +19,12 @@ const PriceInput = ({ readOnly }: { readOnly?: boolean }) => {
     store.dispatch(setPrice(newSliderValue));
   };
 
+  if (readOnly) {
+    return (
+      <a className="flex w-full justify-center text-lg underline">${price}</a>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center gap-12">
       <div className="relative">
@@ -27,7 +33,6 @@ const PriceInput = ({ readOnly }: { readOnly?: boolean }) => {
         </span>
         <input
           className="text-lg text-center w-full pl-8 pr-2 py-1 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline"
-          disabled={readOnly}
           type="number"
           min="0"
           step="10"
@@ -38,7 +43,6 @@ const PriceInput = ({ readOnly }: { readOnly?: boolean }) => {
       </div>
       <input
         className="w-5/6"
-        disabled={readOnly}
         type="range"
         min="0"
         max="10000"

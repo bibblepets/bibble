@@ -57,13 +57,18 @@ const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
   const weightInKg = convertToKg(weight, unit);
   const formattedWeight = formatWeight(weightInKg, unit);
 
+  if (readOnly) {
+    return (
+      <a className="text-sm font-medium text-gray-700">{formattedWeight}</a>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="flex items-start gap-8">
         <div className="flex flex-col gap-2">
           <input
             className="w-48 p-2 text-gray-700 text-sm border border-gray-300 rounded-md focus:outline-none focus:shadow-outline"
-            disabled={readOnly}
             type="number"
             min="0"
             step="0.1"
@@ -79,16 +84,13 @@ const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
         <div className="relative">
           <button
             onClick={toggleOpen}
-            disabled={readOnly}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
           >
             <a className="text-sm font-medium text-gray-500">{unit}</a>
-            {!readOnly && isOpen ? (
+            {isOpen ? (
               <ChevronUpIcon className="w-4 h-4" />
-            ) : !readOnly ? (
-              <ChevronDownIcon className="w-4 h-4" />
             ) : (
-              ''
+              <ChevronDownIcon className="w-4 h-4" />
             )}
           </button>
 

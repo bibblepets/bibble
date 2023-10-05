@@ -7,6 +7,7 @@ import {
 } from 'react-icons/gi';
 import { useSelector } from 'react-redux';
 import { selectListingSpecies } from '../../../features/listingSlice';
+import { toCamelCase } from '../../../utils/string';
 import SpeciesBox from './SpeciesBox';
 
 const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
@@ -47,16 +48,10 @@ const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
 
   if (readOnly) {
     return (
-      <div className="flex flex-row justify-center">
-        {selectedSpecies && (
-          <SpeciesBox
-            species={selectedSpecies}
-            icon={
-              species.find((s) => s.type.name === selectedSpecies.name)!.icon
-            }
-          />
-        )}
-      </div>
+      <a className="text-gray-700 text-sm font-medium">
+        {(selectedSpecies && toCamelCase(selectedSpecies?.name)) ||
+          'No species selected'}
+      </a>
     );
   }
 
