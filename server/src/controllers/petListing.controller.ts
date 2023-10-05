@@ -49,7 +49,7 @@ const createAnimal = async (req: Request) => {
 };
 
 const createDog = async (req: Request) => {
-  const dog = new Dog(req.body);
+  const dog = new Dog(req.body.animal);
 
   return await dog
     .save()
@@ -146,7 +146,7 @@ const updateAnimalById = async (req: Request) => {
 
 const updateDogById = async (req: Request) => {
   const { id } = req.params;
-  return await Dog.findByIdAndUpdate(id, req.body, {
+  return await Dog.findByIdAndUpdate(id, req.body.animal, {
     new: true,
     runValidators: true
   })
