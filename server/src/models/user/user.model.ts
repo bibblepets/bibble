@@ -27,7 +27,8 @@ const userSchema = new Schema(
       ref: 'BusinessProfile',
       immutable: true,
       required: false,
-      autopopulate: true
+      autopopulate: true,
+      default: null
     },
     name: { type: String, required: true, trim: true },
     email: {

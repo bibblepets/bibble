@@ -22,7 +22,7 @@ const handleError = async (req: Request, res: Response, error: any) => {
 
   if (error.code === 11000) {
     errors.push(
-      Object.keys(error.keyValue).map((key: string) => `${key} already exists.`)
+      Object.keys(error.keyValue).map((key: string) => `This ${key} already exists.`)
     );
   }
 

@@ -3,15 +3,24 @@ import { Request, Response } from 'express';
 import { IUser } from '../models/user/user.model';
 import { IBuyerProfile } from '../models/user/buyerProfile.model';
 import { IBusinessProfile } from '../models/user/businessProfile.model';
+import { Model } from 'mongoose';
 
 const jwt = require('jsonwebtoken');
-const User = require('../models/user/user.model');
+const User: Model<IUser> = require('../models/user/user.model');
 
 const { validateEmail, handleError } = require('../utils/util');
 const {
-  createProfiles,
+  createBuyerProfile,
+  createBusinessProfile,
   deleteProfiles,
-  updateProfiles
+  updateBuyerProfile,
+  updateBusinessProfile
+} : {
+  createBuyerProfile: (req: Request) => Promise<IBuyerProfile>;
+  createBusinessProfile: (req: Request) => Promise<IBusinessProfile>;
+  deleteProfiles: (req: Request) => Promise<void>;
+  updateBuyerProfile: (req: Request) => Promise<IBuyerProfile>;
+  updateBusinessProfile: (req: Request) => Promise<IBusinessProfile>;
 } = require('./profile.controller');
 
 const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
@@ -32,7 +41,11 @@ const checkAuthStatus = async (req: Request, res: Response) => {
   const decoded = jwt.verify(token, SECRET_JWT_CODE);
 
   await User.findById(decoded.id)
-    .then((user: IUser) => {
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+
       const token = jwt.sign(
         { id: user._id, email: user.email },
         SECRET_JWT_CODE
@@ -48,8 +61,6 @@ const checkAuthStatus = async (req: Request, res: Response) => {
 
 const registerUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
-  const buyerProfileParams: IBuyerProfile = req.body.buyerProfile;
-  const businessProfileParams: IBusinessProfile = req.body.businessProfile;
 
   if (!name || !email || !password) {
     return res.status(400).json({ message: 'Please enter all fields.' });
@@ -67,14 +78,15 @@ const registerUser = async (req: Request, res: Response) => {
       .json({ message: 'Password must be at least 6 characters long.' });
   }
 
-  if (!buyerProfileParams) {
+  if (!req.body.buyerProfile) {
     return res
       .status(400)
       .json({ message: 'Please provide buyer profile information.' });
   }
 
-  if (businessProfileParams.businessEmail) {
-    if (!validateEmail(businessProfileParams.businessEmail)) {
+  if (req.body.businessProfile) {
+    const { businessEmail } = req.body.businessProfile;
+    if (businessEmail && !validateEmail(businessEmail)) {
       return res
         .status(400)
         .json({ message: 'The business email address provided is invalid.' });
@@ -82,14 +94,14 @@ const registerUser = async (req: Request, res: Response) => {
   }
 
   try {
-    const { buyerProfile, businessProfile } = await createProfiles(
-      buyerProfileParams,
-      businessProfileParams
-    );
+    const buyerProfile = await createBuyerProfile(req);
+    const businessProfile = req.body.businessProfile
+      ? await createBusinessProfile(req)
+      : undefined;
 
     const user = new User({
       buyerProfile: buyerProfile._id,
-      businessProfile: businessProfile._id,
+      businessProfile: businessProfile?._id,
       name,
       email,
       password: hashSync(password, 10)
@@ -110,7 +122,11 @@ const registerUser = async (req: Request, res: Response) => {
       })
       .catch(async (error: any) => {
         console.log('Error creating User:');
-        await deleteProfiles(buyerProfile, businessProfile);
+        req.params.buyerProfileId = buyerProfile._id.toString();
+        if (businessProfile) {
+          req.params.businessProfileId = businessProfile._id.toString();
+        }
+        await deleteProfiles(req);
         throw error;
       });
   } catch (error: any) {
@@ -132,7 +148,7 @@ const loginUser = async (req: Request, res: Response) => {
   }
 
   await User.findOne({ email })
-    .then((user: IUser) => {
+    .then((user) => {
       if (!user) {
         return res.status(404).json({ message: 'User not found.' });
       }
@@ -180,50 +196,58 @@ const updateUser = async (req: Request, res: Response) => {
       .json({ message: 'Password must be at least 6 characters long.' });
   }
 
-  if (
-    req.body.businessProfile &&
-    !validateEmail(req.body.businessProfile.businessEmail)
-  ) {
-    return res
-      .status(400)
-      .json({ message: 'The business email address provided is invalid.' });
+  if (req.body.businessProfile) {
+    const { businessEmail } = req.body.businessProfile;
+    if (businessEmail && !validateEmail(businessEmail)) {
+      return res
+        .status(400)
+        .json({ message: 'The business email address provided is invalid.' });
+    }
   }
 
-  try {
-    await User.findByIdAndUpdate(
-      id,
-      {
-        name,
-        email,
-        password: password ? hashSync(password, 10) : undefined
-      },
-      { new: true, runValidators: true }
-    )
-      .then(async (user: IUser) => {
-        if (!user) {
-          return res.status(404).json({ message: 'User not found.' });
-        }
-    
+  await User.findByIdAndUpdate(
+    id,
+    {
+      name,
+      email,
+      password: password ? hashSync(password, 10) : undefined
+    },
+    { new: true, runValidators: true }
+  )
+    .then(async (user) => {
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
 
-        req.params.buyerProfileId = (user.buyerProfile as any)._id.toString();
+      req.params.buyerProfileId = (user.buyerProfile as any)._id.toString();
+      user.buyerProfile = await updateBuyerProfile(req).then(profile => profile._id);
+
+      if (user.businessProfile) {
+        req.params.businessProfileId = user.businessProfile.toString();
+      }
+
+      if (req.body.businessProfile) {
         if (user.businessProfile) {
-          req.params.businessProfileId = (user.businessProfile as any)._id.toString();
+          console.log('Updating business profile...');
+          user.businessProfile = await updateBusinessProfile(req).then(profile => profile._id);
+        } else {
+          console.log('Creating business profile...');
+          user.businessProfile = await createBusinessProfile(req).then(profile => profile._id);
+          console.log('SHOULD NOT BE BULL ->', user.businessProfile);
         }
-        const {buyerProfile, businessProfile } = await updateProfiles(req);
-        user.buyerProfile = buyerProfile;
-        user.businessProfile = businessProfile;
-        
-        console.log('User updated:', user._id.toString());
-        return res.status(200).json(await User.findById(id));
-      })
-      .catch((error: any) => {
-        console.log('Error updating User:');
-        console.log(error);
-        return handleError(req, res, error);
-      });
-  } catch (error: any) {
-    return handleError(req, res, error);
-  }
+      }
+
+      await user.save().then((user: IUser) => console.log(user));
+      console.log('User Profiles updated.');
+
+      console.log('User updated:', user._id.toString());
+      return res.status(200).json(user);
+    })
+    .catch((error: any) => {
+      console.log('Error updating User:');
+      console.log(error.message);
+      return handleError(req, res, error);
+    });
 };
 
 module.exports = {

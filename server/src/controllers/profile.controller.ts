@@ -1,75 +1,58 @@
 import { Request, Response } from 'express';
 import { IBusinessProfile } from '../models/user/businessProfile.model';
 import { IBuyerProfile } from '../models/user/buyerProfile.model';
-import { IUser } from '../models/user/user.model';
 
 const BuyerProfile = require('../models/user/buyerProfile.model');
 const BusinessProfile = require('../models/user/businessProfile.model');
 
-const createProfiles = async (
-  buyerProfileParams: IBuyerProfile,
-  businessProfileParams: IBusinessProfile | undefined
-) => {
-  const buyerProfile = new BuyerProfile(buyerProfileParams);
-  const businessProfile = new BusinessProfile(businessProfileParams);
+const createBuyerProfile = async (req: Request): Promise<IBuyerProfile> => {
+  const buyerProfile = new BuyerProfile(req.body.buyerProfile);
 
-  let result: {
-    buyerProfile: IBuyerProfile | undefined;
-    businessProfile: IBusinessProfile | undefined;
-  } = {
-    buyerProfile: undefined,
-    businessProfile: undefined
-  };
-
-  await buyerProfile
+  return await buyerProfile
     .save()
     .then((buyerProfile: IBuyerProfile) => {
-      console.log(
-        'Buyer Profile created:',
-        buyerProfile._id.toString()
-      );
-      result['buyerProfile'] = buyerProfile;
+      console.log('Buyer Profile created:', buyerProfile._id.toString());
+      return buyerProfile;
     })
     .catch((error: any) => {
       console.log('Error creating Buyer Profile:');
       throw error;
     });
-
-  if (businessProfileParams) {
-    await businessProfile
-      .save()
-      .then((businessProfile: IBusinessProfile) => {
-        console.log(
-          'Business Profile created:',
-          businessProfile._id.toString()
-        );
-        result['businessProfile'] = businessProfile;
-      })
-      .catch(async (error: any) => {
-        console.log('Error creating Business Profile:');
-        await deleteProfiles(buyerProfile, undefined);
-        throw error;
-      });
-  }
-
-  return result;
 };
 
-const deleteProfiles = async (
-  buyerProfile: IBuyerProfile,
-  businessProfile: IBusinessProfile | undefined
-) => {
-  await BuyerProfile.findByIdAndDelete(buyerProfile._id).then(() =>
-    console.log('Buyer Profile deleted:', buyerProfile._id.toString())
+const createBusinessProfile = async (req: Request): Promise<IBusinessProfile> => {
+  const businessProfile = new BusinessProfile(req.body.businessProfile);
+
+  return await businessProfile
+    .save()
+    .then((businessProfile: IBusinessProfile) => {
+      console.log('Business Profile created:', businessProfile._id.toString());
+      return businessProfile;
+    })
+    .catch((error: any) => {
+      console.log('Error creating Business Profile:');
+      throw error;
+    });
+};
+
+const deleteProfiles = async (req: Request): Promise<void> => {
+  const { buyerProfileId, businessProfileId } = req.params;
+  await BuyerProfile.findByIdAndDelete(buyerProfileId).then(
+    (buyerProfile: IBuyerProfile) =>
+      console.log('Buyer Profile deleted:', buyerProfile._id.toString())
   );
-  if (businessProfile) {
-    await BusinessProfile.findByIdAndDelete(businessProfile._id).then(() =>
-      console.log('Business Profile deleted:', businessProfile._id.toString())
+  if (businessProfileId) {
+    await BusinessProfile.findByIdAndDelete(businessProfileId).then(
+      (businessProfile: IBusinessProfile) =>
+        console.log('Business Profile deleted:', businessProfile._id.toString())
     );
   }
 };
 
-const updateProfiles = async (req: Request) => {
+const updateProfiles = async (req: Request): Promise<{
+  buyerProfile: IBuyerProfile | undefined;
+  businessProfile: IBusinessProfile | undefined;
+}> => {
   let result: {
     buyerProfile: IBuyerProfile | undefined;
     businessProfile: IBusinessProfile | undefined;
@@ -80,8 +63,7 @@ const updateProfiles = async (req: Request) => {
 
   if (req.body.buyerProfile) {
     await updateBuyerProfile(req).then(
-      (buyerProfile: IBuyerProfile) =>
-        (result['buyerProfile'] = buyerProfile)
+      (buyerProfile: IBuyerProfile) => (result['buyerProfile'] = buyerProfile)
     );
   }
 
@@ -95,7 +77,7 @@ const updateProfiles = async (req: Request) => {
   return result;
 };
 
-const updateBuyerProfile = async (req: Request) => {
+const updateBuyerProfile = async (req: Request): Promise<IBuyerProfile> => {
   const { buyerProfileId } = req.params;
 
   return await BuyerProfile.findByIdAndUpdate(
@@ -116,7 +98,9 @@ const updateBuyerProfile = async (req: Request) => {
     });
 };
 
-const updateBusinessProfile = async (req: Request) => {
+const updateBusinessProfile = async (
+  req: Request
+): Promise<IBusinessProfile> => {
   const { businessProfileId } = req.params;
 
   return await BusinessProfile.findByIdAndUpdate(
@@ -138,7 +122,9 @@ const updateBusinessProfile = async (req: Request) => {
 };
 
 module.exports = {
-  createProfiles,
+  createBuyerProfile,
+  createBusinessProfile,
   deleteProfiles,
-  updateProfiles
+  updateBuyerProfile,
+  updateBusinessProfile
 };
