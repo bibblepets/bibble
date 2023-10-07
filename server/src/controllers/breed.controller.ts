@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { IDogBreed } from '../models/listing/animal/dog/dogBreed.model';
-
-const { handleError, mapSpeciesToFunction } = require('../utils/util');
+import { handleError, mapSpeciesToFunction } from '../utils/util';
 
 const DogBreed = require('../models/listing/animal/dog/dogBreed.model');
 
@@ -29,7 +28,7 @@ const createDogBreeds = async (req: Request, res: Response) => {
       );
       return res.json({ breeds: dogBreeds });
     })
-    .catch((error: Error) => {
+    .catch((error: any) => {
       let message = 'Error creating Breeds: ' + error.message;
       return res.status(500).json({ message: message });
     });
@@ -57,7 +56,7 @@ const createDogBreed = async (req: Request, res: Response) => {
       console.log('Dog Breed created successfully: ' + dogBreed._id.toString());
       return res.json({ breed: dogBreed });
     })
-    .catch((error: Error) => {
+    .catch((error: any) => {
       let message = 'Error creating Breed: ' + error.message;
       return res.json({ message: message });
     });
@@ -83,7 +82,7 @@ const getDogBreeds = async (req: Request, res: Response) => {
       console.log('Dog Breeds retrieved successfully: ' + dogBreeds.length);
       return res.json({ breeds: dogBreeds });
     })
-    .catch((error: Error) => {
+    .catch((error: any) => {
       let message = 'Error retrieving Dog Breeds: ' + error.message;
       return res.json({ message: message });
     });

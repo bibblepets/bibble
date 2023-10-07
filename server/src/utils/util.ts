@@ -1,11 +1,5 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { Error } from 'mongoose';
-
-const validateEmail = (email: string) => {
-  return RegExp(
-    /^(([^<>()[\]\\.,;:\s@"]+\.?)|(".+"))@(([a-zA-Z\d-]+\.)+[a-zA-Z]{2,})$/
-  ).exec(String(email).toLowerCase());
-};
 
 export const handleError = async (res: Response, error: any) => {
   const errors = [];
@@ -33,11 +27,11 @@ export const handleError = async (res: Response, error: any) => {
     return res.status(400).json({ message: errors.join('\n') });
   }
 
-  console.log('UNCHECKED ERROR');
+  console.log('An unexpecter error occurred...');
   return res.status(500).json({ message: error.message });
 };
 
-const mapSpeciesToFunction = (
+export const mapSpeciesToFunction = (
   species: string,
   funcArr: Function[]
 ): Function | null => {
@@ -45,10 +39,4 @@ const mapSpeciesToFunction = (
     return funcArr[0];
   }
   return null;
-};
-
-module.exports = {
-  validateEmail,
-  handleError,
-  mapSpeciesToFunction
 };

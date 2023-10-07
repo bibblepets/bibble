@@ -53,7 +53,7 @@ const checkAuthStatus = async (req: ICheckAuthStatusRequest, res: Response) => {
       .cookie('authToken', token, COOKIE_OPTIONS)
       .json({ token: token, currentUser: populatedUser, message: 'User is authenticated.' });
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return handleError(res, error);
   }
 };
 
