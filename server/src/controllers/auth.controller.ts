@@ -18,7 +18,7 @@ const COOKIE_OPTIONS = {
   maxAge: 1000 * 60 * 60 * 24 * 7
 };
 
-const checkAuthStatus = async (req: ICheckAuthStatusRequest, res: Response) => {
+export const checkAuthStatus = async (req: ICheckAuthStatusRequest, res: Response) => {
   const { authToken } = req.cookies;
 
   if (!authToken) {
@@ -57,9 +57,9 @@ const checkAuthStatus = async (req: ICheckAuthStatusRequest, res: Response) => {
   }
 };
 
-const registerUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
+export const registerUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
   const { buyerProfile, businessProfile, email, password } = req.body;
-  console.log('--REGISTER USER--');
+
   try {
     if (!SECRET_JWT_CODE) {
       throw new Error('Secret JWT code not found.');
@@ -97,7 +97,6 @@ const registerUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
       email,
       password
     });
-
     console.log('User created.', createdUser._id);
 
     // Create JWT
@@ -118,7 +117,7 @@ const registerUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
   }
 };
 
-const loginUser = async (req: ILoginUserRequest, res: Response) => {
+export const loginUser = async (req: ILoginUserRequest, res: Response) => {
   const { email, password } = req.body;
 
   try {
@@ -126,7 +125,7 @@ const loginUser = async (req: ILoginUserRequest, res: Response) => {
       throw new Error('Secret JWT code not found.');
     }
 
-    const user = await User.findByEmail(email);
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
@@ -148,7 +147,7 @@ const loginUser = async (req: ILoginUserRequest, res: Response) => {
   }
 };
 
-const logoutUser = (_req: Request, res: Response) => {
+export const logoutUser = (_req: Request, res: Response) => {
   res.clearCookie('authToken', COOKIE_OPTIONS);
 
   res.json({
@@ -156,7 +155,7 @@ const logoutUser = (_req: Request, res: Response) => {
   });
 };
 
-const updateUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
+export const updateUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
   const { id } = req.params;
   const { buyerProfile, businessProfile, email, password } = req.body;
 
@@ -238,7 +237,7 @@ const updateUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
     if (businessProfile && businessProfileId) {
       // If request body contains business profile and user has business profile, update user
       console.log('Updating user...')
-      user.updateOne({
+      await user.updateOne({
         buyerProfile: updatedBuyerProfile._id,
         businessProfile: updatedBusinessProfile._id,
         email,
@@ -270,12 +269,4 @@ const updateUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
   } catch (error: any) {
     return handleError(res, error);
   }
-};
-
-module.exports = {
-  checkAuthStatus,
-  registerUser,
-  loginUser,
-  logoutUser,
-  updateUser
 };

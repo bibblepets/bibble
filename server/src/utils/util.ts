@@ -28,6 +28,7 @@ export const handleError = async (res: Response, error: any) => {
   }
 
   console.log('An unexpecter error occurred...');
+  console.log(error);
   return res.status(500).json({ message: error.message });
 };
 

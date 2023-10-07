@@ -1,11 +1,11 @@
-import { Model, Schema } from 'mongoose';
+import { Request } from 'express';
+import mongoose, { Schema, Model } from 'mongoose';
+import { ICreateOrUpdateDogRequest } from './animal/dog/dog.model';
+import { IUser } from '../user/user.model';
 
-const mongoose = require('mongoose');
-
-const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
-const mediaTypes = ['Image']; // Add more types here: 'video', etc.
-
-const speciesTypes = ['Dog']; // Add other animals here: 'Cat', 'Rabbit', 'Guinea Pig', 'Hamster', 'Gerbil', 'Mouse', 'Chinchilla'
+export const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
+export const mediaTypes = ['Image']; // Add more types here: 'video', etc.
+export const speciesTypes = ['Dog']; // Add other animals here: 'Cat', 'Rabbit', 'Guinea Pig', 'Hamster', 'Gerbil', 'Mouse', 'Chinchilla'
 
 export interface IPetListing {
   _id: Schema.Types.ObjectId;
@@ -14,57 +14,108 @@ export interface IPetListing {
   description: string;
   saleType: string;
   media: { type: string; url: string }[];
-  createdAt: Date;
-  updatedAt: Date;
   animal: Schema.Types.ObjectId;
   species: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const petListingSchema = new Schema(
+export interface ICreateOrUpdatePetListingRequest extends Request {
+  body: Omit<
+    IPetListing,
+    '_id' | 'createdAt' | 'updatedAt' | 'lister' | 'animal'
+  > & {
+    lister: IUser;
+    animal: ICreateOrUpdateDogRequest['body']; // Add other animals here: ICreateOrUpdateCatRequest['body'], etc.
+  };
+}
+
+export interface IGetAllPetListingsRequest extends Request {}
+
+export interface IGetAllPetListingsBySpeciesRequest extends Request {
+  params: {
+    species: string;
+  };
+}
+
+export interface IGetPetListingByIdRequest extends Request {
+  params: {
+    id: string;
+  };
+}
+
+export interface IDeletePetListingByIdRequest extends Request {
+  params: {
+    id: string;
+  };
+}
+
+const PetListingSchema = new Schema(
   {
     lister: {
       type: Schema.Types.ObjectId,
       immutable: true,
       ref: 'User',
-      required: [true, 'Please specify the lister for this listing.'],
-      autopopulate: true
+      required: [true, 'Please specify the lister of this listing.']
     },
-    price: { type: Number, required: true },
-    description: { type: String, required: true },
+    price: { 
+      type: Number, 
+      required: [true, 'Please specify the price of this listing.'],
+      cast: 'Price of `{VALUE}` is invalid.'
+    },
+    description: { 
+      type: String, 
+      required: [true, 'Please provide a description for this listing.'] },
     saleType: {
       type: String,
-      enum: saleTypes,
+      enum: {
+        values: saleTypes,
+        message: 'Sale type of `{VALUE}` is not supported.'
+      },
       immutable: true,
-      required: [true, 'Please specify the sale type for this listing.']
+      required: [true, 'Please specify the sale type of this listing.']
     },
-    media: [{ type: { type: String, enum: mediaTypes }, url: String }],
-    createdAt: { type: Date, immutable: true, default: () => Date.now() },
-    updatedAt: { type: Date, default: () => Date.now() },
+    media: [
+      {
+        type: {
+          type: String,
+          enum: {
+            values: mediaTypes,
+            message: 'Media type of `{VALUE}` is not yet supported.'
+          },
+          required: [true, 'Please specify the media type of this asset.']
+        },
+        url: {
+          type: String,
+          required: [true, 'Please specify the URL of this asset.']
+        }
+      }
+    ],
     animal: {
       type: Schema.Types.ObjectId,
       immutable: true,
       refPath: 'species',
-      required: [true, 'Please specify the animal for this listing.'],
-      autopopulate: true
+      required: [true, 'Please specify the animal in this listing.']
     },
     species: {
       type: String,
-      enum: speciesTypes,
+      enum: {
+        values: speciesTypes,
+        message: 'Animal species of `{VALUE}` is not yet supported.'
+      },
       immutable: true,
       required: [
         true,
-        'Please specify the species of the animal for this listing.'
+        'Please specify the species of the animal in this listing.'
       ]
     }
   },
-  { collection: 'petListings' }
+  { collection: 'petListings', timestamps: true }
 );
 
-petListingSchema.plugin(require('mongoose-autopopulate'));
-
-const PetListing: Model<IPetListing> = mongoose.model(
+const PetListing = mongoose.model<IPetListing, Model<IPetListing>>(
   'PetListing',
-  petListingSchema
+  PetListingSchema
 );
 
-module.exports = { PetListing, saleTypes, mediaTypes, speciesTypes };
+export default PetListing;

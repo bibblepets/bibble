@@ -1,6 +1,5 @@
 import { Router } from 'express';
-
-const AuthController = require('../controllers/auth.controller');
+import * as AuthController from '../controllers/auth.controller';
 
 const router = Router();
 

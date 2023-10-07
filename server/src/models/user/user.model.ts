@@ -19,11 +19,7 @@ interface IUserMethods {
   isCorrectPassword(password: string): boolean;
 }
 
-export type HydratedDocumentUser = mongoose.HydratedDocument<IUser, IUserMethods>;
-
-interface UserModel extends Model<IUser, {}, IUserMethods> {
-  findByEmail(email: string): Promise<HydratedDocumentUser>;
-}
+interface UserModel extends Model<IUser, {}, IUserMethods> {}
 
 export interface ICreateOrUpdateUserRequest extends Request {
   body: Omit<
@@ -55,14 +51,14 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
       ref: 'BuyerProfile',
       immutable: true,
       required: [true, 'Please provide a buyer profile for this user.'],
-      cast: '{VALUE} is not a valid buyer profile ID.'
+      cast: 'Buyer Profile ID of `{VALUE}` is invalid.'
     },
     businessProfile: {
       type: Schema.Types.ObjectId,
       ref: 'BusinessProfile',
       immutable: true,
       required: false,
-      cast: '{VALUE} is not a valid business profile ID.',
+      cast: 'Business Profile ID of `{VALUE}` is invalid.',
     },
     email: {
       type: String,
@@ -97,10 +93,6 @@ UserSchema.pre('findOneAndUpdate', function (next) {
     (this as any)._update.password = hashSync((this as any)._update.password, 10);
   }
   next();
-});
-
-UserSchema.static('findByEmail', async function (email: string) {
-  return await this.findOne({ email });
 });
 
 UserSchema.method('isCorrectPassword', function (password: string) {
