@@ -1,9 +1,9 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model } from 'mongoose';
+import { compareSync, hashSync } from 'bcrypt';
 import { ICreateOrUpdateBuyerProfileRequest } from './buyerProfile.model';
 import { ICreateOrUpdateBusinessProfileRequest } from './businessProfile.model';
 
-import { compareSync, hashSync } from 'bcrypt';
 
 export interface IUser {
   _id: Schema.Types.ObjectId;
