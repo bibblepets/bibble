@@ -170,15 +170,16 @@ export const updatePetListingById = async (
 
     // Validate request
     console.log('Validating request body...');
+    console.log('Validating Animal request body...')
     await validateUpdateAnimal(req, species);
-    await PetListing.validate(
-      {
-        price: price,
-        description: description,
-        media: media
-      },
-      ['price', 'description', 'media']
-    );
+
+    if (price || description || media) {
+      console.log('Validating Pet Listing request body...');
+      const petListingPathsToValidate: string[] = ['price', 'description', 'media'].filter(
+        (key: string) => req.body[key as keyof typeof req.body]
+      );
+      await PetListing.validate({ price, description, media }, petListingPathsToValidate);
+    }
     console.log('Request body validated.');
 
     // Update animal
@@ -217,6 +218,7 @@ const validateUpdateAnimal = async (
   species: string
 ) => {
   if (species == 'Dog') {
+    console.log('Validating Dog request body...');
     return await Dog.validate(req.body.animal, Object.keys(req.body.animal));
   } // else if...
 };

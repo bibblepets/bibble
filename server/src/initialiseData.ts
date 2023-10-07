@@ -1,5 +1,4 @@
 import { Connection } from 'mongoose';
-import { hashSync } from 'bcrypt';
 import User, { IUser } from './models/user/user.model';
 import BuyerProfile, { IBuyerProfile } from './models/user/buyerProfile.model';
 import PetListing, { IPetListing, saleTypes, mediaTypes, speciesTypes } from './models/listing/petListing.model';
