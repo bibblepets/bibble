@@ -2,14 +2,12 @@ import { Connection } from 'mongoose';
 import { hashSync } from 'bcrypt';
 import User, { IUser } from './models/user/user.model';
 import BuyerProfile, { IBuyerProfile } from './models/user/buyerProfile.model';
-import { IPetListing } from './models/listing/petListing.model';
-import { IDog } from './models/listing/animal/dog/dog.model';
+import PetListing, { IPetListing, saleTypes, mediaTypes, speciesTypes } from './models/listing/petListing.model';
+import Dog, { IDog, sizes, hairCoats, genders } from './models/listing/animal/dog/dog.model';
 import { IDogBreed } from './models/listing/animal/dog/dogBreed.model';
 import { IDogVaccine } from './models/listing/animal/dog/dogVaccine.model';
 import { ICountry } from './models/country.model';
 
-const { PetListing, saleTypes, mediaTypes, speciesTypes } = require('./models/listing/petListing.model');
-const { Dog, sizes, hairCoats, genders } = require('./models/listing/animal/dog/dog.model');
 const DogBreed = require('./models/listing/animal/dog/dogBreed.model');
 const DogVaccine = require('./models/listing/animal/dog/dogVaccine.model');
 const Country = require('./models/country.model');
@@ -183,7 +181,7 @@ const initDogs = async (
     }
 
     // Create the dog object with random values
-    const dog: Omit<IDog, '_id'> = {
+    const dog: Omit<IDog, '_id' | 'createdAt' | 'updatedAt'> = {
       breeds: breedIds,
       vaccines: [
         ...dogVaccines.filter((v) => v.isCore).map((v) => v._id),
