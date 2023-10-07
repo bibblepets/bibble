@@ -108,7 +108,7 @@ const registerUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
     );
     console.log('JWT created.');
 
-    const populatedUser = createdUser.populate('buyerProfile businessProfile');
+    const populatedUser = await createdUser.populate('buyerProfile businessProfile');
 
     return res
       .cookie('authToken', token, COOKIE_OPTIONS)
