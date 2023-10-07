@@ -5,10 +5,10 @@ export interface IBuyerProfile {
   _id: Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
-  favouriteListings?: Schema.Types.ObjectId[];
-  profilePic?: string;
-  contactNumber?: string;
-  bio?: string;
+  favouriteListings?: Schema.Types.ObjectId[] | undefined;
+  profilePic?: string | undefined;
+  contactNumber?: string | undefined;
+  bio?: string | undefined;
   createdAt: Date;
   updatedAt: Date;
 }

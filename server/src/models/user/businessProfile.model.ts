@@ -6,12 +6,12 @@ export const bibbleTiers = ['Basic', 'Verified', 'Partner', 'Super'];
 export interface IBusinessProfile {
   _id: Schema.Types.ObjectId;
   bibbleTier: string;
-  businessName: string;
-  businessPic?: string;
-  businessBio?: string;
-  businessAddress: string;
-  businessContact: string;
-  businessEmail: string;
+  businessName?: string | undefined;
+  businessPic?: string | undefined;
+  businessBio?: string | undefined;
+  businessAddress?: string | undefined;
+  businessContact?: string | undefined;
+  businessEmail?: string | undefined;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,7 +34,7 @@ const businessProfileSchema = new Schema(
     },
     businessName: {
       type: String,
-      required: [true, 'Business name is required.']
+      required: false
     },
     businessPic: {
       type: String,
@@ -46,15 +46,15 @@ const businessProfileSchema = new Schema(
     },
     businessAddress: {
       type: String,
-      required: [true, 'Business address is required.']
+      required: false
     },
     businessContact: {
       type: String,
-      required: [true, 'Business contact number is required.']
+      required: false
     },
     businessEmail: {
       type: String,
-      required: [true, 'Business email is required.'],
+      required: false,
       validate: [validateEmail, 'Please enter a valid business email address.']
     },
     createdAt: {
