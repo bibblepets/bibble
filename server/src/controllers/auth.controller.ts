@@ -1,27 +1,14 @@
-import { compareSync, hashSync } from 'bcrypt';
 import { Request, Response } from 'express';
-import { IUser } from '../models/user/user.model';
-import { IBuyerProfile } from '../models/user/buyerProfile.model';
-import { IBusinessProfile } from '../models/user/businessProfile.model';
-import { Model } from 'mongoose';
-
-const jwt = require('jsonwebtoken');
-const User: Model<IUser> = require('../models/user/user.model');
-
-const { validateEmail, handleError } = require('../utils/util');
-const {
-  createBuyerProfile,
-  createBusinessProfile,
-  deleteProfiles,
-  updateBuyerProfile,
-  updateBusinessProfile
-} : {
-  createBuyerProfile: (req: Request) => Promise<IBuyerProfile>;
-  createBusinessProfile: (req: Request) => Promise<IBusinessProfile>;
-  deleteProfiles: (req: Request) => Promise<void>;
-  updateBuyerProfile: (req: Request) => Promise<IBuyerProfile>;
-  updateBusinessProfile: (req: Request) => Promise<IBusinessProfile>;
-} = require('./profile.controller');
+import { verify, sign } from 'jsonwebtoken';
+import { Error } from 'mongoose';
+import { handleError } from '../utils/util';
+import User, {
+  ICreateOrUpdateUserRequest,
+  ICheckAuthStatusRequest,
+  ILoginUserRequest,
+} from '../models/user/user.model';
+import BuyerProfile from '../models/user/buyerProfile.model';
+import BusinessProfile from '../models/user/businessProfile.model';
 
 const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
 
@@ -31,223 +18,258 @@ const COOKIE_OPTIONS = {
   maxAge: 1000 * 60 * 60 * 24 * 7
 };
 
-const checkAuthStatus = async (req: Request, res: Response) => {
-  const token = req.cookies.authToken;
+const checkAuthStatus = async (req: ICheckAuthStatusRequest, res: Response) => {
+  const { authToken } = req.cookies;
 
-  if (!token) {
-    return res.status(401).json({ message: 'User is not logged in.' });
-  }
-
-  const decoded = jwt.verify(token, SECRET_JWT_CODE);
-
-  await User.findById(decoded.id)
-    .then((user) => {
-      if (!user) {
-        return res.status(404).json({ message: 'User not found.' });
-      }
-
-      const token = jwt.sign(
-        { id: user._id, email: user.email },
-        SECRET_JWT_CODE
-      );
-      return res
-        .cookie('authToken', token, COOKIE_OPTIONS)
-        .json({ isAuthenticated: true, token, currentUser: user });
-    })
-    .catch((error: any) => {
-      return res.status(500).json({ message: error.message });
-    });
-};
-
-const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
-
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: 'Please enter all fields.' });
-  }
-
-  if (!validateEmail(email)) {
-    return res
-      .status(400)
-      .json({ message: 'The email address provided is invalid.' });
-  }
-
-  if (password.length < 6) {
-    return res
-      .status(400)
-      .json({ message: 'Password must be at least 6 characters long.' });
-  }
-
-  if (!req.body.buyerProfile) {
-    return res
-      .status(400)
-      .json({ message: 'Please provide buyer profile information.' });
-  }
-
-  if (req.body.businessProfile) {
-    const { businessEmail } = req.body.businessProfile;
-    if (businessEmail && !validateEmail(businessEmail)) {
-      return res
-        .status(400)
-        .json({ message: 'The business email address provided is invalid.' });
-    }
+  if (!authToken) {
+    return res.status(401).json({ message: 'Unauthorized.' });
   }
 
   try {
-    const buyerProfile = await createBuyerProfile(req);
-    const businessProfile = req.body.businessProfile
-      ? await createBusinessProfile(req)
-      : undefined;
+    if (!SECRET_JWT_CODE) {
+      throw new Error('Secret JWT code not found.');
+    }
 
-    const user = new User({
-      buyerProfile: buyerProfile._id,
-      businessProfile: businessProfile?._id,
-      name,
-      email,
-      password: hashSync(password, 10)
-    });
+    const decoded = verify(authToken, SECRET_JWT_CODE);
 
-    await user
-      .save()
-      .then((user: IUser) => {
-        console.log('User created:', user._id.toString());
-        const token = jwt.sign(
-          { id: user._id, email: user.email },
-          SECRET_JWT_CODE
-        );
-        console.log('Token created:', token);
-        return res
-          .cookie('authToken', token, COOKIE_OPTIONS)
-          .json({ isAuthenticated: true, token, currentUser: user });
-      })
-      .catch(async (error: any) => {
-        console.log('Error creating User:');
-        req.params.buyerProfileId = buyerProfile._id.toString();
-        if (businessProfile) {
-          req.params.businessProfileId = businessProfile._id.toString();
-        }
-        await deleteProfiles(req);
-        throw error;
-      });
+    if (typeof decoded === 'string') {
+      throw new Error('Decoded JWT is a string.');
+    }
+
+    const authUser = await User.findById(decoded.id);
+
+    if (!authUser) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const token = sign(
+      { id: authUser._id, email: authUser.email },
+      SECRET_JWT_CODE
+    );
+
+    const populatedUser = await authUser.populate('buyerProfile businessProfile');
+
+    return res
+      .cookie('authToken', token, COOKIE_OPTIONS)
+      .json({ token: token, currentUser: populatedUser, message: 'User is authenticated.' });
   } catch (error: any) {
-    return handleError(req, res, error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
-const loginUser = async (req: Request, res: Response) => {
+const registerUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
+  const { buyerProfile, businessProfile, email, password } = req.body;
+  console.log('--REGISTER USER--');
+  try {
+    if (!SECRET_JWT_CODE) {
+      throw new Error('Secret JWT code not found.');
+    }
+
+    // Validate request body
+    console.log('Validating request body...');
+    await BuyerProfile.validate(buyerProfile);
+    if (businessProfile) {
+      await BusinessProfile.validate(businessProfile);
+    }
+    await User.validate({ email, password }, ['email', 'password']);
+    console.log('Request body validated.');
+
+    // Create Buyer Profile
+    console.log('Creating buyer profile...');
+    const createdBuyerProfile = await BuyerProfile.create(buyerProfile);
+    console.log('Buyer profile created.', createdBuyerProfile._id);
+
+    // Create Business Profile
+    console.log('Creating business profile...');
+    let createdBusinessProfile;
+    if (businessProfile) {
+      createdBusinessProfile = await BusinessProfile.create(businessProfile);
+      console.log('Business profile created.', createdBusinessProfile._id);
+    } else {
+      console.log('Business profile not created.');
+    }
+
+    // Create User
+    console.log('Creating user...');
+    const createdUser = await User.create({
+      buyerProfile: createdBuyerProfile._id,
+      businessProfile: createdBusinessProfile?._id,
+      email,
+      password
+    });
+
+    console.log('User created.', createdUser._id);
+
+    // Create JWT
+    console.log('Creating JWT...');
+    const token = sign(
+      { id: createdUser._id, email: createdUser.email },
+      SECRET_JWT_CODE
+    );
+    console.log('JWT created.');
+
+    const populatedUser = createdUser.populate('buyerProfile businessProfile');
+
+    return res
+      .cookie('authToken', token, COOKIE_OPTIONS)
+      .json({ token: token, currentUser: populatedUser, message: 'User registered successfully.' });
+  } catch (error: any) {
+    return handleError(res, error);
+  }
+};
+
+const loginUser = async (req: ILoginUserRequest, res: Response) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Please enter all fields.' });
-  }
+  try {
+    if (!SECRET_JWT_CODE) {
+      throw new Error('Secret JWT code not found.');
+    }
 
-  if (!validateEmail(email)) {
+    const user = await User.findByEmail(email);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    if (!user.isCorrectPassword(password)) {
+      return res.status(401).json({ message: 'Incorrect password.' });
+    }
+
+    const token = sign({ id: user._id, email: user.email }, SECRET_JWT_CODE);
+
+    const populatedUser = await user.populate('buyerProfile businessProfile');
+
     return res
-      .status(400)
-      .json({ message: 'Please enter a valid email address.' });
+      .cookie('authToken', token, COOKIE_OPTIONS)
+      .json({ token: token, currentUser: populatedUser, message: 'User logged in successfully.' });
+  } catch (error: any) {
+    return handleError(res, error);
   }
-
-  await User.findOne({ email })
-    .then((user) => {
-      if (!user) {
-        return res.status(404).json({ message: 'User not found.' });
-      }
-
-      if (!compareSync(password, user.password)) {
-        return res.status(401).json({ message: 'Incorrect password.' });
-      }
-
-      const token = jwt.sign(
-        { id: user._id, email: user.email },
-        SECRET_JWT_CODE
-      );
-
-      return res
-        .cookie('authToken', token, COOKIE_OPTIONS)
-        .json({ isAuthenticated: true, token, currentUser: user });
-    })
-    .catch((error: any) => {
-      return res.status(500).json({ message: error.message });
-    });
 };
 
 const logoutUser = (_req: Request, res: Response) => {
   res.clearCookie('authToken', COOKIE_OPTIONS);
 
   res.json({
-    isAuthenticated: false,
-    message: 'Logged out successfully'
+    message: 'User logged out successfully.'
   });
 };
 
-const updateUser = async (req: Request, res: Response) => {
+const updateUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
   const { id } = req.params;
-  const { name, email, password } = req.body;
+  const { buyerProfile, businessProfile, email, password } = req.body;
 
-  if (email && !validateEmail(email)) {
-    return res
-      .status(400)
-      .json({ message: 'The email address provided is invalid.' });
-  }
+  try {
+    // Get User Document
+    const user = await User.findById(id);
 
-  if (password && password.length < 6) {
-    return res
-      .status(400)
-      .json({ message: 'Password must be at least 6 characters long.' });
-  }
-
-  if (req.body.businessProfile) {
-    const { businessEmail } = req.body.businessProfile;
-    if (businessEmail && !validateEmail(businessEmail)) {
-      return res
-        .status(400)
-        .json({ message: 'The business email address provided is invalid.' });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
     }
-  }
 
-  await User.findByIdAndUpdate(
-    id,
-    {
-      name,
-      email,
-      password: password ? hashSync(password, 10) : undefined
-    },
-    { new: true, runValidators: true }
-  )
-    .then(async (user) => {
-      if (!user) {
-        return res.status(404).json({ message: 'User not found.' });
+    const buyerProfileId = user.buyerProfile;
+    const businessProfileId = user.businessProfile;
+
+    // Validate request body
+    if (buyerProfile) {
+      console.log('Validating Buyer Profile request body...');
+      await BuyerProfile.validate(buyerProfile, Object.keys(buyerProfile));
+    }
+    if (businessProfile) {
+      // If user has a business profile, validate request body for update
+      console.log('Validating Business Profile (Update) request body...')
+      if (businessProfileId) {
+        await BusinessProfile.validate(
+          businessProfile,
+          Object.keys(businessProfile)
+        );
+      } else {
+        // If user does not have a business profile, validate request body for create
+        console.log('Validating Business Profile (Create) request body...')
+        await BusinessProfile.validate(businessProfile);
       }
+    }
+    if (email || password) {
+      console.log('Validating User request body...');
+      const userPathsToUpdate = ['email', 'password'].filter(
+        (key: string) => req.body[key as keyof typeof req.body]
+      );
+      await User.validate({ email, password }, userPathsToUpdate);
+    }
 
-      req.params.buyerProfileId = (user.buyerProfile as any)._id.toString();
-      user.buyerProfile = await updateBuyerProfile(req).then(profile => profile._id);
+    // Update Buyer Profile
+    console.log('Updating buyer profile...');
+    const updatedBuyerProfile = await BuyerProfile.findByIdAndUpdate(
+      buyerProfileId,
+      buyerProfile,
+      { new: true }
+    );
 
-      if (user.businessProfile) {
-        req.params.businessProfileId = user.businessProfile.toString();
+    if (!updatedBuyerProfile) {
+      return res.status(404).json({ message: 'Buyer profile not found.' });
+    }
+
+    // Update Business Profile
+    let updatedBusinessProfile;
+    if (businessProfile) {
+      if (businessProfileId) {
+        // If request body contains business profile and user has business profile, update business profile
+        console.log('Updating business profile...')
+        updatedBusinessProfile = await BusinessProfile.findByIdAndUpdate(
+          businessProfileId,
+          businessProfile,
+          { new: true }
+        );
+      } else {
+        console.log('Creating business profile...')
+        // If request body contains business profile and user does not have business profile, create business profile
+        updatedBusinessProfile = await BusinessProfile.create(businessProfile);
       }
+    }
 
-      if (req.body.businessProfile) {
-        if (user.businessProfile) {
-          console.log('Updating business profile...');
-          user.businessProfile = await updateBusinessProfile(req).then(profile => profile._id);
-        } else {
-          console.log('Creating business profile...');
-          user.businessProfile = await createBusinessProfile(req).then(profile => profile._id);
-          console.log('SHOULD NOT BE BULL ->', user.businessProfile);
-        }
-      }
+    if (!updatedBusinessProfile) {
+      return res
+        .status(404)
+        .json({ message: 'Business profile not found.' });
+    }
 
-      await user.save().then((user: IUser) => console.log(user));
-      console.log('User Profiles updated.');
+    // Update User
+    if (businessProfile && businessProfileId) {
+      // If request body contains business profile and user has business profile, update user
+      console.log('Updating user...')
+      user.updateOne({
+        buyerProfile: updatedBuyerProfile._id,
+        businessProfile: updatedBusinessProfile._id,
+        email,
+        password
+      });
+    } else if (businessProfile && !businessProfileId) {
+      // If request body contains business profile and user does not have business profile, replace user
+      console.log('Replacing user...')
+      await user.replaceOne({
+        buyerProfile: buyerProfile
+          ? updatedBuyerProfile._id
+          : user.buyerProfile,
+        businessProfile: updatedBusinessProfile?._id,
+        email: email ? email : user.email,
+        password: password ? password : user.password,
+        createdAt: user.createdAt
+      });
+    }
 
-      console.log('User updated:', user._id.toString());
-      return res.status(200).json(user);
-    })
-    .catch((error: any) => {
-      console.log('Error updating User:');
-      console.log(error.message);
-      return handleError(req, res, error);
+    const updatedUser = await User.findById(id);
+    const populatedUser = await updatedUser?.populate(
+      'buyerProfile businessProfile'
+    );
+
+    return res.json({
+      user: populatedUser,
+      message: 'User updated successfully.'
     });
+  } catch (error: any) {
+    return handleError(res, error);
+  }
 };
 
 module.exports = {

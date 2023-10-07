@@ -15,10 +15,10 @@ export interface IAppointment {
 
 const appointmentSchema = new Schema(
     {
-        listingId: { type: Schema.Types.ObjectId, required: true },
-        userId: { type: Schema.Types.ObjectId, required: true },
-        datetime: { type: Date, required: true },
-        status: { type: String, enum: statuses, required: true },
+        listingId: { type: Schema.Types.ObjectId, required: [true, 'Please specify the listing of this appointment.'] },
+        userId: { type: Schema.Types.ObjectId, required: [true, 'Please specify the user that made this appointment.'] },
+        datetime: { type: Date, required: [true, 'Please specify the date and time of this appointment.'] },
+        status: { type: String, enum: statuses, required: [true, 'Please specify the current status of this appointment.'] },
         remarks: { type: String, required: false },
     },
     { collection: "appointments" }

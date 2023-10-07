@@ -26,7 +26,7 @@ const petListingSchema = new Schema(
       type: Schema.Types.ObjectId,
       immutable: true,
       ref: 'User',
-      required: true,
+      required: [true, 'Please specify the lister for this listing.'],
       autopopulate: true
     },
     price: { type: Number, required: true },
@@ -35,7 +35,7 @@ const petListingSchema = new Schema(
       type: String,
       enum: saleTypes,
       immutable: true,
-      required: true
+      required: [true, 'Please specify the sale type for this listing.']
     },
     media: [{ type: { type: String, enum: mediaTypes }, url: String }],
     createdAt: { type: Date, immutable: true, default: () => Date.now() },
@@ -44,14 +44,17 @@ const petListingSchema = new Schema(
       type: Schema.Types.ObjectId,
       immutable: true,
       refPath: 'species',
-      required: true,
+      required: [true, 'Please specify the animal for this listing.'],
       autopopulate: true
     },
     species: {
       type: String,
       enum: speciesTypes,
       immutable: true,
-      required: true
+      required: [
+        true,
+        'Please specify the species of the animal for this listing.'
+      ]
     }
   },
   { collection: 'petListings' }
@@ -59,6 +62,9 @@ const petListingSchema = new Schema(
 
 petListingSchema.plugin(require('mongoose-autopopulate'));
 
-const PetListing: Model<IPetListing> = mongoose.model('PetListing', petListingSchema);
+const PetListing: Model<IPetListing> = mongoose.model(
+  'PetListing',
+  petListingSchema
+);
 
 module.exports = { PetListing, saleTypes, mediaTypes, speciesTypes };

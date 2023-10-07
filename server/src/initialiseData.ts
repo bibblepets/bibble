@@ -1,16 +1,13 @@
 import { Connection } from 'mongoose';
 import { hashSync } from 'bcrypt';
-import { IUser } from './models/user/user.model';
-import { IBuyerProfile } from './models/user/buyerProfile.model';
+import User, { IUser } from './models/user/user.model';
+import BuyerProfile, { IBuyerProfile } from './models/user/buyerProfile.model';
 import { IPetListing } from './models/listing/petListing.model';
 import { IDog } from './models/listing/animal/dog/dog.model';
 import { IDogBreed } from './models/listing/animal/dog/dogBreed.model';
 import { IDogVaccine } from './models/listing/animal/dog/dogVaccine.model';
 import { ICountry } from './models/country.model';
 
-const User = require('./models/user/user.model');
-const BuyerProfile = require('./models/user/buyerProfile.model');
-const BusinessProfile = require('./models/user/businessProfile.model');
 const { PetListing, saleTypes, mediaTypes, speciesTypes } = require('./models/listing/petListing.model');
 const { Dog, sizes, hairCoats, genders } = require('./models/listing/animal/dog/dog.model');
 const DogBreed = require('./models/listing/animal/dog/dogBreed.model');
@@ -27,7 +24,6 @@ const adminBuyerProfile: Omit<
 };
 
 const admin: Omit<IUser, '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile'> = {
-  name: 'Bibble Admin',
   email: 'admin@bibble.com',
   password: '123456'
 };
@@ -139,13 +135,12 @@ const initCountries = async (): Promise<ICountry[]> => {
 };
 
 const initAdmin = async (): Promise<IUser> => {
-  return await BuyerProfile.create(adminBuyerProfile).then(
+  const createdUser = await BuyerProfile.create(adminBuyerProfile).then(
     async (buyerProfile: IBuyerProfile) => {
       return await User.create({
         buyerProfile: buyerProfile._id,
-        name: admin.name,
         email: admin.email,
-        password: hashSync(admin.password, 10)
+        password: admin.password
       })
         .then((user: IUser) => {
           console.log('Admin initialised');
@@ -154,13 +149,17 @@ const initAdmin = async (): Promise<IUser> => {
         .catch((error: any) => console.log('Error creating User:', error));
     }
   );
+  
+  if (!createdUser) {
+    throw new Error('Error creating Admin');
+  }
+  return createdUser;
 };
 
 const initDogs = async (
   dogBreeds: IDogBreed[],
   dogVaccines: IDogVaccine[],
-  countries: ICountry[],
-  admin: IUser
+  countries: ICountry[]
 ) => {
   const numDogs = 10;
   let dogList: IDog[] = [];
@@ -245,7 +244,7 @@ export const initialiseData = async (): Promise<void> => {
   const countries: ICountry[] = await initCountries();
   const admin: IUser = await initAdmin();
 
-  const dogs: IDog[] = await initDogs(dogBreeds, dogVaccines, countries, admin);
+  const dogs: IDog[] = await initDogs(dogBreeds, dogVaccines, countries);
   const petListings: IPetListing[] = await initPetListings(admin, dogs);
 
   console.log('Data initialisation complete');
