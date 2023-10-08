@@ -206,7 +206,7 @@ const initDogs = async (
   dogVaccines: IDogVaccine[],
   countries: ICountry[]
 ) => {
-  const numDogs = 10;
+  const numDogs = 1000000;
   let dogList: IDog[] = [];
 
   for (let i = 0; i < numDogs; i++) {
@@ -362,7 +362,7 @@ const getRandomAVS = (): string => {
   const numbers = '0123456789';
 
   let randomString = 'AS';
-  randomString += Math.floor(Math.random() * 100)
+  randomString += Math.floor(Math.random() * 100000)
     .toString()
     .padStart(2, '0');
   for (let i = 0; i < 3; i++) {

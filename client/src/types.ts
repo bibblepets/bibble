@@ -23,13 +23,17 @@ export type LoginModalType = ModalType & {
 // ------------------------------
 
 export type User = {
+  _id: string;
   email: string;
   password?: string;
   buyerProfile?: BuyerProfile;
   businessProfile?: BusinessProfile;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export type BuyerProfile = {
+  _id: string;
   firstName: string;
   lastName: string;
   favouriteListings?: string[];
@@ -39,6 +43,7 @@ export type BuyerProfile = {
 };
 
 export type BusinessProfile = {
+  _id: string;
   bibbleTier: string;
   businessName: string;
   businessPic?: string;
@@ -51,6 +56,7 @@ export type BusinessProfile = {
 };
 
 export type Listing = {
+  _id: string;
   lister: User;
   price: number;
   description: string;
@@ -63,6 +69,7 @@ export type Listing = {
 };
 
 export type Animal = {
+  _id: string;
   breeds: Breed[];
   vaccines: Vaccine[];
   origin: Country;
@@ -84,30 +91,35 @@ export type SaleType = 'Sale' | 'Adoption';
 export type Species = string;
 
 export type Breed = {
+  _id: string;
   name: string;
 };
 
 export type Country = {
+  _id: string;
   name: string;
 };
 
 export type Gender = 'MALE' | 'FEMALE';
 
 export type Vaccine = {
+  _id: string;
   name: string;
   isCore: boolean;
 };
 
 export type License = {
+  _id: string;
   name: string;
 };
 
 export type Media = {
+  _id: string;
   type: MediaType;
   url: string;
 };
 
-export type MediaType = 'Image' | 'Video';
+export type MediaType = 'Image' | 'V_ideo';
 
 export type GeocodeResponse = {
   results: [
@@ -167,7 +179,7 @@ export type GeocodeResponse = {
           };
         };
       };
-      place_id: string;
+      place__id: string;
       plus_code: {
         compound_code: string;
         global_code: string;
