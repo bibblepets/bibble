@@ -12,14 +12,16 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
   return (
     <div
       className="flex flex-col items-center gap-4"
-      onClick={() => navigate('/kennel/details')}
+      onClick={() => navigate(`/details/${listing._id}`)}
     >
       <img
         className="aspect-square object-cover rounded-3xl transition hover:scale-105 cursor-pointer"
         src={listing.media[0]?.url}
       />
       <div className="flex flex-col items-center gap-2">
-        <a className="text-neutral-800">{listing.animal.breeds[0].name}</a>
+        <a className="text-neutral-800 whitespace-nowrap overflow-ellipsis">
+          {listing.animal.breeds[0].name}
+        </a>
         <a className="text-neutral-500">${listing.price}</a>
         <div className="flex items-center gap-2">
           <img

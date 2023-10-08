@@ -1,7 +1,7 @@
-import { useEffect, useState, useMemo } from 'react';
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import { ArrowPathIcon, MapPinIcon } from '@heroicons/react/24/outline';
-import { GeocodeResponse } from '../../../../types';
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import { useEffect, useMemo, useState } from 'react';
+import { GeocodeResponse } from '../../../types';
 
 // NEED TO HIDE THIS KEY
 const GOOGLE_MAPS_API_KEY = 'AIzaSyB7fMl7N6wsGHbbw5duRQUMPzY3lwGYRHE';
@@ -51,7 +51,7 @@ const MapCard: React.FC<MapCardProps> = ({ location }) => {
   });
 
   const center = useMemo(() => data?.coordinates, [data?.coordinates]);
-  
+
   return data && isLoaded ? (
     <div className="h-96 w-full bg-neutral-200 shadow-xl rounded-2xl">
       {/* Header */}

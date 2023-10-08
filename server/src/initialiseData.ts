@@ -170,7 +170,7 @@ const initDogs = async (
   countries: ICountry[],
   admin: IUser
 ) => {
-  const numDogs = 10;
+  const numDogs = 1000000;
   let dogList: IDog[] = [];
 
   for (let i = 0; i < numDogs; i++) {
@@ -248,10 +248,15 @@ const initPetListings = async (admin: IUser, dogList: IDog[]) => {
 export const initialiseData = async (): Promise<void> => {
   console.log('Initialising Data...');
   await db.asPromise();
-  const dogBreeds: IDogBreed[] = await initDogBreeds();
-  const dogVaccines: IDogVaccine[] = await initDogVaccines();
-  const countries: ICountry[] = await initCountries();
-  const admin: IUser = await initAdmin();
+  // const dogBreeds: IDogBreed[] = await initDogBreeds();
+  // const dogVaccines: IDogVaccine[] = await initDogVaccines();
+  // const countries: ICountry[] = await initCountries();
+  // const admin: IUser = await initAdmin();
+
+  const dogBreeds = await DogBreed.find();
+  const dogVaccines = await DogVaccine.find();
+  const countries = await Country.find();
+  const admin = await User.findOne({ email: 'admin@bibble.com' });
 
   const dogs: IDog[] = await initDogs(dogBreeds, dogVaccines, countries, admin);
   const petListings: IPetListing[] = await initPetListings(admin, dogs);
@@ -288,7 +293,7 @@ const getRandomAVS = (): string => {
   const numbers = '0123456789';
 
   let randomString = 'AS';
-  randomString += Math.floor(Math.random() * 100)
+  randomString += Math.floor(Math.random() * 100000)
     .toString()
     .padStart(2, '0');
   for (let i = 0; i < 3; i++) {
