@@ -1,6 +1,5 @@
 import { Router } from "express";
-
-const PetListingController = require("../controllers/petListing.controller");
+import * as PetListingController from "../controllers/petListing.controller";
 
 const router = Router();
 

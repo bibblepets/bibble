@@ -9,7 +9,7 @@ export interface ICountry {
 
 const countrySchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: [true, 'Please provide the name of this country.'] },
   },
   { collection: "countries" }
 );
