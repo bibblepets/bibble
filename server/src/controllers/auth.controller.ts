@@ -273,8 +273,8 @@ export const updateUser = async (
           ? updatedBuyerProfile._id
           : user.buyerProfile,
         businessProfile: updatedBusinessProfile?._id,
-        email: email ? email : user.email,
-        password: password ? password : user.password,
+        email: email || user.email,
+        password: password || user.password,
         createdAt: user.createdAt
       });
     }
