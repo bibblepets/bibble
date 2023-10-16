@@ -7,7 +7,7 @@ import { ICreateOrUpdateBusinessProfileRequest } from './businessProfile.model';
 export interface IUser {
   _id: Schema.Types.ObjectId;
   buyerProfile: Schema.Types.ObjectId;
-  businessProfile?: Schema.Types.ObjectId | undefined;
+  businessProfile?: Schema.Types.ObjectId;
   email: string;
   password: string;
   createdAt: Date;

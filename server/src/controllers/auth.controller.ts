@@ -1,19 +1,26 @@
 import { Request, Response } from 'express';
-import { verify, sign } from 'jsonwebtoken';
-import { Error } from 'mongoose';
-import { handleError } from '../utils/util';
-import {
-  ICreateOrUpdateUserRequest,
-  ICheckAuthStatusRequest,
-  ILoginUserRequest,
-  UserModel
-} from '../models/user/user.model';
-import { BuyerProfileModel } from '../models/user/buyerProfile.model';
-import { BusinessProfileModel } from '../models/user/businessProfile.model';
+import { Model } from 'mongoose';
+import { IBusinessProfile } from '../models/user/businessProfile.model';
+import { IBuyerProfile } from '../models/user/buyerProfile.model';
+import { IUser } from '../models/user/user.model';
 
-const User: UserModel = require('../models/user/user.model');
-const BuyerProfile: BuyerProfileModel = require('../models/user/buyerProfile.model');
-const BusinessProfile: BusinessProfileModel = require('../models/user/businessProfile.model');
+const jwt = require('jsonwebtoken');
+const User: Model<IUser> = require('../models/user/user.model');
+
+const { validateEmail, handleError } = require('../utils/util');
+const {
+  createBuyerProfile,
+  createBusinessProfile,
+  deleteProfiles,
+  updateBuyerProfile,
+  updateBusinessProfile
+}: {
+  createBuyerProfile: (req: Request) => Promise<IBuyerProfile>;
+  createBusinessProfile: (req: Request) => Promise<IBusinessProfile>;
+  deleteProfiles: (req: Request) => Promise<void>;
+  updateBuyerProfile: (req: Request) => Promise<IBuyerProfile>;
+  updateBusinessProfile: (req: Request) => Promise<IBusinessProfile>;
+} = require('./profile.controller');
 
 const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
 
@@ -69,46 +76,53 @@ export const checkAuthStatus = async (
   }
 };
 
-export const registerUser = async (
-  req: ICreateOrUpdateUserRequest,
-  res: Response
-) => {
-  const { buyerProfile, businessProfile, email, password } = req.body;
+const registerUser = async (req: Request, res: Response) => {
+  const {
+    email,
+    password,
+    buyerProfile: { firstName, lastName }
+  } = req.body;
+
+  if (!firstName || !lastName || !email || !password) {
+    return res.status(400).json({ message: 'Please enter all fields.' });
+  }
+
+  if (!validateEmail(email)) {
+    return res
+      .status(400)
+      .json({ message: 'The email address provided is invalid.' });
+  }
+
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ message: 'Password must be at least 6 characters long.' });
+  }
+
+  if (!req.body.buyerProfile) {
+    return res
+      .status(400)
+      .json({ message: 'Please provide buyer profile information.' });
+  }
+
+  if (req.body.businessProfile) {
+    const { businessEmail } = req.body.businessProfile;
+    if (businessEmail && !validateEmail(businessEmail)) {
+      return res
+        .status(400)
+        .json({ message: 'The business email address provided is invalid.' });
+    }
+  }
 
   try {
-    if (!SECRET_JWT_CODE) {
-      throw new Error('Secret JWT code not found.');
-    }
+    const buyerProfile = await createBuyerProfile(req);
+    const businessProfile = req.body.businessProfile
+      ? await createBusinessProfile(req)
+      : undefined;
 
-    // Validate request body
-    console.log('Validating request body...');
-    await BuyerProfile.validate(buyerProfile);
-    if (businessProfile) {
-      await BusinessProfile.validate(businessProfile);
-    }
-    await User.validate({ email, password }, ['email', 'password']);
-    console.log('Request body validated.');
-
-    // Create Buyer Profile
-    console.log('Creating buyer profile...');
-    const createdBuyerProfile = await BuyerProfile.create(buyerProfile);
-    console.log('Buyer profile created.', createdBuyerProfile._id);
-
-    // Create Business Profile
-    console.log('Creating business profile...');
-    let createdBusinessProfile;
-    if (businessProfile) {
-      createdBusinessProfile = await BusinessProfile.create(businessProfile);
-      console.log('Business profile created.', createdBusinessProfile._id);
-    } else {
-      console.log('Business profile not created.');
-    }
-
-    // Create User
-    console.log('Creating user...');
-    const createdUser = await User.create({
-      buyerProfile: createdBuyerProfile._id,
-      businessProfile: createdBusinessProfile?._id,
+    const user = new User({
+      buyerProfile: buyerProfile._id,
+      businessProfile: businessProfile?._id,
       email,
       password
     });
@@ -191,104 +205,47 @@ export const updateUser = async (
       return res.status(404).json({ message: 'User not found.' });
     }
 
-    const buyerProfileId = user.buyerProfile;
-    const businessProfileId = user.businessProfile;
-
-    // Validate request body
-    if (buyerProfile) {
-      console.log('Validating Buyer Profile request body...');
-      await BuyerProfile.validate(buyerProfile, Object.keys(buyerProfile));
-    }
-    if (businessProfile) {
-      // If user has a business profile, validate request body for update
-      console.log('Validating Business Profile (Update) request body...');
-      if (businessProfileId) {
-        await BusinessProfile.validate(
-          businessProfile,
-          Object.keys(businessProfile)
-        );
-      } else {
-        // If user does not have a business profile, validate request body for create
-        console.log('Validating Business Profile (Create) request body...');
-        await BusinessProfile.validate(businessProfile);
-      }
-    }
-    if (email || password) {
-      console.log('Validating User request body...');
-      const userPathsToUpdate = ['email', 'password'].filter(
-        (key: string) => req.body[key as keyof typeof req.body]
+      req.params.buyerProfileId = (user.buyerProfile as any)._id.toString();
+      user.buyerProfile = await updateBuyerProfile(req).then(
+        (profile) => profile._id
       );
-      await User.validate({ email, password }, userPathsToUpdate);
-    }
 
-    // Update Buyer Profile
-    console.log('Updating buyer profile...');
-    const updatedBuyerProfile = await BuyerProfile.findByIdAndUpdate(
-      buyerProfileId,
-      buyerProfile,
-      { new: true }
-    );
-
-    if (!updatedBuyerProfile) {
-      return res.status(404).json({ message: 'Buyer profile not found.' });
-    }
-
-    // Update Business Profile
-    let updatedBusinessProfile;
-    if (businessProfile) {
-      if (businessProfileId) {
-        // If request body contains business profile and user has business profile, update business profile
-        console.log('Updating business profile...');
-        updatedBusinessProfile = await BusinessProfile.findByIdAndUpdate(
-          businessProfileId,
-          businessProfile,
-          { new: true }
-        );
-      } else {
-        console.log('Creating business profile...');
-        // If request body contains business profile and user does not have business profile, create business profile
-        updatedBusinessProfile = await BusinessProfile.create(businessProfile);
+      if (user.businessProfile) {
+        req.params.businessProfileId = user.businessProfile.toString();
       }
-    }
 
-    if (!updatedBusinessProfile) {
-      return res.status(404).json({ message: 'Business profile not found.' });
-    }
+      if (req.body.businessProfile) {
+        if (user.businessProfile) {
+          console.log('Updating business profile...');
+          user.businessProfile = await updateBusinessProfile(req).then(
+            (profile) => profile._id
+          );
+        } else {
+          console.log('Creating business profile...');
+          user.businessProfile = await createBusinessProfile(req).then(
+            (profile) => profile._id
+          );
+          console.log('SHOULD NOT BE BULL ->', user.businessProfile);
+        }
+      }
 
-    // Update User
-    if (businessProfile && businessProfileId) {
-      // If request body contains business profile and user has business profile, update user
-      console.log('Updating user...');
-      await user.updateOne({
-        buyerProfile: updatedBuyerProfile._id,
-        businessProfile: updatedBusinessProfile._id,
-        email,
-        password
-      });
-    } else if (businessProfile && !businessProfileId) {
-      // If request body contains business profile and user does not have business profile, replace user
-      console.log('Replacing user...');
-      await user.replaceOne({
-        buyerProfile: buyerProfile
-          ? updatedBuyerProfile._id
-          : user.buyerProfile,
-        businessProfile: updatedBusinessProfile?._id,
-        email: email ? email : user.email,
-        password: password ? password : user.password,
-        createdAt: user.createdAt
-      });
-    }
+      await user.save().then((user: IUser) => console.log(user));
+      console.log('User Profiles updated.');
 
-    const updatedUser = await User.findById(id);
-    const populatedUser = await updatedUser?.populate(
-      'buyerProfile businessProfile'
-    );
-
-    return res.json({
-      user: populatedUser,
-      message: 'User updated successfully.'
+      console.log('User updated:', user._id.toString());
+      return res.status(200).json(user);
+    })
+    .catch((error: any) => {
+      console.log('Error updating User:');
+      console.log(error.message);
+      return handleError(req, res, error);
     });
-  } catch (error: any) {
-    return handleError(res, error);
-  }
+};
+
+module.exports = {
+  checkAuthStatus,
+  registerUser,
+  loginUser,
+  logoutUser,
+  updateUser
 };

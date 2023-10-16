@@ -1,59 +1,31 @@
 import { hashSync } from 'bcrypt';
 import { Connection } from 'mongoose';
-import { IUser, UserModel } from './models/user/user.model';
-import {
-  BuyerProfileModel,
-  IBuyerProfile
-} from './models/user/buyerProfile.model';
-import {
-  BusinessProfileModel,
-  IBusinessProfile
-} from './models/user/businessProfile.model';
-import {
-  PetListingModel,
-  IPetListing
-} from './models/listing/petListing.model';
-import { DogModel, IDog } from './models/listing/animal/dog/dog.model';
-import {
-  DogBreedModel,
-  IDogBreed
-} from './models/listing/animal/dog/dogBreed.model';
-import {
-  DogVaccineModel,
-  IDogVaccine
-} from './models/listing/animal/dog/dogVaccine.model';
-import { CountryModel, ICountry } from './models/country.model';
+import { ICountry } from './models/country.model';
+import { IDog } from './models/listing/animal/dog/dog.model';
+import { IDogBreed } from './models/listing/animal/dog/dogBreed.model';
+import { IDogVaccine } from './models/listing/animal/dog/dogVaccine.model';
+import { IPetListing } from './models/listing/petListing.model';
+import { IBuyerProfile } from './models/user/buyerProfile.model';
+import { IUser } from './models/user/user.model';
 
-const User: UserModel = require('./models/user/user.model');
-const BuyerProfile: BuyerProfileModel = require('./models/user/buyerProfile.model');
-const BusinessProfile: BusinessProfileModel = require('./models/user/businessProfile.model');
+const User = require('./models/user/user.model');
+const BuyerProfile = require('./models/user/buyerProfile.model');
+const BusinessProfile = require('./models/user/businessProfile.model');
 const {
   PetListing,
   saleTypes,
   mediaTypes,
-  speciesTypes,
-  saleStatuses
-}: {
-  PetListing: PetListingModel;
-  saleTypes: string[];
-  mediaTypes: string[];
-  speciesTypes: string[];
-  saleStatuses: string[];
+  speciesTypes
 } = require('./models/listing/petListing.model');
 const {
   Dog,
   sizes,
   hairCoats,
   genders
-}: {
-  Dog: DogModel;
-  sizes: string[];
-  hairCoats: string[];
-  genders: string[];
 } = require('./models/listing/animal/dog/dog.model');
-const DogBreed: DogBreedModel = require('./models/listing/animal/dog/dogBreed.model');
-const DogVaccine: DogVaccineModel = require('./models/listing/animal/dog/dogVaccine.model');
-const Country: CountryModel = require('./models/country.model');
+const DogBreed = require('./models/listing/animal/dog/dogBreed.model');
+const DogVaccine = require('./models/listing/animal/dog/dogVaccine.model');
+const Country = require('./models/country.model');
 
 // Seed Data -------------------------------------------------------------------
 const adminBuyerProfile: Omit<
@@ -184,19 +156,16 @@ const initCountries = async (): Promise<ICountry[]> => {
 const initAdmin = async (): Promise<IUser> => {
   return await BuyerProfile.create(adminBuyerProfile).then(
     async (buyerProfile: IBuyerProfile) => {
-      return await BusinessProfile.create(adminBusinessProfile).then(
-        async (businessProfile: IBusinessProfile) => {
-          return await User.create({
-            buyerProfile: buyerProfile._id,
-            businessProfile: businessProfile._id,
-            email: admin.email,
-            password: admin.password
-          }).then((user: IUser) => {
-            console.log('Admin initialised');
-            return user;
-          });
-        }
-      );
+      return await User.create({
+        buyerProfile: buyerProfile._id,
+        email: admin.email,
+        password: hashSync(admin.password, 10)
+      })
+        .then((user: IUser) => {
+          console.log('Admin initialised');
+          return user;
+        })
+        .catch((error: any) => console.log('Error creating User:', error));
     }
   );
 };
@@ -283,20 +252,17 @@ const initPetListings = async (admin: IUser, dogList: IDog[]) => {
 };
 
 export const initialiseData = async (): Promise<void> => {
-  let dogBreeds: IDogBreed[] | undefined;
-  let dogVaccines: IDogVaccine[] | undefined;
-  let countries: ICountry[] | undefined;
-  let admin: IUser | undefined;
-  let dogs: IDog[] | undefined;
-  let petListings: IPetListing[] | undefined;
+  console.log('Initialising Data...');
+  await db.asPromise();
+  // const dogBreeds: IDogBreed[] = await initDogBreeds();
+  // const dogVaccines: IDogVaccine[] = await initDogVaccines();
+  // const countries: ICountry[] = await initCountries();
+  // const admin: IUser = await initAdmin();
 
-  try {
-    console.log('Initialising Data...');
-    await db.asPromise();
-    dogBreeds = await initDogBreeds();
-    dogVaccines = await initDogVaccines();
-    countries = await initCountries();
-    admin = await initAdmin();
+  const dogBreeds = await DogBreed.find();
+  const dogVaccines = await DogVaccine.find();
+  const countries = await Country.find();
+  const admin = await User.findOne({ email: 'admin@bibble.com' });
 
     dogs = await initDogs(dogBreeds, dogVaccines, countries);
     petListings = await initPetListings(admin, dogs);
