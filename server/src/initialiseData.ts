@@ -266,7 +266,6 @@ const initPetListings = async (admin: IUser, dogList: IDog[]) => {
       price: Math.floor(Math.random() * 10000) + 1,
       description: 'Lorem ipsum, this is a description.',
       saleType: saleTypes[Math.floor(Math.random() * saleTypes.length)],
-      saleStatus: saleStatuses[Math.floor(Math.random() * saleStatuses.length)],
       media: generateMedia(mediaTypes),
       animal: dog._id,
       species: speciesTypes[0] // Dog
