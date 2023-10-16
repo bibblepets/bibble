@@ -19,7 +19,7 @@ interface IUserMethods {
   isCorrectPassword(password: string): boolean;
 }
 
-interface UserModel extends Model<IUser, {}, IUserMethods> {}
+export interface UserModel extends Model<IUser, {}, IUserMethods> {}
 
 export interface ICreateOrUpdateUserRequest extends Request {
   body: Omit<
@@ -101,7 +101,7 @@ UserSchema.method('isCorrectPassword', function (password: string) {
 
 const User = mongoose.model<IUser, UserModel>('User', UserSchema);
 
-export default User;
+module.exports = User;
 
 function validateEmail(email: string): boolean {
   return RegExp(

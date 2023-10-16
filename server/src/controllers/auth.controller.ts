@@ -2,13 +2,18 @@ import { Request, Response } from 'express';
 import { verify, sign } from 'jsonwebtoken';
 import { Error } from 'mongoose';
 import { handleError } from '../utils/util';
-import User, {
+import {
   ICreateOrUpdateUserRequest,
   ICheckAuthStatusRequest,
   ILoginUserRequest,
+  UserModel
 } from '../models/user/user.model';
-import BuyerProfile from '../models/user/buyerProfile.model';
-import BusinessProfile from '../models/user/businessProfile.model';
+import { BuyerProfileModel } from '../models/user/buyerProfile.model';
+import { BusinessProfileModel } from '../models/user/businessProfile.model';
+
+const User: UserModel = require('../models/user/user.model');
+const BuyerProfile: BuyerProfileModel = require('../models/user/buyerProfile.model');
+const BusinessProfile: BusinessProfileModel = require('../models/user/businessProfile.model');
 
 const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
 
@@ -18,7 +23,10 @@ const COOKIE_OPTIONS = {
   maxAge: 1000 * 60 * 60 * 24 * 7
 };
 
-export const checkAuthStatus = async (req: ICheckAuthStatusRequest, res: Response) => {
+export const checkAuthStatus = async (
+  req: ICheckAuthStatusRequest,
+  res: Response
+) => {
   const { authToken } = req.cookies;
 
   if (!authToken) {
@@ -47,17 +55,24 @@ export const checkAuthStatus = async (req: ICheckAuthStatusRequest, res: Respons
       SECRET_JWT_CODE
     );
 
-    const populatedUser = await authUser.populate('buyerProfile businessProfile');
+    const populatedUser = await authUser.populate(
+      'buyerProfile businessProfile'
+    );
 
-    return res
-      .cookie('authToken', token, COOKIE_OPTIONS)
-      .json({ token: token, currentUser: populatedUser, message: 'User is authenticated.' });
+    return res.cookie('authToken', token, COOKIE_OPTIONS).json({
+      token: token,
+      currentUser: populatedUser,
+      message: 'User is authenticated.'
+    });
   } catch (error: any) {
     return handleError(res, error);
   }
 };
 
-export const registerUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
+export const registerUser = async (
+  req: ICreateOrUpdateUserRequest,
+  res: Response
+) => {
   const { buyerProfile, businessProfile, email, password } = req.body;
 
   try {
@@ -107,11 +122,15 @@ export const registerUser = async (req: ICreateOrUpdateUserRequest, res: Respons
     );
     console.log('JWT created.');
 
-    const populatedUser = await createdUser.populate('buyerProfile businessProfile');
+    const populatedUser = await createdUser.populate(
+      'buyerProfile businessProfile'
+    );
 
-    return res
-      .cookie('authToken', token, COOKIE_OPTIONS)
-      .json({ token: token, currentUser: populatedUser, message: 'User registered successfully.' });
+    return res.cookie('authToken', token, COOKIE_OPTIONS).json({
+      token: token,
+      currentUser: populatedUser,
+      message: 'User registered successfully.'
+    });
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -139,9 +158,11 @@ export const loginUser = async (req: ILoginUserRequest, res: Response) => {
 
     const populatedUser = await user.populate('buyerProfile businessProfile');
 
-    return res
-      .cookie('authToken', token, COOKIE_OPTIONS)
-      .json({ token: token, currentUser: populatedUser, message: 'User logged in successfully.' });
+    return res.cookie('authToken', token, COOKIE_OPTIONS).json({
+      token: token,
+      currentUser: populatedUser,
+      message: 'User logged in successfully.'
+    });
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -155,7 +176,10 @@ export const logoutUser = (_req: Request, res: Response) => {
   });
 };
 
-export const updateUser = async (req: ICreateOrUpdateUserRequest, res: Response) => {
+export const updateUser = async (
+  req: ICreateOrUpdateUserRequest,
+  res: Response
+) => {
   const { id } = req.params;
   const { buyerProfile, businessProfile, email, password } = req.body;
 
@@ -177,7 +201,7 @@ export const updateUser = async (req: ICreateOrUpdateUserRequest, res: Response)
     }
     if (businessProfile) {
       // If user has a business profile, validate request body for update
-      console.log('Validating Business Profile (Update) request body...')
+      console.log('Validating Business Profile (Update) request body...');
       if (businessProfileId) {
         await BusinessProfile.validate(
           businessProfile,
@@ -185,7 +209,7 @@ export const updateUser = async (req: ICreateOrUpdateUserRequest, res: Response)
         );
       } else {
         // If user does not have a business profile, validate request body for create
-        console.log('Validating Business Profile (Create) request body...')
+        console.log('Validating Business Profile (Create) request body...');
         await BusinessProfile.validate(businessProfile);
       }
     }
@@ -214,29 +238,27 @@ export const updateUser = async (req: ICreateOrUpdateUserRequest, res: Response)
     if (businessProfile) {
       if (businessProfileId) {
         // If request body contains business profile and user has business profile, update business profile
-        console.log('Updating business profile...')
+        console.log('Updating business profile...');
         updatedBusinessProfile = await BusinessProfile.findByIdAndUpdate(
           businessProfileId,
           businessProfile,
           { new: true }
         );
       } else {
-        console.log('Creating business profile...')
+        console.log('Creating business profile...');
         // If request body contains business profile and user does not have business profile, create business profile
         updatedBusinessProfile = await BusinessProfile.create(businessProfile);
       }
     }
 
     if (!updatedBusinessProfile) {
-      return res
-        .status(404)
-        .json({ message: 'Business profile not found.' });
+      return res.status(404).json({ message: 'Business profile not found.' });
     }
 
     // Update User
     if (businessProfile && businessProfileId) {
       // If request body contains business profile and user has business profile, update user
-      console.log('Updating user...')
+      console.log('Updating user...');
       await user.updateOne({
         buyerProfile: updatedBuyerProfile._id,
         businessProfile: updatedBusinessProfile._id,
@@ -245,7 +267,7 @@ export const updateUser = async (req: ICreateOrUpdateUserRequest, res: Response)
       });
     } else if (businessProfile && !businessProfileId) {
       // If request body contains business profile and user does not have business profile, replace user
-      console.log('Replacing user...')
+      console.log('Replacing user...');
       await user.replaceOne({
         buyerProfile: buyerProfile
           ? updatedBuyerProfile._id

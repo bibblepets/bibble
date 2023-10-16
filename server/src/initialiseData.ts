@@ -1,15 +1,58 @@
 import { Connection } from 'mongoose';
-import User, { IUser } from './models/user/user.model';
-import BuyerProfile, { IBuyerProfile } from './models/user/buyerProfile.model';
-import PetListing, { IPetListing, saleTypes, saleStatuses, mediaTypes, speciesTypes } from './models/listing/petListing.model';
-import Dog, { IDog, sizes, hairCoats, genders } from './models/listing/animal/dog/dog.model';
-import { IDogBreed } from './models/listing/animal/dog/dogBreed.model';
-import { IDogVaccine } from './models/listing/animal/dog/dogVaccine.model';
-import { ICountry } from './models/country.model';
+import { IUser, UserModel } from './models/user/user.model';
+import {
+  BuyerProfileModel,
+  IBuyerProfile
+} from './models/user/buyerProfile.model';
+import {
+  BusinessProfileModel,
+  IBusinessProfile
+} from './models/user/businessProfile.model';
+import {
+  PetListingModel,
+  IPetListing
+} from './models/listing/petListing.model';
+import { DogModel, IDog } from './models/listing/animal/dog/dog.model';
+import {
+  DogBreedModel,
+  IDogBreed
+} from './models/listing/animal/dog/dogBreed.model';
+import {
+  DogVaccineModel,
+  IDogVaccine
+} from './models/listing/animal/dog/dogVaccine.model';
+import { CountryModel, ICountry } from './models/country.model';
 
-const DogBreed = require('./models/listing/animal/dog/dogBreed.model');
-const DogVaccine = require('./models/listing/animal/dog/dogVaccine.model');
-const Country = require('./models/country.model');
+const User: UserModel = require('./models/user/user.model');
+const BuyerProfile: BuyerProfileModel = require('./models/user/buyerProfile.model');
+const BusinessProfile: BusinessProfileModel = require('./models/user/businessProfile.model');
+const {
+  PetListing,
+  saleTypes,
+  mediaTypes,
+  speciesTypes,
+  saleStatuses
+}: {
+  PetListing: PetListingModel;
+  saleTypes: string[];
+  mediaTypes: string[];
+  speciesTypes: string[];
+  saleStatuses: string[];
+} = require('./models/listing/petListing.model');
+const {
+  Dog,
+  sizes,
+  hairCoats,
+  genders
+}: {
+  Dog: DogModel;
+  sizes: string[];
+  hairCoats: string[];
+  genders: string[];
+} = require('./models/listing/animal/dog/dog.model');
+const DogBreed: DogBreedModel = require('./models/listing/animal/dog/dogBreed.model');
+const DogVaccine: DogVaccineModel = require('./models/listing/animal/dog/dogVaccine.model');
+const Country: CountryModel = require('./models/country.model');
 
 // Seed Data -------------------------------------------------------------------
 const adminBuyerProfile: Omit<
@@ -18,6 +61,16 @@ const adminBuyerProfile: Omit<
 > = {
   firstName: 'Bibble',
   lastName: 'Admin'
+};
+
+const adminBusinessProfile: Omit<
+  IBusinessProfile,
+  '_id' | 'createdAt' | 'updatedAt'
+> = {
+  bibbleTier: 'Partner',
+  businessName: 'Bibble',
+  businessEmail: 'teamsaturdaydevs@gmail.com',
+  businessContact: '12345678'
 };
 
 const admin: Omit<IUser, '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile'> = {
@@ -105,52 +158,46 @@ const countries: Omit<ICountry, '_id'>[] = [
 
 // Data Initialisation Functions ----------------------------------------------
 const initDogBreeds = async (): Promise<IDogBreed[]> => {
-  return await DogBreed.create(dogBreeds)
-    .then((dogBreeds: IDogBreed[]) => {
-      console.log('Dog Breeds initialised');
-      return dogBreeds;
-    })
-    .catch((error: any) => console.log('Error creating Dog Breed:', error));
+  return await DogBreed.create(dogBreeds).then((dogBreeds: IDogBreed[]) => {
+    console.log('Dog Breeds initialised');
+    return dogBreeds;
+  });
 };
 
 const initDogVaccines = async (): Promise<IDogVaccine[]> => {
-  return await DogVaccine.create(dogVaccines)
-    .then((dogVaccines: IDogVaccine[]) => {
+  return await DogVaccine.create(dogVaccines).then(
+    (dogVaccines: IDogVaccine[]) => {
       console.log('Dog Vaccines initialised');
       return dogVaccines;
-    })
-    .catch((error: any) => console.log('Error creating Dog Vaccine:', error));
+    }
+  );
 };
 
 const initCountries = async (): Promise<ICountry[]> => {
-  return await Country.create(countries)
-    .then((countries: ICountry[]) => {
-      console.log('Countries initialised');
-      return countries;
-    })
-    .catch((error: any) => console.log('Error creating Country:', error));
+  return await Country.create(countries).then((countries: ICountry[]) => {
+    console.log('Countries initialised');
+    return countries;
+  });
 };
 
 const initAdmin = async (): Promise<IUser> => {
-  const createdUser = await BuyerProfile.create(adminBuyerProfile).then(
+  return await BuyerProfile.create(adminBuyerProfile).then(
     async (buyerProfile: IBuyerProfile) => {
-      return await User.create({
-        buyerProfile: buyerProfile._id,
-        email: admin.email,
-        password: admin.password
-      })
-        .then((user: IUser) => {
-          console.log('Admin initialised');
-          return user;
-        })
-        .catch((error: any) => console.log('Error creating User:', error));
+      return await BusinessProfile.create(adminBusinessProfile).then(
+        async (businessProfile: IBusinessProfile) => {
+          return await User.create({
+            buyerProfile: buyerProfile._id,
+            businessProfile: businessProfile._id,
+            email: admin.email,
+            password: admin.password
+          }).then((user: IUser) => {
+            console.log('Admin initialised');
+            return user;
+          });
+        }
+      );
     }
   );
-  
-  if (!createdUser) {
-    throw new Error('Error creating Admin');
-  }
-  return createdUser;
 };
 
 const initDogs = async (
@@ -220,7 +267,7 @@ const initPetListings = async (admin: IUser, dogList: IDog[]) => {
       description: 'Lorem ipsum, this is a description.',
       saleType: saleTypes[Math.floor(Math.random() * saleTypes.length)],
       saleStatus: saleStatuses[Math.floor(Math.random() * saleStatuses.length)],
-      media: generateMedia(),
+      media: generateMedia(mediaTypes),
       animal: dog._id,
       species: speciesTypes[0] // Dog
     })
@@ -235,21 +282,58 @@ const initPetListings = async (admin: IUser, dogList: IDog[]) => {
 };
 
 export const initialiseData = async (): Promise<void> => {
-  console.log('Initialising Data...');
-  await db.asPromise();
-  const dogBreeds: IDogBreed[] = await initDogBreeds();
-  const dogVaccines: IDogVaccine[] = await initDogVaccines();
-  const countries: ICountry[] = await initCountries();
-  const admin: IUser = await initAdmin();
+  let dogBreeds: IDogBreed[] | undefined;
+  let dogVaccines: IDogVaccine[] | undefined;
+  let countries: ICountry[] | undefined;
+  let admin: IUser | undefined;
+  let dogs: IDog[] | undefined;
+  let petListings: IPetListing[] | undefined;
 
-  const dogs: IDog[] = await initDogs(dogBreeds, dogVaccines, countries);
-  const petListings: IPetListing[] = await initPetListings(admin, dogs);
+  try {
+    console.log('Initialising Data...');
+    await db.asPromise();
+    dogBreeds = await initDogBreeds();
+    dogVaccines = await initDogVaccines();
+    countries = await initCountries();
+    admin = await initAdmin();
 
-  console.log('Data initialisation complete');
+    dogs = await initDogs(dogBreeds, dogVaccines, countries);
+    petListings = await initPetListings(admin, dogs);
 
-  db.close();
-  console.log('Disconnected from MongoDB `' + db.name + '`');
-  process.exit();
+    console.log('Data initialisation complete');
+  } catch (error: any) {
+    console.log('Error initialising data, wiping...');
+    if (dogBreeds) {
+      await DogBreed.deleteMany({ _id: { $in: dogBreeds.map((d) => d._id) } });
+    }
+    if (dogVaccines) {
+      await DogVaccine.deleteMany({
+        _id: { $in: dogVaccines.map((d) => d._id) }
+      });
+    }
+    if (countries) {
+      await Country.deleteMany({ _id: { $in: countries.map((c) => c._id) } });
+    }
+    if (admin) {
+      await User.deleteOne({ _id: admin._id });
+      await BuyerProfile.deleteOne({ _id: admin.buyerProfile });
+      await BusinessProfile.deleteOne({ _id: admin.businessProfile });
+    }
+    if (dogs) {
+      await Dog.deleteMany({ _id: { $in: dogs.map((d) => d._id) } });
+    }
+    if (petListings) {
+      await PetListing.deleteMany({
+        _id: { $in: petListings.map((p) => p._id) }
+      });
+    }
+    console.log('Data wipe complete');
+    console.log(error);
+  } finally {
+    db.close();
+    console.log('Disconnected from MongoDB `' + db.name + '`');
+    process.exit();
+  }
 };
 // ----------------------------------------------------------------------------
 
@@ -288,7 +372,7 @@ const getRandomAVS = (): string => {
   return randomString;
 };
 
-const generateMedia = () => {
+const generateMedia = (mediaTypes: string[]) => {
   const numMedia = Math.floor(Math.random() * 4) + 1;
   const media = [];
   for (let i = 0; i < numMedia; i++) {

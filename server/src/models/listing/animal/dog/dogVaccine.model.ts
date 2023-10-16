@@ -1,6 +1,4 @@
-import { Schema } from "mongoose";
-
-const mongoose = require("mongoose");
+import mongoose, { Schema, Model } from 'mongoose';
 
 export interface IDogVaccine {
   _id: Schema.Types.ObjectId;
@@ -8,12 +6,19 @@ export interface IDogVaccine {
   isCore: boolean;
 }
 
+export interface DogVaccineModel extends Model<IDogVaccine> {}
+
 const dogVaccineSchema = new Schema(
   {
     name: { type: String, required: true, unique: true },
     isCore: { type: Boolean, required: true }
   },
-  { collection: "dogVaccines" }
+  { collection: 'dogVaccines' }
 );
 
-module.exports = mongoose.model("DogVaccine", dogVaccineSchema);
+const DogVaccine = mongoose.model<IDogVaccine, DogVaccineModel>(
+  'DogVaccine',
+  dogVaccineSchema
+);
+
+module.exports = DogVaccine;

@@ -1,11 +1,11 @@
-import { Schema } from "mongoose";
-
-const mongoose = require("mongoose");
+import mongoose, { Schema, Model } from 'mongoose';
 
 export interface ICountry {
   _id: Schema.Types.ObjectId;
   name: string;
 }
+
+export interface CountryModel extends Model<ICountry> {}
 
 const countrySchema = new Schema(
   {
@@ -14,4 +14,9 @@ const countrySchema = new Schema(
   { collection: "countries" }
 );
 
-module.exports = mongoose.model("Country", countrySchema);
+const Country = mongoose.model<ICountry, CountryModel>(
+  "Country",
+  countrySchema
+);
+
+module.exports = Country;

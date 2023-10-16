@@ -1,14 +1,20 @@
 import { Response } from 'express';
 import { handleError } from '../utils/util';
-import PetListing, {
+import {
+  PetListingModel,
   ICreateOrUpdatePetListingRequest,
   IGetAllPetListingsRequest,
   IGetAllPetListingsBySpeciesRequest,
   IGetPetListingByIdRequest,
-  IDeletePetListingByIdRequest,
-  IPetListing
+  IDeletePetListingByIdRequest
 } from '../models/listing/petListing.model';
-import Dog from '../models/listing/animal/dog/dog.model';
+import { DogModel } from '../models/listing/animal/dog/dog.model';
+
+require('../models/country.model');
+const { PetListing }: {PetListing: PetListingModel} = require('../models/listing/petListing.model');
+const { Dog }: { Dog: DogModel } = require('../models/listing/animal/dog/dog.model');
+require('../models/listing/animal/dog/dogBreed.model');
+require('../models/listing/animal/dog/dogVaccine.model');
 
 export const createPetListing = async (
   req: ICreateOrUpdatePetListingRequest,
@@ -16,8 +22,16 @@ export const createPetListing = async (
 ) => {
   // Extract fields from request body
   // Pet listing fields
-  const { lister, price, description, saleType, saleStatus, media, animal, species } =
-    req.body;
+  const {
+    lister,
+    price,
+    description,
+    saleType,
+    saleStatus,
+    media,
+    animal,
+    species
+  } = req.body;
 
   let createdAnimal;
   let createdPetListing;
@@ -36,7 +50,15 @@ export const createPetListing = async (
         media: media,
         species: species
       },
-      ['lister', 'price', 'description', 'saleType', 'status', 'media', 'species']
+      [
+        'lister',
+        'price',
+        'description',
+        'saleType',
+        'status',
+        'media',
+        'species'
+      ]
     );
     console.log('Request body validated.');
 
@@ -83,7 +105,7 @@ export const createPetListing = async (
       await createdPetListing.deleteOne();
       console.log('Pet listing deleted.');
     }
-    
+
     return handleError(res, error);
   }
 };
@@ -187,15 +209,20 @@ export const updatePetListingById = async (
 
     // Validate request
     console.log('Validating request body...');
-    console.log('Validating Animal request body...')
+    console.log('Validating Animal request body...');
     await validateUpdateAnimal(req, species);
 
     if (price || description || media) {
       console.log('Validating Pet Listing request body...');
-      const petListingPathsToValidate: string[] = ['price', 'description', 'media'].filter(
-        (key: string) => req.body[key as keyof typeof req.body]
+      const petListingPathsToValidate: string[] = [
+        'price',
+        'description',
+        'media'
+      ].filter((key: string) => req.body[key as keyof typeof req.body]);
+      await PetListing.validate(
+        { price, description, media },
+        petListingPathsToValidate
       );
-      await PetListing.validate({ price, description, media }, petListingPathsToValidate);
     }
     console.log('Request body validated.');
 

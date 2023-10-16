@@ -4,8 +4,8 @@ import { IDogBreed } from './dogBreed.model';
 import { ICountry } from '../../../country.model';
 import { IDogVaccine } from './dogVaccine.model';
 
-export const sizes = ['Small', 'Medium', 'Large'];
-export const hairCoats = [
+const sizes = ['Small', 'Medium', 'Large'];
+const hairCoats = [
   'Double',
   'Silky',
   'Wire',
@@ -15,7 +15,7 @@ export const hairCoats = [
   'Medium',
   'Short'
 ];
-export const genders = ['Male', 'Female'];
+const genders = ['Male', 'Female'];
 
 export interface IDog {
   _id: Schema.Types.ObjectId;
@@ -36,6 +36,8 @@ export interface IDog {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface DogModel extends Model<IDog> {}
 
 export interface ICreateOrUpdateDogRequest extends Request {
   body: Omit<
@@ -145,9 +147,9 @@ const dogSchema = new Schema(
   { collection: 'dogs', timestamps: true }
 );
 
-const Dog = mongoose.model<IDog, Model<IDog>>('Dog', dogSchema);
+const Dog = mongoose.model<IDog, DogModel>('Dog', dogSchema);
 
-export default Dog;
+module.exports = { Dog, sizes, hairCoats, genders };
 
 function validateAVSLicenseNumber(avsLicenseNumber: string): boolean {
   // TODO: Implement AVS license number validation

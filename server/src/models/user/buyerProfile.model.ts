@@ -13,7 +13,8 @@ export interface IBuyerProfile {
   updatedAt: Date;
 }
 
-export type HydratedDocumentBuyerProfile = mongoose.HydratedDocument<IBuyerProfile>;
+// export type HydratedDocumentBuyerProfile = mongoose.HydratedDocument<IBuyerProfile>;
+export interface BuyerProfileModel extends Model<IBuyerProfile> {}
 
 export interface ICreateOrUpdateBuyerProfileRequest extends Request {
   body: Omit<IBuyerProfile, '_id' | 'createdAt' | 'updatedAt'>;
@@ -59,7 +60,7 @@ const BuyerProfile = mongoose.model<IBuyerProfile, Model<IBuyerProfile>>(
   buyerProfileSchema
 );
 
-export default BuyerProfile;
+module.exports = BuyerProfile;
 
 function validateContactNumber(contactNumber: number): boolean {
   return RegExp(/^\d{8,}$/).test(String(contactNumber));

@@ -16,7 +16,8 @@ export interface IBusinessProfile {
   updatedAt: Date;
 }
 
-export type HydratedDocumentBusinessProfile = mongoose.HydratedDocument<IBusinessProfile>;
+// export type HydratedDocumentBusinessProfile = mongoose.HydratedDocument<IBusinessProfile>;
+export interface BusinessProfileModel extends Model<IBusinessProfile> {}
 
 export interface ICreateOrUpdateBusinessProfileRequest extends Request {
   body: Omit<IBusinessProfile, '_id' | 'createdAt' | 'updatedAt'>;
@@ -75,7 +76,7 @@ const BusinessProfile = mongoose.model<
   Model<IBusinessProfile>
 >('BusinessProfile', businessProfileSchema);
 
-export default BusinessProfile;
+module.exports = BusinessProfile;
 
 function validateEmail(email: string): boolean {
   return RegExp(

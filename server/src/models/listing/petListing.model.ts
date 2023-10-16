@@ -3,10 +3,10 @@ import mongoose, { Schema, Model } from 'mongoose';
 import { ICreateOrUpdateDogRequest } from './animal/dog/dog.model';
 import { IUser } from '../user/user.model';
 
-export const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
-export const mediaTypes = ['Image']; // Add more types here: 'video', etc.
-export const speciesTypes = ['Dog']; // Add other animals here: 'Cat', 'Rabbit', 'Guinea Pig', 'Hamster', 'Gerbil', 'Mouse', 'Chinchilla'
-export const saleStatuses = ['Available', 'Sold', 'Expired'];
+const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
+const mediaTypes = ['Image']; // Add more types here: 'video', etc.
+const speciesTypes = ['Dog']; // Add other animals here: 'Cat', 'Rabbit', 'Guinea Pig', 'Hamster', 'Gerbil', 'Mouse', 'Chinchilla'
+const saleStatuses = ['Available', 'Sold', 'Expired'];
 
 export interface IPetListing {
   _id: Schema.Types.ObjectId;
@@ -21,6 +21,8 @@ export interface IPetListing {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface PetListingModel extends Model<IPetListing> {}
 
 export interface ICreateOrUpdatePetListingRequest extends Request {
   body: Omit<
@@ -60,14 +62,15 @@ const PetListingSchema = new Schema(
       ref: 'User',
       required: [true, 'Please specify the lister of this listing.']
     },
-    price: { 
-      type: Number, 
+    price: {
+      type: Number,
       required: [true, 'Please specify the price of this listing.'],
       cast: 'Price of `{VALUE}` is invalid.'
     },
-    description: { 
-      type: String, 
-      required: [true, 'Please provide a description for this listing.'] },
+    description: {
+      type: String,
+      required: [true, 'Please provide a description for this listing.']
+    },
     saleType: {
       type: String,
       enum: {
@@ -123,9 +126,9 @@ const PetListingSchema = new Schema(
   { collection: 'petListings', timestamps: true }
 );
 
-const PetListing = mongoose.model<IPetListing, Model<IPetListing>>(
+const PetListing = mongoose.model<IPetListing, PetListingModel>(
   'PetListing',
   PetListingSchema
 );
 
-export default PetListing;
+module.exports = { PetListing, saleTypes, mediaTypes, speciesTypes, saleStatuses };
