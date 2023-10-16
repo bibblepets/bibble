@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import mongoose, { Schema, Model } from 'mongoose';
+import mongoose, { Schema, Model, Document } from 'mongoose';
 import { ICreateOrUpdateDogRequest } from './animal/dog/dog.model';
 import { IUser } from '../user/user.model';
 
@@ -20,9 +20,15 @@ export interface IPetListing {
   species: string;
   createdAt: Date;
   updatedAt: Date;
+  expiryDate: Date;
 }
 
-export interface PetListingModel extends Model<IPetListing> {}
+interface IPetListingMethods {
+  updateSaleStatus(): void;
+}
+
+export interface PetListingModel
+  extends Model<IPetListing, {}, IPetListingMethods> {}
 
 export interface ICreateOrUpdatePetListingRequest extends Request {
   body: Omit<
@@ -54,7 +60,11 @@ export interface IDeletePetListingByIdRequest extends Request {
   };
 }
 
-const PetListingSchema = new Schema(
+const PetListingSchema = new Schema<
+  IPetListing,
+  PetListingModel,
+  IPetListingMethods
+>(
   {
     lister: {
       type: Schema.Types.ObjectId,
@@ -85,8 +95,7 @@ const PetListingSchema = new Schema(
       enum: {
         values: saleStatuses,
         message: 'Sale status of `{VALUE}` is invalid.'
-      },
-      required: [true, 'Please specify the sale status of this listing.']
+      }
     },
     media: [
       {
@@ -121,9 +130,61 @@ const PetListingSchema = new Schema(
         true,
         'Please specify the species of the animal in this listing.'
       ]
+    },
+    expiryDate: {
+      type: Date,
+      immutable: true
     }
   },
   { collection: 'petListings', timestamps: true }
+);
+
+PetListingSchema.method('updateSaleStatus', function () {
+  if (this.saleStatus === 'Sold' || this.saleStatus === 'Expired') {
+    return;
+  }
+
+  if (new Date() >= this.expiryDate) {
+    this.saleStatus = 'Expired';
+  } else {
+    this.saleStatus = 'Available';
+  }
+});
+
+PetListingSchema.pre('save', function (next) {
+  if (this.isModified('createdAt')) {
+    const expiryDate = new Date(this.createdAt);
+    expiryDate.setDate(expiryDate.getDate() + 30); // Set expiration date to 30 days after creation date
+    this.expiryDate = expiryDate;
+  }
+
+  this.updateSaleStatus(); // Update sale status based on expiration date
+
+  next();
+});
+
+PetListingSchema.post(
+  'findOne',
+  function (
+    doc:
+      | (Document<unknown, {}, IPetListing> &
+          Omit<
+            IPetListing &
+              Required<{
+                _id: Schema.Types.ObjectId;
+              }>,
+            'updateSaleStatus'
+          > &
+          IPetListingMethods)
+      | null
+  ) {
+    if (!doc) {
+      return;
+    }
+
+    doc.updateSaleStatus(); // Update sale status based on expiration date
+    doc.save();
+  }
 );
 
 const PetListing = mongoose.model<IPetListing, PetListingModel>(
@@ -131,4 +192,10 @@ const PetListing = mongoose.model<IPetListing, PetListingModel>(
   PetListingSchema
 );
 
-module.exports = { PetListing, saleTypes, mediaTypes, speciesTypes, saleStatuses };
+module.exports = {
+  PetListing,
+  saleTypes,
+  mediaTypes,
+  speciesTypes,
+  saleStatuses
+};
