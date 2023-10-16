@@ -28,7 +28,7 @@ export const createPetListing = async (
     await validateCreateAnimal(req);
     await PetListing.validate(
       {
-        lister: lister._id,
+        lister: lister,
         price: price,
         description: description,
         saleType: saleType,
@@ -48,13 +48,13 @@ export const createPetListing = async (
     // Create pet listing
     console.log('Creating pet listing...');
     createdPetListing = await PetListing.create({
-      lister: lister._id,
+      lister: lister,
       price: price,
       description: description,
       saleType: saleType,
       saleStatus: saleStatus,
       media: media,
-      animal: createdAnimal._id,
+      animal: createdAnimal,
       species: species
     });
     console.log('Pet listing created.', createdPetListing._id);
