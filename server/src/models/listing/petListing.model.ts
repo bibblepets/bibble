@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model, Document } from 'mongoose';
-import { ICreateOrUpdateDogRequest } from './animal/dog/dog.model';
+import { ICreateOrUpdateDogRequest, IDog } from './animal/dog/dog.model';
 import { IUser } from '../user/user.model';
 
 const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
@@ -10,13 +10,13 @@ const saleStatuses = ['Available', 'Sold', 'Expired'];
 
 export interface IPetListing {
   _id: Schema.Types.ObjectId;
-  lister: Schema.Types.ObjectId;
+  lister: IUser['_id'];
   price: number;
   description: string;
   saleType: string;
   saleStatus: string;
   media: { type: string; url: string }[];
-  animal: Schema.Types.ObjectId;
+  animal: IDog['_id']; // Add other animals here: ICat['_id'], etc.
   species: string;
   createdAt: Date;
   updatedAt: Date;
