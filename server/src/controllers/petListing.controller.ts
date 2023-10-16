@@ -27,7 +27,6 @@ export const createPetListing = async (
     price,
     description,
     saleType,
-    saleStatus,
     media,
     animal,
     species
@@ -39,6 +38,9 @@ export const createPetListing = async (
   try {
     // Validate request
     console.log('Validating request body...');
+    if (!lister.businessProfile) {
+      return res.status(400).json({ message: 'A Business profile is required to make a listing.' });
+    }
     await validateCreateAnimal(req);
     await PetListing.validate(
       {
@@ -46,7 +48,6 @@ export const createPetListing = async (
         price: price,
         description: description,
         saleType: saleType,
-        saleStatus: saleStatus,
         media: media,
         species: species
       },
@@ -55,7 +56,6 @@ export const createPetListing = async (
         'price',
         'description',
         'saleType',
-        'status',
         'media',
         'species'
       ]
@@ -74,7 +74,6 @@ export const createPetListing = async (
       price: price,
       description: description,
       saleType: saleType,
-      saleStatus: saleStatus,
       media: media,
       animal: createdAnimal,
       species: species

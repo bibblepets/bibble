@@ -1,13 +1,19 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model } from 'mongoose';
 import { compareSync, hashSync } from 'bcrypt';
-import { ICreateOrUpdateBuyerProfileRequest } from './buyerProfile.model';
-import { ICreateOrUpdateBusinessProfileRequest } from './businessProfile.model';
+import {
+  IBuyerProfile,
+  ICreateOrUpdateBuyerProfileRequest
+} from './buyerProfile.model';
+import {
+  IBusinessProfile,
+  ICreateOrUpdateBusinessProfileRequest
+} from './businessProfile.model';
 
 export interface IUser {
   _id: Schema.Types.ObjectId;
-  buyerProfile: Schema.Types.ObjectId;
-  businessProfile?: Schema.Types.ObjectId;
+  buyerProfile: IBuyerProfile['_id'];
+  businessProfile?: IBusinessProfile['_id'];
   email: string;
   password: string;
   createdAt: Date;

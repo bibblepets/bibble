@@ -6,12 +6,12 @@ export const bibbleTiers = ['Basic', 'Verified', 'Partner', 'Super'];
 export interface IBusinessProfile {
   _id: Schema.Types.ObjectId;
   bibbleTier: string;
-  businessName?: string | undefined;
-  businessPic?: string | undefined;
-  businessBio?: string | undefined;
-  businessAddress?: string | undefined;
-  businessContact?: string | undefined;
-  businessEmail?: string | undefined;
+  businessName?: string;
+  businessPic?: string;
+  businessBio?: string;
+  businessAddress?: string;
+  businessContact?: string;
+  businessEmail?: string;
   createdAt: Date;
   updatedAt: Date;
 }
