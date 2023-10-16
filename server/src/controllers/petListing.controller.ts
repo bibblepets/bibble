@@ -19,6 +19,9 @@ export const createPetListing = async (
   const { lister, price, description, saleType, saleStatus, media, animal, species } =
     req.body;
 
+  let createdAnimal;
+  let createdPetListing;
+
   try {
     // Validate request
     console.log('Validating request body...');
@@ -39,16 +42,17 @@ export const createPetListing = async (
 
     // Create animal
     console.log('Creating animal...');
-    const createdAnimal = await createAnimal(req);
+    createdAnimal = await createAnimal(req);
     console.log('Animal created.', createdAnimal._id);
 
     // Create pet listing
     console.log('Creating pet listing...');
-    const createdPetListing = await PetListing.create({
+    createdPetListing = await PetListing.create({
       lister: lister._id,
       price: price,
       description: description,
       saleType: saleType,
+      saleStatus: saleStatus,
       media: media,
       animal: createdAnimal._id,
       species: species
@@ -68,6 +72,18 @@ export const createPetListing = async (
       message: 'Pet listing created successfully.'
     });
   } catch (error: any) {
+    if (createdAnimal) {
+      console.log('Deleting animal...');
+      await createdAnimal.deleteOne();
+      console.log('Animal deleted.');
+    }
+
+    if (createdPetListing) {
+      console.log('Deleting pet listing...');
+      await createdPetListing.deleteOne();
+      console.log('Pet listing deleted.');
+    }
+    
     return handleError(res, error);
   }
 };
