@@ -1,26 +1,19 @@
 import { Request, Response } from 'express';
-import { Model } from 'mongoose';
-import { IBusinessProfile } from '../models/user/businessProfile.model';
-import { IBuyerProfile } from '../models/user/buyerProfile.model';
-import { IUser } from '../models/user/user.model';
+import { verify, sign } from 'jsonwebtoken';
+import { Error } from 'mongoose';
+import { handleError } from '../utils/util';
+import {
+  ICreateOrUpdateUserRequest,
+  ICheckAuthStatusRequest,
+  ILoginUserRequest,
+  UserModel
+} from '../models/user/user.model';
+import { BuyerProfileModel } from '../models/user/buyerProfile.model';
+import { BusinessProfileModel } from '../models/user/businessProfile.model';
 
-const jwt = require('jsonwebtoken');
-const User: Model<IUser> = require('../models/user/user.model');
-
-const { validateEmail, handleError } = require('../utils/util');
-const {
-  createBuyerProfile,
-  createBusinessProfile,
-  deleteProfiles,
-  updateBuyerProfile,
-  updateBusinessProfile
-}: {
-  createBuyerProfile: (req: Request) => Promise<IBuyerProfile>;
-  createBusinessProfile: (req: Request) => Promise<IBusinessProfile>;
-  deleteProfiles: (req: Request) => Promise<void>;
-  updateBuyerProfile: (req: Request) => Promise<IBuyerProfile>;
-  updateBusinessProfile: (req: Request) => Promise<IBusinessProfile>;
-} = require('./profile.controller');
+const User: UserModel = require('../models/user/user.model');
+const BuyerProfile: BuyerProfileModel = require('../models/user/buyerProfile.model');
+const BusinessProfile: BusinessProfileModel = require('../models/user/businessProfile.model');
 
 const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
 
@@ -76,53 +69,46 @@ export const checkAuthStatus = async (
   }
 };
 
-const registerUser = async (req: Request, res: Response) => {
-  const {
-    email,
-    password,
-    buyerProfile: { firstName, lastName }
-  } = req.body;
-
-  if (!firstName || !lastName || !email || !password) {
-    return res.status(400).json({ message: 'Please enter all fields.' });
-  }
-
-  if (!validateEmail(email)) {
-    return res
-      .status(400)
-      .json({ message: 'The email address provided is invalid.' });
-  }
-
-  if (password.length < 6) {
-    return res
-      .status(400)
-      .json({ message: 'Password must be at least 6 characters long.' });
-  }
-
-  if (!req.body.buyerProfile) {
-    return res
-      .status(400)
-      .json({ message: 'Please provide buyer profile information.' });
-  }
-
-  if (req.body.businessProfile) {
-    const { businessEmail } = req.body.businessProfile;
-    if (businessEmail && !validateEmail(businessEmail)) {
-      return res
-        .status(400)
-        .json({ message: 'The business email address provided is invalid.' });
-    }
-  }
+export const registerUser = async (
+  req: ICreateOrUpdateUserRequest,
+  res: Response
+) => {
+  const { buyerProfile, businessProfile, email, password } = req.body;
 
   try {
-    const buyerProfile = await createBuyerProfile(req);
-    const businessProfile = req.body.businessProfile
-      ? await createBusinessProfile(req)
-      : undefined;
+    if (!SECRET_JWT_CODE) {
+      throw new Error('Secret JWT code not found.');
+    }
 
-    const user = new User({
-      buyerProfile: buyerProfile._id,
-      businessProfile: businessProfile?._id,
+    // Validate request body
+    console.log('Validating request body...');
+    await BuyerProfile.validate(buyerProfile);
+    if (businessProfile) {
+      await BusinessProfile.validate(businessProfile);
+    }
+    await User.validate({ email, password }, ['email', 'password']);
+    console.log('Request body validated.');
+
+    // Create Buyer Profile
+    console.log('Creating buyer profile...');
+    const createdBuyerProfile = await BuyerProfile.create(buyerProfile);
+    console.log('Buyer profile created.', createdBuyerProfile._id);
+
+    // Create Business Profile
+    console.log('Creating business profile...');
+    let createdBusinessProfile;
+    if (businessProfile) {
+      createdBusinessProfile = await BusinessProfile.create(businessProfile);
+      console.log('Business profile created.', createdBusinessProfile._id);
+    } else {
+      console.log('Business profile not created.');
+    }
+
+    // Create User
+    console.log('Creating user...');
+    const createdUser = await User.create({
+      buyerProfile: createdBuyerProfile._id,
+      businessProfile: createdBusinessProfile?._id,
       email,
       password
     });
