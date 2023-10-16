@@ -16,7 +16,7 @@ export const createPetListing = async (
 ) => {
   // Extract fields from request body
   // Pet listing fields
-  const { lister, price, description, saleType, media, animal, species } =
+  const { lister, price, description, saleType, saleStatus, media, animal, species } =
     req.body;
 
   try {
@@ -29,10 +29,11 @@ export const createPetListing = async (
         price: price,
         description: description,
         saleType: saleType,
+        saleStatus: saleStatus,
         media: media,
         species: species
       },
-      ['lister', 'price', 'description', 'saleType', 'media', 'species']
+      ['lister', 'price', 'description', 'saleType', 'status', 'media', 'species']
     );
     console.log('Request body validated.');
 

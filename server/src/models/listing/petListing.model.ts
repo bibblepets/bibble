@@ -6,6 +6,7 @@ import { IUser } from '../user/user.model';
 export const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
 export const mediaTypes = ['Image']; // Add more types here: 'video', etc.
 export const speciesTypes = ['Dog']; // Add other animals here: 'Cat', 'Rabbit', 'Guinea Pig', 'Hamster', 'Gerbil', 'Mouse', 'Chinchilla'
+export const saleStatuses = ['Available', 'Sold', 'Expired'];
 
 export interface IPetListing {
   _id: Schema.Types.ObjectId;
@@ -13,6 +14,7 @@ export interface IPetListing {
   price: number;
   description: string;
   saleType: string;
+  saleStatus: string;
   media: { type: string; url: string }[];
   animal: Schema.Types.ObjectId;
   species: string;
@@ -74,6 +76,14 @@ const PetListingSchema = new Schema(
       },
       immutable: true,
       required: [true, 'Please specify the sale type of this listing.']
+    },
+    saleStatus: {
+      type: String,
+      enum: {
+        values: saleStatuses,
+        message: 'Sale status of `{VALUE}` is invalid.'
+      },
+      required: [true, 'Please specify the sale status of this listing.']
     },
     media: [
       {

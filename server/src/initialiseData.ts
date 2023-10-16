@@ -1,7 +1,7 @@
 import { Connection } from 'mongoose';
 import User, { IUser } from './models/user/user.model';
 import BuyerProfile, { IBuyerProfile } from './models/user/buyerProfile.model';
-import PetListing, { IPetListing, saleTypes, mediaTypes, speciesTypes } from './models/listing/petListing.model';
+import PetListing, { IPetListing, saleTypes, saleStatuses, mediaTypes, speciesTypes } from './models/listing/petListing.model';
 import Dog, { IDog, sizes, hairCoats, genders } from './models/listing/animal/dog/dog.model';
 import { IDogBreed } from './models/listing/animal/dog/dogBreed.model';
 import { IDogVaccine } from './models/listing/animal/dog/dogVaccine.model';
@@ -219,6 +219,7 @@ const initPetListings = async (admin: IUser, dogList: IDog[]) => {
       price: Math.floor(Math.random() * 10000) + 1,
       description: 'Lorem ipsum, this is a description.',
       saleType: saleTypes[Math.floor(Math.random() * saleTypes.length)],
+      saleStatus: saleStatuses[Math.floor(Math.random() * saleStatuses.length)],
       media: generateMedia(),
       animal: dog._id,
       species: speciesTypes[0] // Dog
