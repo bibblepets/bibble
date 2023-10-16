@@ -8,7 +8,7 @@ import { IBusinessProfile, ICreateOrUpdateBusinessProfileRequest } from './busin
 export interface IUser {
   _id: Schema.Types.ObjectId;
   buyerProfile: IBuyerProfile['_id'];
-  businessProfile: IBusinessProfile['_id'] | undefined;
+  businessProfile?: IBusinessProfile['_id'];
   email: string;
   password: string;
   createdAt: Date;

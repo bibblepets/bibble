@@ -6,10 +6,10 @@ export interface IBuyerProfile {
   _id: Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
-  favouriteListings: IPetListing['_id'][] | undefined;
-  profilePic: string | undefined;
-  contactNumber: string | undefined;
-  bio: string | undefined;
+  favouriteListings?: IPetListing['_id'][];
+  profilePic?: string;
+  contactNumber?: string;
+  bio?: string;
   createdAt: Date;
   updatedAt: Date;
 }

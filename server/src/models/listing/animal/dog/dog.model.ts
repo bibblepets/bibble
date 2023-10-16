@@ -20,9 +20,9 @@ const genders = ['Male', 'Female'];
 export interface IDog {
   _id: Schema.Types.ObjectId;
   breeds: IDogBreed['_id'][];
-  vaccines: IDogVaccine['_id'][] | undefined;
+  vaccines?: IDogVaccine['_id'][];
   origin: ICountry['_id'];
-  name: string | undefined;
+  name?: string;
   gender: string;
   birthdate: Date;
   size: string;
