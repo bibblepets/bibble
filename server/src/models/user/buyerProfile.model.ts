@@ -8,7 +8,7 @@ export interface IBuyerProfile {
   lastName: string;
   favouriteListings?: IPetListing['_id'][];
   profilePic?: string;
-  contactNumber?: string;
+  contactNumber?: number;
   bio?: string;
   createdAt: Date;
   updatedAt: Date;
