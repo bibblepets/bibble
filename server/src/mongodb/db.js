@@ -1,14 +1,23 @@
 const mongoose = require('mongoose');
 
-const connectionString = process.env.MONGO_URI;
+let database;
+if (process.env.NODE_ENV === 'testing') {
+  database = process.env.MONGO_URI_TEST;
+} else {
+  database = process.env.MONGO_URI;
+}
 
 mongoose
-  .connect(connectionString, {
+  .connect(database, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
   .then(() => {
-    console.log('MongoDB connection successful');
+    if (process.env.NODE_ENV === 'testing') {
+      console.log('    MongoDB connection successful (testing)');
+    } else {
+      console.log('    MongoDB connection successful');
+    }
   })
   .catch((error) => {
     console.error('Connection error', error.message);
