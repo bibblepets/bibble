@@ -4,8 +4,7 @@ import {
 } from '../../src/models/user/buyerProfile.model';
 import { afterEach } from 'mocha';
 
-require('dotenv').config();
-const assert = require('assert');
+const chai: Chai.ChaiStatic = require('chai');
 
 const BuyerProfile: BuyerProfileModel = require('../../src/models/user/buyerProfile.model');
 
@@ -27,12 +26,14 @@ describe('Buyer Profile model', () => {
 
       const buyerProfile = new BuyerProfile(buyerProfileData);
       const savedBuyerProfile = await buyerProfile.save();
-      assert.strictEqual(
-        savedBuyerProfile.firstName,
-        buyerProfileData.firstName
-      );
-      assert.strictEqual(savedBuyerProfile.lastName, buyerProfileData.lastName);
-      assert(savedBuyerProfile._id);
+
+      chai.expect(savedBuyerProfile._id).to.exist;
+      chai
+        .expect(savedBuyerProfile.firstName)
+        .to.equal(buyerProfileData.firstName);
+      chai
+        .expect(savedBuyerProfile.lastName)
+        .to.equal(buyerProfileData.lastName);
     } catch (error: any) {
       console.error(error);
     }
@@ -45,31 +46,28 @@ describe('Buyer Profile model', () => {
         lastName: 'Doe',
         bio: 'I am a buyer',
         profilePic: 'https://www.google.com',
-        contactNumber: 12345678,
+        contactNumber: '+0012345678',
         favouriteListings: []
       };
 
       const buyerProfile = new BuyerProfile(buyerProfileData);
       const savedBuyerProfile = await buyerProfile.save();
-      assert.strictEqual(
-        savedBuyerProfile.firstName,
-        buyerProfileData.firstName
-      );
-      assert.strictEqual(savedBuyerProfile.lastName, buyerProfileData.lastName);
-      assert.strictEqual(savedBuyerProfile.bio, buyerProfileData.bio);
-      assert.strictEqual(
-        savedBuyerProfile.profilePic,
-        buyerProfileData.profilePic
-      );
-      assert.strictEqual(
-        savedBuyerProfile.contactNumber,
-        buyerProfileData.contactNumber
-      );
-      assert.strictEqual(
-        assert.strictEqual(savedBuyerProfile.favouriteListings?.length, 0),
-        assert.strictEqual(buyerProfileData.favouriteListings?.length, 0)
-      );
-      assert(savedBuyerProfile._id);
+
+      chai.expect(savedBuyerProfile._id).to.exist;
+      chai
+        .expect(savedBuyerProfile.firstName)
+        .to.equal(buyerProfileData.firstName);
+      chai
+        .expect(savedBuyerProfile.lastName)
+        .to.equal(buyerProfileData.lastName);
+      chai.expect(savedBuyerProfile.bio).to.equal(buyerProfileData.bio);
+      chai
+        .expect(savedBuyerProfile.profilePic)
+        .to.equal(buyerProfileData.profilePic);
+      chai
+        .expect(savedBuyerProfile.contactNumber)
+        .to.equal(buyerProfileData.contactNumber);
+      chai.expect(savedBuyerProfile.favouriteListings).to.be.empty;
     } catch (error: any) {
       console.error(error);
     }
@@ -85,7 +83,7 @@ describe('Buyer Profile model', () => {
       const buyerProfile = new BuyerProfile(buyerProfileData);
       await buyerProfile.save();
     } catch (error: any) {
-      assert.strictEqual(error.name, 'ValidationError');
+      chai.expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -99,7 +97,7 @@ describe('Buyer Profile model', () => {
       const buyerProfile = new BuyerProfile(buyerProfileData);
       await buyerProfile.save();
     } catch (error: any) {
-      assert.strictEqual(error.name, 'ValidationError');
+      chai.expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -113,7 +111,22 @@ describe('Buyer Profile model', () => {
       const buyerProfile = new BuyerProfile(buyerProfileData);
       await buyerProfile.save();
     } catch (error: any) {
-      assert.strictEqual(error.name, 'ValidationError');
+      chai.expect(error.name).to.equal('ValidationError');
+    }
+  });
+
+  it('- Create Buyer Profile (invalid `contactNumber`)', async function () {
+    try {
+      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
+        firstName: 'John',
+        lastName: 'Doe',
+        contactNumber: 'Invalid'
+      };
+
+      const buyerProfile = new BuyerProfile(buyerProfileData);
+      await buyerProfile.save();
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('ValidationError');
     }
   });
 });
