@@ -118,10 +118,10 @@ describe('Business Profile model', () => {
 
   it('- Create Business Profile (missing `bibbleTier`)', async function () {
     try {
-      const businessProfileData: ICreateOrUpdateBusinessProfileRequest['body'] =
-        {
-          bibbleTier: ''
-        };
+      const businessProfileData: Omit<
+        ICreateOrUpdateBusinessProfileRequest['body'],
+        'bibbleTier'
+      > = {};
 
       const businessProfile = new BusinessProfile(businessProfileData);
       await businessProfile.save();

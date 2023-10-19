@@ -116,4 +116,156 @@ describe('User model', () => {
       console.error(error);
     }
   });
+
+  it('- Create User (missing `buyerProfile`)', async function () {
+    try {
+      const userData: Omit<ICreateOrUpdateUserRequest['body'], 'buyerProfile'> =
+        {
+          email: 'test@exmaple.com',
+          password: 'password'
+        };
+      const user = new User(userData);
+      await user.save();
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('ValidationError');
+    }
+  });
+
+  it('- Create User with Buyer Profile (missing `email`)', async function () {
+    try {
+      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
+        firstName: 'John',
+        lastName: 'Doe'
+      };
+
+      const buyerProfile = new BuyerProfile(buyerProfileData);
+      const savedBuyerProfile = await buyerProfile.save();
+
+      chai.expect(savedBuyerProfile._id).to.exist;
+      chai
+        .expect(savedBuyerProfile.firstName)
+        .to.equal(buyerProfileData.firstName);
+      chai
+        .expect(savedBuyerProfile.lastName)
+        .to.equal(buyerProfileData.lastName);
+
+      const userData: Omit<
+        ICreateOrUpdateUserRequest['body'],
+        'buyerProfile' | 'email'
+      > & {
+        buyerProfile: Schema.Types.ObjectId;
+      } = {
+        password: 'password',
+        buyerProfile: savedBuyerProfile._id
+      };
+      const user = new User(userData);
+      await user.save();
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('ValidationError');
+    }
+  });
+
+  it('- Create User with Buyer Profile (missing `password`)', async function () {
+    try {
+      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
+        firstName: 'John',
+        lastName: 'Doe'
+      };
+
+      const buyerProfile = new BuyerProfile(buyerProfileData);
+      const savedBuyerProfile = await buyerProfile.save();
+
+      chai.expect(savedBuyerProfile._id).to.exist;
+      chai
+        .expect(savedBuyerProfile.firstName)
+        .to.equal(buyerProfileData.firstName);
+      chai
+        .expect(savedBuyerProfile.lastName)
+        .to.equal(buyerProfileData.lastName);
+
+      const userData: Omit<
+        ICreateOrUpdateUserRequest['body'],
+        'buyerProfile' | 'password'
+      > & {
+        buyerProfile: Schema.Types.ObjectId;
+      } = {
+        email: 'test@exmaple.com',
+        buyerProfile: savedBuyerProfile._id
+      };
+      const user = new User(userData);
+      await user.save();
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('ValidationError');
+    }
+  });
+
+  it('- Create User with Buyer Profile (invalid `email`)', async function () {
+    try {
+      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
+        firstName: 'John',
+        lastName: 'Doe'
+      };
+
+      const buyerProfile = new BuyerProfile(buyerProfileData);
+      const savedBuyerProfile = await buyerProfile.save();
+
+      chai.expect(savedBuyerProfile._id).to.exist;
+      chai
+        .expect(savedBuyerProfile.firstName)
+        .to.equal(buyerProfileData.firstName);
+      chai
+        .expect(savedBuyerProfile.lastName)
+        .to.equal(buyerProfileData.lastName);
+
+      const userData: Omit<
+        ICreateOrUpdateUserRequest['body'],
+        'buyerProfile'
+      > & {
+        buyerProfile: Schema.Types.ObjectId;
+      } = {
+        email: 'invalid-email',
+        password: 'password',
+        buyerProfile: savedBuyerProfile._id
+      };
+      const user = new User(userData);
+      await user.save();
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('ValidationError');
+    }
+  });
+
+  it('- Create User with Buyer Profile (invalid `password`)', async function () {
+    try {
+      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
+        firstName: 'John',
+        lastName: 'Doe'
+      };
+
+      const buyerProfile = new BuyerProfile(buyerProfileData);
+      const savedBuyerProfile = await buyerProfile.save();
+
+      chai.expect(savedBuyerProfile._id).to.exist;
+      chai
+        .expect(savedBuyerProfile.firstName)
+        .to.equal(buyerProfileData.firstName);
+      chai
+        .expect(savedBuyerProfile.lastName)
+        .to.equal(buyerProfileData.lastName);
+
+      const userData: Omit<
+        ICreateOrUpdateUserRequest['body'],
+        'buyerProfile'
+      > & {
+        buyerProfile: Schema.Types.ObjectId;
+      } = {
+        email: 'test@exmaple.com',
+        password: 'pass',
+        buyerProfile: savedBuyerProfile._id
+      };
+      const user = new User(userData);
+      await user.save();
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('ValidationError');
+    }
+  });
 });

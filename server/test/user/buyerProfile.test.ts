@@ -75,8 +75,10 @@ describe('Buyer Profile model', () => {
 
   it('- Create Buyer Profile (missing `firstName`)', async function () {
     try {
-      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
-        firstName: '',
+      const buyerProfileData: Omit<
+        ICreateOrUpdateBuyerProfileRequest['body'],
+        'firstName'
+      > = {
         lastName: 'Doe'
       };
 
@@ -89,9 +91,11 @@ describe('Buyer Profile model', () => {
 
   it('- Create Buyer Profile (missing `lasttName`)', async function () {
     try {
-      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
-        firstName: 'John',
-        lastName: ''
+      const buyerProfileData: Omit<
+        ICreateOrUpdateBuyerProfileRequest['body'],
+        'lastName'
+      > = {
+        firstName: 'John'
       };
 
       const buyerProfile = new BuyerProfile(buyerProfileData);
@@ -103,10 +107,10 @@ describe('Buyer Profile model', () => {
 
   it('- Create Buyer Profile (missing `firstName` and `lastName`)', async function () {
     try {
-      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
-        firstName: '',
-        lastName: ''
-      };
+      const buyerProfileData: Omit<
+        ICreateOrUpdateBuyerProfileRequest['body'],
+        'firstName' | 'lastName'
+      > = {};
 
       const buyerProfile = new BuyerProfile(buyerProfileData);
       await buyerProfile.save();
