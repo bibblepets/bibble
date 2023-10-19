@@ -13,10 +13,8 @@ mongoose
     useUnifiedTopology: true
   })
   .then(() => {
-    if (process.env.NODE_ENV === 'testing') {
-      console.log('    MongoDB connection successful (testing)');
-    } else {
-      console.log('    MongoDB connection successful');
+    if (process.env.NODE_ENV !== 'testing') {
+      console.log('MongoDB connection successful');
     }
   })
   .catch((error) => {
