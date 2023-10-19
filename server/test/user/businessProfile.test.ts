@@ -169,6 +169,50 @@ describe('Business Profile model (UPDATE)', () => {
     await BusinessProfile.deleteMany({});
   });
 
+  it('+ Update Business Profile (only `bibbleTier` to `Verified`)', async function () {
+    const businessProfileData: Partial<
+      ICreateOrUpdateBusinessProfileRequest['body']
+    > = {
+      bibbleTier: 'Verified'
+    };
+
+    const updatedBusinessProfile = await BusinessProfile.findOneAndUpdate(
+      { _id: existingBusinessProfileId },
+      businessProfileData,
+      { new: true }
+    );
+
+    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
+    chai
+      .expect(updatedBusinessProfile?._id.toString())
+      .to.equal(existingBusinessProfileId.toString());
+    chai
+      .expect(updatedBusinessProfile?.bibbleTier)
+      .to.equal(businessProfileData.bibbleTier);
+  });
+
+  it('+ Update Business Profile (only `bibbleTier` to `Partner`)', async function () {
+    const businessProfileData: Partial<
+      ICreateOrUpdateBusinessProfileRequest['body']
+    > = {
+      bibbleTier: 'Partner'
+    };
+
+    const updatedBusinessProfile = await BusinessProfile.findOneAndUpdate(
+      { _id: existingBusinessProfileId },
+      businessProfileData,
+      { new: true }
+    );
+
+    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
+    chai
+      .expect(updatedBusinessProfile?._id.toString())
+      .to.equal(existingBusinessProfileId.toString());
+    chai
+      .expect(updatedBusinessProfile?.bibbleTier)
+      .to.equal(businessProfileData.bibbleTier);
+  });
+
   it('+ Update Business Profile (only `businessName`)', async function () {
     const businessProfileData: Partial<
       ICreateOrUpdateBusinessProfileRequest['body']
@@ -189,5 +233,212 @@ describe('Business Profile model (UPDATE)', () => {
     chai
       .expect(updatedBusinessProfile?.businessName)
       .to.equal(businessProfileData.businessName);
+  });
+
+  it('+ Update Business Profile (only `businessAddress`)', async function () {
+    const businessProfileData: Partial<
+      ICreateOrUpdateBusinessProfileRequest['body']
+    > = {
+      businessAddress: 'Test Address'
+    };
+
+    const updatedBusinessProfile = await BusinessProfile.findOneAndUpdate(
+      { _id: existingBusinessProfileId },
+      businessProfileData,
+      { new: true }
+    );
+
+    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
+    chai
+      .expect(updatedBusinessProfile?._id.toString())
+      .to.equal(existingBusinessProfileId.toString());
+    chai
+      .expect(updatedBusinessProfile?.businessAddress)
+      .to.equal(businessProfileData.businessAddress);
+  });
+
+  it('+ Update Business Profile (only `businessBio`)', async function () {
+    const businessProfileData: Partial<
+      ICreateOrUpdateBusinessProfileRequest['body']
+    > = {
+      businessBio: 'Test Bio'
+    };
+
+    const updatedBusinessProfile = await BusinessProfile.findOneAndUpdate(
+      { _id: existingBusinessProfileId },
+      businessProfileData,
+      { new: true }
+    );
+
+    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
+    chai
+      .expect(updatedBusinessProfile?._id.toString())
+      .to.equal(existingBusinessProfileId.toString());
+    chai
+      .expect(updatedBusinessProfile?.businessBio)
+      .to.equal(businessProfileData.businessBio);
+  });
+
+  it('+ Update Business Profile (only `businessContact`)', async function () {
+    const businessProfileData: Partial<
+      ICreateOrUpdateBusinessProfileRequest['body']
+    > = {
+      businessContact: '+0012345678'
+    };
+
+    const updatedBusinessProfile = await BusinessProfile.findOneAndUpdate(
+      { _id: existingBusinessProfileId },
+      businessProfileData,
+      { new: true }
+    );
+
+    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
+    chai
+      .expect(updatedBusinessProfile?._id.toString())
+      .to.equal(existingBusinessProfileId.toString());
+    chai
+      .expect(updatedBusinessProfile?.businessContact)
+      .to.equal(businessProfileData.businessContact);
+  });
+
+  it('+ Update Business Profile (only `businessEmail`)', async function () {
+    const businessProfileData: Partial<
+      ICreateOrUpdateBusinessProfileRequest['body']
+    > = {
+      businessEmail: 'test-business-email@example.com'
+    };
+
+    const updatedBusinessProfile = await BusinessProfile.findOneAndUpdate(
+      { _id: existingBusinessProfileId },
+      businessProfileData,
+      { new: true }
+    );
+
+    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
+    chai
+      .expect(updatedBusinessProfile?._id.toString())
+      .to.equal(existingBusinessProfileId.toString());
+    chai
+      .expect(updatedBusinessProfile?.businessEmail)
+      .to.equal(businessProfileData.businessEmail);
+  });
+
+  it('+ Update Business Profile (only `businessPic`)', async function () {
+    const businessProfileData: Partial<
+      ICreateOrUpdateBusinessProfileRequest['body']
+    > = {
+      businessPic: 'https://www.google.com'
+    };
+
+    const updatedBusinessProfile = await BusinessProfile.findOneAndUpdate(
+      { _id: existingBusinessProfileId },
+      businessProfileData,
+      { new: true }
+    );
+
+    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
+    chai
+      .expect(updatedBusinessProfile?._id.toString())
+      .to.equal(existingBusinessProfileId.toString());
+    chai
+      .expect(updatedBusinessProfile?.businessPic)
+      .to.equal(businessProfileData.businessPic);
+  });
+
+  it('+ Update Business Profile (all fields)', async function () {
+    const businessProfileData: Partial<
+      ICreateOrUpdateBusinessProfileRequest['body']
+    > = {
+      bibbleTier: 'Basic',
+      businessName: 'Test Business',
+      businessAddress: 'Test Address',
+      businessBio: 'Test Bio',
+      businessContact: '+0012345678',
+      businessEmail: 'test-business-email@example.com',
+      businessPic: 'https://www.google.com'
+    };
+
+    const updatedBusinessProfile = await BusinessProfile.findOneAndUpdate(
+      { _id: existingBusinessProfileId },
+      businessProfileData,
+      { new: true }
+    );
+
+    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
+    chai
+      .expect(updatedBusinessProfile?._id.toString())
+      .to.equal(existingBusinessProfileId.toString());
+    chai
+      .expect(updatedBusinessProfile?.businessName)
+      .to.equal(businessProfileData.businessName);
+    chai
+      .expect(updatedBusinessProfile?.businessAddress)
+      .to.equal(businessProfileData.businessAddress);
+    chai
+      .expect(updatedBusinessProfile?.businessBio)
+      .to.equal(businessProfileData.businessBio);
+    chai
+      .expect(updatedBusinessProfile?.businessContact)
+      .to.equal(businessProfileData.businessContact);
+    chai
+      .expect(updatedBusinessProfile?.businessEmail)
+      .to.equal(businessProfileData.businessEmail);
+    chai
+      .expect(updatedBusinessProfile?.businessPic)
+      .to.equal(businessProfileData.businessPic);
+  });
+
+  it('- Update Business Profile (invalid `businessContact`)', async function () {
+    try {
+      const businessProfileData: Partial<
+        ICreateOrUpdateBusinessProfileRequest['body']
+      > = {
+        businessContact: 'Invalid'
+      };
+
+      await BusinessProfile.findOneAndUpdate(
+        { _id: existingBusinessProfileId },
+        businessProfileData,
+        { new: true }
+      );
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('ValidationError');
+    }
+  });
+
+  it('- Update Business Profile (invalid `businessEmail`)', async function () {
+    try {
+      const businessProfileData: Partial<
+        ICreateOrUpdateBusinessProfileRequest['body']
+      > = {
+        businessEmail: 'Invalid'
+      };
+
+      await BusinessProfile.findOneAndUpdate(
+        { _id: existingBusinessProfileId },
+        businessProfileData,
+        { new: true }
+      );
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('ValidationError');
+    }
+  });
+
+  it('- Update Business Profile (invalid `bibbleTier`)', async function () {
+    try {
+      const businessProfileData: Partial<
+        ICreateOrUpdateBusinessProfileRequest['body']
+      > = {
+        bibbleTier: 'Invalid'
+      };
+
+      await BusinessProfile.findOneAndUpdate(
+        { _id: existingBusinessProfileId },
+        businessProfileData,
+        { new: true }
+      );
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('ValidationError');
+    }
   });
 });
