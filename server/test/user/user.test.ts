@@ -13,8 +13,7 @@ import {
 } from '../../src/models/user/businessProfile.model';
 import { afterEach } from 'mocha';
 
-require('dotenv').config();
-const assert = require('assert');
+const chai: Chai.ChaiStatic = require('chai');
 
 const User: UserModel = require('../../src/models/user/user.model');
 const BuyerProfile: BuyerProfileModel = require('../../src/models/user/buyerProfile.model');
@@ -38,12 +37,14 @@ describe('User model', () => {
 
       const buyerProfile = new BuyerProfile(buyerProfileData);
       const savedBuyerProfile = await buyerProfile.save();
-      assert.strictEqual(
-        savedBuyerProfile.firstName,
-        buyerProfileData.firstName
-      );
-      assert.strictEqual(savedBuyerProfile.lastName, buyerProfileData.lastName);
-      assert(savedBuyerProfile._id);
+
+      chai.expect(savedBuyerProfile._id).to.exist;
+      chai
+        .expect(savedBuyerProfile.firstName)
+        .to.equal(buyerProfileData.firstName);
+      chai
+        .expect(savedBuyerProfile.lastName)
+        .to.equal(buyerProfileData.lastName);
 
       const userData: Omit<
         ICreateOrUpdateUserRequest['body'],
@@ -58,8 +59,8 @@ describe('User model', () => {
       const user = new User(userData);
       const savedUser = await user.save();
 
-      assert.strictEqual(savedUser.email, userData.email);
-      assert(savedUser._id);
+      chai.expect(savedUser._id).to.exist;
+      chai.expect(savedUser.email).to.equal(userData.email);
     } catch (error: any) {
       console.error(error);
     }
@@ -74,12 +75,14 @@ describe('User model', () => {
 
       const buyerProfile = new BuyerProfile(buyerProfileData);
       const savedBuyerProfile = await buyerProfile.save();
-      assert.strictEqual(
-        savedBuyerProfile.firstName,
-        buyerProfileData.firstName
-      );
-      assert.strictEqual(savedBuyerProfile.lastName, buyerProfileData.lastName);
-      assert(savedBuyerProfile._id);
+
+      chai.expect(savedBuyerProfile._id).to.exist;
+      chai
+        .expect(savedBuyerProfile.firstName)
+        .to.equal(buyerProfileData.firstName);
+      chai
+        .expect(savedBuyerProfile.lastName)
+        .to.equal(buyerProfileData.lastName);
 
       const businessProfileData: ICreateOrUpdateBusinessProfileRequest['body'] =
         {
@@ -88,11 +91,11 @@ describe('User model', () => {
 
       const businessProfile = new BusinessProfile(businessProfileData);
       const savedBusinessProfile = await businessProfile.save();
-      assert.strictEqual(
-        savedBusinessProfile.bibbleTier,
-        businessProfileData.bibbleTier
-      );
-      assert(savedBusinessProfile._id);
+
+      chai.expect(savedBusinessProfile._id).to.exist;
+      chai
+        .expect(savedBusinessProfile.bibbleTier)
+        .to.equal(businessProfileData.bibbleTier);
 
       const userData: Omit<
         ICreateOrUpdateUserRequest['body'],
@@ -107,8 +110,8 @@ describe('User model', () => {
       const user = new User(userData);
       const savedUser = await user.save();
 
-      assert.strictEqual(savedUser.email, userData.email);
-      assert(savedUser._id);
+      chai.expect(savedUser._id).to.exist;
+      chai.expect(savedUser.email).to.equal(userData.email);
     } catch (error: any) {
       console.error(error);
     }
