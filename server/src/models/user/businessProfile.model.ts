@@ -51,7 +51,8 @@ const businessProfileSchema = new Schema(
     },
     businessContact: {
       type: String,
-      required: false
+      required: false,
+      validate: [validateContactNumber, 'Please enter a valid contact number.']
     },
     businessEmail: {
       type: String,
@@ -82,4 +83,8 @@ function validateEmail(email: string): boolean {
   return RegExp(
     /^(([^<>()[\]\\.,;:\s@"]+\.?)|(".+"))@(([a-zA-Z\d-]+\.)+[a-zA-Z]{2,})$/
   ).test(String(email).toLowerCase());
+}
+
+function validateContactNumber(contactNumber: string): boolean {
+  return RegExp(/^\+\d{1,3}\s?\d{8,}$/).test(contactNumber);
 }
