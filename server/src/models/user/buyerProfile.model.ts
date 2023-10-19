@@ -8,7 +8,7 @@ export interface IBuyerProfile {
   lastName: string;
   favouriteListings?: IPetListing['_id'][];
   profilePic?: string;
-  contactNumber?: number;
+  contactNumber?: string;
   bio?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -44,7 +44,7 @@ const buyerProfileSchema = new Schema(
       required: false
     },
     contactNumber: {
-      type: Number,
+      type: String,
       required: false,
       validate: [validateContactNumber, 'Please enter a valid contact number.']
     },
@@ -63,6 +63,6 @@ const BuyerProfile = mongoose.model<IBuyerProfile, Model<IBuyerProfile>>(
 
 module.exports = BuyerProfile;
 
-function validateContactNumber(contactNumber: number): boolean {
-  return RegExp(/^\d{8,}$/).test(String(contactNumber));
+function validateContactNumber(contactNumber: string): boolean {
+  return RegExp(/^\+\d{1,3}\s?\d{8,}$/).test(contactNumber);
 }
