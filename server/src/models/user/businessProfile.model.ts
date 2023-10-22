@@ -19,8 +19,12 @@ export interface IBusinessProfile {
 // export type HydratedDocumentBusinessProfile = mongoose.HydratedDocument<IBusinessProfile>;
 export interface BusinessProfileModel extends Model<IBusinessProfile> {}
 
-export interface ICreateOrUpdateBusinessProfileRequest extends Request {
+export interface ICreateBusinessProfileRequest extends Request {
   body: Omit<IBusinessProfile, '_id' | 'createdAt' | 'updatedAt'>;
+}
+
+export interface IUpdateBusinessProfileRequest extends Request {
+  body: Partial<ICreateBusinessProfileRequest['body']>;
 }
 
 const businessProfileSchema = new Schema(

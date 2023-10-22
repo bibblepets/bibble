@@ -17,8 +17,12 @@ export interface IBuyerProfile {
 // export type HydratedDocumentBuyerProfile = mongoose.HydratedDocument<IBuyerProfile>;
 export interface BuyerProfileModel extends Model<IBuyerProfile> {}
 
-export interface ICreateOrUpdateBuyerProfileRequest extends Request {
+export interface ICreateBuyerProfileRequest extends Request {
   body: Omit<IBuyerProfile, '_id' | 'createdAt' | 'updatedAt'>;
+}
+
+export interface IUpdateBuyerProfileRequest extends Request {
+  body: Partial<ICreateBuyerProfileRequest['body']>;
 }
 
 const buyerProfileSchema = new Schema(
