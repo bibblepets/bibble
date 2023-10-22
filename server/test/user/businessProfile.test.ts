@@ -187,13 +187,14 @@ describe('Business Profile model (READ)', () => {
 });
 
 describe('Business Profile model (UPDATE)', () => {
-  let existingBusinessProfileId: Schema.Types.ObjectId;
-  beforeEach(async function () {
-    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
-      bibbleTier: 'Basic'
-    };
+  const existingBusinessProfileData: ICreateBusinessProfileRequest['body'] = {
+    bibbleTier: 'Basic'
+  };
 
-    const businessProfile = new BusinessProfile(businessProfileData);
+  let existingBusinessProfileId: Schema.Types.ObjectId;
+
+  beforeEach(async function () {
+    const businessProfile = new BusinessProfile(existingBusinessProfileData);
     const savedBusinessProfile = await businessProfile.save();
     existingBusinessProfileId = savedBusinessProfile._id;
   });
@@ -258,6 +259,9 @@ describe('Business Profile model (UPDATE)', () => {
       .expect(updatedBusinessProfile?._id.toString())
       .to.equal(existingBusinessProfileId.toString());
     chai
+      .expect(updatedBusinessProfile?.bibbleTier)
+      .to.equal(existingBusinessProfileData.bibbleTier);
+    chai
       .expect(updatedBusinessProfile?.businessName)
       .to.equal(businessProfileData.businessName);
   });
@@ -277,6 +281,9 @@ describe('Business Profile model (UPDATE)', () => {
     chai
       .expect(updatedBusinessProfile?._id.toString())
       .to.equal(existingBusinessProfileId.toString());
+    chai
+      .expect(updatedBusinessProfile?.bibbleTier)
+      .to.equal(existingBusinessProfileData.bibbleTier);
     chai
       .expect(updatedBusinessProfile?.businessAddress)
       .to.equal(businessProfileData.businessAddress);
@@ -298,6 +305,9 @@ describe('Business Profile model (UPDATE)', () => {
       .expect(updatedBusinessProfile?._id.toString())
       .to.equal(existingBusinessProfileId.toString());
     chai
+      .expect(updatedBusinessProfile?.bibbleTier)
+      .to.equal(existingBusinessProfileData.bibbleTier);
+    chai
       .expect(updatedBusinessProfile?.businessBio)
       .to.equal(businessProfileData.businessBio);
   });
@@ -317,6 +327,9 @@ describe('Business Profile model (UPDATE)', () => {
     chai
       .expect(updatedBusinessProfile?._id.toString())
       .to.equal(existingBusinessProfileId.toString());
+    chai
+      .expect(updatedBusinessProfile?.bibbleTier)
+      .to.equal(existingBusinessProfileData.bibbleTier);
     chai
       .expect(updatedBusinessProfile?.businessContact)
       .to.equal(businessProfileData.businessContact);
@@ -338,6 +351,9 @@ describe('Business Profile model (UPDATE)', () => {
       .expect(updatedBusinessProfile?._id.toString())
       .to.equal(existingBusinessProfileId.toString());
     chai
+      .expect(updatedBusinessProfile?.bibbleTier)
+      .to.equal(existingBusinessProfileData.bibbleTier);
+    chai
       .expect(updatedBusinessProfile?.businessEmail)
       .to.equal(businessProfileData.businessEmail);
   });
@@ -357,6 +373,9 @@ describe('Business Profile model (UPDATE)', () => {
     chai
       .expect(updatedBusinessProfile?._id.toString())
       .to.equal(existingBusinessProfileId.toString());
+    chai
+      .expect(updatedBusinessProfile?.bibbleTier)
+      .to.equal(existingBusinessProfileData.bibbleTier);
     chai
       .expect(updatedBusinessProfile?.businessPic)
       .to.equal(businessProfileData.businessPic);
@@ -456,16 +475,35 @@ describe('Business Profile model (UPDATE)', () => {
       chai.expect(error.name).to.equal('ValidationError');
     }
   });
+
+  it('- Update Business Profile (empty `bibbleTier`)', async function () {
+    try {
+      const businessProfileData: Partial<
+        ICreateBusinessProfileRequest['body']
+      > = {
+        bibbleTier: ''
+      };
+
+      await BusinessProfile.findOneAndUpdate(
+        { _id: existingBusinessProfileId },
+        businessProfileData,
+        { new: true }
+      );
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('ValidationError');
+    }
+  });
 });
 
 describe('Business Profile model (DELETE)', () => {
-  let existingBusinessProfileId: Schema.Types.ObjectId;
-  beforeEach(async function () {
-    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
-      bibbleTier: 'Basic'
-    };
+  const existingBusinessProfileData: ICreateBusinessProfileRequest['body'] = {
+    bibbleTier: 'Basic'
+  };
 
-    const businessProfile = new BusinessProfile(businessProfileData);
+  let existingBusinessProfileId: Schema.Types.ObjectId;
+
+  beforeEach(async function () {
+    const businessProfile = new BusinessProfile(existingBusinessProfileData);
     const savedBusinessProfile = await businessProfile.save();
     existingBusinessProfileId = savedBusinessProfile._id;
   });
