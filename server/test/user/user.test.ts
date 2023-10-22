@@ -22,7 +22,7 @@ const User: UserModel = require('../../src/models/user/user.model');
 const BuyerProfile: BuyerProfileModel = require('../../src/models/user/buyerProfile.model');
 const BusinessProfile: BusinessProfileModel = require('../../src/models/user/businessProfile.model');
 
-describe('User model', () => {
+describe('User model (CREATE)', () => {
   afterEach(async function () {
     await User.deleteMany({});
   });
@@ -56,7 +56,7 @@ describe('User model', () => {
     chai.expect(savedUser.buyerProfile).to.be.equal(savedBuyerProfile);
   });
 
-  it('+ Create User with Buyer and Business Profile (Basic)', async function () {
+  it('+ Create User with Buyer and Business Profile (only required fields)', async function () {
     const buyerProfileData: ICreateBuyerProfileRequest['body'] = {
       firstName: 'John',
       lastName: 'Doe'
@@ -234,3 +234,11 @@ describe('User model', () => {
     }
   });
 });
+
+describe('User model (READ)', () => {
+  afterEach(async function () {
+    await User.deleteMany({});
+  });
+});
+
+describe('User model (UPDATE)', () => {});
