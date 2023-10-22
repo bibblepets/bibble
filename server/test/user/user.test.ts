@@ -1,15 +1,18 @@
 import { Schema } from 'mongoose';
 import {
-  ICreateOrUpdateUserRequest,
-  UserModel
+  UserModel,
+  ICreateUserRequest,
+  IUpdateUserRequest
 } from '../../src/models/user/user.model';
 import {
   BuyerProfileModel,
-  ICreateOrUpdateBuyerProfileRequest
+  ICreateBuyerProfileRequest,
+  IUpdateBuyerProfileRequest
 } from '../../src/models/user/buyerProfile.model';
 import {
   BusinessProfileModel,
-  ICreateOrUpdateBusinessProfileRequest
+  ICreateBusinessProfileRequest,
+  IUpdateBusinessProfileRequest
 } from '../../src/models/user/businessProfile.model';
 import { afterEach } from 'mocha';
 
@@ -25,7 +28,7 @@ describe('User model', () => {
   });
 
   it('+ Create User with Buyer Profile', async function () {
-    const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
+    const buyerProfileData: ICreateBuyerProfileRequest['body'] = {
       firstName: 'John',
       lastName: 'Doe'
     };
@@ -39,22 +42,22 @@ describe('User model', () => {
       .to.equal(buyerProfileData.firstName);
     chai.expect(savedBuyerProfile.lastName).to.equal(buyerProfileData.lastName);
 
-    const userData: Omit<ICreateOrUpdateUserRequest['body'], 'buyerProfile'> & {
-      buyerProfile: Schema.Types.ObjectId;
-    } = {
+    const userData: ICreateUserRequest['body'] = {
       email: 'test@example.com',
       password: 'password',
-      buyerProfile: savedBuyerProfile._id
+      buyerProfile: savedBuyerProfile
     };
     const user = new User(userData);
     const savedUser = await user.save();
 
     chai.expect(savedUser._id).to.exist;
     chai.expect(savedUser.email).to.equal(userData.email);
+    chai.expect(savedUser.buyerProfile).to.exist;
+    chai.expect(savedUser.buyerProfile).to.be.equal(savedBuyerProfile);
   });
 
   it('+ Create User with Buyer and Business Profile (Basic)', async function () {
-    const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
+    const buyerProfileData: ICreateBuyerProfileRequest['body'] = {
       firstName: 'John',
       lastName: 'Doe'
     };
@@ -68,7 +71,7 @@ describe('User model', () => {
       .to.equal(buyerProfileData.firstName);
     chai.expect(savedBuyerProfile.lastName).to.equal(buyerProfileData.lastName);
 
-    const businessProfileData: ICreateOrUpdateBusinessProfileRequest['body'] = {
+    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
       bibbleTier: 'Basic'
     };
 
@@ -80,27 +83,30 @@ describe('User model', () => {
       .expect(savedBusinessProfile.bibbleTier)
       .to.equal(businessProfileData.bibbleTier);
 
-    const userData: Omit<ICreateOrUpdateUserRequest['body'], 'buyerProfile'> & {
-      buyerProfile: Schema.Types.ObjectId;
-    } = {
+    const userData: ICreateUserRequest['body'] = {
       email: 'test@example.com',
       password: 'password',
-      buyerProfile: savedBuyerProfile._id
+      buyerProfile: savedBuyerProfile,
+      businessProfile: savedBusinessProfile
     };
+
     const user = new User(userData);
     const savedUser = await user.save();
 
     chai.expect(savedUser._id).to.exist;
     chai.expect(savedUser.email).to.equal(userData.email);
+    chai.expect(savedUser.buyerProfile).to.exist;
+    chai.expect(savedUser.buyerProfile).to.be.equal(savedBuyerProfile);
+    chai.expect(savedUser.businessProfile).to.exist;
+    chai.expect(savedUser.businessProfile).to.be.equal(savedBusinessProfile);
   });
 
   it('- Create User (missing `buyerProfile`)', async function () {
     try {
-      const userData: Omit<ICreateOrUpdateUserRequest['body'], 'buyerProfile'> =
-        {
-          email: 'test@exmaple.com',
-          password: 'password'
-        };
+      const userData: Omit<ICreateUserRequest['body'], 'buyerProfile'> = {
+        email: 'test@exmaple.com',
+        password: 'password'
+      };
       const user = new User(userData);
       await user.save();
     } catch (error: any) {
@@ -110,7 +116,7 @@ describe('User model', () => {
 
   it('- Create User with Buyer Profile (missing `email`)', async function () {
     try {
-      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
+      const buyerProfileData: ICreateBuyerProfileRequest['body'] = {
         firstName: 'John',
         lastName: 'Doe'
       };
@@ -126,15 +132,11 @@ describe('User model', () => {
         .expect(savedBuyerProfile.lastName)
         .to.equal(buyerProfileData.lastName);
 
-      const userData: Omit<
-        ICreateOrUpdateUserRequest['body'],
-        'buyerProfile' | 'email'
-      > & {
-        buyerProfile: Schema.Types.ObjectId;
-      } = {
+      const userData: Omit<ICreateUserRequest['body'], 'email'> = {
         password: 'password',
-        buyerProfile: savedBuyerProfile._id
+        buyerProfile: savedBuyerProfile
       };
+
       const user = new User(userData);
       await user.save();
     } catch (error: any) {
@@ -144,7 +146,7 @@ describe('User model', () => {
 
   it('- Create User with Buyer Profile (missing `password`)', async function () {
     try {
-      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
+      const buyerProfileData: ICreateBuyerProfileRequest['body'] = {
         firstName: 'John',
         lastName: 'Doe'
       };
@@ -160,15 +162,11 @@ describe('User model', () => {
         .expect(savedBuyerProfile.lastName)
         .to.equal(buyerProfileData.lastName);
 
-      const userData: Omit<
-        ICreateOrUpdateUserRequest['body'],
-        'buyerProfile' | 'password'
-      > & {
-        buyerProfile: Schema.Types.ObjectId;
-      } = {
+      const userData: Omit<ICreateUserRequest['body'], 'password'> = {
         email: 'test@exmaple.com',
-        buyerProfile: savedBuyerProfile._id
+        buyerProfile: savedBuyerProfile
       };
+
       const user = new User(userData);
       await user.save();
     } catch (error: any) {
@@ -178,7 +176,7 @@ describe('User model', () => {
 
   it('- Create User with Buyer Profile (invalid `email`)', async function () {
     try {
-      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
+      const buyerProfileData: ICreateBuyerProfileRequest['body'] = {
         firstName: 'John',
         lastName: 'Doe'
       };
@@ -194,15 +192,10 @@ describe('User model', () => {
         .expect(savedBuyerProfile.lastName)
         .to.equal(buyerProfileData.lastName);
 
-      const userData: Omit<
-        ICreateOrUpdateUserRequest['body'],
-        'buyerProfile'
-      > & {
-        buyerProfile: Schema.Types.ObjectId;
-      } = {
+      const userData: ICreateUserRequest['body'] = {
         email: 'invalid-email',
         password: 'password',
-        buyerProfile: savedBuyerProfile._id
+        buyerProfile: savedBuyerProfile
       };
       const user = new User(userData);
       await user.save();
@@ -213,7 +206,7 @@ describe('User model', () => {
 
   it('- Create User with Buyer Profile (invalid `password`)', async function () {
     try {
-      const buyerProfileData: ICreateOrUpdateBuyerProfileRequest['body'] = {
+      const buyerProfileData: ICreateBuyerProfileRequest['body'] = {
         firstName: 'John',
         lastName: 'Doe'
       };
@@ -229,15 +222,10 @@ describe('User model', () => {
         .expect(savedBuyerProfile.lastName)
         .to.equal(buyerProfileData.lastName);
 
-      const userData: Omit<
-        ICreateOrUpdateUserRequest['body'],
-        'buyerProfile'
-      > & {
-        buyerProfile: Schema.Types.ObjectId;
-      } = {
+      const userData: ICreateUserRequest['body'] = {
         email: 'test@exmaple.com',
         password: 'pass',
-        buyerProfile: savedBuyerProfile._id
+        buyerProfile: savedBuyerProfile
       };
       const user = new User(userData);
       await user.save();
