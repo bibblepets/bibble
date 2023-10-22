@@ -1,7 +1,8 @@
 import { Schema } from 'mongoose';
 import {
   BusinessProfileModel,
-  ICreateOrUpdateBusinessProfileRequest
+  ICreateBusinessProfileRequest,
+  IUpdateBusinessProfileRequest
 } from '../../src/models/user/businessProfile.model';
 import { beforeEach, afterEach, it } from 'mocha';
 
@@ -15,7 +16,7 @@ describe('Business Profile model (CREATE)', () => {
   });
 
   it('+ Create Business Profile (only required `bibbleTier` with `Basic`)', async function () {
-    const businessProfileData: ICreateOrUpdateBusinessProfileRequest['body'] = {
+    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
       bibbleTier: 'Basic'
     };
 
@@ -29,7 +30,7 @@ describe('Business Profile model (CREATE)', () => {
   });
 
   it('+ Create Business Profile (only required `bibbleTier` with `Verfied`)', async function () {
-    const businessProfileData: ICreateOrUpdateBusinessProfileRequest['body'] = {
+    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
       bibbleTier: 'Verified'
     };
 
@@ -43,7 +44,7 @@ describe('Business Profile model (CREATE)', () => {
   });
 
   it('+ Create Business Profile (only required `bibbleTier` with `Partner`)', async function () {
-    const businessProfileData: ICreateOrUpdateBusinessProfileRequest['body'] = {
+    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
       bibbleTier: 'Partner'
     };
 
@@ -57,7 +58,7 @@ describe('Business Profile model (CREATE)', () => {
   });
 
   it('+ Create Business Profile (all fields)', async function () {
-    const businessProfileData: ICreateOrUpdateBusinessProfileRequest['body'] = {
+    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
       bibbleTier: 'Basic',
       businessName: 'Test Business',
       businessAddress: 'Test Address',
@@ -97,7 +98,7 @@ describe('Business Profile model (CREATE)', () => {
   it('- Create Business Profile (missing `bibbleTier`)', async function () {
     try {
       const businessProfileData: Omit<
-        ICreateOrUpdateBusinessProfileRequest['body'],
+        ICreateBusinessProfileRequest['body'],
         'bibbleTier'
       > = {};
 
@@ -110,10 +111,9 @@ describe('Business Profile model (CREATE)', () => {
 
   it('- Create Business Profile (invalid `bibbleTier`)', async function () {
     try {
-      const businessProfileData: ICreateOrUpdateBusinessProfileRequest['body'] =
-        {
-          bibbleTier: 'Invalid'
-        };
+      const businessProfileData: ICreateBusinessProfileRequest['body'] = {
+        bibbleTier: 'Invalid'
+      };
 
       const businessProfile = new BusinessProfile(businessProfileData);
       await businessProfile.save();
@@ -124,11 +124,10 @@ describe('Business Profile model (CREATE)', () => {
 
   it('- Create Business Profile (invlid `businessContact`)', async function () {
     try {
-      const businessProfileData: ICreateOrUpdateBusinessProfileRequest['body'] =
-        {
-          bibbleTier: 'Basic',
-          businessContact: 'Invalid'
-        };
+      const businessProfileData: ICreateBusinessProfileRequest['body'] = {
+        bibbleTier: 'Basic',
+        businessContact: 'Invalid'
+      };
 
       const businessProfile = new BusinessProfile(businessProfileData);
       await businessProfile.save();
@@ -139,11 +138,10 @@ describe('Business Profile model (CREATE)', () => {
 
   it('- Create Business Profile (invalid `businessEmail`)', async function () {
     try {
-      const businessProfileData: ICreateOrUpdateBusinessProfileRequest['body'] =
-        {
-          bibbleTier: 'Basic',
-          businessEmail: 'Invalid'
-        };
+      const businessProfileData: ICreateBusinessProfileRequest['body'] = {
+        bibbleTier: 'Basic',
+        businessEmail: 'Invalid'
+      };
 
       const businessProfile = new BusinessProfile(businessProfileData);
       await businessProfile.save();
@@ -153,10 +151,45 @@ describe('Business Profile model (CREATE)', () => {
   });
 });
 
+describe('Business Profile model (READ)', () => {
+  let existingBusinessProfileId: Schema.Types.ObjectId;
+  beforeEach(async function () {
+    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
+      bibbleTier: 'Basic'
+    };
+
+    const businessProfile = new BusinessProfile(businessProfileData);
+    const savedBusinessProfile = await businessProfile.save();
+    existingBusinessProfileId = savedBusinessProfile._id;
+  });
+
+  afterEach(async function () {
+    await BusinessProfile.deleteMany({});
+  });
+
+  it('+ Get Business Profile (by `id`)', async function () {
+    const businessProfile = await BusinessProfile.findById(
+      existingBusinessProfileId
+    );
+
+    chai
+      .expect(businessProfile?._id.toString())
+      .to.equal(existingBusinessProfileId.toString());
+  });
+
+  it('- Get Business Profile (invalid `id`)', async function () {
+    try {
+      await BusinessProfile.findById('Invalid');
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('CastError');
+    }
+  });
+});
+
 describe('Business Profile model (UPDATE)', () => {
   let existingBusinessProfileId: Schema.Types.ObjectId;
   beforeEach(async function () {
-    const businessProfileData: ICreateOrUpdateBusinessProfileRequest['body'] = {
+    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
       bibbleTier: 'Basic'
     };
 
@@ -170,9 +203,7 @@ describe('Business Profile model (UPDATE)', () => {
   });
 
   it('+ Update Business Profile (only `bibbleTier` to `Verified`)', async function () {
-    const businessProfileData: Partial<
-      ICreateOrUpdateBusinessProfileRequest['body']
-    > = {
+    const businessProfileData: IUpdateBusinessProfileRequest['body'] = {
       bibbleTier: 'Verified'
     };
 
@@ -192,9 +223,7 @@ describe('Business Profile model (UPDATE)', () => {
   });
 
   it('+ Update Business Profile (only `bibbleTier` to `Partner`)', async function () {
-    const businessProfileData: Partial<
-      ICreateOrUpdateBusinessProfileRequest['body']
-    > = {
+    const businessProfileData: IUpdateBusinessProfileRequest['body'] = {
       bibbleTier: 'Partner'
     };
 
@@ -214,9 +243,7 @@ describe('Business Profile model (UPDATE)', () => {
   });
 
   it('+ Update Business Profile (only `businessName`)', async function () {
-    const businessProfileData: Partial<
-      ICreateOrUpdateBusinessProfileRequest['body']
-    > = {
+    const businessProfileData: IUpdateBusinessProfileRequest['body'] = {
       businessName: 'Test Business'
     };
 
@@ -236,9 +263,7 @@ describe('Business Profile model (UPDATE)', () => {
   });
 
   it('+ Update Business Profile (only `businessAddress`)', async function () {
-    const businessProfileData: Partial<
-      ICreateOrUpdateBusinessProfileRequest['body']
-    > = {
+    const businessProfileData: IUpdateBusinessProfileRequest['body'] = {
       businessAddress: 'Test Address'
     };
 
@@ -258,9 +283,7 @@ describe('Business Profile model (UPDATE)', () => {
   });
 
   it('+ Update Business Profile (only `businessBio`)', async function () {
-    const businessProfileData: Partial<
-      ICreateOrUpdateBusinessProfileRequest['body']
-    > = {
+    const businessProfileData: IUpdateBusinessProfileRequest['body'] = {
       businessBio: 'Test Bio'
     };
 
@@ -280,9 +303,7 @@ describe('Business Profile model (UPDATE)', () => {
   });
 
   it('+ Update Business Profile (only `businessContact`)', async function () {
-    const businessProfileData: Partial<
-      ICreateOrUpdateBusinessProfileRequest['body']
-    > = {
+    const businessProfileData: IUpdateBusinessProfileRequest['body'] = {
       businessContact: '+0012345678'
     };
 
@@ -302,9 +323,7 @@ describe('Business Profile model (UPDATE)', () => {
   });
 
   it('+ Update Business Profile (only `businessEmail`)', async function () {
-    const businessProfileData: Partial<
-      ICreateOrUpdateBusinessProfileRequest['body']
-    > = {
+    const businessProfileData: IUpdateBusinessProfileRequest['body'] = {
       businessEmail: 'test-business-email@example.com'
     };
 
@@ -324,9 +343,7 @@ describe('Business Profile model (UPDATE)', () => {
   });
 
   it('+ Update Business Profile (only `businessPic`)', async function () {
-    const businessProfileData: Partial<
-      ICreateOrUpdateBusinessProfileRequest['body']
-    > = {
+    const businessProfileData: IUpdateBusinessProfileRequest['body'] = {
       businessPic: 'https://www.google.com'
     };
 
@@ -346,9 +363,7 @@ describe('Business Profile model (UPDATE)', () => {
   });
 
   it('+ Update Business Profile (all fields)', async function () {
-    const businessProfileData: Partial<
-      ICreateOrUpdateBusinessProfileRequest['body']
-    > = {
+    const businessProfileData: IUpdateBusinessProfileRequest['body'] = {
       bibbleTier: 'Basic',
       businessName: 'Test Business',
       businessAddress: 'Test Address',
@@ -391,7 +406,7 @@ describe('Business Profile model (UPDATE)', () => {
   it('- Update Business Profile (invalid `businessContact`)', async function () {
     try {
       const businessProfileData: Partial<
-        ICreateOrUpdateBusinessProfileRequest['body']
+        ICreateBusinessProfileRequest['body']
       > = {
         businessContact: 'Invalid'
       };
@@ -409,7 +424,7 @@ describe('Business Profile model (UPDATE)', () => {
   it('- Update Business Profile (invalid `businessEmail`)', async function () {
     try {
       const businessProfileData: Partial<
-        ICreateOrUpdateBusinessProfileRequest['body']
+        ICreateBusinessProfileRequest['body']
       > = {
         businessEmail: 'Invalid'
       };
@@ -427,7 +442,7 @@ describe('Business Profile model (UPDATE)', () => {
   it('- Update Business Profile (invalid `bibbleTier`)', async function () {
     try {
       const businessProfileData: Partial<
-        ICreateOrUpdateBusinessProfileRequest['body']
+        ICreateBusinessProfileRequest['body']
       > = {
         bibbleTier: 'Invalid'
       };
@@ -439,6 +454,41 @@ describe('Business Profile model (UPDATE)', () => {
       );
     } catch (error: any) {
       chai.expect(error.name).to.equal('ValidationError');
+    }
+  });
+});
+
+describe('Business Profile model (DELETE)', () => {
+  let existingBusinessProfileId: Schema.Types.ObjectId;
+  beforeEach(async function () {
+    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
+      bibbleTier: 'Basic'
+    };
+
+    const businessProfile = new BusinessProfile(businessProfileData);
+    const savedBusinessProfile = await businessProfile.save();
+    existingBusinessProfileId = savedBusinessProfile._id;
+  });
+
+  afterEach(async function () {
+    await BusinessProfile.deleteMany({});
+  });
+
+  it('+ Delete Business Profile (by `id`)', async function () {
+    const deletedBusinessProfile = await BusinessProfile.findOneAndDelete({
+      _id: existingBusinessProfileId
+    });
+
+    chai
+      .expect(deletedBusinessProfile?._id.toString())
+      .to.equal(existingBusinessProfileId.toString());
+  });
+
+  it('- Delete Business Profile (invalid `id`)', async function () {
+    try {
+      await BusinessProfile.findOneAndDelete({ _id: 'Invalid' });
+    } catch (error: any) {
+      chai.expect(error.name).to.equal('CastError');
     }
   });
 });
