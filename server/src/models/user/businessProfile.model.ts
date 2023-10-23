@@ -63,6 +63,7 @@ const businessProfileSchema = new Schema(
     petShopLicenseNumber: {
       type: String,
       required: false,
+      immutable: true,
       validate: [
         validatePetShopLicenseNumber,
         'Please enter a valid pet shop license.'

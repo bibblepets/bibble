@@ -17,6 +17,7 @@ const licensedPetShopSchema = new Schema(
     licenseNumber: {
       type: String,
       immutable: true,
+      unique: true,
       required: [true, 'Please specify the license number of this pet shop.']
     },
     name: {
