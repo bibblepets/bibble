@@ -1,5 +1,5 @@
 build:
 	docker build -t server:bibble .
 
-dev-test:
+run test:
 	docker exec -it server sh -c "npm test"
