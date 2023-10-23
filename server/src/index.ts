@@ -1,7 +1,7 @@
 import { Express } from 'express';
 
 require('dotenv').config();
-require('./mongodb/db');
+require('./mongodb/connection');
 
 const express = require('express');
 const cookieParser = require('cookie-parser');

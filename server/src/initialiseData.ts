@@ -1,4 +1,6 @@
 import { Connection } from 'mongoose';
+import { readFileSync } from 'fs';
+import { parse } from 'papaparse';
 import { IUser, UserModel } from './models/user/user.model';
 import {
   BuyerProfileModel,
@@ -22,6 +24,10 @@ import {
   IDogVaccine
 } from './models/listing/animal/dog/dogVaccine.model';
 import { CountryModel, ICountry } from './models/country.model';
+import {
+  ILicensedPetShop,
+  LicensedPetShopModel
+} from './models/licensedPetShop.model';
 
 const User: UserModel = require('./models/user/user.model');
 const BuyerProfile: BuyerProfileModel = require('./models/user/buyerProfile.model');
@@ -53,6 +59,7 @@ const {
 const DogBreed: DogBreedModel = require('./models/listing/animal/dog/dogBreed.model');
 const DogVaccine: DogVaccineModel = require('./models/listing/animal/dog/dogVaccine.model');
 const Country: CountryModel = require('./models/country.model');
+const LicensedPetShop: LicensedPetShopModel = require('./models/licensedPetShop.model');
 
 // Seed Data -------------------------------------------------------------------
 const adminBuyerProfile: Omit<
@@ -248,10 +255,7 @@ const initDogs = async (
     };
 
     // Save the dog object to the database
-    await new Dog(dog)
-      .save()
-      .then((dog: IDog) => dogList.push(dog))
-      .catch((error: any) => console.log('Error creating Dog:', error));
+    await new Dog(dog).save().then((dog: IDog) => dogList.push(dog));
   }
   console.log('Dogs initialised');
   return dogList;
@@ -269,11 +273,9 @@ const initPetListings = async (admin: IUser, dogList: IDog[]) => {
       media: generateMedia(mediaTypes),
       animal: dog._id,
       species: speciesTypes[0] // Dog
-    })
-      .then((petListing: IPetListing) => {
-        petListings.push(petListing);
-      })
-      .catch((error: any) => console.log('Error creating Pet Listing:', error));
+    }).then((petListing: IPetListing) => {
+      petListings.push(petListing);
+    });
   }
 
   console.log('Pet Listings initialised');
@@ -286,59 +288,71 @@ export const initialiseData = async (): Promise<void> => {
   let countries: ICountry[] | undefined;
   let admin: IUser | undefined;
   let dogs: IDog[] | undefined;
-  let petListings: IPetListing[] | undefined;
 
   try {
     console.log('Initialising Data...');
-    await db.asPromise();
+    await connection.asPromise();
     dogBreeds = await initDogBreeds();
     dogVaccines = await initDogVaccines();
     countries = await initCountries();
     admin = await initAdmin();
 
     dogs = await initDogs(dogBreeds, dogVaccines, countries);
-    petListings = await initPetListings(admin, dogs);
+    await initPetListings(admin, dogs);
+
+    await dumpFromCSV('src/licensedPetShops.csv');
 
     console.log('Data initialisation complete');
   } catch (error: any) {
     console.log('Error initialising data, wiping...');
-    if (dogBreeds) {
-      await DogBreed.deleteMany({ _id: { $in: dogBreeds.map((d) => d._id) } });
-    }
-    if (dogVaccines) {
-      await DogVaccine.deleteMany({
-        _id: { $in: dogVaccines.map((d) => d._id) }
-      });
-    }
-    if (countries) {
-      await Country.deleteMany({ _id: { $in: countries.map((c) => c._id) } });
-    }
-    if (admin) {
-      await User.deleteOne({ _id: admin._id });
-      await BuyerProfile.deleteOne({ _id: admin.buyerProfile });
-      await BusinessProfile.deleteOne({ _id: admin.businessProfile });
-    }
-    if (dogs) {
-      await Dog.deleteMany({ _id: { $in: dogs.map((d) => d._id) } });
-    }
-    if (petListings) {
-      await PetListing.deleteMany({
-        _id: { $in: petListings.map((p) => p._id) }
-      });
-    }
-    console.log('Data wipe complete');
+    await connection.dropDatabase().then(() => console.log('Database wiped'));
     console.log(error);
   } finally {
-    db.close();
-    console.log('Disconnected from MongoDB `' + db.name + '`');
+    connection.close();
+    console.log(
+      'Disconnected from MongoDB `' + connection.db.databaseName + '`'
+    );
     process.exit();
   }
 };
 // ----------------------------------------------------------------------------
 
+// Dump from CSV file ---------------------------------------------------------
+type LicensedPetShopCSV = {
+  'License Number': string;
+  'Pet Shop Name': string;
+  Address: string;
+};
+
+const dumpFromCSV = async (path: string) => {
+  const licensedPetShops: Omit<ILicensedPetShop, '_id'>[] = [];
+  console.log('Dumping from csv: `' + path + '`...');
+  const content = readFileSync(path, 'utf8');
+
+  parse<LicensedPetShopCSV>(content, {
+    header: true,
+    dynamicTyping: true,
+    complete: function (results) {
+      results.data.forEach((result) => {
+        licensedPetShops.push({
+          licenseNumber: result['License Number'],
+          name: result['Pet Shop Name'],
+          address: result['Address']
+        });
+      });
+    }
+  });
+
+  return await LicensedPetShop.create(licensedPetShops).then((shops) => {
+    console.log('Dumped from csv: `' + path + '`!');
+    return shops;
+  });
+};
+// ----------------------------------------------------------------------------
+
 // Main -----------------------------------------------------------------------
 require('dotenv').config();
-const db: Connection = require('./mongodb/db');
+const connection: Connection = require('./mongodb/db');
 initialiseData();
 // ----------------------------------------------------------------------------
 
