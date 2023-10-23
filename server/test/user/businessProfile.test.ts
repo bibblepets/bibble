@@ -152,13 +152,14 @@ describe('Business Profile model (CREATE)', () => {
 });
 
 describe('Business Profile model (READ)', () => {
-  let existingBusinessProfileId: Schema.Types.ObjectId;
-  beforeEach(async function () {
-    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
-      bibbleTier: 'Basic'
-    };
+  const existingBusinessProfileData: ICreateBusinessProfileRequest['body'] = {
+    bibbleTier: 'Basic'
+  };
 
-    const businessProfile = new BusinessProfile(businessProfileData);
+  let existingBusinessProfileId: Schema.Types.ObjectId;
+
+  beforeEach(async function () {
+    const businessProfile = new BusinessProfile(existingBusinessProfileData);
     const savedBusinessProfile = await businessProfile.save();
     existingBusinessProfileId = savedBusinessProfile._id;
   });

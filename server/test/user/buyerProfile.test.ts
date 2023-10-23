@@ -122,14 +122,14 @@ describe('Buyer Profile model (CREATE)', () => {
 });
 
 describe('Buyer Profile model (READ)', () => {
+  const existingBuyerProfileData: ICreateBuyerProfileRequest['body'] = {
+    firstName: 'John',
+    lastName: 'Doe'
+  };
+
   let existingBuyerProfileId: Schema.Types.ObjectId;
   beforeEach(async function () {
-    const buyerProfileData: ICreateBuyerProfileRequest['body'] = {
-      firstName: 'John',
-      lastName: 'Doe'
-    };
-
-    const buyerProfile = new BuyerProfile(buyerProfileData);
+    const buyerProfile = new BuyerProfile(existingBuyerProfileData);
     const savedBuyerProfile = await buyerProfile.save();
 
     existingBuyerProfileId = savedBuyerProfile._id;
