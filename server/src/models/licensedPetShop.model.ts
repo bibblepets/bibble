@@ -8,7 +8,9 @@ export interface ILicensedPetShop {
   address: string;
 }
 
-export interface LicensedPetShopModel extends Model<ILicensedPetShop> {}
+export interface LicensedPetShopModel extends Model<ILicensedPetShop> {
+  verifyLicense(licenseNumber: string): Promise<boolean>;
+}
 
 const licensedPetShopSchema = new Schema(
   {
@@ -29,7 +31,7 @@ const licensedPetShopSchema = new Schema(
   { collection: 'licensedPetShops' }
 );
 
-licensedPetShopSchema.statics.exists = async function (
+licensedPetShopSchema.statics.verifyLicense = async function (
   licenseNumber: string
 ): Promise<boolean> {
   const licensedPetShop = await this.findOne({ licenseNumber: licenseNumber });
