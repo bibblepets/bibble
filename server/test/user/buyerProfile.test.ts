@@ -1,12 +1,11 @@
+import { afterEach, beforeEach, describe, it } from 'mocha';
+import { expect } from 'chai';
 import { Schema } from 'mongoose';
 import {
   BuyerProfileModel,
   ICreateBuyerProfileRequest,
   IUpdateBuyerProfileRequest
 } from '../../src/models/user/buyerProfile.model';
-import { afterEach } from 'mocha';
-
-const chai: Chai.ChaiStatic = require('chai');
 
 const BuyerProfile: BuyerProfileModel = require('../../src/models/user/buyerProfile.model');
 
@@ -24,11 +23,10 @@ describe('Buyer Profile model (CREATE)', () => {
     const buyerProfile = new BuyerProfile(buyerProfileData);
     const savedBuyerProfile = await buyerProfile.save();
 
-    chai.expect(savedBuyerProfile._id).to.exist;
-    chai
-      .expect(savedBuyerProfile.firstName)
-      .to.equal(buyerProfileData.firstName);
-    chai.expect(savedBuyerProfile.lastName).to.equal(buyerProfileData.lastName);
+    expect(savedBuyerProfile._id).to.exist;
+
+    expect(savedBuyerProfile.firstName).to.equal(buyerProfileData.firstName);
+    expect(savedBuyerProfile.lastName).to.equal(buyerProfileData.lastName);
   });
 
   it('+ Create Buyer Profile (all fields)', async function () {
@@ -44,19 +42,18 @@ describe('Buyer Profile model (CREATE)', () => {
     const buyerProfile = new BuyerProfile(buyerProfileData);
     const savedBuyerProfile = await buyerProfile.save();
 
-    chai.expect(savedBuyerProfile._id).to.exist;
-    chai
-      .expect(savedBuyerProfile.firstName)
-      .to.equal(buyerProfileData.firstName);
-    chai.expect(savedBuyerProfile.lastName).to.equal(buyerProfileData.lastName);
-    chai.expect(savedBuyerProfile.bio).to.equal(buyerProfileData.bio);
-    chai
-      .expect(savedBuyerProfile.profilePic)
-      .to.equal(buyerProfileData.profilePic);
-    chai
-      .expect(savedBuyerProfile.contactNumber)
-      .to.equal(buyerProfileData.contactNumber);
-    chai.expect(savedBuyerProfile.favouriteListings).to.be.empty;
+    expect(savedBuyerProfile._id).to.exist;
+
+    expect(savedBuyerProfile.firstName).to.equal(buyerProfileData.firstName);
+    expect(savedBuyerProfile.lastName).to.equal(buyerProfileData.lastName);
+    expect(savedBuyerProfile.bio).to.equal(buyerProfileData.bio);
+
+    expect(savedBuyerProfile.profilePic).to.equal(buyerProfileData.profilePic);
+
+    expect(savedBuyerProfile.contactNumber).to.equal(
+      buyerProfileData.contactNumber
+    );
+    expect(savedBuyerProfile.favouriteListings).to.be.empty;
   });
 
   it('- Create Buyer Profile (missing `firstName`)', async function () {
@@ -71,7 +68,7 @@ describe('Buyer Profile model (CREATE)', () => {
       const buyerProfile = new BuyerProfile(buyerProfileData);
       await buyerProfile.save();
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -87,7 +84,7 @@ describe('Buyer Profile model (CREATE)', () => {
       const buyerProfile = new BuyerProfile(buyerProfileData);
       await buyerProfile.save();
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -101,7 +98,7 @@ describe('Buyer Profile model (CREATE)', () => {
       const buyerProfile = new BuyerProfile(buyerProfileData);
       await buyerProfile.save();
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -116,7 +113,7 @@ describe('Buyer Profile model (CREATE)', () => {
       const buyerProfile = new BuyerProfile(buyerProfileData);
       await buyerProfile.save();
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 });
@@ -144,17 +141,18 @@ describe('Buyer Profile model (READ)', () => {
       existingBuyerProfileId
     );
 
-    chai.expect(foundBuyerProfile).to.exist;
-    chai
-      .expect(foundBuyerProfile?._id.toString())
-      .to.equal(existingBuyerProfileId.toString());
+    expect(foundBuyerProfile).to.exist;
+
+    expect(foundBuyerProfile?._id.toString()).to.equal(
+      existingBuyerProfileId.toString()
+    );
   });
 
   it('- Get Buyer Profile (invalid `id`)', async function () {
     try {
       await BuyerProfile.findById('Invalid');
     } catch (error: any) {
-      chai.expect(error.name).to.equal('CastError');
+      expect(error.name).to.equal('CastError');
     }
   });
 });
@@ -189,16 +187,17 @@ describe('Buyer Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBuyerProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBuyerProfile?._id.toString())
-      .to.equal(existingBuyerProfileId.toString());
-    chai
-      .expect(updatedBuyerProfile?.firstName)
-      .to.equal(buyerProfileData.firstName);
-    chai
-      .expect(updatedBuyerProfile?.lastName)
-      .to.equal(existingBuyerProfileData.lastName);
+    expect(updatedBuyerProfile?.isNew).to.be.false;
+
+    expect(updatedBuyerProfile?._id.toString()).to.equal(
+      existingBuyerProfileId.toString()
+    );
+
+    expect(updatedBuyerProfile?.firstName).to.equal(buyerProfileData.firstName);
+
+    expect(updatedBuyerProfile?.lastName).to.equal(
+      existingBuyerProfileData.lastName
+    );
   });
 
   it('+ Update Buyer Profile (only `lastName`)', async function () {
@@ -212,16 +211,17 @@ describe('Buyer Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBuyerProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBuyerProfile?._id.toString())
-      .to.equal(existingBuyerProfileId.toString());
-    chai
-      .expect(updatedBuyerProfile?.firstName)
-      .to.equal(existingBuyerProfileData.firstName);
-    chai
-      .expect(updatedBuyerProfile?.lastName)
-      .to.equal(buyerProfileData.lastName);
+    expect(updatedBuyerProfile?.isNew).to.be.false;
+
+    expect(updatedBuyerProfile?._id.toString()).to.equal(
+      existingBuyerProfileId.toString()
+    );
+
+    expect(updatedBuyerProfile?.firstName).to.equal(
+      existingBuyerProfileData.firstName
+    );
+
+    expect(updatedBuyerProfile?.lastName).to.equal(buyerProfileData.lastName);
   });
 
   it('+ Update Buyer Profile (only `bio`)', async function () {
@@ -235,17 +235,20 @@ describe('Buyer Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBuyerProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBuyerProfile?._id.toString())
-      .to.equal(existingBuyerProfileId.toString());
-    chai
-      .expect(updatedBuyerProfile?.firstName)
-      .to.equal(existingBuyerProfileData.firstName);
-    chai
-      .expect(updatedBuyerProfile?.lastName)
-      .to.equal(existingBuyerProfileData.lastName);
-    chai.expect(updatedBuyerProfile?.bio).to.equal(buyerProfileData.bio);
+    expect(updatedBuyerProfile?.isNew).to.be.false;
+
+    expect(updatedBuyerProfile?._id.toString()).to.equal(
+      existingBuyerProfileId.toString()
+    );
+
+    expect(updatedBuyerProfile?.firstName).to.equal(
+      existingBuyerProfileData.firstName
+    );
+
+    expect(updatedBuyerProfile?.lastName).to.equal(
+      existingBuyerProfileData.lastName
+    );
+    expect(updatedBuyerProfile?.bio).to.equal(buyerProfileData.bio);
   });
 
   it('+ Update Buyer Profile (only `profilePic`)', async function () {
@@ -259,19 +262,23 @@ describe('Buyer Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBuyerProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBuyerProfile?._id.toString())
-      .to.equal(existingBuyerProfileId.toString());
-    chai
-      .expect(updatedBuyerProfile?.firstName)
-      .to.equal(existingBuyerProfileData.firstName);
-    chai
-      .expect(updatedBuyerProfile?.lastName)
-      .to.equal(existingBuyerProfileData.lastName);
-    chai
-      .expect(updatedBuyerProfile?.profilePic)
-      .to.equal(buyerProfileData.profilePic);
+    expect(updatedBuyerProfile?.isNew).to.be.false;
+
+    expect(updatedBuyerProfile?._id.toString()).to.equal(
+      existingBuyerProfileId.toString()
+    );
+
+    expect(updatedBuyerProfile?.firstName).to.equal(
+      existingBuyerProfileData.firstName
+    );
+
+    expect(updatedBuyerProfile?.lastName).to.equal(
+      existingBuyerProfileData.lastName
+    );
+
+    expect(updatedBuyerProfile?.profilePic).to.equal(
+      buyerProfileData.profilePic
+    );
   });
 
   it('+ Update Buyer Profile (only `contactNumber`)', async function () {
@@ -285,19 +292,23 @@ describe('Buyer Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBuyerProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBuyerProfile?._id.toString())
-      .to.equal(existingBuyerProfileId.toString());
-    chai
-      .expect(updatedBuyerProfile?.firstName)
-      .to.equal(existingBuyerProfileData.firstName);
-    chai
-      .expect(updatedBuyerProfile?.lastName)
-      .to.equal(existingBuyerProfileData.lastName);
-    chai
-      .expect(updatedBuyerProfile?.contactNumber)
-      .to.equal(buyerProfileData.contactNumber);
+    expect(updatedBuyerProfile?.isNew).to.be.false;
+
+    expect(updatedBuyerProfile?._id.toString()).to.equal(
+      existingBuyerProfileId.toString()
+    );
+
+    expect(updatedBuyerProfile?.firstName).to.equal(
+      existingBuyerProfileData.firstName
+    );
+
+    expect(updatedBuyerProfile?.lastName).to.equal(
+      existingBuyerProfileData.lastName
+    );
+
+    expect(updatedBuyerProfile?.contactNumber).to.equal(
+      buyerProfileData.contactNumber
+    );
   });
 
   it('+ Update Buyer Profile (all fields)', async function () {
@@ -316,24 +327,25 @@ describe('Buyer Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBuyerProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBuyerProfile?._id.toString())
-      .to.equal(existingBuyerProfileId.toString());
-    chai
-      .expect(updatedBuyerProfile?.firstName)
-      .to.equal(buyerProfileData.firstName);
-    chai
-      .expect(updatedBuyerProfile?.lastName)
-      .to.equal(buyerProfileData.lastName);
-    chai.expect(updatedBuyerProfile?.bio).to.equal(buyerProfileData.bio);
-    chai
-      .expect(updatedBuyerProfile?.profilePic)
-      .to.equal(buyerProfileData.profilePic);
-    chai
-      .expect(updatedBuyerProfile?.contactNumber)
-      .to.equal(buyerProfileData.contactNumber);
-    chai.expect(updatedBuyerProfile?.favouriteListings).to.be.empty;
+    expect(updatedBuyerProfile?.isNew).to.be.false;
+
+    expect(updatedBuyerProfile?._id.toString()).to.equal(
+      existingBuyerProfileId.toString()
+    );
+
+    expect(updatedBuyerProfile?.firstName).to.equal(buyerProfileData.firstName);
+
+    expect(updatedBuyerProfile?.lastName).to.equal(buyerProfileData.lastName);
+    expect(updatedBuyerProfile?.bio).to.equal(buyerProfileData.bio);
+
+    expect(updatedBuyerProfile?.profilePic).to.equal(
+      buyerProfileData.profilePic
+    );
+
+    expect(updatedBuyerProfile?.contactNumber).to.equal(
+      buyerProfileData.contactNumber
+    );
+    expect(updatedBuyerProfile?.favouriteListings).to.be.empty;
   });
 
   it('- Update Buyer Profile (empty `firstName`)', async function () {
@@ -348,7 +360,7 @@ describe('Buyer Profile model (UPDATE)', () => {
         { new: true }
       );
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -364,7 +376,7 @@ describe('Buyer Profile model (UPDATE)', () => {
         { new: true }
       );
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -380,7 +392,7 @@ describe('Buyer Profile model (UPDATE)', () => {
         { new: true }
       );
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 });
@@ -409,16 +421,16 @@ describe('Buyer Profile model (DELETE)', () => {
       existingBuyerProfileId
     );
 
-    chai
-      .expect(deletedBuyerProfile?._id.toString())
-      .to.equal(existingBuyerProfileId.toString());
+    expect(deletedBuyerProfile?._id.toString()).to.equal(
+      existingBuyerProfileId.toString()
+    );
   });
 
   it('- Delete Buyer Profile (invalid `id`)', async function () {
     try {
       await BuyerProfile.findByIdAndDelete('Invalid');
     } catch (error: any) {
-      chai.expect(error.name).to.equal('CastError');
+      expect(error.name).to.equal('CastError');
     }
   });
 });

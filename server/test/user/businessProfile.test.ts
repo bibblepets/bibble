@@ -1,12 +1,11 @@
+import { afterEach, beforeEach, describe, it } from 'mocha';
+import { expect } from 'chai';
 import { Schema } from 'mongoose';
 import {
   BusinessProfileModel,
   ICreateBusinessProfileRequest,
   IUpdateBusinessProfileRequest
 } from '../../src/models/user/businessProfile.model';
-import { beforeEach, afterEach, it } from 'mocha';
-
-const chai: Chai.ChaiStatic = require('chai');
 
 const BusinessProfile: BusinessProfileModel = require('../../src/models/user/businessProfile.model');
 
@@ -23,10 +22,11 @@ describe('Business Profile model (CREATE)', () => {
     const businessProfile = new BusinessProfile(businessProfileData);
     const savedBusinessProfile = await businessProfile.save();
 
-    chai.expect(savedBusinessProfile._id).to.exist;
-    chai
-      .expect(savedBusinessProfile.bibbleTier)
-      .to.equal(businessProfileData.bibbleTier);
+    expect(savedBusinessProfile._id).to.exist;
+
+    expect(savedBusinessProfile.bibbleTier).to.equal(
+      businessProfileData.bibbleTier
+    );
   });
 
   it('+ Create Business Profile (only required `bibbleTier` with `Verfied`)', async function () {
@@ -37,10 +37,11 @@ describe('Business Profile model (CREATE)', () => {
     const businessProfile = new BusinessProfile(businessProfileData);
     const savedBusinessProfile = await businessProfile.save();
 
-    chai.expect(savedBusinessProfile._id).to.exist;
-    chai
-      .expect(savedBusinessProfile.bibbleTier)
-      .to.equal(businessProfileData.bibbleTier);
+    expect(savedBusinessProfile._id).to.exist;
+
+    expect(savedBusinessProfile.bibbleTier).to.equal(
+      businessProfileData.bibbleTier
+    );
   });
 
   it('+ Create Business Profile (only required `bibbleTier` with `Partner`)', async function () {
@@ -51,10 +52,11 @@ describe('Business Profile model (CREATE)', () => {
     const businessProfile = new BusinessProfile(businessProfileData);
     const savedBusinessProfile = await businessProfile.save();
 
-    chai.expect(savedBusinessProfile._id).to.exist;
-    chai
-      .expect(savedBusinessProfile.bibbleTier)
-      .to.equal(businessProfileData.bibbleTier);
+    expect(savedBusinessProfile._id).to.exist;
+
+    expect(savedBusinessProfile.bibbleTier).to.equal(
+      businessProfileData.bibbleTier
+    );
   });
 
   it('+ Create Business Profile (all fields)', async function () {
@@ -71,28 +73,35 @@ describe('Business Profile model (CREATE)', () => {
     const businessProfile = new BusinessProfile(businessProfileData);
     const savedBusinessProfile = await businessProfile.save();
 
-    chai.expect(savedBusinessProfile._id).to.exist;
-    chai
-      .expect(savedBusinessProfile.bibbleTier)
-      .to.equal(businessProfileData.bibbleTier);
-    chai
-      .expect(savedBusinessProfile.businessName)
-      .to.equal(businessProfileData.businessName);
-    chai
-      .expect(savedBusinessProfile.businessAddress)
-      .to.equal(businessProfileData.businessAddress);
-    chai
-      .expect(savedBusinessProfile.businessBio)
-      .to.equal(businessProfileData.businessBio);
-    chai
-      .expect(savedBusinessProfile.businessContact)
-      .to.equal(businessProfileData.businessContact);
-    chai
-      .expect(savedBusinessProfile.businessEmail)
-      .to.equal(businessProfileData.businessEmail);
-    chai
-      .expect(savedBusinessProfile.businessPic)
-      .to.equal(businessProfileData.businessPic);
+    expect(savedBusinessProfile._id).to.exist;
+
+    expect(savedBusinessProfile.bibbleTier).to.equal(
+      businessProfileData.bibbleTier
+    );
+
+    expect(savedBusinessProfile.businessName).to.equal(
+      businessProfileData.businessName
+    );
+
+    expect(savedBusinessProfile.businessAddress).to.equal(
+      businessProfileData.businessAddress
+    );
+
+    expect(savedBusinessProfile.businessBio).to.equal(
+      businessProfileData.businessBio
+    );
+
+    expect(savedBusinessProfile.businessContact).to.equal(
+      businessProfileData.businessContact
+    );
+
+    expect(savedBusinessProfile.businessEmail).to.equal(
+      businessProfileData.businessEmail
+    );
+
+    expect(savedBusinessProfile.businessPic).to.equal(
+      businessProfileData.businessPic
+    );
   });
 
   it('- Create Business Profile (missing `bibbleTier`)', async function () {
@@ -105,7 +114,7 @@ describe('Business Profile model (CREATE)', () => {
       const businessProfile = new BusinessProfile(businessProfileData);
       await businessProfile.save();
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -118,7 +127,7 @@ describe('Business Profile model (CREATE)', () => {
       const businessProfile = new BusinessProfile(businessProfileData);
       await businessProfile.save();
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -132,7 +141,7 @@ describe('Business Profile model (CREATE)', () => {
       const businessProfile = new BusinessProfile(businessProfileData);
       await businessProfile.save();
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -146,7 +155,7 @@ describe('Business Profile model (CREATE)', () => {
       const businessProfile = new BusinessProfile(businessProfileData);
       await businessProfile.save();
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 });
@@ -173,16 +182,16 @@ describe('Business Profile model (READ)', () => {
       existingBusinessProfileId
     );
 
-    chai
-      .expect(businessProfile?._id.toString())
-      .to.equal(existingBusinessProfileId.toString());
+    expect(businessProfile?._id.toString()).to.equal(
+      existingBusinessProfileId.toString()
+    );
   });
 
   it('- Get Business Profile (invalid `id`)', async function () {
     try {
       await BusinessProfile.findById('Invalid');
     } catch (error: any) {
-      chai.expect(error.name).to.equal('CastError');
+      expect(error.name).to.equal('CastError');
     }
   });
 });
@@ -215,13 +224,15 @@ describe('Business Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBusinessProfile?._id.toString())
-      .to.equal(existingBusinessProfileId.toString());
-    chai
-      .expect(updatedBusinessProfile?.bibbleTier)
-      .to.equal(businessProfileData.bibbleTier);
+    expect(updatedBusinessProfile?.isNew).to.be.false;
+
+    expect(updatedBusinessProfile?._id.toString()).to.equal(
+      existingBusinessProfileId.toString()
+    );
+
+    expect(updatedBusinessProfile?.bibbleTier).to.equal(
+      businessProfileData.bibbleTier
+    );
   });
 
   it('+ Update Business Profile (only `bibbleTier` to `Partner`)', async function () {
@@ -235,13 +246,15 @@ describe('Business Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBusinessProfile?._id.toString())
-      .to.equal(existingBusinessProfileId.toString());
-    chai
-      .expect(updatedBusinessProfile?.bibbleTier)
-      .to.equal(businessProfileData.bibbleTier);
+    expect(updatedBusinessProfile?.isNew).to.be.false;
+
+    expect(updatedBusinessProfile?._id.toString()).to.equal(
+      existingBusinessProfileId.toString()
+    );
+
+    expect(updatedBusinessProfile?.bibbleTier).to.equal(
+      businessProfileData.bibbleTier
+    );
   });
 
   it('+ Update Business Profile (only `businessName`)', async function () {
@@ -255,16 +268,19 @@ describe('Business Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBusinessProfile?._id.toString())
-      .to.equal(existingBusinessProfileId.toString());
-    chai
-      .expect(updatedBusinessProfile?.bibbleTier)
-      .to.equal(existingBusinessProfileData.bibbleTier);
-    chai
-      .expect(updatedBusinessProfile?.businessName)
-      .to.equal(businessProfileData.businessName);
+    expect(updatedBusinessProfile?.isNew).to.be.false;
+
+    expect(updatedBusinessProfile?._id.toString()).to.equal(
+      existingBusinessProfileId.toString()
+    );
+
+    expect(updatedBusinessProfile?.bibbleTier).to.equal(
+      existingBusinessProfileData.bibbleTier
+    );
+
+    expect(updatedBusinessProfile?.businessName).to.equal(
+      businessProfileData.businessName
+    );
   });
 
   it('+ Update Business Profile (only `businessAddress`)', async function () {
@@ -278,16 +294,19 @@ describe('Business Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBusinessProfile?._id.toString())
-      .to.equal(existingBusinessProfileId.toString());
-    chai
-      .expect(updatedBusinessProfile?.bibbleTier)
-      .to.equal(existingBusinessProfileData.bibbleTier);
-    chai
-      .expect(updatedBusinessProfile?.businessAddress)
-      .to.equal(businessProfileData.businessAddress);
+    expect(updatedBusinessProfile?.isNew).to.be.false;
+
+    expect(updatedBusinessProfile?._id.toString()).to.equal(
+      existingBusinessProfileId.toString()
+    );
+
+    expect(updatedBusinessProfile?.bibbleTier).to.equal(
+      existingBusinessProfileData.bibbleTier
+    );
+
+    expect(updatedBusinessProfile?.businessAddress).to.equal(
+      businessProfileData.businessAddress
+    );
   });
 
   it('+ Update Business Profile (only `businessBio`)', async function () {
@@ -301,16 +320,19 @@ describe('Business Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBusinessProfile?._id.toString())
-      .to.equal(existingBusinessProfileId.toString());
-    chai
-      .expect(updatedBusinessProfile?.bibbleTier)
-      .to.equal(existingBusinessProfileData.bibbleTier);
-    chai
-      .expect(updatedBusinessProfile?.businessBio)
-      .to.equal(businessProfileData.businessBio);
+    expect(updatedBusinessProfile?.isNew).to.be.false;
+
+    expect(updatedBusinessProfile?._id.toString()).to.equal(
+      existingBusinessProfileId.toString()
+    );
+
+    expect(updatedBusinessProfile?.bibbleTier).to.equal(
+      existingBusinessProfileData.bibbleTier
+    );
+
+    expect(updatedBusinessProfile?.businessBio).to.equal(
+      businessProfileData.businessBio
+    );
   });
 
   it('+ Update Business Profile (only `businessContact`)', async function () {
@@ -324,16 +346,19 @@ describe('Business Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBusinessProfile?._id.toString())
-      .to.equal(existingBusinessProfileId.toString());
-    chai
-      .expect(updatedBusinessProfile?.bibbleTier)
-      .to.equal(existingBusinessProfileData.bibbleTier);
-    chai
-      .expect(updatedBusinessProfile?.businessContact)
-      .to.equal(businessProfileData.businessContact);
+    expect(updatedBusinessProfile?.isNew).to.be.false;
+
+    expect(updatedBusinessProfile?._id.toString()).to.equal(
+      existingBusinessProfileId.toString()
+    );
+
+    expect(updatedBusinessProfile?.bibbleTier).to.equal(
+      existingBusinessProfileData.bibbleTier
+    );
+
+    expect(updatedBusinessProfile?.businessContact).to.equal(
+      businessProfileData.businessContact
+    );
   });
 
   it('+ Update Business Profile (only `businessEmail`)', async function () {
@@ -347,16 +372,19 @@ describe('Business Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBusinessProfile?._id.toString())
-      .to.equal(existingBusinessProfileId.toString());
-    chai
-      .expect(updatedBusinessProfile?.bibbleTier)
-      .to.equal(existingBusinessProfileData.bibbleTier);
-    chai
-      .expect(updatedBusinessProfile?.businessEmail)
-      .to.equal(businessProfileData.businessEmail);
+    expect(updatedBusinessProfile?.isNew).to.be.false;
+
+    expect(updatedBusinessProfile?._id.toString()).to.equal(
+      existingBusinessProfileId.toString()
+    );
+
+    expect(updatedBusinessProfile?.bibbleTier).to.equal(
+      existingBusinessProfileData.bibbleTier
+    );
+
+    expect(updatedBusinessProfile?.businessEmail).to.equal(
+      businessProfileData.businessEmail
+    );
   });
 
   it('+ Update Business Profile (only `businessPic`)', async function () {
@@ -370,16 +398,19 @@ describe('Business Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBusinessProfile?._id.toString())
-      .to.equal(existingBusinessProfileId.toString());
-    chai
-      .expect(updatedBusinessProfile?.bibbleTier)
-      .to.equal(existingBusinessProfileData.bibbleTier);
-    chai
-      .expect(updatedBusinessProfile?.businessPic)
-      .to.equal(businessProfileData.businessPic);
+    expect(updatedBusinessProfile?.isNew).to.be.false;
+
+    expect(updatedBusinessProfile?._id.toString()).to.equal(
+      existingBusinessProfileId.toString()
+    );
+
+    expect(updatedBusinessProfile?.bibbleTier).to.equal(
+      existingBusinessProfileData.bibbleTier
+    );
+
+    expect(updatedBusinessProfile?.businessPic).to.equal(
+      businessProfileData.businessPic
+    );
   });
 
   it('+ Update Business Profile (all fields)', async function () {
@@ -399,28 +430,35 @@ describe('Business Profile model (UPDATE)', () => {
       { new: true }
     );
 
-    chai.expect(updatedBusinessProfile?.isNew).to.be.false;
-    chai
-      .expect(updatedBusinessProfile?._id.toString())
-      .to.equal(existingBusinessProfileId.toString());
-    chai
-      .expect(updatedBusinessProfile?.businessName)
-      .to.equal(businessProfileData.businessName);
-    chai
-      .expect(updatedBusinessProfile?.businessAddress)
-      .to.equal(businessProfileData.businessAddress);
-    chai
-      .expect(updatedBusinessProfile?.businessBio)
-      .to.equal(businessProfileData.businessBio);
-    chai
-      .expect(updatedBusinessProfile?.businessContact)
-      .to.equal(businessProfileData.businessContact);
-    chai
-      .expect(updatedBusinessProfile?.businessEmail)
-      .to.equal(businessProfileData.businessEmail);
-    chai
-      .expect(updatedBusinessProfile?.businessPic)
-      .to.equal(businessProfileData.businessPic);
+    expect(updatedBusinessProfile?.isNew).to.be.false;
+
+    expect(updatedBusinessProfile?._id.toString()).to.equal(
+      existingBusinessProfileId.toString()
+    );
+
+    expect(updatedBusinessProfile?.businessName).to.equal(
+      businessProfileData.businessName
+    );
+
+    expect(updatedBusinessProfile?.businessAddress).to.equal(
+      businessProfileData.businessAddress
+    );
+
+    expect(updatedBusinessProfile?.businessBio).to.equal(
+      businessProfileData.businessBio
+    );
+
+    expect(updatedBusinessProfile?.businessContact).to.equal(
+      businessProfileData.businessContact
+    );
+
+    expect(updatedBusinessProfile?.businessEmail).to.equal(
+      businessProfileData.businessEmail
+    );
+
+    expect(updatedBusinessProfile?.businessPic).to.equal(
+      businessProfileData.businessPic
+    );
   });
 
   it('- Update Business Profile (invalid `businessContact`)', async function () {
@@ -437,7 +475,7 @@ describe('Business Profile model (UPDATE)', () => {
         { new: true }
       );
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -455,7 +493,7 @@ describe('Business Profile model (UPDATE)', () => {
         { new: true }
       );
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -473,7 +511,7 @@ describe('Business Profile model (UPDATE)', () => {
         { new: true }
       );
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 
@@ -491,7 +529,7 @@ describe('Business Profile model (UPDATE)', () => {
         { new: true }
       );
     } catch (error: any) {
-      chai.expect(error.name).to.equal('ValidationError');
+      expect(error.name).to.equal('ValidationError');
     }
   });
 });
@@ -518,16 +556,16 @@ describe('Business Profile model (DELETE)', () => {
       _id: existingBusinessProfileId
     });
 
-    chai
-      .expect(deletedBusinessProfile?._id.toString())
-      .to.equal(existingBusinessProfileId.toString());
+    expect(deletedBusinessProfile?._id.toString()).to.equal(
+      existingBusinessProfileId.toString()
+    );
   });
 
   it('- Delete Business Profile (invalid `id`)', async function () {
     try {
       await BusinessProfile.findOneAndDelete({ _id: 'Invalid' });
     } catch (error: any) {
-      chai.expect(error.name).to.equal('CastError');
+      expect(error.name).to.equal('CastError');
     }
   });
 });
