@@ -1,37 +1,37 @@
 import { Connection } from 'mongoose';
 import { readFileSync } from 'fs';
 import { parse } from 'papaparse';
-import { IUser, UserModel } from './models/user/user.model';
+import { IUser, UserModel } from '../src/models/user/user.model';
 import {
   BuyerProfileModel,
   IBuyerProfile
-} from './models/user/buyerProfile.model';
+} from '../src/models/user/buyerProfile.model';
 import {
   BusinessProfileModel,
   IBusinessProfile
-} from './models/user/businessProfile.model';
+} from '../src/models/user/businessProfile.model';
 import {
   PetListingModel,
   IPetListing
-} from './models/listing/petListing.model';
-import { DogModel, IDog } from './models/listing/animal/dog/dog.model';
+} from '../src/models/listing/petListing.model';
+import { DogModel, IDog } from '../src/models/listing/animal/dog/dog.model';
 import {
   DogBreedModel,
   IDogBreed
-} from './models/listing/animal/dog/dogBreed.model';
+} from '../src/models/listing/animal/dog/dogBreed.model';
 import {
   DogVaccineModel,
   IDogVaccine
-} from './models/listing/animal/dog/dogVaccine.model';
-import { CountryModel, ICountry } from './models/country.model';
+} from '../src/models/listing/animal/dog/dogVaccine.model';
+import { CountryModel, ICountry } from '../src/models/country.model';
 import {
   ILicensedPetShop,
   LicensedPetShopModel
-} from './models/licensedPetShop.model';
+} from '../src/models/licensedPetShop.model';
 
-const User: UserModel = require('./models/user/user.model');
-const BuyerProfile: BuyerProfileModel = require('./models/user/buyerProfile.model');
-const BusinessProfile: BusinessProfileModel = require('./models/user/businessProfile.model');
+const User: UserModel = require('../src/models/user/user.model');
+const BuyerProfile: BuyerProfileModel = require('../src/models/user/buyerProfile.model');
+const BusinessProfile: BusinessProfileModel = require('../src/models/user/businessProfile.model');
 const {
   PetListing,
   saleTypes,
@@ -44,7 +44,7 @@ const {
   mediaTypes: string[];
   speciesTypes: string[];
   saleStatuses: string[];
-} = require('./models/listing/petListing.model');
+} = require('../src/models/listing/petListing.model');
 const {
   Dog,
   sizes,
@@ -55,11 +55,11 @@ const {
   sizes: string[];
   hairCoats: string[];
   genders: string[];
-} = require('./models/listing/animal/dog/dog.model');
-const DogBreed: DogBreedModel = require('./models/listing/animal/dog/dogBreed.model');
-const DogVaccine: DogVaccineModel = require('./models/listing/animal/dog/dogVaccine.model');
-const Country: CountryModel = require('./models/country.model');
-const LicensedPetShop: LicensedPetShopModel = require('./models/licensedPetShop.model');
+} = require('../src/models/listing/animal/dog/dog.model');
+const DogBreed: DogBreedModel = require('../src/models/listing/animal/dog/dogBreed.model');
+const DogVaccine: DogVaccineModel = require('../src/models/listing/animal/dog/dogVaccine.model');
+const Country: CountryModel = require('../src/models/country.model');
+const LicensedPetShop: LicensedPetShopModel = require('../src/models/licensedPetShop.model');
 
 // Seed Data -------------------------------------------------------------------
 const adminBuyerProfile: Omit<
@@ -300,7 +300,7 @@ export const initialiseData = async (): Promise<void> => {
     dogs = await initDogs(dogBreeds, dogVaccines, countries);
     await initPetListings(admin, dogs);
 
-    await dumpFromCSV('src/licensedPetShops.csv');
+    await dumpFromCSV('data/licensedPetShops.csv');
 
     console.log('Data initialisation complete');
   } catch (error: any) {
@@ -352,7 +352,7 @@ const dumpFromCSV = async (path: string) => {
 
 // Main -----------------------------------------------------------------------
 require('dotenv').config();
-const connection: Connection = require('./mongodb/db');
+const connection: Connection = require('../src/mongodb/connection');
 initialiseData();
 // ----------------------------------------------------------------------------
 
