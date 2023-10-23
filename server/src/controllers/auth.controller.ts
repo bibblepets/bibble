@@ -74,7 +74,9 @@ export const registerUser = async (
   res: Response
 ) => {
   const { buyerProfile, businessProfile, email, password } = req.body;
-
+  let createdBuyerProfile;
+  let createdBusinessProfile;
+  let createdUser;
   try {
     if (!SECRET_JWT_CODE) {
       throw new Error('Secret JWT code not found.');
@@ -91,12 +93,11 @@ export const registerUser = async (
 
     // Create Buyer Profile
     console.log('Creating buyer profile...');
-    const createdBuyerProfile = await BuyerProfile.create(buyerProfile);
+    createdBuyerProfile = await BuyerProfile.create(buyerProfile);
     console.log('Buyer profile created.', createdBuyerProfile._id);
 
     // Create Business Profile
     console.log('Creating business profile...');
-    let createdBusinessProfile;
     if (businessProfile) {
       createdBusinessProfile = await BusinessProfile.create(businessProfile);
       console.log('Business profile created.', createdBusinessProfile._id);
@@ -106,7 +107,7 @@ export const registerUser = async (
 
     // Create User
     console.log('Creating user...');
-    const createdUser = await User.create({
+    createdUser = await User.create({
       buyerProfile: createdBuyerProfile._id,
       businessProfile: createdBusinessProfile?._id,
       email,
@@ -132,6 +133,21 @@ export const registerUser = async (
       message: 'User registered successfully.'
     });
   } catch (error: any) {
+    if (createdUser) {
+      console.log('Deleting user...');
+      await createdUser.deleteOne();
+      console.log('User deleted.');
+    }
+    if (createdBusinessProfile) {
+      console.log('Deleting business profile...');
+      await createdBusinessProfile.deleteOne();
+      console.log('Business profile deleted.');
+    }
+    if (createdBuyerProfile) {
+      console.log('Deleting buyer profile...');
+      await createdBuyerProfile.deleteOne();
+      console.log('Buyer profile deleted.');
+    }
     return handleError(res, error);
   }
 };
