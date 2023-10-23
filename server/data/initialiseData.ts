@@ -74,7 +74,7 @@ const adminBusinessProfile: Omit<
   IBusinessProfile,
   '_id' | 'createdAt' | 'updatedAt'
 > = {
-  bibbleTier: 'Partner',
+  bibbleTier: 'Basic',
   businessName: 'Bibble',
   businessEmail: 'teamsaturdaydevs@gmail.com',
   businessContact: '12345678'
