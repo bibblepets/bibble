@@ -4,6 +4,8 @@ WORKDIR /usr/src/app
 
 COPY package*.json .
 
+COPY ../data/*.csv ./data
+
 RUN npm install
 
 COPY . .
