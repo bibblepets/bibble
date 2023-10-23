@@ -62,7 +62,12 @@ const businessProfileSchema = new Schema(
     },
     petShopLicenseNumber: {
       type: String,
-      required: false,
+      required: [
+        function (this: IBusinessProfile) {
+          return this.bibbleTier !== 'Basic';
+        },
+        'A Pet shop license number is required for tiers above `Basic`.'
+      ],
       immutable: true,
       validate: [
         validatePetShopLicenseNumber,
