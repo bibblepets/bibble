@@ -76,8 +76,7 @@ const adminBusinessProfile: Omit<
 > = {
   bibbleTier: 'Basic',
   businessName: 'Bibble',
-  businessEmail: 'teamsaturdaydevs@gmail.com',
-  businessContact: '12345678'
+  businessEmail: 'teamsaturdaydevs@gmail.com'
 };
 
 const admin: Omit<IUser, '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile'> = {

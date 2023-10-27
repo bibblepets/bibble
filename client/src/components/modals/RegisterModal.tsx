@@ -1,8 +1,12 @@
-import { ChangeEvent, useCallback } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { BiLogoGoogle, BiLogoLinkedin } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/logo-icon.png';
-import { registerUser, selectIsAuthenticated } from '../../features/authSlice';
+import {
+  registerUser,
+  selectAuthStatus,
+  resetStatus
+} from '../../features/authSlice';
 import {
   closeRegisterModal,
   openLoginModal,
@@ -19,14 +23,38 @@ import {
 } from '../../features/modalsSlice';
 import { store } from '../../store';
 import BaseModal from './BaseModal';
+import {
+  ArrowPathIcon,
+  CheckCircleIcon,
+  InformationCircleIcon
+} from '@heroicons/react/24/outline';
 
 const RegisterModal = () => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
   const isOpen = useSelector(selectIsRegisterModalOpen);
   const firstName = useSelector(selectRegisterModalFirstName);
   const lastName = useSelector(selectRegisterModalLastName);
   const email = useSelector(selectRegisterModalEmail);
   const password = useSelector(selectRegisterModalPassword);
+  const status = useSelector(selectAuthStatus);
+
+  // useEffect(() => {
+  //   let status = store.getState().authentication.status;
+
+  //   if (status === 'LOADING') {
+  //     setLoading(true);
+  //   }
+
+  //   if (status === 'ERROR') {
+  //     setLoading(false);
+  //     setError(store.getState().authentication.error);
+  //   }
+
+  //   if (status === 'SUCCESS') {
+  //     setLoading(false);
+  //     store.dispatch(resetRegisterModal());
+  //     store.dispatch(closeRegisterModal());
+  //   }
+  // }, [store]);
 
   const onChangeFirstName = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -66,9 +94,13 @@ const RegisterModal = () => {
       lastName
     };
     store.dispatch(registerUser({ email, password, buyerProfile }));
+  }, [store, email, password, firstName, lastName]);
+
+  const onSuccess = useCallback(() => {
     store.dispatch(resetRegisterModal());
     store.dispatch(closeRegisterModal());
-  }, [store, email, password, firstName, lastName]);
+    store.dispatch(resetStatus());
+  }, [store]);
 
   const onToggle = useCallback(() => {
     store.dispatch(closeRegisterModal());
@@ -131,20 +163,48 @@ const RegisterModal = () => {
             <input
               type="checkbox"
               className="form-checkbox w-4 h-4 text-neutral-500 cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                alert('Remember me not implemented yet');
+              }}
             />
             <span className="text-sm text-neutral-500">Remember me</span>
           </label>
 
-          <a className="text-sm text-sky-500 font-semibold transition cursor-pointer hover:underline">
+          <a
+            className="text-sm text-sky-500 font-semibold transition cursor-pointer hover:underline"
+            onClick={() =>
+              alert('Forgot password redirect not implemented yet')
+            }
+          >
             Forgot password?
           </a>
         </div>
 
+        {status === 'ERROR' && (
+          <div className="flex flex-row gap-4 w-full justify-center items-center border border-red-500 rounded-lg p-2 text-sm">
+            <InformationCircleIcon className="w-6 h-6 text-red-500" />
+            <a className="text-sm text-red-500 whitespace-pre-line">
+              {store.getState().authentication.error}
+            </a>
+          </div>
+        )}
+
         <button
           onClick={onSubmit}
-          className="bg-sky-500 text-white w-full font-semibold text-sm rounded-lg p-3 transition hover:bg-opacity-70 hover:shadow-inner"
+          className="flex justify-center items-center bg-sky-500 text-white w-full font-semibold text-sm rounded-lg p-3 transition hover:bg-opacity-70 hover:shadow-inner disabled:bg-neutral-400"
+          disabled={status === 'LOADING'}
         >
-          Register
+          {status === 'LOADING' ? (
+            <ArrowPathIcon className="animate-spin w-5 h-5" />
+          ) : status === 'SUCCESS' ? (
+            <>
+              <CheckCircleIcon className="animate-bounce w-5 h-5" />
+              {onSuccess()}
+            </>
+          ) : (
+            <label>Register</label>
+          )}
         </button>
 
         <div className="flex flex-row w-full items-center gap-2">
