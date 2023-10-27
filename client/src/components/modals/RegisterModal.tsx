@@ -83,8 +83,8 @@ const RegisterModal = () => {
           Register your account
         </a>
         <div className="flex flex-col gap-4 w-full">
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-col gap-2">
+          <div className="flex flex-row gap-4 justify-between">
+            <div className="flex flex-col gap-2 w-1/2">
               <a className="text-sm text-neutral-500">First Name</a>
               <input
                 className="border rounded-lg p-2 text-sm"
@@ -94,7 +94,7 @@ const RegisterModal = () => {
               />
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-1/2">
               <a className="text-sm text-neutral-500">Last Name</a>
               <input
                 className="border rounded-lg p-2 text-sm"
