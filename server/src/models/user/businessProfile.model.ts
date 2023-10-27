@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import mongoose, { Model, Schema } from 'mongoose';
+import { LicensedPetShopModel } from '../licensedPetShop.model';
 
 export const bibbleTiers = ['Basic', 'Verified', 'Partner', 'Super'];
 
@@ -12,6 +13,7 @@ export interface IBusinessProfile {
   businessAddress?: string;
   businessContact?: string;
   businessEmail?: string;
+  petShopLicenseNumber?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -58,6 +60,20 @@ const businessProfileSchema = new Schema(
       required: false,
       validate: [validateEmail, 'Please enter a valid business email address.']
     },
+    petShopLicenseNumber: {
+      type: String,
+      required: [
+        function (this: IBusinessProfile) {
+          return this.bibbleTier !== 'Basic';
+        },
+        'A Pet shop license number is required for tiers above `Basic`.'
+      ],
+      immutable: true,
+      validate: [
+        validatePetShopLicenseNumber,
+        'Please enter a valid pet shop license.'
+      ]
+    },
     createdAt: {
       type: Date,
       immutable: true,
@@ -82,4 +98,11 @@ function validateEmail(email: string): boolean {
   return RegExp(
     /^(([^<>()[\]\\.,;:\s@"]+\.?)|(".+"))@(([a-zA-Z\d-]+\.)+[a-zA-Z]{2,})$/
   ).test(String(email).toLowerCase());
+}
+
+async function validatePetShopLicenseNumber(
+  licenseNumber: string
+): Promise<boolean> {
+  const LicensedPetShop: LicensedPetShopModel = require('../licensedPetShop.model');
+  return await LicensedPetShop.verifyLicense(licenseNumber);
 }
