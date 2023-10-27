@@ -6,6 +6,14 @@
     "strict": true,
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "./src/types"],
-    "types": ["node", "bcrypt"]
+    "types": [
+      "bcrypt",
+      "chai",
+      "express",
+      "jsonwebtoken",
+      "mocha",
+      "node",
+      "supertest"
+    ]
   }
 }

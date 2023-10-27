@@ -3,7 +3,8 @@ import { verify, sign } from 'jsonwebtoken';
 import { Error } from 'mongoose';
 import { handleError } from '../utils/util';
 import {
-  ICreateOrUpdateUserRequest,
+  ICreateUserRequest,
+  IUpdateUserRequest,
   ICheckAuthStatusRequest,
   ILoginUserRequest,
   UserModel
@@ -69,10 +70,7 @@ export const checkAuthStatus = async (
   }
 };
 
-export const registerUser = async (
-  req: ICreateOrUpdateUserRequest,
-  res: Response
-) => {
+export const registerUser = async (req: ICreateUserRequest, res: Response) => {
   const { buyerProfile, businessProfile, email, password } = req.body;
   let createdBuyerProfile;
   let createdBusinessProfile;
@@ -192,10 +190,7 @@ export const logoutUser = (_req: Request, res: Response) => {
   });
 };
 
-export const updateUser = async (
-  req: ICreateOrUpdateUserRequest,
-  res: Response
-) => {
+export const updateUser = async (req: IUpdateUserRequest, res: Response) => {
   const { id } = req.params;
   const { buyerProfile, businessProfile, email, password } = req.body;
 

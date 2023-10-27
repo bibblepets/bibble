@@ -1,9 +1,16 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model } from 'mongoose';
 import { compareSync, hashSync } from 'bcrypt';
-import { IBuyerProfile, ICreateOrUpdateBuyerProfileRequest } from './buyerProfile.model';
-import { IBusinessProfile, ICreateOrUpdateBusinessProfileRequest } from './businessProfile.model';
-
+import {
+  IBuyerProfile,
+  ICreateBuyerProfileRequest,
+  IUpdateBuyerProfileRequest
+} from './buyerProfile.model';
+import {
+  IBusinessProfile,
+  ICreateBusinessProfileRequest,
+  IUpdateBusinessProfileRequest
+} from './businessProfile.model';
 
 export interface IUser {
   _id: Schema.Types.ObjectId;
@@ -21,13 +28,22 @@ interface IUserMethods {
 
 export interface UserModel extends Model<IUser, {}, IUserMethods> {}
 
-export interface ICreateOrUpdateUserRequest extends Request {
+export interface ICreateUserRequest extends Request {
   body: Omit<
     IUser,
     '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile' | 'businessProfile'
   > & {
-    buyerProfile: ICreateOrUpdateBuyerProfileRequest['body'];
-    businessProfile?: ICreateOrUpdateBusinessProfileRequest['body'] | undefined;
+    buyerProfile: ICreateBuyerProfileRequest['body'];
+    businessProfile?: ICreateBusinessProfileRequest['body'];
+  };
+}
+
+export interface IUpdateUserRequest extends Request {
+  body: Partial<
+    Omit<ICreateUserRequest['body'], 'buyerProfile' | 'businessProfile'>
+  > & {
+    buyerProfile?: IUpdateBuyerProfileRequest['body'];
+    businessProfile?: IUpdateBusinessProfileRequest['body'];
   };
 }
 
@@ -58,7 +74,7 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
       ref: 'BusinessProfile',
       immutable: true,
       required: false,
-      cast: 'Business Profile ID of `{VALUE}` is invalid.',
+      cast: 'Business Profile ID of `{VALUE}` is invalid.'
     },
     email: {
       type: String,
@@ -75,7 +91,7 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
         validatePassword,
         'Password must be at least 6 characters long.'
       ]
-    },
+    }
   },
   { collection: 'users', timestamps: true, versionKey: false }
 );
@@ -90,7 +106,10 @@ UserSchema.pre('save', function (next) {
 
 UserSchema.pre('findOneAndUpdate', function (next) {
   if ((this as any)._update.password) {
-    (this as any)._update.password = hashSync((this as any)._update.password, 10);
+    (this as any)._update.password = hashSync(
+      (this as any)._update.password,
+      10
+    );
   }
   next();
 });
