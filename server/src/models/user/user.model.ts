@@ -39,7 +39,9 @@ export interface ICreateUserRequest extends Request {
 }
 
 export interface IUpdateUserRequest extends Request {
-  body: Partial<ICreateUserRequest['body']> & {
+  body: Partial<
+    Omit<ICreateUserRequest['body'], 'buyerProfile' | 'businessProfile'>
+  > & {
     buyerProfile?: IUpdateBuyerProfileRequest['body'];
     businessProfile?: IUpdateBusinessProfileRequest['body'];
   };
