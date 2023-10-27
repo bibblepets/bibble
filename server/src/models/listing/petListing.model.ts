@@ -1,6 +1,10 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model, Document } from 'mongoose';
-import { ICreateOrUpdateDogRequest, IDog } from './animal/dog/dog.model';
+import {
+  ICreateDogRequest,
+  IUpdateDogRequest,
+  IDog
+} from './animal/dog/dog.model';
 import { IUser } from '../user/user.model';
 
 const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
@@ -30,13 +34,19 @@ interface IPetListingMethods {
 export interface PetListingModel
   extends Model<IPetListing, {}, IPetListingMethods> {}
 
-export interface ICreateOrUpdatePetListingRequest extends Request {
+export interface ICreatePetListingRequest extends Request {
   body: Omit<
     IPetListing,
     '_id' | 'createdAt' | 'updatedAt' | 'lister' | 'animal'
   > & {
     lister: IUser;
-    animal: ICreateOrUpdateDogRequest['body']; // Add other animals here: ICreateOrUpdateCatRequest['body'], etc.
+    animal: ICreateDogRequest['body']; // Add other animals here: ICreateCatRequest['body'], etc.
+  };
+}
+
+export interface IUpdatePetListingRequest extends Request {
+  body: Partial<Omit<ICreatePetListingRequest['body'], 'animal'>> & {
+    animal: IUpdateDogRequest['body']; // Add other animals here: IUpdateCatRequest['body'], etc.
   };
 }
 
