@@ -29,6 +29,18 @@ import {
   InformationCircleIcon
 } from '@heroicons/react/24/outline';
 
+function generateTitle() {
+  const titles = [
+    'Join the Paw-some Bibble Community',
+    'Unlock Your Pet-tential',
+    'Fetch Your Free Account',
+    'Furever Friends Start Here',
+    "Let's Get This Pawty Started"
+  ];
+
+  return titles[Math.floor(Math.random() * titles.length)];
+}
+
 const RegisterModal = () => {
   const isOpen = useSelector(selectIsRegisterModalOpen);
   const firstName = useSelector(selectRegisterModalFirstName);
@@ -101,7 +113,7 @@ const RegisterModal = () => {
       <div className="flex flex-col items-center gap-8">
         <img className="h-[32px]" src={logo} alt="bibble-logo" />
         <a className="font-semibold text-xl text-neutral-700">
-          Register your account
+          {generateTitle()}
         </a>
         <div className="flex flex-col gap-4 w-full">
           <div className="flex flex-row gap-4 justify-between">

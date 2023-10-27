@@ -25,6 +25,17 @@ import {
   InformationCircleIcon
 } from '@heroicons/react/24/outline';
 
+function generateTitle() {
+  const titles = [
+    'Welcome Back to the Pack',
+    'Step Back into Pet Paradise',
+    'Paw-some to Have You Back',
+    'A Fur-st Class Welcome Back'
+  ];
+
+  return titles[Math.floor(Math.random() * titles.length)];
+}
+
 const LoginModal = () => {
   const isOpen = useSelector(selectIsLoginModalOpen);
   const email = useSelector(selectLoginModalEmail);
@@ -77,7 +88,7 @@ const LoginModal = () => {
       <div className="flex flex-col items-center gap-8">
         <img className="h-[32px]" src={logo} alt="bibble-logo" />
         <a className="font-semibold text-xl text-neutral-700">
-          Sign in to your account
+          {generateTitle()}
         </a>
         <div className="flex flex-col gap-4 w-full">
           <div className="flex flex-col gap-2">
