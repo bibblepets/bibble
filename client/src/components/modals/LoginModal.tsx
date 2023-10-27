@@ -1,8 +1,12 @@
-import { ChangeEvent, useCallback } from 'react';
+import { ChangeEvent, useCallback, useEffect } from 'react';
 import { BiLogoGoogle, BiLogoLinkedin } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/logo-icon.png';
-import { loginUser, selectIsAuthenticated } from '../../features/authSlice';
+import {
+  loginUser,
+  resetStatus,
+  selectAuthStatus
+} from '../../features/authSlice';
 import {
   closeLoginModal,
   openRegisterModal,
@@ -15,12 +19,25 @@ import {
 } from '../../features/modalsSlice';
 import { store } from '../../store';
 import BaseModal from './BaseModal';
+import {
+  ArrowPathIcon,
+  CheckCircleIcon,
+  InformationCircleIcon
+} from '@heroicons/react/24/outline';
 
 const LoginModal = () => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
   const isOpen = useSelector(selectIsLoginModalOpen);
   const email = useSelector(selectLoginModalEmail);
   const password = useSelector(selectLoginModalPassword);
+  const status = useSelector(selectAuthStatus);
+
+  useEffect(() => {
+    console.log('useEffect LoginModal');
+    if (isOpen && status === 'SUCCESS') {
+      console.log('useEffect LoginModal SUCCESS');
+      setTimeout(onSuccess, 1000);
+    }
+  }, [status]);
 
   const onChangeEmail = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -42,9 +59,13 @@ const LoginModal = () => {
 
   const onSubmit = useCallback(() => {
     store.dispatch(loginUser({ email, password }));
+  }, [store, email, password]);
+
+  const onSuccess = useCallback(() => {
+    store.dispatch(resetStatus());
     store.dispatch(resetLoginModal());
     store.dispatch(closeLoginModal());
-  }, [store, email, password]);
+  }, [store]);
 
   const onToggle = useCallback(() => {
     store.dispatch(closeLoginModal());
@@ -85,20 +106,47 @@ const LoginModal = () => {
             <input
               type="checkbox"
               className="form-checkbox w-4 h-4 text-neutral-500 cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                alert('Remember me not implemented yet');
+              }}
             />
             <span className="text-sm text-neutral-500">Remember me</span>
           </label>
 
-          <a className="text-sm text-sky-500 font-semibold transition cursor-pointer hover:underline">
+          <a
+            className="text-sm text-sky-500 font-semibold transition cursor-pointer hover:underline"
+            onClick={() =>
+              alert('Forgot password redirect not implemented yet')
+            }
+          >
             Forgot password?
           </a>
         </div>
 
+        {status === 'ERROR' && (
+          <div className="flex flex-row gap-4 w-full justify-center items-center border border-red-500 rounded-lg p-2 text-sm">
+            <InformationCircleIcon className="w-6 h-6 text-red-500" />
+            <a className="text-sm text-red-500 whitespace-pre-line">
+              {store.getState().authentication.error}
+            </a>
+          </div>
+        )}
+
         <button
           onClick={onSubmit}
-          className="bg-sky-500 text-white w-full font-semibold text-sm rounded-lg p-3 transition hover:bg-opacity-70 hover:shadow-inner"
+          className="flex justify-center items-center bg-sky-500 text-white w-full font-semibold text-sm rounded-lg p-3 transition hover:bg-opacity-70 hover:shadow-inner disabled:bg-neutral-400"
+          disabled={status === 'LOADING'}
         >
-          Sign in
+          {status === 'LOADING' ? (
+            <ArrowPathIcon className="animate-spin w-5 h-5" />
+          ) : status === 'SUCCESS' ? (
+            <>
+              <CheckCircleIcon className="w-5 h-5" />
+            </>
+          ) : (
+            <label>Sign In</label>
+          )}
         </button>
 
         <div className="flex flex-row w-full items-center gap-2">

@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect } from 'react';
 import { BiLogoGoogle, BiLogoLinkedin } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/logo-icon.png';
@@ -37,24 +37,13 @@ const RegisterModal = () => {
   const password = useSelector(selectRegisterModalPassword);
   const status = useSelector(selectAuthStatus);
 
-  // useEffect(() => {
-  //   let status = store.getState().authentication.status;
-
-  //   if (status === 'LOADING') {
-  //     setLoading(true);
-  //   }
-
-  //   if (status === 'ERROR') {
-  //     setLoading(false);
-  //     setError(store.getState().authentication.error);
-  //   }
-
-  //   if (status === 'SUCCESS') {
-  //     setLoading(false);
-  //     store.dispatch(resetRegisterModal());
-  //     store.dispatch(closeRegisterModal());
-  //   }
-  // }, [store]);
+  useEffect(() => {
+    console.log('useEffect RegisterModal');
+    if (isOpen && status === 'SUCCESS') {
+      console.log('useEffect RegisterModal SUCCESS');
+      setTimeout(onSuccess, 1000);
+    }
+  }, [status]);
 
   const onChangeFirstName = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -97,9 +86,9 @@ const RegisterModal = () => {
   }, [store, email, password, firstName, lastName]);
 
   const onSuccess = useCallback(() => {
+    store.dispatch(resetStatus());
     store.dispatch(resetRegisterModal());
     store.dispatch(closeRegisterModal());
-    store.dispatch(resetStatus());
   }, [store]);
 
   const onToggle = useCallback(() => {
@@ -199,8 +188,7 @@ const RegisterModal = () => {
             <ArrowPathIcon className="animate-spin w-5 h-5" />
           ) : status === 'SUCCESS' ? (
             <>
-              <CheckCircleIcon className="animate-bounce w-5 h-5" />
-              {onSuccess()}
+              <CheckCircleIcon className="w-5 h-5" />
             </>
           ) : (
             <label>Register</label>

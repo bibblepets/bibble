@@ -5,7 +5,6 @@ import { BusinessProfile, BuyerProfile, StatusType, User } from '../types';
 
 interface AuthState {
   token?: string;
-  isAuthenticated: boolean;
   currentUser?: User;
   status: StatusType;
   error?: string;
@@ -14,7 +13,6 @@ interface AuthState {
 
 const initialState: AuthState = {
   token: undefined,
-  isAuthenticated: false,
   currentUser: undefined,
   status: 'DEFAULT',
   error: undefined,
@@ -32,6 +30,11 @@ export const checkAuthStatus = createAsyncThunk(
         return response.data;
       })
       .catch((error) => {
+        if (error.response.status === 401) {
+          return {
+            message: error.response.data.message
+          };
+        }
         throw new Error(error.response.data.message);
       });
   }
@@ -64,7 +67,12 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   '/authSlice/loginUser',
-  async (credentials: { email: string; password: string }) => {
+  async (
+    credentials: Omit<
+      User,
+      '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile' | 'businessProfile'
+    >
+  ) => {
     return await axios
       .post('api/auth/login', credentials)
       .then((response) => {
@@ -95,6 +103,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     resetStatus: (state) => {
+      console.log('reseting Auth Slice status...');
       state.status = 'DEFAULT';
     }
   },
@@ -105,23 +114,14 @@ export const authSlice = createSlice({
         state.error = undefined;
       })
       .addCase(checkAuthStatus.fulfilled, (state, action) => {
-        state.status = 'SUCCESS';
-        state.isAuthenticated = true;
+        state.status = 'DEFAULT';
         state.currentUser = action.payload.currentUser;
         state.token = action.payload.token;
         state.message = action.payload.message;
       })
       .addCase(checkAuthStatus.rejected, (state, action) => {
-        if (action.error.message === 'Unauthorized.') {
-          state.status = 'SUCCESS';
-          state.isAuthenticated = false;
-          state.currentUser = undefined;
-          state.token = undefined;
-          state.message = action.error.message;
-        } else {
-          state.status = 'ERROR';
-          state.error = action.error.message;
-        }
+        state.status = 'ERROR';
+        state.error = action.error.message;
       })
       .addCase(registerUser.pending, (state) => {
         state.status = 'LOADING';
@@ -129,7 +129,6 @@ export const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.isAuthenticated = true;
         state.currentUser = action.payload.currentUser;
         state.token = action.payload.token;
         state.message = action.payload.message;
@@ -144,7 +143,6 @@ export const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.isAuthenticated = action.payload.isAuthenticated;
         state.currentUser = action.payload.currentUser;
         state.token = action.payload.token;
         state.message = action.payload.message;
@@ -158,8 +156,7 @@ export const authSlice = createSlice({
         state.error = undefined;
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
-        state.status = 'SUCCESS';
-        state.isAuthenticated = action.payload.isAuthenticated;
+        state.status = 'DEFAULT';
         state.currentUser = undefined;
         state.token = undefined;
         state.message = action.payload.message;
@@ -176,7 +173,7 @@ export const { resetStatus } = authSlice.actions;
 export const selectCurrentUser = (state: RootState) =>
   state.authentication.currentUser;
 export const selectIsAuthenticated = (state: RootState) =>
-  state.authentication.isAuthenticated;
+  !!state.authentication.currentUser;
 export const selectAuthStatus = (state: RootState) =>
   state.authentication.status;
 
