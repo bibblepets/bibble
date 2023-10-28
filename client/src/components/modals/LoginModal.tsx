@@ -87,6 +87,12 @@ const LoginModal = () => {
               type="text"
               value={email}
               onChange={onChangeEmail}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  onSubmit();
+                }
+              }}
             />
           </div>
 
@@ -97,6 +103,12 @@ const LoginModal = () => {
               type="password"
               value={password}
               onChange={onChangePassword}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  onSubmit();
+                }
+              }}
             />
           </div>
         </div>

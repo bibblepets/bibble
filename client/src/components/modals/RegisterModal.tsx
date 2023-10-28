@@ -112,6 +112,12 @@ const RegisterModal = () => {
                 type="text"
                 value={firstName}
                 onChange={onChangeFirstName}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    onSubmit();
+                  }
+                }}
               />
             </div>
 
@@ -122,6 +128,12 @@ const RegisterModal = () => {
                 type="text"
                 value={lastName}
                 onChange={onChangeLastName}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    onSubmit();
+                  }
+                }}
               />
             </div>
           </div>
@@ -133,6 +145,12 @@ const RegisterModal = () => {
               type="text"
               value={email}
               onChange={onChangeEmail}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  onSubmit();
+                }
+              }}
             />
           </div>
 
@@ -143,6 +161,12 @@ const RegisterModal = () => {
               type="password"
               value={password}
               onChange={onChangePassword}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  onSubmit();
+                }
+              }}
             />
           </div>
         </div>
