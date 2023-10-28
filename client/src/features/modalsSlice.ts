@@ -14,13 +14,15 @@ const initialState: ModalsState = {
     firstName: '',
     lastName: '',
     email: '',
-    password: ''
+    password: '',
+    title: ''
   },
   loginModal: {
     isOpen: false,
     status: 'DEFAULT',
     email: '',
-    password: ''
+    password: '',
+    title: ''
   }
 };
 
@@ -49,6 +51,18 @@ export const modalsSlice = createSlice({
     resetRegisterModal: (state) => {
       state.registerModal = initialState.registerModal;
     },
+    generateRegisterModalTitle: (state) => {
+      const titles = [
+        'Join the Paw-some Bibble Community',
+        'Unlock Your Pet-tential',
+        'Fetch Your Free Account',
+        'Furever Friends Start Here',
+        "Let's Get This Pawty Started"
+      ];
+
+      state.registerModal.title =
+        titles[Math.floor(Math.random() * titles.length)];
+    },
     openLoginModal: (state) => {
       state.loginModal.isOpen = true;
     },
@@ -63,6 +77,17 @@ export const modalsSlice = createSlice({
     },
     resetLoginModal: (state) => {
       state.loginModal = initialState.loginModal;
+    },
+    generateLoginModalTitle: (state) => {
+      const titles = [
+        'Welcome Back to the Pack',
+        'Step Back into Pet Paradise',
+        'Paw-some to Have You Back',
+        'A Fur-st Class Welcome Back'
+      ];
+
+      state.loginModal.title =
+        titles[Math.floor(Math.random() * titles.length)];
     }
   }
 });
@@ -75,11 +100,13 @@ export const {
   updateRegisterModalEmail,
   updateRegisterModalPassword,
   resetRegisterModal,
+  generateRegisterModalTitle,
   openLoginModal,
   closeLoginModal,
   updateLoginModalEmail,
   updateLoginModalPassword,
-  resetLoginModal
+  resetLoginModal,
+  generateLoginModalTitle
 } = modalsSlice.actions;
 
 export const selectIsRegisterModalOpen = (state: RootState) =>
@@ -94,6 +121,8 @@ export const selectRegisterModalEmail = (state: RootState) =>
   state.modals.registerModal.email;
 export const selectRegisterModalPassword = (state: RootState) =>
   state.modals.registerModal.password;
+export const selectRegisterModalTitle = (state: RootState) =>
+  state.modals.registerModal.title;
 export const selectIsLoginModalOpen = (state: RootState) =>
   state.modals.loginModal.isOpen;
 export const selectLoginModalStatus = (state: RootState) =>
@@ -102,5 +131,7 @@ export const selectLoginModalEmail = (state: RootState) =>
   state.modals.loginModal.email;
 export const selectLoginModalPassword = (state: RootState) =>
   state.modals.loginModal.password;
+export const selectLoginModalTitle = (state: RootState) =>
+  state.modals.loginModal.title;
 
 export default modalsSlice.reducer;

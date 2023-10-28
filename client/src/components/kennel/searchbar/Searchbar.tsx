@@ -12,6 +12,8 @@ function generatePlaceholder() {
 }
 
 const Searchbar = () => {
+  const placeholder = generatePlaceholder();
+
   return (
     <div className="flex justify-center items-center gap-8 border-t-[1px] border-gray-100 shadow-sm">
       <div className="flex flex-row w-full items-center mx-12 my-6 gap-4 justify-between">
@@ -23,7 +25,7 @@ const Searchbar = () => {
           <input
             type="text"
             className="text-xs outline-none w-full"
-            placeholder={generatePlaceholder()}
+            placeholder={placeholder}
           />
         </div>
         <FilterButton />

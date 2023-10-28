@@ -16,6 +16,7 @@ import {
   selectRegisterModalFirstName,
   selectRegisterModalLastName,
   selectRegisterModalPassword,
+  selectRegisterModalTitle,
   updateRegisterModalEmail,
   updateRegisterModalFirstName,
   updateRegisterModalLastName,
@@ -29,18 +30,6 @@ import {
   InformationCircleIcon
 } from '@heroicons/react/24/outline';
 
-function generateTitle() {
-  const titles = [
-    'Join the Paw-some Bibble Community',
-    'Unlock Your Pet-tential',
-    'Fetch Your Free Account',
-    'Furever Friends Start Here',
-    "Let's Get This Pawty Started"
-  ];
-
-  return titles[Math.floor(Math.random() * titles.length)];
-}
-
 const RegisterModal = () => {
   const isOpen = useSelector(selectIsRegisterModalOpen);
   const firstName = useSelector(selectRegisterModalFirstName);
@@ -48,6 +37,7 @@ const RegisterModal = () => {
   const email = useSelector(selectRegisterModalEmail);
   const password = useSelector(selectRegisterModalPassword);
   const status = useSelector(selectAuthStatus);
+  const title = useSelector(selectRegisterModalTitle);
 
   useEffect(() => {
     console.log('useEffect RegisterModal');
@@ -112,9 +102,7 @@ const RegisterModal = () => {
     <BaseModal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center gap-8">
         <img className="h-[32px]" src={logo} alt="bibble-logo" />
-        <a className="font-semibold text-xl text-neutral-700">
-          {generateTitle()}
-        </a>
+        <a className="font-semibold text-xl text-neutral-700">{title}</a>
         <div className="flex flex-col gap-4 w-full">
           <div className="flex flex-row gap-4 justify-between">
             <div className="flex flex-col gap-2 w-1/2">

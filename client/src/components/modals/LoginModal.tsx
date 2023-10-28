@@ -14,6 +14,7 @@ import {
   selectIsLoginModalOpen,
   selectLoginModalEmail,
   selectLoginModalPassword,
+  selectLoginModalTitle,
   updateLoginModalEmail,
   updateLoginModalPassword
 } from '../../features/modalsSlice';
@@ -25,22 +26,12 @@ import {
   InformationCircleIcon
 } from '@heroicons/react/24/outline';
 
-function generateTitle() {
-  const titles = [
-    'Welcome Back to the Pack',
-    'Step Back into Pet Paradise',
-    'Paw-some to Have You Back',
-    'A Fur-st Class Welcome Back'
-  ];
-
-  return titles[Math.floor(Math.random() * titles.length)];
-}
-
 const LoginModal = () => {
   const isOpen = useSelector(selectIsLoginModalOpen);
   const email = useSelector(selectLoginModalEmail);
   const password = useSelector(selectLoginModalPassword);
   const status = useSelector(selectAuthStatus);
+  const title = useSelector(selectLoginModalTitle);
 
   useEffect(() => {
     console.log('useEffect LoginModal');
@@ -87,9 +78,7 @@ const LoginModal = () => {
     <BaseModal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col items-center gap-8">
         <img className="h-[32px]" src={logo} alt="bibble-logo" />
-        <a className="font-semibold text-xl text-neutral-700">
-          {generateTitle()}
-        </a>
+        <a className="font-semibold text-xl text-neutral-700">{title}</a>
         <div className="flex flex-col gap-4 w-full">
           <div className="flex flex-col gap-2">
             <a className="text-sm text-neutral-500">Email</a>
