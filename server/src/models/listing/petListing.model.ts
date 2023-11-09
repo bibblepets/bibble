@@ -37,7 +37,7 @@ export interface PetListingModel
 export interface ICreatePetListingRequest extends Request {
   body: Omit<
     IPetListing,
-    '_id' | 'createdAt' | 'updatedAt' | 'lister' | 'animal'
+    '_id' | 'createdAt' | 'updatedAt' | 'expiryDate' | 'lister' | 'animal'
   > & {
     lister: IUser;
     animal: ICreateDogRequest['body']; // Add other animals here: ICreateCatRequest['body'], etc.
@@ -105,7 +105,8 @@ const PetListingSchema = new Schema<
       enum: {
         values: saleStatuses,
         message: 'Sale status of `{VALUE}` is invalid.'
-      }
+      },
+      required: [true, 'Please specify the sale status of this listing.']
     },
     media: [
       {
@@ -143,7 +144,8 @@ const PetListingSchema = new Schema<
     },
     expiryDate: {
       type: Date,
-      immutable: true
+      immutable: true,
+      required: [true, 'Please specify the expiry date of this listing.'] // Handled in pre-save hook
     }
   },
   { collection: 'petListings', timestamps: true }
