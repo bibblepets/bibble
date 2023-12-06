@@ -29,14 +29,12 @@ const SpeciesBox: React.FC<SpeciesBoxProps> = ({ species, icon: Icon }) => {
       <button
         onClick={() => onSelect(species)}
         className={`p-4 rounded-lg transition ${
-          selectedSpecies?.name === species.name ? 'bg-sky-500' : 'bg-gray-500'
+          selectedSpecies === species ? 'bg-sky-500' : 'bg-gray-500'
         }`}
       >
         <Icon className="text-white w-6 h-6" />
       </button>
-      <a className="text-sm font-light text-gray-500">
-        {toCamelCase(species.name)}
-      </a>
+      <a className="text-sm font-light text-gray-500">{toCamelCase(species)}</a>
     </div>
   );
 };

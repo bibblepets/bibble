@@ -86,7 +86,7 @@ export type Animal = {
   avsLicenseNumber: string;
 };
 
-export type SaleType = 'Sale' | 'Adoption';
+export type SaleType = 'SALE' | 'ADOPTION';
 
 export type Species = string;
 

@@ -13,33 +13,23 @@ import SpeciesBox from './SpeciesBox';
 const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
   const species = [
     {
-      type: {
-        name: 'dog'
-      },
+      type: 'dog',
       icon: GiSittingDog
     },
     {
-      type: {
-        name: 'cat'
-      },
+      type: 'cat',
       icon: GiCat
     },
     {
-      type: {
-        name: 'rabbit'
-      },
+      type: 'rabbit',
       icon: GiRabbit
     },
     {
-      type: {
-        name: 'mouse'
-      },
+      type: 'mouse',
       icon: GiRat
     },
     {
-      type: {
-        name: 'bird'
-      },
+      type: 'bird',
       icon: GiHummingbird
     }
   ];
@@ -49,7 +39,7 @@ const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
   if (readOnly) {
     return (
       <a className="text-gray-700 text-sm font-medium">
-        {(selectedSpecies && toCamelCase(selectedSpecies?.name)) ||
+        {(selectedSpecies && toCamelCase(selectedSpecies)) ||
           'No species selected'}
       </a>
     );
