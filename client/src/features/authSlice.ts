@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../store';
-import { StatusType, User } from '../types';
+import { BusinessProfile, BuyerProfile, StatusType, User } from '../types';
 
 interface AuthState {
   token?: string;
@@ -30,6 +30,11 @@ export const checkAuthStatus = createAsyncThunk(
         return response.data;
       })
       .catch((error) => {
+        if (error.response.status === 401) {
+          return {
+            message: error.response.data.message
+          };
+        }
         throw new Error(error.response.data.message);
       });
   }
@@ -37,7 +42,18 @@ export const checkAuthStatus = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   '/authSlice/registerUser',
-  async (credentials: User) => {
+  async (
+    credentials: Omit<
+      User,
+      '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile' | 'businessProfile'
+    > & {
+      buyerProfile: Omit<BuyerProfile, '_id' | 'createdAt' | 'updatedAt'>;
+      businessProfile?: Omit<
+        BusinessProfile,
+        '_id' | 'createdAt' | 'updatedAt'
+      >;
+    }
+  ) => {
     return await axios
       .post('api/auth/register', credentials)
       .then((response) => {
@@ -51,7 +67,12 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   '/authSlice/loginUser',
-  async (credentials: { email: string; password: string }) => {
+  async (
+    credentials: Omit<
+      User,
+      '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile' | 'businessProfile'
+    >
+  ) => {
     return await axios
       .post('api/auth/login', credentials)
       .then((response) => {
@@ -80,7 +101,12 @@ export const logoutUser = createAsyncThunk(
 export const authSlice = createSlice({
   name: 'authentication',
   initialState,
-  reducers: {},
+  reducers: {
+    resetStatus: (state) => {
+      console.log('reseting Auth Slice status...');
+      state.status = 'DEFAULT';
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(checkAuthStatus.pending, (state) => {
@@ -88,7 +114,7 @@ export const authSlice = createSlice({
         state.error = undefined;
       })
       .addCase(checkAuthStatus.fulfilled, (state, action) => {
-        state.status = 'SUCCESS';
+        state.status = 'DEFAULT';
         state.currentUser = action.payload.currentUser;
         state.token = action.payload.token;
         state.message = action.payload.message;
@@ -130,7 +156,7 @@ export const authSlice = createSlice({
         state.error = undefined;
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
-        state.status = 'SUCCESS';
+        state.status = 'DEFAULT';
         state.currentUser = undefined;
         state.token = undefined;
         state.message = action.payload.message;
@@ -142,8 +168,12 @@ export const authSlice = createSlice({
   }
 });
 
+export const { resetStatus } = authSlice.actions;
+
 export const selectCurrentUser = (state: RootState) =>
   state.authentication.currentUser;
+export const selectIsAuthenticated = (state: RootState) =>
+  !!state.authentication.currentUser;
 export const selectAuthStatus = (state: RootState) =>
   state.authentication.status;
 

@@ -1,7 +1,19 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import FilterButton from './FilterButton';
 
+function generatePlaceholder() {
+  const placeholders = [
+    'Find your furry friend...',
+    'Discover your purrfect match...',
+    'Sniff out your soulmate...'
+  ];
+
+  return placeholders[Math.floor(Math.random() * placeholders.length)];
+}
+
 const Searchbar = () => {
+  const placeholder = generatePlaceholder();
+
   return (
     <div className="flex justify-center items-center gap-8 border-t-[1px] border-gray-100 shadow-sm">
       <div className="flex flex-row w-full items-center mx-12 my-6 gap-4 justify-between">
@@ -13,7 +25,7 @@ const Searchbar = () => {
           <input
             type="text"
             className="text-xs outline-none w-full"
-            placeholder="Find your best friend..."
+            placeholder={placeholder}
           />
         </div>
         <FilterButton />

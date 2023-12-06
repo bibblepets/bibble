@@ -12,11 +12,13 @@ export type RegisterModalType = ModalType & {
   lastName: string;
   email: string;
   password: string;
+  title: string;
 };
 
 export type LoginModalType = ModalType & {
   email: string;
   password: string;
+  title: string;
 };
 
 // MODEL TYPES
