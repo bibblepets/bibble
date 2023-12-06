@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import paw from '../../../assets/paw.jpeg';
-import { Listing } from '../../../types';
+import { Listing } from '../../../features/types';
 
 interface ListingCardProps {
   listing: Listing;

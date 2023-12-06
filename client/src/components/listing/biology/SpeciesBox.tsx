@@ -6,7 +6,7 @@ import {
   setSpecies
 } from '../../../features/listingSlice';
 import { store } from '../../../store';
-import { Species } from '../../../types';
+import { Species } from '../../../features/types';
 import { toCamelCase } from '../../../utils/string';
 
 interface SpeciesBoxProps {

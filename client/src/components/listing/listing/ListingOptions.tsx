@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setSaleType } from '../../../features/listingSlice';
 import { store } from '../../../store';
-import { SaleType } from '../../../types';
+import { SaleType } from '../../../features/types';
 
 const ListingOptions = () => {
   const navigate = useNavigate();

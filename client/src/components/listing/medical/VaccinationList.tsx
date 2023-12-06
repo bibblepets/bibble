@@ -7,7 +7,7 @@ import {
   selectListingVaccinations
 } from '../../../features/listingSlice';
 import { store } from '../../../store';
-import { Vaccine } from '../../../types';
+import { Vaccine } from '../../../features/types';
 import { toCamelCase } from '../../../utils/string';
 
 const dummyVaccines = [

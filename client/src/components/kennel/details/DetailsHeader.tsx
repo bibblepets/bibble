@@ -1,5 +1,5 @@
 import { HeartIcon, ShareIcon } from '@heroicons/react/24/solid';
-import { Listing } from '../../../types';
+import { Listing } from '../../../features/types';
 
 interface DetailsHeaderProps {
   listing: Listing;

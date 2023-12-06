@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { LoginModalType, RegisterModalType } from '../types';
+import { LoginModalType, RegisterModalType } from './types';
 
 interface ModalsState {
   registerModal: RegisterModalType;

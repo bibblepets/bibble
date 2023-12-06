@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../store';
-import { Listing, StatusType } from '../types';
+import { Listing, StatusType } from './types';
 
 interface KennelState {
   listings: Listing[];

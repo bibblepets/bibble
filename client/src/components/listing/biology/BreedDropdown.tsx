@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectListingBreed, setBreed } from '../../../features/listingSlice';
 import { store } from '../../../store';
-import { Breed } from '../../../types';
+import { Breed } from '../../../features/types';
 
 const dummyBreeds = [
   { name: 'Labrador Retriever' },

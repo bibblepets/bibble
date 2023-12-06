@@ -1,7 +1,7 @@
 import { ArrowPathIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import { useEffect, useMemo, useState } from 'react';
-import { GeocodeResponse } from '../../../types';
+import { GeocodeResponse } from '../../../features/types';
 
 // NEED TO HIDE THIS KEY
 const GOOGLE_MAPS_API_KEY = 'AIzaSyB7fMl7N6wsGHbbw5duRQUMPzY3lwGYRHE';

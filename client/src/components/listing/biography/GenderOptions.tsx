@@ -3,7 +3,7 @@ import { BiFemaleSign, BiMaleSign } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import { selectListingGender, setGender } from '../../../features/listingSlice';
 import { store } from '../../../store';
-import { Gender } from '../../../types';
+import { Gender } from '../../../features/types';
 import { toCamelCase } from '../../../utils/string';
 
 const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
