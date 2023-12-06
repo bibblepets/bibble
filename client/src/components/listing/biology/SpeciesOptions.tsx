@@ -18,19 +18,23 @@ const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
     },
     {
       type: 'cat',
-      icon: GiCat
+      icon: GiCat,
+      disabled: true
     },
     {
       type: 'rabbit',
-      icon: GiRabbit
+      icon: GiRabbit,
+      disabled: true
     },
     {
       type: 'mouse',
-      icon: GiRat
+      icon: GiRat,
+      disabled: true
     },
     {
       type: 'bird',
-      icon: GiHummingbird
+      icon: GiHummingbird,
+      disabled: true
     }
   ];
 
@@ -48,7 +52,12 @@ const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
   return (
     <div className="flex flex-row justify-between">
       {species.map((species, index) => (
-        <SpeciesBox key={index} species={species.type} icon={species.icon} />
+        <SpeciesBox
+          key={index}
+          species={species.type}
+          icon={species.icon}
+          disabled={species.disabled}
+        />
       ))}
     </div>
   );

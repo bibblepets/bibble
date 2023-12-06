@@ -12,9 +12,14 @@ import { toCamelCase } from '../../../utils/string';
 interface SpeciesBoxProps {
   species: Species;
   icon: IconType;
+  disabled?: boolean;
 }
 
-const SpeciesBox: React.FC<SpeciesBoxProps> = ({ species, icon: Icon }) => {
+const SpeciesBox: React.FC<SpeciesBoxProps> = ({
+  species,
+  icon: Icon,
+  disabled
+}) => {
   const selectedSpecies = useSelector(selectListingSpecies);
 
   const onSelect = useCallback(
@@ -29,12 +34,23 @@ const SpeciesBox: React.FC<SpeciesBoxProps> = ({ species, icon: Icon }) => {
       <button
         onClick={() => onSelect(species)}
         className={`p-4 rounded-lg transition ${
-          selectedSpecies === species ? 'bg-sky-500' : 'bg-gray-500'
+          selectedSpecies === species
+            ? 'bg-sky-500'
+            : disabled
+            ? 'bg-gray-300'
+            : 'bg-gray-500'
         }`}
+        disabled={disabled}
       >
         <Icon className="text-white w-6 h-6" />
       </button>
-      <a className="text-sm font-light text-gray-500">{toCamelCase(species)}</a>
+      <a
+        className={`text-sm font-light ${
+          disabled ? 'text-gray-300' : 'text-gray-500'
+        }`}
+      >
+        {toCamelCase(species)}
+      </a>
     </div>
   );
 };

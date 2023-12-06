@@ -119,7 +119,7 @@ export type Media = {
   url: string;
 };
 
-export type MediaType = 'Image' | 'V_id?eo';
+export type MediaType = 'Image' | 'Video';
 
 export type GeocodeResponse = {
   results: [

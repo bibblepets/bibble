@@ -1,137 +1,11 @@
-import dogImg from '../../assets/dog1.jpeg';
+import { useSelector } from 'react-redux';
 import ListingOptions from '../../components/listing/listing/ListingOptions';
 import ListingRow from '../../components/listing/listing/ListingRow';
 import ListingLayout from '../../layouts/ListingLayout';
-
-const dummyListings = [
-  {
-    species: 'Dog',
-    breed: 'Golden Retriever',
-    saleType: 'Sale',
-    imgSrc: dogImg
-  },
-  {
-    species: 'Dog',
-    breed: 'Poodle',
-    saleType: 'Adoption'
-  },
-  {
-    species: 'Cat',
-    breed: 'British Shorthair',
-    saleType: 'Sale'
-  },
-  {
-    species: 'Cat',
-    breed: 'Street Cat',
-    saleType: 'Sale'
-  },
-  {
-    species: 'Dog',
-    breed: 'Maltipoo',
-    saleType: 'Adoption'
-  },
-  {
-    species: 'Dog',
-    breed: 'Siberian Husky',
-    saleType: 'Sale'
-  },
-  {
-    species: 'Dog',
-    breed: 'Golden Retriever',
-    saleType: 'Sale',
-    imgSrc: dogImg
-  },
-  {
-    species: 'Dog',
-    breed: 'Poodle',
-    saleType: 'Adoption'
-  },
-  {
-    species: 'Cat',
-    breed: 'British Shorthair',
-    saleType: 'Sale'
-  },
-  {
-    species: 'Cat',
-    breed: 'Street Cat',
-    saleType: 'Sale'
-  },
-  {
-    species: 'Dog',
-    breed: 'Maltipoo',
-    saleType: 'Adoption'
-  },
-  {
-    species: 'Dog',
-    breed: 'Siberian Husky',
-    saleType: 'Sale'
-  },
-  {
-    species: 'Dog',
-    breed: 'Golden Retriever',
-    saleType: 'Sale',
-    imgSrc: dogImg
-  },
-  {
-    species: 'Dog',
-    breed: 'Poodle',
-    saleType: 'Adoption'
-  },
-  {
-    species: 'Cat',
-    breed: 'British Shorthair',
-    saleType: 'Sale'
-  },
-  {
-    species: 'Cat',
-    breed: 'Street Cat',
-    saleType: 'Sale'
-  },
-  {
-    species: 'Dog',
-    breed: 'Maltipoo',
-    saleType: 'Adoption'
-  },
-  {
-    species: 'Dog',
-    breed: 'Siberian Husky',
-    saleType: 'Sale'
-  },
-  {
-    species: 'Dog',
-    breed: 'Golden Retriever',
-    saleType: 'Sale',
-    imgSrc: dogImg
-  },
-  {
-    species: 'Dog',
-    breed: 'Poodle',
-    saleType: 'Adoption'
-  },
-  {
-    species: 'Cat',
-    breed: 'British Shorthair',
-    saleType: 'Sale'
-  },
-  {
-    species: 'Cat',
-    breed: 'Street Cat',
-    saleType: 'Sale'
-  },
-  {
-    species: 'Dog',
-    breed: 'Maltipoo',
-    saleType: 'Adoption'
-  },
-  {
-    species: 'Dog',
-    breed: 'Siberian Husky',
-    saleType: 'Sale'
-  }
-];
+import { selectMyListings } from '../../features/kennelSlice';
 
 const Listing = () => {
-  const listings = dummyListings;
+  const listings = useSelector(selectMyListings);
 
   return (
     <>
@@ -146,13 +20,7 @@ const Listing = () => {
               {listings.length > 0 ? (
                 <div className="flex flex-col gap-4 overflow-auto">
                   {listings.map((listing, index) => (
-                    <ListingRow
-                      key={index}
-                      species={listing.species}
-                      breed={listing.breed}
-                      saleType={listing.saleType}
-                      imgSrc={listing.imgSrc}
-                    />
+                    <ListingRow key={index} listing={listing} />
                   ))}
                 </div>
               ) : (
