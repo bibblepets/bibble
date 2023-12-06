@@ -19,7 +19,7 @@ interface ListingState {
   };
   biology?: {
     species?: Species;
-    breed?: Breed;
+    breeds?: Breed[];
   };
   biography?: {
     origin?: Country;
@@ -65,10 +65,18 @@ const listingSlice = createSlice({
         species: action.payload
       };
     },
-    setBreed: (state, action: PayloadAction<Breed>) => {
+    addBreed: (state, action: PayloadAction<Breed>) => {
       state.biology = {
         ...state.biology,
-        breed: action.payload
+        breeds: [...(state.biology?.breeds || []), action.payload] as Breed[]
+      };
+    },
+    removeBreed: (state, action: PayloadAction<Breed>) => {
+      state.biology = {
+        ...state.biology,
+        breeds: state.biology?.breeds?.filter(
+          (b) => b._id !== action.payload._id
+        )
       };
     },
     setOrigin: (state, action: PayloadAction<Country>) => {
@@ -163,7 +171,8 @@ const listingSlice = createSlice({
 export const {
   setSaleType,
   setSpecies,
-  setBreed,
+  addBreed,
+  removeBreed,
   setOrigin,
   setGender,
   setBirthdate,
@@ -189,8 +198,8 @@ export const selectListingSaleType = (state: RootState) =>
   state.listing.listing?.saleType;
 export const selectListingSpecies = (state: RootState) =>
   state.listing.biology?.species;
-export const selectListingBreed = (state: RootState) =>
-  state.listing.biology?.breed;
+export const selectListingBreeds = (state: RootState) =>
+  state.listing.biology?.breeds;
 export const selectListingOrigin = (state: RootState) =>
   state.listing.biography?.origin;
 export const selectListingGender = (state: RootState) =>

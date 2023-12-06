@@ -1,10 +1,11 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  selectListingBreed,
-  selectListingSpecies,
-  setBreed
+  addBreed,
+  removeBreed,
+  selectListingBreeds,
+  selectListingSpecies
 } from '../../../features/listingSlice';
 import { store } from '../../../store';
 import { Breed } from '../../../types';
@@ -13,22 +14,29 @@ import { selectListingOptionsBreeds } from '../../../features/listingOptionsSlic
 const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedSpecies = useSelector(selectListingSpecies);
-  const selectedBreed = useSelector(selectListingBreed);
+  const selectedBreeds = useSelector(selectListingBreeds);
   const breeds = useSelector(selectListingOptionsBreeds(selectedSpecies));
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleBreedSelected = (breed: Breed) => {
-    store.dispatch(setBreed(breed));
-    setIsOpen(false);
-  };
+  const handleBreedSelected = useCallback(
+    (breed: Breed) => {
+      if (selectedBreeds?.map((breed) => breed.name).includes(breed.name)) {
+        store.dispatch(removeBreed(breed));
+      } else {
+        store.dispatch(addBreed(breed));
+      }
+    },
+    [store, selectedBreeds]
+  );
 
   if (readOnly) {
     return (
       <a className="text-sm font-medium text-gray-700">{`${
-        selectedBreed?.name || 'No breed selected'
+        selectedBreeds?.map((breed) => breed.name).join(', ') ||
+        'No breed selected'
       }`}</a>
     );
   }
@@ -43,7 +51,8 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
         <span>{`${
           !selectedSpecies
             ? 'Select a species'
-            : selectedBreed?.name || 'Select a breed'
+            : selectedBreeds?.map((breed) => breed.name).join(', ') ||
+              'Select a breed'
         }`}</span>
         {isOpen ? (
           <ChevronUpIcon className="w-4 h-4" />
@@ -60,7 +69,13 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
                 <li key={index}>
                   <button
                     onClick={() => handleBreedSelected(breed)}
-                    className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    className={`block w-full px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 hover:text-gray-900 ${
+                      selectedBreeds
+                        ?.map((breed) => breed.name)
+                        .includes(breed.name)
+                        ? 'bg-gray-300 text-gray-900'
+                        : ''
+                    }`}
                   >
                     {breed?.name}
                   </button>
