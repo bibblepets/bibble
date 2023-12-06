@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback } from 'react';
 import { BiLogoGoogle, BiLogoLinkedin } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/logo-icon.png';
-import { loginUser, selectIsAuthenticated } from '../../features/authSlice';
+import { loginUser } from '../../features/authSlice';
 import {
   closeLoginModal,
   openRegisterModal,
@@ -17,7 +17,6 @@ import { store } from '../../store';
 import BaseModal from './BaseModal';
 
 const LoginModal = () => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
   const isOpen = useSelector(selectIsLoginModalOpen);
   const email = useSelector(selectLoginModalEmail);
   const password = useSelector(selectLoginModalPassword);

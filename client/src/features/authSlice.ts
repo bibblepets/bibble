@@ -5,7 +5,6 @@ import { StatusType, User } from '../types';
 
 interface AuthState {
   token?: string;
-  isAuthenticated: boolean;
   currentUser?: User;
   status: StatusType;
   error?: string;
@@ -14,7 +13,6 @@ interface AuthState {
 
 const initialState: AuthState = {
   token: undefined,
-  isAuthenticated: false,
   currentUser: undefined,
   status: 'DEFAULT',
   error: undefined,
@@ -91,7 +89,6 @@ export const authSlice = createSlice({
       })
       .addCase(checkAuthStatus.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.isAuthenticated = action.payload.isAuthenticated;
         state.currentUser = action.payload.currentUser;
         state.token = action.payload.token;
         state.message = action.payload.message;
@@ -106,7 +103,6 @@ export const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.isAuthenticated = action.payload.isAuthenticated;
         state.currentUser = action.payload.currentUser;
         state.token = action.payload.token;
         state.message = action.payload.message;
@@ -121,7 +117,6 @@ export const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.isAuthenticated = action.payload.isAuthenticated;
         state.currentUser = action.payload.currentUser;
         state.token = action.payload.token;
         state.message = action.payload.message;
@@ -136,7 +131,6 @@ export const authSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.isAuthenticated = action.payload.isAuthenticated;
         state.currentUser = undefined;
         state.token = undefined;
         state.message = action.payload.message;
@@ -150,8 +144,6 @@ export const authSlice = createSlice({
 
 export const selectCurrentUser = (state: RootState) =>
   state.authentication.currentUser;
-export const selectIsAuthenticated = (state: RootState) =>
-  state.authentication.isAuthenticated;
 export const selectAuthStatus = (state: RootState) =>
   state.authentication.status;
 

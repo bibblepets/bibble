@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback } from 'react';
 import { BiLogoGoogle, BiLogoLinkedin } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/logo-icon.png';
-import { registerUser, selectIsAuthenticated } from '../../features/authSlice';
+import { registerUser } from '../../features/authSlice';
 import {
   closeRegisterModal,
   openLoginModal,
@@ -21,7 +21,6 @@ import { store } from '../../store';
 import BaseModal from './BaseModal';
 
 const RegisterModal = () => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
   const isOpen = useSelector(selectIsRegisterModalOpen);
   const firstName = useSelector(selectRegisterModalFirstName);
   const lastName = useSelector(selectRegisterModalLastName);
@@ -83,11 +82,11 @@ const RegisterModal = () => {
           Register your account
         </a>
         <div className="flex flex-col gap-4 w-full">
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row gap-4">
             <div className="flex flex-col gap-2">
               <a className="text-sm text-neutral-500">First Name</a>
               <input
-                className="border rounded-lg p-2 text-sm"
+                className="border rounded-lg p-2 text-sm w-full"
                 type="text"
                 value={firstName}
                 onChange={onChangeFirstName}
@@ -97,7 +96,7 @@ const RegisterModal = () => {
             <div className="flex flex-col gap-2">
               <a className="text-sm text-neutral-500">Last Name</a>
               <input
-                className="border rounded-lg p-2 text-sm"
+                className="border rounded-lg p-2 text-sm w-full"
                 type="text"
                 value={lastName}
                 onChange={onChangeLastName}
