@@ -21,7 +21,6 @@ const MapCard: React.FC<MapCardProps> = ({ location }) => {
       let request_url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
         location
       )}&key=${GOOGLE_MAPS_API_KEY}`;
-      console.log(request_url);
       const data = await fetch(request_url).then(async (response) => {
         return await response
           .json()

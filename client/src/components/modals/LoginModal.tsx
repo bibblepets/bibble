@@ -34,9 +34,7 @@ const LoginModal = () => {
   const title = useSelector(selectLoginModalTitle);
 
   useEffect(() => {
-    console.log('useEffect LoginModal');
     if (isOpen && status === 'SUCCESS') {
-      console.log('useEffect LoginModal SUCCESS');
       setTimeout(onSuccess, 1000);
     }
   }, [status]);

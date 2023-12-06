@@ -40,9 +40,7 @@ const RegisterModal = () => {
   const title = useSelector(selectRegisterModalTitle);
 
   useEffect(() => {
-    console.log('useEffect RegisterModal');
     if (isOpen && status === 'SUCCESS') {
-      console.log('useEffect RegisterModal SUCCESS');
       setTimeout(onSuccess, 1000);
     }
   }, [status]);
