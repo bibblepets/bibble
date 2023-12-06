@@ -77,7 +77,7 @@ const adminBusinessProfile: Omit<
   bibbleTier: 'Basic',
   businessName: 'Bibble',
   businessEmail: 'teamsaturdaydevs@gmail.com',
-  businessContact: '12345678'
+  businessContact: '+6512345678',
 };
 
 const admin: Omit<IUser, '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile'> = {

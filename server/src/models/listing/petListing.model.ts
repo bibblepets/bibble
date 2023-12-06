@@ -163,15 +163,21 @@ PetListingSchema.method('updateSaleStatus', function () {
   }
 });
 
-PetListingSchema.pre('save', function (next) {
-  if (this.isModified('createdAt')) {
+PetListingSchema.pre('validate', function (next) {
+  if (this.isNew) {
+    this.saleStatus = 'Available';
+    this.createdAt = new Date();
     const expiryDate = new Date(this.createdAt);
     expiryDate.setDate(expiryDate.getDate() + 30); // Set expiration date to 30 days after creation date
     this.expiryDate = expiryDate;
   }
 
-  this.updateSaleStatus(); // Update sale status based on expiration date
+  next();
+});
 
+PetListingSchema.pre('save', function (next) {
+  this.updateSaleStatus(); // Update sale status based on expiration date
+  
   next();
 });
 
