@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectListingOrigin, setOrigin } from '../../../features/listingSlice';
 import { store } from '../../../store';
-import { Country } from '../../../features/types';
+import { Country } from '../../../types';
 
 const dummyOrigins = [
   { name: 'Singapore' },

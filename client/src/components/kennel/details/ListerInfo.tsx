@@ -1,7 +1,7 @@
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { CheckBadgeIcon } from '@heroicons/react/24/solid';
 import paw from '../../../assets/paw.jpeg';
-import { Listing } from '../../../features/types';
+import { Listing } from '../../../types';
 import MapCard from './MapCard';
 
 interface ListerInfoProps {

@@ -7,7 +7,7 @@ import {
   selectListingLicenses
 } from '../../../features/listingSlice';
 import { store } from '../../../store';
-import { License } from '../../../features/types';
+import { License } from '../../../types';
 import { toCamelCase } from '../../../utils/string';
 
 const dummyLicenses = [

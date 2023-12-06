@@ -16,7 +16,7 @@ import {
 import { CheckBadgeIcon } from '@heroicons/react/24/solid';
 import { BiFemaleSign, BiMaleSign } from 'react-icons/bi';
 import paw from '../../../assets/paw.jpeg';
-import { Listing } from '../../../features/types';
+import { Listing } from '../../../types';
 import InfoSection from './InfoSection';
 import SectionHeader from './SectionHeader';
 

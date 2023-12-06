@@ -10,7 +10,7 @@ import {
   Species,
   StatusType,
   Vaccine
-} from './types';
+} from '../types';
 
 interface ListingState {
   listing?: {
