@@ -1,6 +1,10 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model, Document } from 'mongoose';
-import { ICreateOrUpdateDogRequest, IDog } from './animal/dog/dog.model';
+import {
+  ICreateDogRequest,
+  IUpdateDogRequest,
+  IDog
+} from './animal/dog/dog.model';
 import { IUser } from '../user/user.model';
 
 const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
@@ -30,13 +34,19 @@ interface IPetListingMethods {
 export interface PetListingModel
   extends Model<IPetListing, {}, IPetListingMethods> {}
 
-export interface ICreateOrUpdatePetListingRequest extends Request {
+export interface ICreatePetListingRequest extends Request {
   body: Omit<
     IPetListing,
-    '_id' | 'createdAt' | 'updatedAt' | 'lister' | 'animal'
+    '_id' | 'createdAt' | 'updatedAt' | 'expiryDate' | 'lister' | 'animal'
   > & {
     lister: IUser;
-    animal: ICreateOrUpdateDogRequest['body']; // Add other animals here: ICreateOrUpdateCatRequest['body'], etc.
+    animal: ICreateDogRequest['body']; // Add other animals here: ICreateCatRequest['body'], etc.
+  };
+}
+
+export interface IUpdatePetListingRequest extends Request {
+  body: Partial<Omit<ICreatePetListingRequest['body'], 'animal'>> & {
+    animal: IUpdateDogRequest['body']; // Add other animals here: IUpdateCatRequest['body'], etc.
   };
 }
 
@@ -95,7 +105,8 @@ const PetListingSchema = new Schema<
       enum: {
         values: saleStatuses,
         message: 'Sale status of `{VALUE}` is invalid.'
-      }
+      },
+      required: [true, 'Please specify the sale status of this listing.']
     },
     media: [
       {
@@ -133,7 +144,8 @@ const PetListingSchema = new Schema<
     },
     expiryDate: {
       type: Date,
-      immutable: true
+      immutable: true,
+      required: [true, 'Please specify the expiry date of this listing.'] // Handled in pre-save hook
     }
   },
   { collection: 'petListings', timestamps: true }
