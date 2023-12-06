@@ -1,51 +1,36 @@
-import {
-  ChevronRightIcon,
-  DocumentDuplicateIcon,
-  PaperClipIcon,
-  SquaresPlusIcon
-} from '@heroicons/react/24/outline';
+import { useSelector } from 'react-redux';
+import ListingOptions from '../../components/listing/listing/ListingOptions';
+import ListingRow from '../../components/listing/listing/ListingRow';
 import ListingLayout from '../../layouts/ListingLayout';
+import { selectMyListings } from '../../features/kennelSlice';
 
 const Listing = () => {
+  const listings = useSelector(selectMyListings);
+
   return (
     <>
       <ListingLayout>
-        <div className="flex justify-center items-center pb-20">
-          <div className="flex flex-col gap-8 w-[780px]">
+        <div className="flex flex-col w-full md:w-[756px] justify-center h-[75vh] px-4">
+          <div className="flex flex-col flex-grow gap-8 overflow-hidden">
             <h1 className="text-3xl font-medium">Welcome back, Titus</h1>
-            <h2 className="text-xl font-medium">Finish your listing</h2>
 
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-row gap-4 p-4 border rounded-xl w-full cursor-pointer transition hover:opacity-75">
-                <PaperClipIcon className="w-6 h-6" />
-                Golden Retriever
-              </div>
-              <div className="flex flex-row gap-4 p-4 border rounded-xl w-full cursor-pointer transition hover:opacity-75">
-                <PaperClipIcon className="w-6 h-6" />
-                Siberian Husky
-              </div>
-              <div className="flex flex-row gap-4 p-4 border rounded-xl w-full cursor-pointer transition hover:opacity-75">
-                <PaperClipIcon className="w-6 h-6" />
-                Pomerenian
-              </div>
-            </div>
+            <div className="flex flex-col gap-4 h-full overflow-hidden">
+              <a className="font-medium">Listings</a>
 
-            <h2 className="text-xl font-medium pt-8">Start a new listing</h2>
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-row justify-between items-center p-4 border-b w-full cursor-pointer transition hover:opacity-75">
-                <div className="flex flex-row gap-4">
-                  <SquaresPlusIcon className="w-6 h-6" />
-                  Create a new listing
+              {listings.length > 0 ? (
+                <div className="flex flex-col gap-4 overflow-auto">
+                  {listings.map((listing, index) => (
+                    <ListingRow key={index} listing={listing} />
+                  ))}
                 </div>
-                <ChevronRightIcon className="w-5 h-5" />
-              </div>
-              <div className="flex flex-row justify-between items-center p-4 border-b w-full cursor-pointer transition hover:opacity-75">
-                <div className="flex flex-row gap-4">
-                  <DocumentDuplicateIcon className="w-6 h-6" />
-                  Duplicate an existing listing
-                </div>
-                <ChevronRightIcon className="w-5 h-5" />
-              </div>
+              ) : (
+                <p className="font-light text-sm text-gray-500">
+                  You haven't listed any pets yet. Get started with a listing.
+                </p>
+              )}
+
+              <hr className="border-gray-200 my-4" />
+              <ListingOptions />
             </div>
           </div>
         </div>

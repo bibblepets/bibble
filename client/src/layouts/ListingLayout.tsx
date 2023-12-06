@@ -8,14 +8,12 @@ interface ListingLayoutProps {
 
 const ListingLayout: React.FC<ListingLayoutProps> = ({ children }) => {
   return (
-    <div className="flex flex-col items-center">
-      <div className="w-full">
-        <Navbar />
-        <main className="flex flex-col justify-center items-center min-h-screen ">
-          {children}
-        </main>
-        <Footer />
-      </div>
+    <div className="flex flex-col w-full h-screen justify-center items-center">
+      <Navbar />
+      <main className="flex flex-col w-full h-full justify-center items-center mt-[85px] mb-[84px] overflow-auto">
+        {children}
+      </main>
+      <Footer />
     </div>
   );
 };

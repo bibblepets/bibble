@@ -4,9 +4,9 @@ import UserMenu from './UserMenu';
 
 const Navbar = () => {
   const tabs = [
-    { name: 'Featured', path: '/kennel/featured' },
-    { name: 'Explore', path: '/kennel/explore' },
-    { name: 'Rescue', path: '/kennel/rescue' }
+    { name: 'Featured', path: '/featured' },
+    { name: 'Explore', path: '/' },
+    { name: 'Rescue', path: '/rescue' }
   ];
 
   return (

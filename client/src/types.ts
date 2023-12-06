@@ -1,11 +1,5 @@
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
+// REDUX TYPES
+// ------------------------------
 export type StatusType = 'DEFAULT' | 'LOADING' | 'SUCCESS' | 'ERROR';
 
 export type ModalType = {
@@ -14,7 +8,8 @@ export type ModalType = {
 };
 
 export type RegisterModalType = ModalType & {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 };
@@ -23,6 +18,108 @@ export type LoginModalType = ModalType & {
   email: string;
   password: string;
 };
+
+// MODEL TYPES
+// ------------------------------
+
+export type User = {
+  _id?: string;
+  email: string;
+  password?: string;
+  buyerProfile?: BuyerProfile;
+  businessProfile?: BusinessProfile;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export type BuyerProfile = {
+  _id?: string;
+  firstName: string;
+  lastName: string;
+  favouriteListings?: string[];
+  profilePic?: string;
+  contactNumber?: string;
+  bio?: string;
+};
+
+export type BusinessProfile = {
+  _id?: string;
+  bibbleTier: string;
+  businessName: string;
+  businessPic?: string;
+  businessBio?: string;
+  businessAddress: string;
+  businessContact: string;
+  businessEmail: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type Listing = {
+  _id?: string;
+  lister: User;
+  price: number;
+  description: string;
+  saleType: SaleType;
+  media: Media[];
+  animal: Animal;
+  species: Species;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export type Animal = {
+  _id?: string;
+  breeds: Breed[];
+  vaccines: Vaccine[];
+  origin: Country;
+  name?: string;
+  gender: string;
+  birthdate: Date;
+  size: string;
+  weight: number;
+  hairCoat: string;
+  isHypoallergenic: boolean;
+  isMicrochipped: boolean;
+  isNeutered: boolean;
+  isHdbApproved: boolean;
+  avsLicenseNumber: string;
+};
+
+export type SaleType = 'SALE' | 'ADOPTION';
+
+export type Species = string;
+
+export type Breed = {
+  _id?: string;
+  name: string;
+};
+
+export type Country = {
+  _id?: string;
+  name: string;
+};
+
+export type Gender = 'MALE' | 'FEMALE';
+
+export type Vaccine = {
+  _id?: string;
+  name: string;
+  isCore: boolean;
+};
+
+export type License = {
+  _id?: string;
+  name: string;
+};
+
+export type Media = {
+  _id?: string;
+  type: MediaType;
+  url: string;
+};
+
+export type MediaType = 'Image' | 'Video';
 
 export type GeocodeResponse = {
   results: [
@@ -82,7 +179,7 @@ export type GeocodeResponse = {
           };
         };
       };
-      place_id: string;
+      place__id?: string;
       plus_code: {
         compound_code: string;
         global_code: string;

@@ -2,7 +2,8 @@ import { Response } from 'express';
 import { handleError } from '../utils/util';
 import {
   PetListingModel,
-  ICreateOrUpdatePetListingRequest,
+  ICreatePetListingRequest,
+  IUpdatePetListingRequest,
   IGetAllPetListingsRequest,
   IGetAllPetListingsBySpeciesRequest,
   IGetPetListingByIdRequest,
@@ -11,26 +12,25 @@ import {
 import { DogModel } from '../models/listing/animal/dog/dog.model';
 
 require('../models/country.model');
-const { PetListing }: {PetListing: PetListingModel} = require('../models/listing/petListing.model');
-const { Dog }: { Dog: DogModel } = require('../models/listing/animal/dog/dog.model');
+const {
+  PetListing
+}: {
+  PetListing: PetListingModel;
+} = require('../models/listing/petListing.model');
+const {
+  Dog
+}: { Dog: DogModel } = require('../models/listing/animal/dog/dog.model');
 require('../models/listing/animal/dog/dogBreed.model');
 require('../models/listing/animal/dog/dogVaccine.model');
 
 export const createPetListing = async (
-  req: ICreateOrUpdatePetListingRequest,
+  req: ICreatePetListingRequest,
   res: Response
 ) => {
   // Extract fields from request body
   // Pet listing fields
-  const {
-    lister,
-    price,
-    description,
-    saleType,
-    media,
-    animal,
-    species
-  } = req.body;
+  const { lister, price, description, saleType, media, animal, species } =
+    req.body;
 
   let createdAnimal;
   let createdPetListing;
@@ -39,7 +39,9 @@ export const createPetListing = async (
     // Validate request
     console.log('Validating request body...');
     if (!lister.businessProfile) {
-      return res.status(400).json({ message: 'A Business profile is required to make a listing.' });
+      return res
+        .status(400)
+        .json({ message: 'A Business profile is required to make a listing.' });
     }
     await validateCreateAnimal(req);
     await PetListing.validate(
@@ -51,14 +53,7 @@ export const createPetListing = async (
         media: media,
         species: species
       },
-      [
-        'lister',
-        'price',
-        'description',
-        'saleType',
-        'media',
-        'species'
-      ]
+      ['lister', 'price', 'description', 'saleType', 'media', 'species']
     );
     console.log('Request body validated.');
 
@@ -109,7 +104,7 @@ export const createPetListing = async (
   }
 };
 
-const validateCreateAnimal = async (req: ICreateOrUpdatePetListingRequest) => {
+const validateCreateAnimal = async (req: ICreatePetListingRequest) => {
   const { species } = req.body;
 
   if (species == 'Dog') {
@@ -117,7 +112,7 @@ const validateCreateAnimal = async (req: ICreateOrUpdatePetListingRequest) => {
   } // else if...
 };
 
-const createAnimal = async (req: ICreateOrUpdatePetListingRequest) => {
+const createAnimal = async (req: ICreatePetListingRequest) => {
   const { species } = req.body;
   let createdAnimal;
 
@@ -188,7 +183,7 @@ export const getPetListingById = async (
 };
 
 export const updatePetListingById = async (
-  req: ICreateOrUpdatePetListingRequest,
+  req: IUpdatePetListingRequest,
   res: Response
 ) => {
   const { id } = req.params;
@@ -257,7 +252,7 @@ export const updatePetListingById = async (
 };
 
 const validateUpdateAnimal = async (
-  req: ICreateOrUpdatePetListingRequest,
+  req: IUpdatePetListingRequest,
   species: string
 ) => {
   if (species == 'Dog') {
@@ -267,7 +262,7 @@ const validateUpdateAnimal = async (
 };
 
 const updateAnimal = async (
-  req: ICreateOrUpdatePetListingRequest,
+  req: IUpdatePetListingRequest,
   species: string,
   animalId: string
 ) => {

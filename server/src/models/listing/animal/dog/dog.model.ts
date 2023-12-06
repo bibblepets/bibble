@@ -39,7 +39,7 @@ export interface IDog {
 
 export interface DogModel extends Model<IDog> {}
 
-export interface ICreateOrUpdateDogRequest extends Request {
+export interface ICreateDogRequest extends Request {
   body: Omit<
     IDog,
     '_id' | 'createdAt' | 'updatedAt' | 'breeds' | 'vaccines' | 'origin'
@@ -48,6 +48,10 @@ export interface ICreateOrUpdateDogRequest extends Request {
     vaccines: IDogVaccine[];
     origin: ICountry;
   };
+}
+
+export interface IUpdateDogRequest extends Request {
+  body: Partial<ICreateDogRequest['body']>;
 }
 
 const dogSchema = new Schema(

@@ -1,25 +1,38 @@
-import placeholder from '../../../assets/dog1.jpeg';
-import pfp from '../../../assets/dog8.jpeg';
 import { useNavigate } from 'react-router-dom';
+import paw from '../../../assets/paw.jpeg';
+import { Listing } from '../../../types';
 
-const ListingCard = () => {
+interface ListingCardProps {
+  listing: Listing;
+}
+
+const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col items-center gap-4" onClick={() => navigate('/kennel/details')}>
+    <div
+      className="flex flex-col items-center gap-4"
+      onClick={() => navigate(`/details/${listing._id}`)}
+    >
       <img
-        className="rounded-3xl transition hover:scale-105 cursor-pointer"
-        src={placeholder}
+        className="aspect-square object-cover rounded-3xl transition hover:scale-105 cursor-pointer"
+        src={listing.media[0]?.url}
       />
       <div className="flex flex-col items-center gap-2">
-        <a className="text-neutral-800">Golden Retriever</a>
-        <a className="text-neutral-500">$300</a>
+        <a className="text-neutral-800 whitespace-nowrap overflow-ellipsis">
+          {listing.animal.breeds[0].name}
+        </a>
+        <a className="text-neutral-500">${listing.price}</a>
         <div className="flex items-center gap-2">
           <img
             className="h-6 w-6 border border-gray-300 rounded-full"
-            src={pfp}
+            src={listing.lister.buyerProfile?.profilePic || paw}
           />
-          <a className="text-xs text-neutral-500">Posted by Titus Lowe</a>
+          <a className="text-xs text-neutral-500">
+            Posted by{' '}
+            {listing.lister.businessProfile?.businessName ||
+              listing.lister.buyerProfile?.firstName}
+          </a>
         </div>
       </div>
     </div>

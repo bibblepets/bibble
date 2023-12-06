@@ -21,8 +21,12 @@ export interface IBusinessProfile {
 // export type HydratedDocumentBusinessProfile = mongoose.HydratedDocument<IBusinessProfile>;
 export interface BusinessProfileModel extends Model<IBusinessProfile> {}
 
-export interface ICreateOrUpdateBusinessProfileRequest extends Request {
+export interface ICreateBusinessProfileRequest extends Request {
   body: Omit<IBusinessProfile, '_id' | 'createdAt' | 'updatedAt'>;
+}
+
+export interface IUpdateBusinessProfileRequest extends Request {
+  body: Partial<ICreateBusinessProfileRequest['body']>;
 }
 
 const businessProfileSchema = new Schema(
@@ -53,7 +57,8 @@ const businessProfileSchema = new Schema(
     },
     businessContact: {
       type: String,
-      required: false
+      required: false,
+      validate: [validateContactNumber, 'Please enter a valid contact number.']
     },
     businessEmail: {
       type: String,
@@ -105,4 +110,8 @@ async function validatePetShopLicenseNumber(
 ): Promise<boolean> {
   const LicensedPetShop: LicensedPetShopModel = require('../licensedPetShop.model');
   return await LicensedPetShop.verifyLicense(licenseNumber);
+}
+
+function validateContactNumber(contactNumber: string): boolean {
+  return RegExp(/^\+\d{1,3}\s?\d{8,}$/).test(contactNumber);
 }
