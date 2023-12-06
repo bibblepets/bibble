@@ -119,6 +119,26 @@ describe('Pet Listing Model (CREATE)', () => {
       name: 'Buddy'
     };
 
-    const dog = await Dog.create(dogData);
+    const petListingData: ICreatePetListingRequest['body'] = {
+      lister: user,
+      animal: dogData,
+      description: 'This is a description',
+      price: 1000,
+      media: [
+        {
+          type: 'Image',
+          url: 'https://via.placeholder.com/150'
+        }
+      ],
+      saleStatus: 'Available',
+      saleType: 'Sale',
+      species: 'Dog'
+    };
+
+    const petListing = await PetListing.create(petListingData);
+
+    expect(petListing).to.exist;
+    expect(await User.findById(petListing.lister)).to.exist;
+    expect(await Dog.findById(petListing.animal)).to.exist;
   });
 });

@@ -1,23 +1,19 @@
 import { PaperClipIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import { Listing } from '../../../types';
 
 interface ListingRowProps {
-  species: string;
-  breed: string;
-  saleType: string;
-  imgSrc?: string;
+  listing: Listing;
 }
 
-const ListingRow: React.FC<ListingRowProps> = ({
-  species,
-  breed,
-  saleType,
-  imgSrc
-}) => {
+const ListingRow: React.FC<ListingRowProps> = ({ listing }) => {
   return (
     <button onClick={() => alert('implement')} className="flex flex-row gap-4">
       <div className="rounded-lg">
-        {imgSrc ? (
-          <img className="rounded-lg w-[52px] h-[52px]" src={imgSrc} />
+        {listing.media ? (
+          <img
+            className="rounded-lg w-[52px] h-[52px] object-cover"
+            src={listing.media.find((e) => e.type === 'Image')?.url}
+          />
         ) : (
           <div className="p-4 bg-gray-300 rounded-lg">
             <PhotoIcon className="w-5 h-5 text-white" />
@@ -27,11 +23,12 @@ const ListingRow: React.FC<ListingRowProps> = ({
       <div className="flex flex-col items-start gap-1 p-1">
         <div className="flex flex-row items-center gap-2">
           <a className="text-sm font-medium">
-            {breed} {species}
+            {listing.animal.breeds.map((breed) => breed.name).join(', ')}{' '}
+            {listing.species}
           </a>
           <PaperClipIcon className="w-3 h-3" strokeWidth={2} />
         </div>
-        <p className="text-sm font-light text-gray-500">{saleType}</p>
+        <p className="text-sm font-light text-gray-500">{listing.saleType}</p>
       </div>
     </button>
   );

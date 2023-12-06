@@ -11,16 +11,16 @@ import { Vaccine } from '../../../types';
 import { toCamelCase } from '../../../utils/string';
 
 const dummyVaccines = [
-  { name: 'avian influenza' },
-  { name: 'lymphocytic choriomeningitis' },
-  { name: 'rabies' },
-  { name: 'canine parvovirus' },
-  { name: 'bovine viral diarrhea' },
-  { name: 'feline immunodeficiency' },
-  { name: 'feline leukemia' },
-  { name: 'porcine herpes' },
-  { name: 'foot and mouth disease' },
-  { name: 'canine distemper' }
+  { name: 'avian influenza', isCore: false },
+  { name: 'lymphocytic choriomeningitis', isCore: false },
+  { name: 'rabies', isCore: false },
+  { name: 'canine parvovirus', isCore: false },
+  { name: 'bovine viral diarrhea', isCore: true },
+  { name: 'feline immunodeficiency', isCore: true },
+  { name: 'feline leukemia', isCore: true },
+  { name: 'porcine herpes', isCore: true },
+  { name: 'foot and mouth disease', isCore: true },
+  { name: 'canine distemper', isCore: true }
 ];
 
 const VaccinationList = ({ readOnly }: { readOnly?: boolean }) => {

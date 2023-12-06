@@ -13,34 +13,28 @@ import SpeciesBox from './SpeciesBox';
 const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
   const species = [
     {
-      type: {
-        name: 'dog'
-      },
+      type: 'dog',
       icon: GiSittingDog
     },
     {
-      type: {
-        name: 'cat'
-      },
-      icon: GiCat
+      type: 'cat',
+      icon: GiCat,
+      disabled: true
     },
     {
-      type: {
-        name: 'rabbit'
-      },
-      icon: GiRabbit
+      type: 'rabbit',
+      icon: GiRabbit,
+      disabled: true
     },
     {
-      type: {
-        name: 'mouse'
-      },
-      icon: GiRat
+      type: 'mouse',
+      icon: GiRat,
+      disabled: true
     },
     {
-      type: {
-        name: 'bird'
-      },
-      icon: GiHummingbird
+      type: 'bird',
+      icon: GiHummingbird,
+      disabled: true
     }
   ];
 
@@ -49,7 +43,7 @@ const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
   if (readOnly) {
     return (
       <a className="text-gray-700 text-sm font-medium">
-        {(selectedSpecies && toCamelCase(selectedSpecies?.name)) ||
+        {(selectedSpecies && toCamelCase(selectedSpecies)) ||
           'No species selected'}
       </a>
     );
@@ -58,7 +52,12 @@ const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
   return (
     <div className="flex flex-row justify-between">
       {species.map((species, index) => (
-        <SpeciesBox key={index} species={species.type} icon={species.icon} />
+        <SpeciesBox
+          key={index}
+          species={species.type}
+          icon={species.icon}
+          disabled={species.disabled}
+        />
       ))}
     </div>
   );

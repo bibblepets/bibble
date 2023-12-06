@@ -108,7 +108,7 @@ const RegisterModal = () => {
             <div className="flex flex-col gap-2 w-1/2">
               <a className="text-sm text-neutral-500">First Name</a>
               <input
-                className="border rounded-lg p-2 text-sm"
+                className="border rounded-lg p-2 text-sm w-full"
                 type="text"
                 value={firstName}
                 onChange={onChangeFirstName}
@@ -124,7 +124,7 @@ const RegisterModal = () => {
             <div className="flex flex-col gap-2 w-1/2">
               <a className="text-sm text-neutral-500">Last Name</a>
               <input
-                className="border rounded-lg p-2 text-sm"
+                className="border rounded-lg p-2 text-sm w-full"
                 type="text"
                 value={lastName}
                 onChange={onChangeLastName}

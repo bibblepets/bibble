@@ -2,11 +2,7 @@ import { Bars3Icon, BellIcon } from '@heroicons/react/24/outline';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import paw from '../../../assets/paw.jpeg';
-import {
-  logoutUser,
-  selectCurrentUser,
-  selectIsAuthenticated
-} from '../../../features/authSlice';
+import { logoutUser, selectCurrentUser } from '../../../features/authSlice';
 import {
   openLoginModal,
   openRegisterModal
@@ -20,7 +16,6 @@ interface UserMenuProps {
 const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const isAuthenticated = useSelector(selectIsAuthenticated);
   const currentUser = useSelector(selectCurrentUser);
 
   const logout = useCallback(() => {
@@ -44,7 +39,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
     };
   }, [isOpen, setIsOpen]);
 
-  if (!isAuthenticated) {
+  if (!currentUser) {
     return (
       <>
         <div className="flex justify-end w-64">
