@@ -13,26 +13,26 @@ import SpeciesBox from './SpeciesBox';
 const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
   const species = [
     {
-      type: 'dog',
+      type: 'Dog',
       icon: GiSittingDog
     },
     {
-      type: 'cat',
+      type: 'Cat',
       icon: GiCat,
       disabled: true
     },
     {
-      type: 'rabbit',
+      type: 'Rabbit',
       icon: GiRabbit,
       disabled: true
     },
     {
-      type: 'mouse',
+      type: 'Mouse',
       icon: GiRat,
       disabled: true
     },
     {
-      type: 'bird',
+      type: 'Bird',
       icon: GiHummingbird,
       disabled: true
     }

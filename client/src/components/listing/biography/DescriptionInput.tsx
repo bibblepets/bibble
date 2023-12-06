@@ -19,7 +19,11 @@ const DescriptionInput = ({ readOnly }: { readOnly?: boolean }) => {
   );
 
   if (readOnly) {
-    return <p className="text-gray text-sm">{displayDescription}</p>;
+    return (
+      <p className="text-gray text-sm">
+        {displayDescription || 'No description provided'}
+      </p>
+    );
   }
 
   return (

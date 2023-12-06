@@ -8,6 +8,8 @@ import LicenseList from '../../components/listing/legal/LicenseList';
 import ListingSection from '../../components/listing/listing/ListingSection';
 import ListingStage from '../../components/listing/listing/ListingStage';
 import MediaUpload from '../../components/listing/media/MediaUpload';
+import HairCoatInput from '../../components/listing/medical/HairCoatInput';
+import SizeOptions from '../../components/listing/medical/SizeOptions';
 import VaccinationList from '../../components/listing/medical/VaccinationList';
 import WeightInput from '../../components/listing/medical/WeightInput';
 import PriceInput from '../../components/listing/price/PriceInput';
@@ -44,8 +46,16 @@ const Summary = () => {
           <DescriptionInput readOnly />
         </ListingSection>
 
+        <ListingSection title="Size">
+          <SizeOptions readOnly />
+        </ListingSection>
+
         <ListingSection title="Weight">
           <WeightInput readOnly />
+        </ListingSection>
+
+        <ListingSection title="Hair Coat">
+          <HairCoatInput readOnly />
         </ListingSection>
 
         <ListingSection title="Vaccinations">

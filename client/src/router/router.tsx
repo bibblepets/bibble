@@ -11,7 +11,7 @@ import Media from '../modules/listing/Media';
 import Medical from '../modules/listing/Medical';
 import Price from '../modules/listing/Price';
 import Summary from '../modules/listing/Summary';
-import { kennelLoader } from './loaders';
+import { kennelLoader, listingLoader } from './loaders';
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +36,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'listing',
+        loader: listingLoader,
         children: [
           {
             index: true,
