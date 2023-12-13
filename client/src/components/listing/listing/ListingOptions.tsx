@@ -18,7 +18,7 @@ const ListingOptions = () => {
 
   return (
     <div className="grid grid-cols-2 gap-4">
-      <button onClick={() => onStart('SALE')} className="flex flex-row gap-4">
+      <button onClick={() => onStart('Sale')} className="flex flex-row gap-4">
         <div className="p-4 bg-rose-500 rounded-lg">
           <SquaresPlusIcon className="w-5 h-5 text-white" />
         </div>
@@ -34,7 +34,7 @@ const ListingOptions = () => {
       </button>
 
       <button
-        onClick={() => onStart('ADOPTION')}
+        onClick={() => onStart('Adoption')}
         className="flex flex-row gap-4"
       >
         <div className="p-4 bg-sky-500 rounded-lg">

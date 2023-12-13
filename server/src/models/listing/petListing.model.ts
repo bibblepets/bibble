@@ -106,7 +106,7 @@ const PetListingSchema = new Schema<
         values: saleStatuses,
         message: 'Sale status of `{VALUE}` is invalid.'
       },
-      required: [true, 'Please specify the sale status of this listing.']
+      default: 'Available' // CHANGE TITUS: Changed required to default
     },
     media: [
       {
@@ -144,8 +144,8 @@ const PetListingSchema = new Schema<
     },
     expiryDate: {
       type: Date,
-      immutable: true,
-      required: [true, 'Please specify the expiry date of this listing.'] // Handled in pre-save hook
+      immutable: true
+      // CHANGED TITUS: Removed required
     }
   },
   { collection: 'petListings', timestamps: true }

@@ -1,10 +1,16 @@
 import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { store } from '../../../store';
+import { createListing, selectListing } from '../../../features/listingSlice';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../features/authSlice';
 
 const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname.replace(/^\/listing\/*/, '');
+  const currentUser = useSelector(selectCurrentUser);
+  const listing = useSelector(selectListing);
 
   const stages = [
     '',
@@ -28,12 +34,14 @@ const Footer = () => {
   }, [stages, pathname, navigate]);
 
   const onNext = useCallback(() => {
-    if (index < stages.length - 1) {
+    if (currentUser && index < stages.length - 1) {
       navigate(
         '/listing' + (stages[index + 1] === '' ? '' : '/' + stages[index + 1])
       );
+    } else if (currentUser) {
+      store.dispatch(createListing({ currentUser, listing }));
     }
-  }, [stages, pathname, navigate]);
+  }, [stages, pathname, navigate, currentUser, listing]);
 
   if (pathname === '') {
     return <a className="fixed w-full bottom-0 z-40 bg-white h-[84px]" />;
