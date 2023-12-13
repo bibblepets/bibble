@@ -6,7 +6,7 @@ import {
 } from '../../../features/listingSlice';
 import { store } from '../../../store';
 
-const HairCoatInput = (readOnly: { readOnly?: boolean }) => {
+const HairCoatInput = ({ readOnly }: { readOnly?: boolean }) => {
   const hairCoat = useSelector(selectListingHairCoat);
 
   const handleHairCoatChange = useCallback(

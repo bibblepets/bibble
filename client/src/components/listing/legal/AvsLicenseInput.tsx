@@ -6,7 +6,7 @@ import {
   setAvsLicenseNumber
 } from '../../../features/listingSlice';
 
-const AvsLicenseInput = (readOnly: { readOnly?: boolean }) => {
+const AvsLicenseInput = ({ readOnly }: { readOnly?: boolean }) => {
   const avsLicenseNumber = useSelector(selectListingAvsLicenseNumber);
 
   const handleAvsLicenseNumberChange = useCallback(

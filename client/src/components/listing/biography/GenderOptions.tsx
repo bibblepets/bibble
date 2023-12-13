@@ -25,9 +25,9 @@ const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
         </a>
         {selectedGender === 'Male' ? (
           <BiMaleSign className="w-5 h-5 text-gray-700" />
-        ) : (
+        ) : selectedGender === 'Female' ? (
           <BiFemaleSign className="w-5 h-5 text-gray-700" />
-        )}
+        ) : null}
       </div>
     );
   }

@@ -4,6 +4,7 @@ import GenderOptions from '../../components/listing/biography/GenderOptions';
 import OriginDropdown from '../../components/listing/biography/OriginDropdown';
 import BreedDropdown from '../../components/listing/biology/BreedDropdown';
 import SpeciesOptions from '../../components/listing/biology/SpeciesOptions';
+import AvsLicenseInput from '../../components/listing/legal/AvsLicenseInput';
 import LicenseList from '../../components/listing/legal/LicenseList';
 import ListingSection from '../../components/listing/listing/ListingSection';
 import ListingStage from '../../components/listing/listing/ListingStage';
@@ -60,6 +61,10 @@ const Summary = () => {
 
         <ListingSection title="Vaccinations">
           <VaccinationList readOnly />
+        </ListingSection>
+
+        <ListingSection title="AVS License Number">
+          <AvsLicenseInput readOnly />
         </ListingSection>
 
         <ListingSection title="Licenses">
