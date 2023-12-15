@@ -11,3 +11,9 @@ export interface IGetVaccinesBySpeciesRequest extends Request {
     species: string;
   };
 }
+
+export interface IGetHairCoatsBySpeciesRequest extends Request {
+  params: {
+    species: string;
+  };
+}

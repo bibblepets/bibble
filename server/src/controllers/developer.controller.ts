@@ -1,10 +1,12 @@
 import { Response } from 'express';
 import {
   IGetBreedsBySpeciesRequest,
+  IGetHairCoatsBySpeciesRequest,
   IGetVaccinesBySpeciesRequest
 } from '../models/listing/animal/animal.model';
 import { IGetAllCountriesOfOriginRequest } from '../models/country.model';
 
+const { hairCoats }: { hairCoats: string[] } = require('../models/listing/animal/dog/dog.model')
 const DogBreed = require('../models/listing/animal/dog/dogBreed.model');
 const DogVaccine = require('../models/listing/animal/dog/dogVaccine.model');
 const Country = require('../models/country.model');
@@ -41,3 +43,16 @@ export const getAllCountriesOfOrigin = async (
 ) => {
   return res.status(200).json(await Country.find());
 };
+
+export const getHairCoatsBySpecies = async (
+  req: IGetHairCoatsBySpeciesRequest,
+  res: Response
+) => {
+  const { species } = req.params;
+
+  if (species === 'Dog') {
+    return res.status(200).json({ hairCoats: hairCoats });
+  } // else if...
+
+  return res.status(400).json({ message: 'Invalid species.' });
+}

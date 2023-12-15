@@ -24,4 +24,11 @@ router.get('/vaccines/:species', DeveloperController.getVaccinesBySpecies);
  */
 router.get('/countries', DeveloperController.getAllCountriesOfOrigin);
 
+/**
+ * @route GET /api/developer/hair-coats/:species
+ * @desc Get all hair coats of a given species
+ * @access Public
+ */
+router.get('/hair-coats/:species', DeveloperController.getHairCoatsBySpecies);
+
 module.exports = router;
