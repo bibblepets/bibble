@@ -16,6 +16,7 @@ const hairCoats = [
   'Short'
 ];
 const genders = ['Male', 'Female'];
+const legalTags = ["isHypoallergenic", "isMicrochipped", "isNeutered", "isHdbApproved"];
 
 export interface IDog {
   _id: Schema.Types.ObjectId;
@@ -153,7 +154,7 @@ const dogSchema = new Schema(
 
 const Dog = mongoose.model<IDog, DogModel>('Dog', dogSchema);
 
-module.exports = { Dog, sizes, hairCoats, genders };
+module.exports = { Dog, sizes, hairCoats, genders, legalTags };
 
 function validateAVSLicenseNumber(avsLicenseNumber: string): boolean {
   // TODO: Implement AVS license number validation

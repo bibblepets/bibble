@@ -31,4 +31,11 @@ router.get('/countries', DeveloperController.getAllCountriesOfOrigin);
  */
 router.get('/hair-coats/:species', DeveloperController.getHairCoatsBySpecies);
 
+/**
+ * @route GET /api/developer/legal-tags/:species
+ * @desc Get all legal tags of a given species
+ * @access Public
+ */
+router.get('/legal-tags/:species', DeveloperController.getLegalTagsBySpecies);
+
 module.exports = router;

@@ -17,3 +17,9 @@ export interface IGetHairCoatsBySpeciesRequest extends Request {
     species: string;
   };
 }
+
+export interface IGetLegalTagsBySpeciesRequest extends Request {
+  params: {
+    species: string;
+  };
+}
