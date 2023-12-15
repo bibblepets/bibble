@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, it } from 'mocha';
+import { afterEach, before, beforeEach, describe, it } from 'mocha';
 import { expect } from 'chai';
 import { Schema } from 'mongoose';
 import {
@@ -6,8 +6,12 @@ import {
   ICreateBusinessProfileRequest,
   IUpdateBusinessProfileRequest
 } from '../../src/models/user/businessProfile.model';
+import { LicensedPetShopModel } from '../../src/models/licensedPetShop.model';
 
 const BusinessProfile: BusinessProfileModel = require('../../src/models/user/businessProfile.model');
+const LicensedPetShop: LicensedPetShopModel = require('../../src/models/licensedPetShop.model');
+
+const existingLicensedPetShopNumber: string = 'AS19J00045'; // This is a valid license number for '181 AQUARIUM'.
 
 describe('Business Profile model (CREATE)', () => {
   afterEach(async function () {
@@ -30,8 +34,53 @@ describe('Business Profile model (CREATE)', () => {
   });
 
   it('+ Create Business Profile (only required `bibbleTier` with `Verfied`)', async function () {
+    console.log(existingLicensedPetShopNumber);
     const businessProfileData: ICreateBusinessProfileRequest['body'] = {
-      bibbleTier: 'Verified'
+      bibbleTier: 'Verified',
+      businessName: 'Test Business',
+      businessAddress: 'Test Address',
+      businessContact: '+6512345678',
+      businessEmail: 'testbusiness@example.com',
+      petShopLicenseNumber: existingLicensedPetShopNumber
+    };
+    const businessProfile = new BusinessProfile(businessProfileData);
+    const savedBusinessProfile = await businessProfile.save();
+
+    expect(savedBusinessProfile._id).to.exist;
+
+    expect(savedBusinessProfile.bibbleTier).to.equal(
+      businessProfileData.bibbleTier
+    );
+
+    expect(savedBusinessProfile.businessName).to.equal(
+      businessProfileData.businessName
+    );
+
+    expect(savedBusinessProfile.businessAddress).to.equal(
+      businessProfileData.businessAddress
+    );
+
+    expect(savedBusinessProfile.businessContact).to.equal(
+      businessProfileData.businessContact
+    );
+
+    expect(savedBusinessProfile.businessEmail).to.equal(
+      businessProfileData.businessEmail
+    );
+
+    expect(savedBusinessProfile.petShopLicenseNumber).to.equal(
+      businessProfileData.petShopLicenseNumber
+    );
+  });
+
+  it('+ Create Business Profile (only required `bibbleTier` with `Partner`)', async function () {
+    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
+      bibbleTier: 'Partner',
+      businessName: 'Test Business',
+      businessAddress: 'Test Address',
+      businessContact: '+6512345678',
+      businessEmail: 'testbusiness@example.com',
+      petShopLicenseNumber: existingLicensedPetShopNumber
     };
 
     const businessProfile = new BusinessProfile(businessProfileData);
@@ -42,20 +91,25 @@ describe('Business Profile model (CREATE)', () => {
     expect(savedBusinessProfile.bibbleTier).to.equal(
       businessProfileData.bibbleTier
     );
-  });
+    
+    expect(savedBusinessProfile.businessName).to.equal(
+      businessProfileData.businessName
+    );
+    
+    expect(savedBusinessProfile.businessAddress).to.equal(
+      businessProfileData.businessAddress
+    );
 
-  it('+ Create Business Profile (only required `bibbleTier` with `Partner`)', async function () {
-    const businessProfileData: ICreateBusinessProfileRequest['body'] = {
-      bibbleTier: 'Partner'
-    };
+    expect(savedBusinessProfile.businessContact).to.equal(
+      businessProfileData.businessContact
+    );
 
-    const businessProfile = new BusinessProfile(businessProfileData);
-    const savedBusinessProfile = await businessProfile.save();
+    expect(savedBusinessProfile.businessEmail).to.equal(
+      businessProfileData.businessEmail
+    );
 
-    expect(savedBusinessProfile._id).to.exist;
-
-    expect(savedBusinessProfile.bibbleTier).to.equal(
-      businessProfileData.bibbleTier
+    expect(savedBusinessProfile.petShopLicenseNumber).to.equal(
+      businessProfileData.petShopLicenseNumber
     );
   });
 

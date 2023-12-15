@@ -35,7 +35,7 @@ const licensedPetShopSchema = new Schema(
 licensedPetShopSchema.statics.verifyLicense = async function (
   licenseNumber: string
 ): Promise<boolean> {
-  const licensedPetShop = await this.findOne({ licenseNumber: licenseNumber });
+  const licensedPetShop = await this.find({ licenseNumber: licenseNumber });
   return !!licensedPetShop;
 };
 

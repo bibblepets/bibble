@@ -41,7 +41,12 @@ const businessProfileSchema = new Schema(
     },
     businessName: {
       type: String,
-      required: false
+      required: [
+        function (this: IBusinessProfile) {
+          return this.bibbleTier !== 'Basic';
+        },
+        'A business name is required for business tiers above `Basic`.'
+      ]
     },
     businessPic: {
       type: String,
@@ -53,16 +58,31 @@ const businessProfileSchema = new Schema(
     },
     businessAddress: {
       type: String,
-      required: false
+      required: [
+        function (this: IBusinessProfile) {
+          return this.bibbleTier !== 'Basic';
+        },
+        'A business address is required for business tiers above `Basic`.'
+      ]
     },
     businessContact: {
       type: String,
-      required: false,
+      required: [
+        function (this: IBusinessProfile) {
+          return this.bibbleTier !== 'Basic';
+        },
+        'A business contact number is required for business tiers above `Basic`.'
+      ],
       validate: [validateContactNumber, 'Please enter a valid contact number.']
     },
     businessEmail: {
       type: String,
-      required: false,
+      required: [
+        function (this: IBusinessProfile) {
+          return this.bibbleTier !== 'Basic';
+        },
+        'A business email is required for business tiers above `Basic`.'
+      ],
       validate: [validateEmail, 'Please enter a valid business email address.']
     },
     petShopLicenseNumber: {
@@ -71,7 +91,7 @@ const businessProfileSchema = new Schema(
         function (this: IBusinessProfile) {
           return this.bibbleTier !== 'Basic';
         },
-        'A Pet shop license number is required for tiers above `Basic`.'
+        'A Pet shop license number is required for business tiers above `Basic`.'
       ],
       immutable: true,
       validate: [

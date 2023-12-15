@@ -5,7 +5,7 @@ require('dotenv').config();
 let db: Connection;
 
 before(async function () {
-  db = require('../src/mongodb/db');
+  db = require('../src/mongodb/connection');
 });
 
 after(async function () {
