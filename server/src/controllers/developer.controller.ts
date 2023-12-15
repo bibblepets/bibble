@@ -8,14 +8,14 @@ import {
 import { IGetAllCountriesOfOriginRequest } from '../models/country.model';
 
 const {
-  hairCoats,
-  legalTags
+  hairCoats : dogHairCoats,
+  legalTags: dogLegalTags
 }: {
   hairCoats: string[];
   legalTags: string[];
 } = require('../models/listing/animal/dog/dog.model');
-const DogBreed = require('../models/listing/animal/dog/dogBreed.model');
-const DogVaccine = require('../models/listing/animal/dog/dogVaccine.model');
+const Breed = require('../models/listing/animal/breed.model');
+const Vaccine = require('../models/listing/animal/vaccine.model');
 const Country = require('../models/country.model');
 
 export const getBreedsBySpecies = async (
@@ -25,7 +25,7 @@ export const getBreedsBySpecies = async (
   const { species } = req.params;
 
   if (species === 'Dog') {
-    return res.status(200).json(await DogBreed.find());
+    return res.status(200).json(await Breed.find({ species: 'Dog' }));
   } // else if...
 
   return res.status(400).json({ message: 'Invalid species.' });
@@ -38,7 +38,7 @@ export const getVaccinesBySpecies = async (
   const { species } = req.params;
 
   if (species === 'Dog') {
-    return res.status(200).json(await DogVaccine.find());
+    return res.status(200).json(await Vaccine.find({ species: 'Dog' }));
   } // else if...
 
   return res.status(400).json({ message: 'Invalid species.' });
@@ -58,7 +58,7 @@ export const getHairCoatsBySpecies = async (
   const { species } = req.params;
 
   if (species === 'Dog') {
-    return res.status(200).json({ hairCoats: hairCoats });
+    return res.status(200).json({ dogHairCoats: dogHairCoats });
   } // else if...
 
   return res.status(400).json({ message: 'Invalid species.' });
@@ -71,7 +71,7 @@ export const getLegalTagsBySpecies = async (
   const { species } = req.params;
 
   if (species === 'Dog') {
-    return res.status(200).json({ legalTags: legalTags });
+    return res.status(200).json({ legalTags: dogLegalTags });
   } // else if...
 
   return res.status(400).json({ message: 'Invalid species.' });

@@ -1,8 +1,8 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model } from 'mongoose';
-import { IDogBreed } from './dogBreed.model';
+import { IBreed } from '../breed.model';
 import { ICountry } from '../../../country.model';
-import { IDogVaccine } from './dogVaccine.model';
+import { IVaccine } from '../vaccine.model';
 
 const sizes = ['Small', 'Medium', 'Large'];
 const hairCoats = [
@@ -20,8 +20,8 @@ const legalTags = ["isHypoallergenic", "isMicrochipped", "isNeutered", "isHdbApp
 
 export interface IDog {
   _id: Schema.Types.ObjectId;
-  breeds: IDogBreed['_id'][];
-  vaccines?: IDogVaccine['_id'][];
+  breeds: IBreed['_id'][];
+  vaccines?: IVaccine['_id'][];
   origin: ICountry['_id'];
   name?: string;
   gender: string;
@@ -45,8 +45,8 @@ export interface ICreateDogRequest extends Request {
     IDog,
     '_id' | 'createdAt' | 'updatedAt' | 'breeds' | 'vaccines' | 'origin'
   > & {
-    breeds: IDogBreed[];
-    vaccines: IDogVaccine[];
+    breeds: IBreed[];
+    vaccines: IVaccine[];
     origin: ICountry;
   };
 }
@@ -61,7 +61,7 @@ const dogSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         immutable: true,
-        ref: 'DogBreed',
+        ref: 'Breed',
         required: [true, 'Please specify at least one breed for this dog.'],
         cast: 'Dog Breed ID of `{VALUE}` is invalid.'
       }
@@ -69,7 +69,7 @@ const dogSchema = new Schema(
     vaccines: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'DogVaccine',
+        ref: 'Vaccine',
         required: false
       }
     ],
@@ -161,13 +161,13 @@ function validateAVSLicenseNumber(avsLicenseNumber: string): boolean {
   return true;
 }
 
-function determineIsHDBApproved(dogBreed: IDogBreed): boolean {
+function determineIsHDBApproved(dogBreed: IBreed): boolean {
   // TODO: Implement HDB approval logic
   // Possible future plan: Automatically determine HDB approval instead of requiring user input
   return true;
 }
 
-function determineIsHypoallergenic(dogBreed: IDogBreed): boolean {
+function determineIsHypoallergenic(dogBreed: IBreed): boolean {
   // TODO: Implement hypoallergenic logic
   // Possible future plan: Automatically determine hypoallergenic status instead of requiring user input
   return true;

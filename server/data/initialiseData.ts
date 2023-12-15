@@ -16,13 +16,13 @@ import {
 } from '../src/models/listing/petListing.model';
 import { DogModel, IDog } from '../src/models/listing/animal/dog/dog.model';
 import {
-  DogBreedModel,
-  IDogBreed
-} from '../src/models/listing/animal/dog/dogBreed.model';
+  BreedModel,
+  IBreed
+} from '../src/models/listing/animal/breed.model';
 import {
-  DogVaccineModel,
-  IDogVaccine
-} from '../src/models/listing/animal/dog/dogVaccine.model';
+  VaccineModel,
+  IVaccine
+} from '../src/models/listing/animal/vaccine.model';
 import { CountryModel, ICountry } from '../src/models/country.model';
 import {
   ILicensedPetShop,
@@ -56,8 +56,8 @@ const {
   hairCoats: string[];
   genders: string[];
 } = require('../src/models/listing/animal/dog/dog.model');
-const DogBreed: DogBreedModel = require('../src/models/listing/animal/dog/dogBreed.model');
-const DogVaccine: DogVaccineModel = require('../src/models/listing/animal/dog/dogVaccine.model');
+const Breed: BreedModel = require('../src/models/listing/animal/breed.model');
+const Vaccine: VaccineModel = require('../src/models/listing/animal/vaccine.model');
 const Country: CountryModel = require('../src/models/country.model');
 const LicensedPetShop: LicensedPetShopModel = require('../src/models/licensedPetShop.model');
 
@@ -74,10 +74,12 @@ const adminBusinessProfile: Omit<
   IBusinessProfile,
   '_id' | 'createdAt' | 'updatedAt'
 > = {
-  bibbleTier: 'Basic',
+  bibbleTier: 'Super',
   businessName: 'Bibble',
   businessEmail: 'teamsaturdaydevs@gmail.com',
   businessContact: '+6512345678',
+  businessAddress: '123 Bibble Street',
+  petShopLicenseNumber: 'AS08G00025' // Pet Lovers Centre Marine Parade
 };
 
 const admin: Omit<IUser, '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile'> = {
@@ -85,56 +87,63 @@ const admin: Omit<IUser, '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile'> = {
   password: '123456'
 };
 
-const dogBreeds: Omit<IDogBreed, '_id'>[] = [
-  { name: 'Labrador Retriever' },
-  { name: 'German Shepherd' },
-  { name: 'Golden Retriever' },
-  { name: 'Bulldog' },
-  { name: 'Poodle' },
-  { name: 'Beagle' },
-  { name: 'Rottweiler' },
-  { name: 'Yorkshire Terrier' },
-  { name: 'Dachshund' },
-  { name: 'Boxer' },
-  { name: 'Siberian Husky' },
-  { name: 'Pembroke Welsh Corgi' },
-  { name: 'Australian Shepherd' },
-  { name: 'Doberman Pinscher' },
-  { name: 'Great Dane' },
-  { name: 'Cavalier King Charles Spaniel' },
-  { name: 'Shih Tzu' },
-  { name: 'Boston Terrier' },
-  { name: 'Pug' },
-  { name: 'Havanese' }
+const dogBreeds: Omit<IBreed, '_id'>[] = [
+  { name: 'Labrador Retriever', species: 'Dog' },
+  { name: 'German Shepherd', species: 'Dog' },
+  { name: 'Golden Retriever', species: 'Dog' },
+  { name: 'Bulldog', species: 'Dog' },
+  { name: 'Poodle', species: 'Dog' },
+  { name: 'Beagle', species: 'Dog' },
+  { name: 'Rottweiler', species: 'Dog' },
+  { name: 'Yorkshire Terrier', species: 'Dog' },
+  { name: 'Dachshund', species: 'Dog' },
+  { name: 'Boxer', species: 'Dog' },
+  { name: 'Siberian Husky', species: 'Dog' },
+  { name: 'Pembroke Welsh Corgi', species: 'Dog' },
+  { name: 'Australian Shepherd', species: 'Dog' },
+  { name: 'Doberman Pinscher', species: 'Dog' },
+  { name: 'Great Dane', species: 'Dog' },
+  { name: 'Cavalier King Charles Spaniel', species: 'Dog' },
+  { name: 'Shih Tzu', species: 'Dog' },
+  { name: 'Boston Terrier', species: 'Dog' },
+  { name: 'Pug', species: 'Dog' },
+  { name: 'Havanese', species: 'Dog' }
 ];
 
-const dogVaccines: Omit<IDogVaccine, '_id'>[] = [
+const dogVaccines: Omit<IVaccine, '_id'>[] = [
   {
     name: 'Canine Distemper Virus (CDV)',
+    species: 'Dog',
     isCore: true
   },
   {
     name: 'Canine Adenovirus (CAV)',
+    species: 'Dog',
     isCore: true
   },
   {
     name: 'Canine Parvovirus (CPV)',
+    species: 'Dog',
     isCore: true
   },
   {
     name: 'Leptospirosis',
+    species: 'Dog',
     isCore: false
   },
   {
     name: 'Rabies',
+    species: 'Dog',
     isCore: false
   },
   {
     name: 'Canine Infectious Respiratory Disease Complex (Kennel Cough)',
+    species: 'Dog',
     isCore: false
   },
   {
     name: 'Canine Coronavirus (CCV)',
+    species: 'Dog',
     isCore: false
   }
 ];
@@ -164,16 +173,16 @@ const countries: Omit<ICountry, '_id'>[] = [
 // ----------------------------------------------------------------------------
 
 // Data Initialisation Functions ----------------------------------------------
-const initDogBreeds = async (): Promise<IDogBreed[]> => {
-  return await DogBreed.create(dogBreeds).then((dogBreeds: IDogBreed[]) => {
+const initDogBreeds = async (): Promise<IBreed[]> => {
+  return await Breed.create(dogBreeds).then((dogBreeds: IBreed[]) => {
     console.log('Dog Breeds initialised');
     return dogBreeds;
   });
 };
 
-const initDogVaccines = async (): Promise<IDogVaccine[]> => {
-  return await DogVaccine.create(dogVaccines).then(
-    (dogVaccines: IDogVaccine[]) => {
+const initDogVaccines = async (): Promise<IVaccine[]> => {
+  return await Vaccine.create(dogVaccines).then(
+    (dogVaccines: IVaccine[]) => {
       console.log('Dog Vaccines initialised');
       return dogVaccines;
     }
@@ -208,11 +217,11 @@ const initAdmin = async (): Promise<IUser> => {
 };
 
 const initDogs = async (
-  dogBreeds: IDogBreed[],
-  dogVaccines: IDogVaccine[],
+  dogBreeds: IBreed[],
+  dogVaccines: IVaccine[],
   countries: ICountry[]
 ) => {
-  const numDogs = 10;
+  const numDogs = 50;
   let dogList: IDog[] = [];
 
   for (let i = 0; i < numDogs; i++) {
@@ -283,8 +292,8 @@ const initPetListings = async (admin: IUser, dogList: IDog[]) => {
 };
 
 export const initialiseData = async (): Promise<void> => {
-  let dogBreeds: IDogBreed[] | undefined;
-  let dogVaccines: IDogVaccine[] | undefined;
+  let dogBreeds: IBreed[] | undefined;
+  let dogVaccines: IVaccine[] | undefined;
   let countries: ICountry[] | undefined;
   let admin: IUser | undefined;
   let dogs: IDog[] | undefined;
@@ -292,6 +301,9 @@ export const initialiseData = async (): Promise<void> => {
   try {
     console.log('Initialising Data...');
     await connection.asPromise();
+
+    await dumpFromCSV('data/licensedPetShops.csv');
+
     dogBreeds = await initDogBreeds();
     dogVaccines = await initDogVaccines();
     countries = await initCountries();
@@ -299,8 +311,6 @@ export const initialiseData = async (): Promise<void> => {
 
     dogs = await initDogs(dogBreeds, dogVaccines, countries);
     await initPetListings(admin, dogs);
-
-    await dumpFromCSV('data/licensedPetShops.csv');
 
     console.log('Data initialisation complete');
   } catch (error: any) {

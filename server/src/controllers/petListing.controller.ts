@@ -20,8 +20,8 @@ const {
 const {
   Dog
 }: { Dog: DogModel } = require('../models/listing/animal/dog/dog.model');
-require('../models/listing/animal/dog/dogBreed.model');
-require('../models/listing/animal/dog/dogVaccine.model');
+require('../models/listing/animal/breed.model');
+require('../models/listing/animal/vaccine.model');
 
 export const createPetListing = async (
   req: ICreatePetListingRequest,
