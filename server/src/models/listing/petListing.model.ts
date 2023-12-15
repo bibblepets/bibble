@@ -106,7 +106,7 @@ const PetListingSchema = new Schema<
         values: saleStatuses,
         message: 'Sale status of `{VALUE}` is invalid.'
       },
-      default: 'Available' // CHANGE TITUS: Changed required to default
+      default: 'Available'
     },
     media: [
       {
@@ -144,8 +144,12 @@ const PetListingSchema = new Schema<
     },
     expiryDate: {
       type: Date,
-      immutable: true
-      // CHANGED TITUS: Removed required
+      immutable: true,
+      default: function () {
+        const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + 30); // Set expiration date to 30 days after creation date
+        return expiryDate;
+      }
     }
   },
   { collection: 'petListings', timestamps: true }
@@ -161,18 +165,6 @@ PetListingSchema.method('updateSaleStatus', function () {
   } else {
     this.saleStatus = 'Available';
   }
-});
-
-PetListingSchema.pre('validate', function (next) {
-  if (this.isNew) {
-    this.saleStatus = 'Available';
-    this.createdAt = new Date();
-    const expiryDate = new Date(this.createdAt);
-    expiryDate.setDate(expiryDate.getDate() + 30); // Set expiration date to 30 days after creation date
-    this.expiryDate = expiryDate;
-  }
-
-  next();
 });
 
 PetListingSchema.pre('save', function (next) {
