@@ -8,18 +8,15 @@ import {
 } from '../../../features/listingSlice';
 import { store } from '../../../store';
 import { License } from '../../../types';
-import { toCamelCase } from '../../../utils/string';
 
-const dummyLicenses = [
-  { name: 'avs license' },
-  { name: 'breed allowed' },
-  { name: 'hdb approved' },
-  { name: 'insurance' },
-  { name: 'microchipped' }
-];
+const licenses: Record<License, string> = {
+  isHypoallergenic: 'Hypoallergenic',
+  isNeutered: 'Neutered',
+  isMicrochipped: 'Microchipped',
+  isHdbApproved: 'HDB Approved'
+};
 
 const LicenseList = ({ readOnly }: { readOnly?: boolean }) => {
-  const licenses = dummyLicenses;
   const selectedLicenses = useSelector(selectListingLicenses);
 
   const handleClick = useCallback(
@@ -35,21 +32,21 @@ const LicenseList = ({ readOnly }: { readOnly?: boolean }) => {
 
   return (
     <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-      {licenses.map((license, index) => (
+      {Object.entries(licenses).map(([type, label], index) => (
         <div key={index} className="flex flex-row gap-4 items-center">
           <button
-            onClick={() => handleClick(license)}
+            onClick={() => handleClick(type as License)}
             disabled={readOnly}
             className="p-2 rounded-lg border transition hover:shadow-inner"
           >
-            {selectedLicenses?.map((e) => e.name).includes(license.name) ? (
+            {selectedLicenses?.includes(type as License) ? (
               <CheckIcon className="w-4 h-4" />
             ) : (
               <div className="w-4 h-4" />
             )}
           </button>
           <a key={index} className="text-sm font-light text-gray-500">
-            {toCamelCase(license.name)}
+            {label}
           </a>
         </div>
       ))}

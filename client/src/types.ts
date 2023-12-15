@@ -88,13 +88,14 @@ export type Animal = {
   avsLicenseNumber: string;
 };
 
-export type SaleType = 'SALE' | 'ADOPTION';
+export type SaleType = 'Sale' | 'Adoption';
 
 export type Species = string;
 
 export type Breed = {
   _id?: string;
   name: string;
+  species: string;
 };
 
 export type Country = {
@@ -102,18 +103,22 @@ export type Country = {
   name: string;
 };
 
-export type Gender = 'MALE' | 'FEMALE';
+export type Gender = 'Male' | 'Female';
+
+export type Size = 'Small' | 'Medium' | 'Large';
 
 export type Vaccine = {
   _id?: string;
   name: string;
+  species: string;
   isCore: boolean;
 };
 
-export type License = {
-  _id?: string;
-  name: string;
-};
+export type License =
+  | 'isHypoallergenic'
+  | 'isMicrochipped'
+  | 'isNeutered'
+  | 'isHdbApproved';
 
 export type Media = {
   _id?: string;

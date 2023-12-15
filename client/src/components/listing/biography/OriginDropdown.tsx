@@ -4,25 +4,12 @@ import { useSelector } from 'react-redux';
 import { selectListingOrigin, setOrigin } from '../../../features/listingSlice';
 import { store } from '../../../store';
 import { Country } from '../../../types';
-
-const dummyOrigins = [
-  { name: 'Singapore' },
-  { name: 'Malaysia' },
-  { name: 'Indonesia' },
-  { name: 'Thailand' },
-  { name: 'Philippines' },
-  { name: 'Vietnam' },
-  { name: 'Myanmar' },
-  { name: 'Cambodia' },
-  { name: 'Laos' },
-  { name: 'Brunei' },
-  { name: 'East Timor' }
-];
+import { selectListingOptionsCountries } from '../../../features/listingOptionsSlice';
 
 const OriginDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedOrigin = useSelector(selectListingOrigin);
-  const origins = dummyOrigins;
+  const origins = useSelector(selectListingOptionsCountries);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);

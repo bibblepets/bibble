@@ -1,51 +1,42 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectListingBreed, setBreed } from '../../../features/listingSlice';
+import {
+  addBreed,
+  removeBreed,
+  selectListingBreeds,
+  selectListingSpecies
+} from '../../../features/listingSlice';
 import { store } from '../../../store';
 import { Breed } from '../../../types';
-
-const dummyBreeds = [
-  { name: 'Labrador Retriever' },
-  { name: 'German Shepherd' },
-  { name: 'Golden Retriever' },
-  { name: 'French Bulldog' },
-  { name: 'Bulldog' },
-  { name: 'Poodle' },
-  { name: 'Beagle' },
-  { name: 'Rottweiler' },
-  { name: 'Yorkshire Terrier' },
-  { name: 'Boxer' },
-  { name: 'Labrador Retriever' },
-  { name: 'German Shepherd' },
-  { name: 'Golden Retriever' },
-  { name: 'French Bulldog' },
-  { name: 'Bulldog' },
-  { name: 'Poodle' },
-  { name: 'Beagle' },
-  { name: 'Rottweiler' },
-  { name: 'Yorkshire Terrier' },
-  { name: 'Boxer' }
-];
+import { selectListingOptionsBreeds } from '../../../features/listingOptionsSlice';
 
 const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const selectedBreed = useSelector(selectListingBreed);
-  const breeds = dummyBreeds;
+  const selectedSpecies = useSelector(selectListingSpecies);
+  const selectedBreeds = useSelector(selectListingBreeds);
+  const breeds = useSelector(selectListingOptionsBreeds(selectedSpecies));
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleBreedSelected = (breed: Breed) => {
-    store.dispatch(setBreed(breed));
-    setIsOpen(false);
-  };
+  const handleBreedSelected = useCallback(
+    (breed: Breed) => {
+      if (selectedBreeds?.map((breed) => breed.name).includes(breed.name)) {
+        store.dispatch(removeBreed(breed));
+      } else {
+        store.dispatch(addBreed(breed));
+      }
+    },
+    [store, selectedBreeds]
+  );
 
   if (readOnly) {
     return (
       <a className="text-sm font-medium text-gray-700">{`${
-        selectedBreed?.name || 'No breed selected'
+        selectedBreeds?.map((breed) => breed.name).join(', ') ||
+        'No breed selected'
       }`}</a>
     );
   }
@@ -55,8 +46,14 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
       <button
         onClick={toggleDropdown}
         className="flex items-center justify-between w-full px-4 p-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none"
+        disabled={!selectedSpecies}
       >
-        <span>{`${selectedBreed?.name || 'Select a breed'}`}</span>
+        <span>{`${
+          !selectedSpecies
+            ? 'Select a species'
+            : selectedBreeds?.map((breed) => breed.name).join(', ') ||
+              'Select a breed'
+        }`}</span>
         {isOpen ? (
           <ChevronUpIcon className="w-4 h-4" />
         ) : (
@@ -68,11 +65,17 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
         <div className="absolute pb-4 w-full z-10">
           <div className="mt-2 bg-white shadow-lg rounded-b-lg max-h-[280px] overflow-auto">
             <ul className="py-1">
-              {breeds.map((breed, index) => (
+              {breeds?.map((breed, index) => (
                 <li key={index}>
                   <button
                     onClick={() => handleBreedSelected(breed)}
-                    className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    className={`block w-full px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 hover:text-gray-900 ${
+                      selectedBreeds
+                        ?.map((breed) => breed.name)
+                        .includes(breed.name)
+                        ? 'bg-gray-300 text-gray-900'
+                        : ''
+                    }`}
                   >
                     {breed?.name}
                   </button>

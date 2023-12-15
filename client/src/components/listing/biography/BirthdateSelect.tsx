@@ -27,8 +27,7 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
   const [isMonthOpen, setMonthIsOpen] = useState(false);
   const [isYearOpen, setYearIsOpen] = useState(false);
 
-  const birthdateString = useSelector(selectListingBirthdate) || Date.now();
-  const birthdate = new Date(birthdateString);
+  const birthdate = useSelector(selectListingBirthdate) || new Date(Date.now());
 
   const toggleDate = useCallback(() => {
     setDateIsOpen(!isDateOpen);
@@ -48,33 +47,33 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
 
   const handleDateSelected = useCallback(
     (date: number) => {
-      const newBirthdate = new Date(birthdateString);
+      const newBirthdate = new Date(birthdate);
       newBirthdate.setDate(date);
 
-      store.dispatch(setBirthdate(newBirthdate.toISOString()));
+      store.dispatch(setBirthdate(newBirthdate));
       setDateIsOpen(false);
     },
-    [store, birthdateString]
+    [store, birthdate]
   );
 
   const handleMonthSelected = useCallback(
     (month: number) => {
-      const newBirthdate = new Date(birthdateString!);
+      const newBirthdate = new Date(birthdate);
       newBirthdate.setMonth(month);
-      store.dispatch(setBirthdate(newBirthdate.toISOString()));
+      store.dispatch(setBirthdate(newBirthdate));
       setMonthIsOpen(false);
     },
-    [store, birthdateString]
+    [store, birthdate]
   );
 
   const handleYearSelected = useCallback(
     (year: number) => {
-      const newBirthdate = new Date(birthdateString!);
+      const newBirthdate = new Date(birthdate);
       newBirthdate.setFullYear(year);
-      store.dispatch(setBirthdate(newBirthdate.toISOString()));
+      store.dispatch(setBirthdate(newBirthdate));
       setYearIsOpen(false);
     },
-    [store, birthdateString]
+    [store, birthdate]
   );
 
   if (readOnly) {

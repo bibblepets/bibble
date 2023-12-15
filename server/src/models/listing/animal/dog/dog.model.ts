@@ -106,7 +106,7 @@ const dogSchema = new Schema(
     },
     weight: {
       type: Number,
-      min: [1, 'Weight must be greater than 0.'],
+      min: [0.1, 'Weight must be greater than 0.'], // TITUS Changed min to 0.1 (measure in kg)
       required: [true, 'Please specify the weight of this dog.'],
       cast: 'Weight of `{VALUE}` is invalid.'
     },
@@ -120,22 +120,22 @@ const dogSchema = new Schema(
     },
     isHypoallergenic: {
       type: Boolean,
-      required: [true, 'Please specify whether this dog is hypoallergenic.'],
+      default: false, // TITUS Changed required to default
       cast: '`{VALUE}` is not a boolean.'
     },
     isMicrochipped: {
       type: Boolean,
-      required: [true, 'Please specify whether this dog is microchipped.'],
+      default: false, // TITUS Changed required to default
       cast: '`{VALUE}` is not a boolean.'
     },
     isNeutered: {
       type: Boolean,
-      required: [true, 'Please specify whether this dog is neutered.'],
+      default: false, // TITUS Changed required to default
       cast: '`{VALUE}` is not a boolean.'
     },
     isHdbApproved: {
       type: Boolean,
-      required: [true, 'Please specify whether this dog is approved for HDBs.'],
+      default: false, // TITUS Changed required to default
       cast: '`{VALUE}` is not a boolean.'
     },
     avsLicenseNumber: {

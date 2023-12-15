@@ -23,11 +23,11 @@ const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
           {(selectedGender && toCamelCase(selectedGender)) ||
             'No gender selected'}
         </a>
-        {selectedGender === 'MALE' ? (
+        {selectedGender === 'Male' ? (
           <BiMaleSign className="w-5 h-5 text-gray-700" />
-        ) : (
+        ) : selectedGender === 'Female' ? (
           <BiFemaleSign className="w-5 h-5 text-gray-700" />
-        )}
+        ) : null}
       </div>
     );
   }
@@ -35,9 +35,9 @@ const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
   return (
     <div className="flex flex-row gap-8 justify-between">
       <button
-        onClick={() => handleClick('MALE')}
+        onClick={() => handleClick('Male')}
         className={`flex flex-row justify-center p-4 rounded-lg items-center gap-4 w-full transition ${
-          selectedGender === 'MALE' ? 'bg-sky-500' : 'bg-gray-500'
+          selectedGender === 'Male' ? 'bg-sky-500' : 'bg-gray-500'
         }`}
       >
         <BiMaleSign className="w-5 h-5 text-white" />
@@ -45,9 +45,9 @@ const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
       </button>
 
       <button
-        onClick={() => handleClick('FEMALE')}
+        onClick={() => handleClick('Female')}
         className={`flex flex-row justify-center  p-4 rounded-lg items-center gap-4 w-full transition ${
-          selectedGender === 'FEMALE' ? 'bg-rose-500' : 'bg-gray-500'
+          selectedGender === 'Female' ? 'bg-rose-500' : 'bg-gray-500'
         }`}
       >
         <BiFemaleSign className="w-5 h-5 text-white" />

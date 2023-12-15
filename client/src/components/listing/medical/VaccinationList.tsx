@@ -4,27 +4,17 @@ import { useSelector } from 'react-redux';
 import {
   addVaccination,
   removeVaccination,
+  selectListingSpecies,
   selectListingVaccinations
 } from '../../../features/listingSlice';
 import { store } from '../../../store';
 import { Vaccine } from '../../../types';
 import { toCamelCase } from '../../../utils/string';
-
-const dummyVaccines = [
-  { name: 'avian influenza', isCore: false },
-  { name: 'lymphocytic choriomeningitis', isCore: false },
-  { name: 'rabies', isCore: false },
-  { name: 'canine parvovirus', isCore: false },
-  { name: 'bovine viral diarrhea', isCore: true },
-  { name: 'feline immunodeficiency', isCore: true },
-  { name: 'feline leukemia', isCore: true },
-  { name: 'porcine herpes', isCore: true },
-  { name: 'foot and mouth disease', isCore: true },
-  { name: 'canine distemper', isCore: true }
-];
+import { selectListingOptionsVaccines } from '../../../features/listingOptionsSlice';
 
 const VaccinationList = ({ readOnly }: { readOnly?: boolean }) => {
-  const vaccines = dummyVaccines;
+  const species = useSelector(selectListingSpecies);
+  const vaccines = useSelector(selectListingOptionsVaccines(species));
   const selectedVaccines = useSelector(selectListingVaccinations);
 
   const handleClick = useCallback(
