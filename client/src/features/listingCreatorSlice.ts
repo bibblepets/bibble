@@ -35,7 +35,7 @@ interface ListingCreatorState {
     size?: Size;
     weight?: number;
     hairCoat?: HairCoat;
-    vaccinations?: Vaccine[];
+    vaccines?: Vaccine[];
   };
   legal?: {
     avsLicenseNumber?: string;
@@ -136,7 +136,7 @@ export const updateMedical = createAsyncThunk(
   '/listingCreator/updateMedical',
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const { size, weight, hairCoat, vaccinations } =
+    const { size, weight, hairCoat, vaccines } =
       state.listingCreator.medical || {};
 
     return await axios
@@ -146,7 +146,7 @@ export const updateMedical = createAsyncThunk(
         size,
         weight,
         hairCoat,
-        vaccinations
+        vaccines
       })
       .then((response) => {
         return response.data;
@@ -312,19 +312,19 @@ const listingCreatorSlice = createSlice({
       if (!state.medical) {
         state.medical = {};
       }
-      if (!state.medical.vaccinations) {
-        state.medical.vaccinations = [];
+      if (!state.medical.vaccines) {
+        state.medical.vaccines = [];
       }
-      state.medical.vaccinations.push(action.payload);
+      state.medical.vaccines.push(action.payload);
     },
     removeVaccination: (state, action: PayloadAction<Vaccine>) => {
       if (!state.medical) {
         state.medical = {};
       }
-      if (!state.medical.vaccinations) {
-        state.medical.vaccinations = [];
+      if (!state.medical.vaccines) {
+        state.medical.vaccines = [];
       }
-      state.medical.vaccinations = state.medical.vaccinations.filter(
+      state.medical.vaccines = state.medical.vaccines.filter(
         (vaccine) => vaccine._id !== action.payload._id
       );
     },
@@ -543,8 +543,8 @@ export const selectListingWeight = (state: RootState) =>
   state.listingCreator.medical?.weight;
 export const selectListingHairCoat = (state: RootState) =>
   state.listingCreator.medical?.hairCoat;
-export const selectListingVaccinations = (state: RootState) =>
-  state.listingCreator.medical?.vaccinations;
+export const selectListingVaccines = (state: RootState) =>
+  state.listingCreator.medical?.vaccines;
 export const selectListingAvsLicenseNumber = (state: RootState) =>
   state.listingCreator.legal?.avsLicenseNumber;
 export const selectListingLegalTags = (state: RootState) =>

@@ -162,10 +162,10 @@ export const updateMedical = async (
   res: Response
 ) => {
   try {
-    const { _id, stage, size, weight, hairCoat, vaccinations } = req.body;
+    const { _id, stage, size, weight, hairCoat, vaccines } = req.body;
 
     assertFields(
-      ['_id', 'stage', 'size', 'weight', 'hairCoat', 'vaccinations'],
+      ['_id', 'stage', 'size', 'weight', 'hairCoat', 'vaccines'],
       req
     );
 
@@ -177,7 +177,7 @@ export const updateMedical = async (
           size,
           weight,
           hairCoat,
-          vaccinations
+          vaccines
         }
       },
       { new: true }

@@ -5,7 +5,7 @@ import {
   addVaccination,
   removeVaccination,
   selectListingSpecies,
-  selectListingVaccinations
+  selectListingVaccines
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 import { Vaccine } from '../../../types';
@@ -16,7 +16,7 @@ const VaccinationList = ({ readOnly }: { readOnly?: boolean }) => {
   const species = useSelector(selectListingSpecies);
   const allVaccines = useSelector(selectListingOptionsVaccines);
   const vaccines = allVaccines.filter((vaccine) => vaccine.species === species);
-  const selectedVaccines = useSelector(selectListingVaccinations);
+  const selectedVaccines = useSelector(selectListingVaccines);
 
   const handleClick = useCallback(
     (vaccine: Vaccine) => {
