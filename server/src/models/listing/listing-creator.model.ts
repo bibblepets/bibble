@@ -77,7 +77,11 @@ export interface ICreateListingCreatorRequest extends Request {
 }
 
 export interface IUpdateListingCreatorRequest extends Request {
-  body: Partial<IListingCreator>
+  body: Partial<IListingCreator> & {
+    lister: IUser['_id'];
+    stage: number;
+    saleType: string;
+  }
 }
 
 export interface IUpdateBiologyRequest extends Request {

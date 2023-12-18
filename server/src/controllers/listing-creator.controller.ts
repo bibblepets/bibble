@@ -80,54 +80,10 @@ export const updateListingCreatorById = async (
   res: Response
 ) => {
   try {
-    const { _id, stage } = req.body;
-
-    let fieldsToAssert: string[] = [];
-    switch (stage) {
-      case 1: // Biology
-        fieldsToAssert = ['_id', 'stage', 'species', 'breeds'];
-        break;
-      case 2: // Biography
-        fieldsToAssert = [
-          '_id',
-          'stage',
-          'origin',
-          'gender',
-          'birthdate',
-          'description'
-        ];
-        break;
-      case 3: // Medical
-        fieldsToAssert = [
-          '_id',
-          'stage',
-          'size',
-          'weight',
-          'hairCoat',
-          'vaccinations'
-        ];
-        break;
-      case 4: // Legal
-        fieldsToAssert = ['_id', 'stage', 'avsLicenseNumber'];
-        break;
-      case 5: // Media
-        fieldsToAssert = ['_id', 'stage']; // TODO: media
-        break;
-      case 6: // Price
-        fieldsToAssert = ['_id', 'stage', 'price'];
-        break;
-      case 7: // Submit
-        fieldsToAssert = ['_id', 'stage'];
-        break;
-      default:
-        break;
-    }
-
-    assertFields(fieldsToAssert, req);
+    const { _id } = req.body;
 
     const listingCreator = await ListingCreator.findByIdAndUpdate(
-      _id,
-      {
+      _id, {
         ...req.body
       },
       { new: true }
