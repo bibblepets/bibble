@@ -1,11 +1,7 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model, Document } from 'mongoose';
-import {
-  ICreateDogRequest,
-  IUpdateDogRequest,
-  IDog
-} from './animal/dog/dog.model';
 import { IUser } from '../user/user.model';
+import { IAnimal, ICreateAnimalRequest, IUpdateAnimalRequest } from './animal/animal.model';
 
 const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
 const mediaTypes = ['Image']; // Add more types here: 'video', etc.
@@ -20,7 +16,7 @@ export interface IPetListing {
   saleType: string;
   saleStatus: string;
   media: { type: string; url: string }[];
-  animal: IDog['_id']; // Add other animals here: ICat['_id'], etc.
+  animal: IAnimal['_id'];
   species: string;
   createdAt: Date;
   updatedAt: Date;
@@ -40,13 +36,13 @@ export interface ICreatePetListingRequest extends Request {
     '_id' | 'createdAt' | 'updatedAt' | 'expiryDate' | 'lister' | 'animal'
   > & {
     lister: IUser['_id'];
-    animal: ICreateDogRequest['body']; // Add other animals here: ICreateCatRequest['body'], etc.
+    animal: ICreateAnimalRequest['body'];
   };
 }
 
 export interface IUpdatePetListingRequest extends Request {
   body: Partial<Omit<ICreatePetListingRequest['body'], 'animal'>> & {
-    animal: IUpdateDogRequest['body']; // Add other animals here: IUpdateCatRequest['body'], etc.
+    animal: IUpdateAnimalRequest['body'];
   };
 }
 

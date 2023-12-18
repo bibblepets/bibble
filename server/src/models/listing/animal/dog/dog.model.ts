@@ -1,10 +1,10 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model } from 'mongoose';
+import { IAnimal, ICreateAnimalRequest, IUpdateAnimalRequest, genders, sizes } from '../animal.model';
 import { IBreed } from '../breed.model';
 import { ICountry } from '../../../country.model';
 import { IVaccine } from '../vaccine.model';
 
-const sizes = ['Small', 'Medium', 'Large'];
 const hairCoats = [
   'Double',
   'Silky',
@@ -15,43 +15,30 @@ const hairCoats = [
   'Medium',
   'Short'
 ];
-const genders = ['Male', 'Female'];
 const legalTags = ["isHypoallergenic", "isMicrochipped", "isNeutered", "isHdbApproved"];
 
-export interface IDog {
-  _id: Schema.Types.ObjectId;
-  breeds: IBreed['_id'][];
-  vaccines?: IVaccine['_id'][];
-  origin: ICountry['_id'];
-  name?: string;
-  gender: string;
-  birthdate: Date;
-  size: string;
-  weight: number;
+export interface IDog extends IAnimal {
   hairCoat: string;
   isHypoallergenic: boolean;
   isMicrochipped: boolean;
   isNeutered: boolean;
   isHdbApproved: boolean;
-  avsLicenseNumber: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface DogModel extends Model<IDog> {}
 
-export interface ICreateDogRequest extends Request {
+export interface ICreateDogRequest extends ICreateAnimalRequest {
   body: Omit<
     IDog,
     '_id' | 'createdAt' | 'updatedAt' | 'breeds' | 'vaccines' | 'origin'
   > & {
-    breeds: IBreed[];
-    vaccines: IVaccine[];
-    origin: ICountry;
+    breeds: IBreed['_id'][];
+    vaccines: IVaccine['_id'][];
+    origin: ICountry['_id'];
   };
 }
 
-export interface IUpdateDogRequest extends Request {
+export interface IUpdateDogRequest extends IUpdateAnimalRequest {
   body: Partial<ICreateDogRequest['body']>;
 }
 
@@ -154,7 +141,7 @@ const dogSchema = new Schema(
 
 const Dog = mongoose.model<IDog, DogModel>('Dog', dogSchema);
 
-module.exports = { Dog, sizes, hairCoats, genders, legalTags };
+module.exports = { Dog, hairCoats, legalTags };
 
 function validateAVSLicenseNumber(avsLicenseNumber: string): boolean {
   // TODO: Implement AVS license number validation
