@@ -15,7 +15,7 @@ const ListerInfo: React.FC<ListerInfoProps> = ({ listing }) => {
     <>
       {/* Divider */}
       <div className="flex items-center gap-1">
-        <UserCircleIcon className="w-6 h-6 text-neutral-500" />{' '}
+        <UserCircleIcon className="w-6 h-6 text-gray-800" />{' '}
         <hr className="mx-4 grow" />
       </div>
 
