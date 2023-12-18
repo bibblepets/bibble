@@ -5,11 +5,11 @@ import { IUser, UserModel } from '../src/models/user/user.model';
 import {
   BuyerProfileModel,
   IBuyerProfile
-} from '../src/models/user/buyerProfile.model';
+} from '../src/models/user/buyer-profile.model';
 import {
   BusinessProfileModel,
   IBusinessProfile
-} from '../src/models/user/businessProfile.model';
+} from '../src/models/user/business-profile.model';
 import { ListingModel, IListing } from '../src/models/listing/listing.model';
 import { DogModel, IDog } from '../src/models/listing/animal/dog/dog.model';
 import { BreedModel, IBreed } from '../src/models/listing/animal/breed.model';
@@ -21,11 +21,11 @@ import { CountryModel, ICountry } from '../src/models/country.model';
 import {
   ILicensedPetShop,
   LicensedPetShopModel
-} from '../src/models/licensedPetShop.model';
+} from '../src/models/licensed-pet-shop.model';
 
 const User: UserModel = require('../src/models/user/user.model');
-const BuyerProfile: BuyerProfileModel = require('../src/models/user/buyerProfile.model');
-const BusinessProfile: BusinessProfileModel = require('../src/models/user/businessProfile.model');
+const BuyerProfile: BuyerProfileModel = require('../src/models/user/buyer-profile.model');
+const BusinessProfile: BusinessProfileModel = require('../src/models/user/business-profile.model');
 const {
   sizes,
   genders
@@ -56,7 +56,7 @@ const {
 const Breed: BreedModel = require('../src/models/listing/animal/breed.model');
 const Vaccine: VaccineModel = require('../src/models/listing/animal/vaccine.model');
 const Country: CountryModel = require('../src/models/country.model');
-const LicensedPetShop: LicensedPetShopModel = require('../src/models/licensedPetShop.model');
+const LicensedPetShop: LicensedPetShopModel = require('../src/models/licensed-pet-shop.model');
 
 // Seed Data -------------------------------------------------------------------
 const adminBuyerProfile: Omit<

@@ -10,12 +10,12 @@ import {
   BuyerProfileModel,
   ICreateBuyerProfileRequest,
   IUpdateBuyerProfileRequest
-} from '../../src/models/user/buyerProfile.model';
+} from '../../src/models/user/buyer-profile.model';
 import {
   BusinessProfileModel,
   ICreateBusinessProfileRequest,
   IUpdateBusinessProfileRequest
-} from '../../src/models/user/businessProfile.model';
+} from '../../src/models/user/business-profile.model';
 
 const User: UserModel = require('../../src/models/user/user.model');
 const BuyerProfile: BuyerProfileModel = require('../../src/models/user/buyerProfile.model');

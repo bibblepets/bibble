@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import mongoose, { Model, Schema } from 'mongoose';
-import { LicensedPetShopModel } from '../licensedPetShop.model';
+import { LicensedPetShopModel } from '../licensed-pet-shop.model';
 
 export const bibbleTiers = ['Basic', 'Verified', 'Partner', 'Super'];
 
@@ -128,7 +128,7 @@ function validateEmail(email: string): boolean {
 async function validatePetShopLicenseNumber(
   licenseNumber: string
 ): Promise<boolean> {
-  const LicensedPetShop: LicensedPetShopModel = require('../licensedPetShop.model');
+  const LicensedPetShop: LicensedPetShopModel = require('../licensed-pet-shop.model');
   return await LicensedPetShop.verifyLicense(licenseNumber);
 }
 

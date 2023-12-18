@@ -5,7 +5,7 @@ import {
   BuyerProfileModel,
   ICreateBuyerProfileRequest,
   IUpdateBuyerProfileRequest
-} from '../../src/models/user/buyerProfile.model';
+} from '../../src/models/user/buyer-profile.model';
 
 const BuyerProfile: BuyerProfileModel = require('../../src/models/user/buyerProfile.model');
 

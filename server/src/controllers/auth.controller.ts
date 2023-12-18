@@ -9,12 +9,12 @@ import {
   ILoginUserRequest,
   UserModel
 } from '../models/user/user.model';
-import { BuyerProfileModel } from '../models/user/buyerProfile.model';
-import { BusinessProfileModel } from '../models/user/businessProfile.model';
+import { BuyerProfileModel } from '../models/user/buyer-profile.model';
+import { BusinessProfileModel } from '../models/user/business-profile.model';
 
 const User: UserModel = require('../models/user/user.model');
-const BuyerProfile: BuyerProfileModel = require('../models/user/buyerProfile.model');
-const BusinessProfile: BusinessProfileModel = require('../models/user/businessProfile.model');
+const BuyerProfile: BuyerProfileModel = require('../models/user/buyer-profile.model');
+const BusinessProfile: BusinessProfileModel = require('../models/user/business-profile.model');
 
 const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
 

@@ -5,12 +5,12 @@ import {
   IBuyerProfile,
   ICreateBuyerProfileRequest,
   IUpdateBuyerProfileRequest
-} from './buyerProfile.model';
+} from './buyer-profile.model';
 import {
   IBusinessProfile,
   ICreateBusinessProfileRequest,
   IUpdateBusinessProfileRequest
-} from './businessProfile.model';
+} from './business-profile.model';
 
 export interface IUser {
   _id: Schema.Types.ObjectId;

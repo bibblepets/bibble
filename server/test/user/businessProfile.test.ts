@@ -5,8 +5,8 @@ import {
   BusinessProfileModel,
   ICreateBusinessProfileRequest,
   IUpdateBusinessProfileRequest
-} from '../../src/models/user/businessProfile.model';
-import { LicensedPetShopModel } from '../../src/models/licensedPetShop.model';
+} from '../../src/models/user/business-profile.model';
+import { LicensedPetShopModel } from '../../src/models/licensed-pet-shop.model';
 
 const BusinessProfile: BusinessProfileModel = require('../../src/models/user/businessProfile.model');
 const LicensedPetShop: LicensedPetShopModel = require('../../src/models/licensedPetShop.model');
