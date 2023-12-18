@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as ListingController from '../controllers/listing.controller';
+import * as AuthMiddleware from '../middleware/auth.middleware';
 
 const router = Router();
 
@@ -8,7 +9,7 @@ const router = Router();
  * @desc Create a new listing
  * @access Private
  */
-router.post('/', ListingController.createListing);
+router.post('/', AuthMiddleware.checkBibbleTier, ListingController.createListing);
 
 /**
  * @route GET /api/listings
@@ -36,13 +37,13 @@ router.get('/:id', ListingController.getListingById);
  * @desc Update a listing by ID
  * @access Private
  */
-router.put('/:id', ListingController.updateListingById);
+router.put('/:id', AuthMiddleware.checkBibbleTier, ListingController.updateListingById);
 
 /**
  * @route DELETE /api/listings/:id
  * @desc Delete a listing by ID
  * @access Private
  */
-router.delete('/:id', ListingController.deleteListingById);
+router.delete('/:id', AuthMiddleware.checkBibbleTier, ListingController.deleteListingById);
 
 module.exports = router;

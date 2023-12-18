@@ -38,7 +38,6 @@ export const createListing = async (
   try {
     // Validate request
     console.log('Validating request body...');
-    // TODO: Validate lister in middleware
     await validateCreateAnimal(req);
     await Listing.validate(
       {

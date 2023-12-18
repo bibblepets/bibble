@@ -41,7 +41,7 @@ export const checkAuthStatus = createAsyncThunk(
 );
 
 export const registerUser = createAsyncThunk(
-  '/authSlice/registerUser',
+  '/authSlice/register',
   async (
     credentials: Omit<
       User,
