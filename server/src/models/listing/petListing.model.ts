@@ -39,7 +39,7 @@ export interface ICreatePetListingRequest extends Request {
     IPetListing,
     '_id' | 'createdAt' | 'updatedAt' | 'expiryDate' | 'lister' | 'animal'
   > & {
-    lister: IUser;
+    lister: IUser['_id'];
     animal: ICreateDogRequest['body']; // Add other animals here: ICreateCatRequest['body'], etc.
   };
 }

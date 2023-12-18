@@ -38,11 +38,7 @@ export const createPetListing = async (
   try {
     // Validate request
     console.log('Validating request body...');
-    if (!lister.businessProfile) {
-      return res
-        .status(400)
-        .json({ message: 'A Business profile is required to make a listing.' });
-    }
+    // TODO: Validate lister in middleware
     await validateCreateAnimal(req);
     await PetListing.validate(
       {
