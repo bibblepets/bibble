@@ -11,9 +11,9 @@ import {
   IBusinessProfile
 } from '../src/models/user/businessProfile.model';
 import {
-  PetListingModel,
-  IPetListing
-} from '../src/models/listing/petListing.model';
+  ListingModel,
+  IListing
+} from '../src/models/listing/listing.model';
 import { DogModel, IDog } from '../src/models/listing/animal/dog/dog.model';
 import {
   BreedModel,
@@ -33,18 +33,18 @@ const User: UserModel = require('../src/models/user/user.model');
 const BuyerProfile: BuyerProfileModel = require('../src/models/user/buyerProfile.model');
 const BusinessProfile: BusinessProfileModel = require('../src/models/user/businessProfile.model');
 const {
-  PetListing,
+  Listing,
   saleTypes,
   mediaTypes,
   speciesTypes,
   saleStatuses
 }: {
-  PetListing: PetListingModel;
+  Listing: ListingModel;
   saleTypes: string[];
   mediaTypes: string[];
   speciesTypes: string[];
   saleStatuses: string[];
-} = require('../src/models/listing/petListing.model');
+} = require('../src/models/listing/listing.model');
 const {
   Dog,
   sizes,
@@ -270,11 +270,11 @@ const initDogs = async (
   return dogList;
 };
 
-const initPetListings = async (admin: IUser, dogList: IDog[]) => {
-  let petListings: IPetListing[] = [];
+const initListings = async (admin: IUser, dogList: IDog[]) => {
+  let listings: IListing[] = [];
 
   for (const dog of dogList) {
-    await PetListing.create({
+    await Listing.create({
       lister: admin._id,
       price: Math.floor(Math.random() * 10000) + 1,
       description: 'Lorem ipsum, this is a description.',
@@ -282,13 +282,13 @@ const initPetListings = async (admin: IUser, dogList: IDog[]) => {
       media: generateMedia(mediaTypes),
       animal: dog._id,
       species: speciesTypes[0] // Dog
-    }).then((petListing: IPetListing) => {
-      petListings.push(petListing);
+    }).then((listing: IListing) => {
+      listings.push(listing);
     });
   }
 
   console.log('Pet Listings initialised');
-  return petListings;
+  return listings;
 };
 
 export const initialiseData = async (): Promise<void> => {
@@ -310,7 +310,7 @@ export const initialiseData = async (): Promise<void> => {
     admin = await initAdmin();
 
     dogs = await initDogs(dogBreeds, dogVaccines, countries);
-    await initPetListings(admin, dogs);
+    await initListings(admin, dogs);
 
     console.log('Data initialisation complete');
   } catch (error: any) {

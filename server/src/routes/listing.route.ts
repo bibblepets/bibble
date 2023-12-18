@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as PetListingController from "../controllers/petListing.controller";
+import * as ListingController from "../controllers/listing.controller";
 
 const router = Router();
 
@@ -8,42 +8,42 @@ const router = Router();
  * @desc Create a new pet listing
  * @access Private
  */
-router.post("/", PetListingController.createPetListing);
+router.post("/", ListingController.createListing);
 
 /**
  * @route GET /api/pet-listings
  * @desc Get all pet listings
  * @access Public
  */
-router.get("/", PetListingController.getAllPetListings);
+router.get("/", ListingController.getAllListings);
 
 /**
  * @route GET /api/pet-listings/species/:species
  * @desc Get all pet listings for a specific species
  * @access Public
  */
-router.get("/species/:species", PetListingController.getAllPetListingsBySpecies);
+router.get("/species/:species", ListingController.getAllListingsBySpecies);
 
 /**
  * @route GET /api/pet-listings/:id
  * @desc Get a pet listing by ID
  * @access Public
  */
-router.get("/:id", PetListingController.getPetListingById);
+router.get("/:id", ListingController.getListingById);
 
 /**
  * @route PUT /api/pet-listings/:id
  * @desc Update a pet listing by ID
  * @access Private
  */
-router.put("/:id", PetListingController.updatePetListingById);
+router.put("/:id", ListingController.updateListingById);
 
 /**
  * @route DELETE /api/pet-listings/:id
  * @desc Delete a pet listing by ID
  * @access Private
  */
-router.delete("/:id", PetListingController.deletePetListingById);
+router.delete("/:id", ListingController.deleteListingById);
 
 
 module.exports = router;

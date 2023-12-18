@@ -1,14 +1,18 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model, Document } from 'mongoose';
 import { IUser } from '../user/user.model';
-import { IAnimal, ICreateAnimalRequest, IUpdateAnimalRequest } from './animal/animal.model';
+import {
+  IAnimal,
+  ICreateAnimalRequest,
+  IUpdateAnimalRequest
+} from './animal/animal.model';
 
 const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
 const mediaTypes = ['Image']; // Add more types here: 'video', etc.
 const speciesTypes = ['Dog']; // Add other animals here: 'Cat', 'Rabbit', 'Guinea Pig', 'Hamster', 'Gerbil', 'Mouse', 'Chinchilla'
 const saleStatuses = ['Available', 'Sold', 'Expired'];
 
-export interface IPetListing {
+export interface IListing {
   _id: Schema.Types.ObjectId;
   lister: IUser['_id'];
   price: number;
@@ -23,16 +27,15 @@ export interface IPetListing {
   expiryDate: Date;
 }
 
-interface IPetListingMethods {
+interface IListingMethods {
   updateSaleStatus(): void;
 }
 
-export interface PetListingModel
-  extends Model<IPetListing, {}, IPetListingMethods> {}
+export interface ListingModel extends Model<IListing, {}, IListingMethods> {}
 
-export interface ICreatePetListingRequest extends Request {
+export interface ICreateListingRequest extends Request {
   body: Omit<
-    IPetListing,
+    IListing,
     '_id' | 'createdAt' | 'updatedAt' | 'expiryDate' | 'lister' | 'animal'
   > & {
     lister: IUser['_id'];
@@ -40,37 +43,33 @@ export interface ICreatePetListingRequest extends Request {
   };
 }
 
-export interface IUpdatePetListingRequest extends Request {
-  body: Partial<Omit<ICreatePetListingRequest['body'], 'animal'>> & {
+export interface IUpdateListingRequest extends Request {
+  body: Partial<Omit<ICreateListingRequest['body'], 'animal'>> & {
     animal: IUpdateAnimalRequest['body'];
   };
 }
 
-export interface IGetAllPetListingsRequest extends Request {}
+export interface IGetAllListingsRequest extends Request {}
 
-export interface IGetAllPetListingsBySpeciesRequest extends Request {
+export interface IGetAllListingsBySpeciesRequest extends Request {
   params: {
     species: string;
   };
 }
 
-export interface IGetPetListingByIdRequest extends Request {
+export interface IGetListingByIdRequest extends Request {
   params: {
     id: string;
   };
 }
 
-export interface IDeletePetListingByIdRequest extends Request {
+export interface IDeleteListingByIdRequest extends Request {
   params: {
     id: string;
   };
 }
 
-const PetListingSchema = new Schema<
-  IPetListing,
-  PetListingModel,
-  IPetListingMethods
->(
+const ListingSchema = new Schema<IListing, ListingModel, IListingMethods>(
   {
     lister: {
       type: Schema.Types.ObjectId,
@@ -148,10 +147,10 @@ const PetListingSchema = new Schema<
       }
     }
   },
-  { collection: 'petListings', timestamps: true }
+  { collection: 'listings', timestamps: true }
 );
 
-PetListingSchema.method('updateSaleStatus', function () {
+ListingSchema.method('updateSaleStatus', function () {
   if (this.saleStatus === 'Sold' || this.saleStatus === 'Expired') {
     return;
   }
@@ -163,25 +162,25 @@ PetListingSchema.method('updateSaleStatus', function () {
   }
 });
 
-PetListingSchema.pre('save', function (next) {
+ListingSchema.pre('save', function (next) {
   this.updateSaleStatus(); // Update sale status based on expiration date
-  
+
   next();
 });
 
-PetListingSchema.post(
+ListingSchema.post(
   'findOne',
   function (
     doc:
-      | (Document<unknown, {}, IPetListing> &
+      | (Document<unknown, {}, IListing> &
           Omit<
-            IPetListing &
+            IListing &
               Required<{
                 _id: Schema.Types.ObjectId;
               }>,
             'updateSaleStatus'
           > &
-          IPetListingMethods)
+          IListingMethods)
       | null
   ) {
     if (!doc) {
@@ -193,13 +192,13 @@ PetListingSchema.post(
   }
 );
 
-const PetListing = mongoose.model<IPetListing, PetListingModel>(
-  'PetListing',
-  PetListingSchema
+const Listing = mongoose.model<IListing, ListingModel>(
+  'Listing',
+  ListingSchema
 );
 
 module.exports = {
-  PetListing,
+  Listing: Listing,
   saleTypes,
   mediaTypes,
   speciesTypes,

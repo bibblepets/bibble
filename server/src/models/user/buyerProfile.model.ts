@@ -1,12 +1,12 @@
 import { Request } from 'express';
 import mongoose, { Model, Schema } from 'mongoose';
-import { IPetListing } from '../listing/petListing.model';
+import { IListing } from '../listing/listing.model';
 
 export interface IBuyerProfile {
   _id: Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
-  favouriteListings?: IPetListing['_id'][];
+  favouriteListings?: IListing['_id'][];
   profilePic?: string;
   contactNumber?: string;
   bio?: string;

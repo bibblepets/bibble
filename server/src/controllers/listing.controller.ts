@@ -1,30 +1,30 @@
 import { Response } from 'express';
 import { handleError } from '../utils/util';
 import {
-  PetListingModel,
-  ICreatePetListingRequest,
-  IUpdatePetListingRequest,
-  IGetAllPetListingsRequest,
-  IGetAllPetListingsBySpeciesRequest,
-  IGetPetListingByIdRequest,
-  IDeletePetListingByIdRequest
-} from '../models/listing/petListing.model';
+  ListingModel,
+  ICreateListingRequest,
+  IUpdateListingRequest,
+  IGetAllListingsRequest,
+  IGetAllListingsBySpeciesRequest,
+  IGetListingByIdRequest,
+  IDeleteListingByIdRequest
+} from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
 
 require('../models/country.model');
 const {
-  PetListing
+  Listing
 }: {
-  PetListing: PetListingModel;
-} = require('../models/listing/petListing.model');
+  Listing: ListingModel;
+} = require('../models/listing/listing.model');
 const {
   Dog
 }: { Dog: DogModel } = require('../models/listing/animal/dog/dog.model');
 require('../models/listing/animal/breed.model');
 require('../models/listing/animal/vaccine.model');
 
-export const createPetListing = async (
-  req: ICreatePetListingRequest,
+export const createListing = async (
+  req: ICreateListingRequest,
   res: Response
 ) => {
   // Extract fields from request body
@@ -33,14 +33,14 @@ export const createPetListing = async (
     req.body;
 
   let createdAnimal;
-  let createdPetListing;
+  let createdListing;
 
   try {
     // Validate request
     console.log('Validating request body...');
     // TODO: Validate lister in middleware
     await validateCreateAnimal(req);
-    await PetListing.validate(
+    await Listing.validate(
       {
         lister: lister,
         price: price,
@@ -60,7 +60,7 @@ export const createPetListing = async (
 
     // Create pet listing
     console.log('Creating pet listing...');
-    createdPetListing = await PetListing.create({
+    createdListing = await Listing.create({
       lister: lister,
       price: price,
       description: description,
@@ -69,18 +69,18 @@ export const createPetListing = async (
       animal: createdAnimal,
       species: species
     });
-    console.log('Pet listing created.', createdPetListing._id);
+    console.log('Pet listing created.', createdListing._id);
 
     // Populate pet listing
     console.log('Populating pet listing...');
-    const populatedPetListing = await createdPetListing.populate([
+    const populatedListing = await createdListing.populate([
       { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
       { path: 'animal', populate: { path: 'breeds vaccines origin' } }
     ]);
     console.log('Pet listing populated.');
 
     return res.status(201).json({
-      petListing: populatedPetListing,
+      listing: populatedListing,
       message: 'Pet listing created successfully.'
     });
   } catch (error: any) {
@@ -90,9 +90,9 @@ export const createPetListing = async (
       console.log('Animal deleted.');
     }
 
-    if (createdPetListing) {
+    if (createdListing) {
       console.log('Deleting pet listing...');
-      await createdPetListing.deleteOne();
+      await createdListing.deleteOne();
       console.log('Pet listing deleted.');
     }
 
@@ -100,7 +100,7 @@ export const createPetListing = async (
   }
 };
 
-const validateCreateAnimal = async (req: ICreatePetListingRequest) => {
+const validateCreateAnimal = async (req: ICreateListingRequest) => {
   const { species } = req.body;
 
   if (species == 'Dog') {
@@ -108,7 +108,7 @@ const validateCreateAnimal = async (req: ICreatePetListingRequest) => {
   } // else if...
 };
 
-const createAnimal = async (req: ICreatePetListingRequest) => {
+const createAnimal = async (req: ICreateListingRequest) => {
   const { species } = req.body;
   let createdAnimal;
 
@@ -123,48 +123,48 @@ const createAnimal = async (req: ICreatePetListingRequest) => {
   return createdAnimal;
 };
 
-export const getAllPetListings = async (
-  req: IGetAllPetListingsRequest,
+export const getAllListings = async (
+  req: IGetAllListingsRequest,
   res: Response
 ) => {
   try {
-    const allPetListings = await PetListing.find().populate([
+    const allListings = await Listing.find().populate([
       { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
       { path: 'animal', populate: { path: 'breeds vaccines origin' } }
     ]);
-    return res.status(200).json(allPetListings);
+    return res.status(200).json(allListings);
   } catch (error: any) {
     return handleError(res, error);
   }
 };
 
-export const getAllPetListingsBySpecies = async (
-  req: IGetAllPetListingsBySpeciesRequest,
+export const getAllListingsBySpecies = async (
+  req: IGetAllListingsBySpeciesRequest,
   res: Response
 ) => {
   const { species } = req.params;
 
   try {
-    const speciesPetListings = await PetListing.find({ species }).populate([
+    const speciesListings = await Listing.find({ species }).populate([
       { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
       { path: 'animal', populate: { path: 'breeds vaccines origin' } }
     ]);
-    return res.status(200).json(speciesPetListings);
+    return res.status(200).json(speciesListings);
   } catch (error: any) {
     return handleError(res, error);
   }
 };
 
-export const getPetListingById = async (
-  req: IGetPetListingByIdRequest,
+export const getListingById = async (
+  req: IGetListingByIdRequest,
   res: Response
 ) => {
   const { id } = req.params;
 
   try {
-    const petListing = await PetListing.findById(id).then(
-      async (petListing) =>
-        await petListing?.populate([
+    const listing = await Listing.findById(id).then(
+      async (listing) =>
+        await listing?.populate([
           {
             path: 'lister',
             populate: { path: 'buyerProfile businessProfile' }
@@ -172,14 +172,14 @@ export const getPetListingById = async (
           { path: 'animal', populate: { path: 'breeds vaccines origin' } }
         ])
     );
-    return res.status(200).json(petListing);
+    return res.status(200).json(listing);
   } catch (error: any) {
     return handleError(res, error);
   }
 };
 
-export const updatePetListingById = async (
-  req: IUpdatePetListingRequest,
+export const updateListingById = async (
+  req: IUpdateListingRequest,
   res: Response
 ) => {
   const { id } = req.params;
@@ -187,15 +187,15 @@ export const updatePetListingById = async (
 
   try {
     // Get pet listing
-    const petListing = await PetListing.findById(id);
+    const listing = await Listing.findById(id);
 
-    if (!petListing) {
+    if (!listing) {
       return res.status(404).json({ message: 'Pet listing not found.' });
     }
 
-    const listerId = petListing.lister;
-    const species = petListing.species;
-    const animalId = petListing.animal;
+    const listerId = listing.lister;
+    const species = listing.species;
+    const animalId = listing.animal;
 
     // Validate request
     console.log('Validating request body...');
@@ -204,14 +204,14 @@ export const updatePetListingById = async (
 
     if (price || description || media) {
       console.log('Validating Pet Listing request body...');
-      const petListingPathsToValidate: string[] = [
+      const listingPathsToValidate: string[] = [
         'price',
         'description',
         'media'
       ].filter((key: string) => req.body[key as keyof typeof req.body]);
-      await PetListing.validate(
+      await Listing.validate(
         { price, description, media },
-        petListingPathsToValidate
+        listingPathsToValidate
       );
     }
     console.log('Request body validated.');
@@ -223,23 +223,23 @@ export const updatePetListingById = async (
 
     // Update pet listing
     console.log('Updating pet listing...');
-    await petListing.updateOne({
+    await listing.updateOne({
       price: price,
       description: description,
       media: media
     });
-    console.log('Pet listing updated.', petListing._id);
+    console.log('Pet listing updated.', listing._id);
 
     // Populate pet listing
     console.log('Populating pet listing...');
-    const updatedPetListing = await PetListing.findById(id);
-    const populatedPetListing = await updatedPetListing?.populate([
+    const updatedListing = await Listing.findById(id);
+    const populatedListing = await updatedListing?.populate([
       { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
       { path: 'animal', populate: { path: 'breeds vaccines origin' } }
     ]);
 
     return res.status(200).json({
-      petListing: populatedPetListing,
+      listing: populatedListing,
       message: 'Pet listing updated successfully.'
     });
   } catch (error: any) {
@@ -248,7 +248,7 @@ export const updatePetListingById = async (
 };
 
 const validateUpdateAnimal = async (
-  req: IUpdatePetListingRequest,
+  req: IUpdateListingRequest,
   species: string
 ) => {
   if (species == 'Dog') {
@@ -258,7 +258,7 @@ const validateUpdateAnimal = async (
 };
 
 const updateAnimal = async (
-  req: IUpdatePetListingRequest,
+  req: IUpdateListingRequest,
   species: string,
   animalId: string
 ) => {
@@ -276,21 +276,21 @@ const updateAnimal = async (
   return updatedAnimal;
 };
 
-export const deletePetListingById = async (
-  req: IDeletePetListingByIdRequest,
+export const deleteListingById = async (
+  req: IDeleteListingByIdRequest,
   res: Response
 ) => {
   const { id } = req.params;
 
   try {
-    const petListing = await PetListing.findById(id);
+    const listing = await Listing.findById(id);
 
-    if (!petListing) {
+    if (!listing) {
       return res.status(404).json({ message: 'Pet listing not found.' });
     }
 
-    const species = petListing.species;
-    const animalId = petListing.animal;
+    const species = listing.species;
+    const animalId = listing.animal;
 
     // Delete animal in pet listing
     console.log('Deleting animal in pet listing...');
@@ -303,8 +303,8 @@ export const deletePetListingById = async (
 
     // Delete pet listing
     console.log('Deleting pet listing...');
-    await petListing.deleteOne();
-    console.log('Pet listing deleted.', petListing._id);
+    await listing.deleteOne();
+    console.log('Pet listing deleted.', listing._id);
 
     return res
       .status(200)
@@ -315,7 +315,7 @@ export const deletePetListingById = async (
 };
 
 const deleteAnimalById = async (
-  req: IDeletePetListingByIdRequest,
+  req: IDeleteListingByIdRequest,
   species: string,
   animalId: string
 ) => {
