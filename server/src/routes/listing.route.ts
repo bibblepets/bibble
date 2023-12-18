@@ -1,49 +1,48 @@
-import { Router } from "express";
-import * as ListingController from "../controllers/listing.controller";
+import { Router } from 'express';
+import * as ListingController from '../controllers/listing.controller';
 
 const router = Router();
 
 /**
- * @route POST /api/pet-listings
- * @desc Create a new pet listing
+ * @route POST /api/listings
+ * @desc Create a new listing
  * @access Private
  */
-router.post("/", ListingController.createListing);
+router.post('/', ListingController.createListing);
 
 /**
- * @route GET /api/pet-listings
- * @desc Get all pet listings
+ * @route GET /api/listings
+ * @desc Get all listings
  * @access Public
  */
-router.get("/", ListingController.getAllListings);
+router.get('/', ListingController.getAllListings);
 
 /**
- * @route GET /api/pet-listings/species/:species
- * @desc Get all pet listings for a specific species
+ * @route GET /api/listings/species/:species
+ * @desc Get all listings for a specific species
  * @access Public
  */
-router.get("/species/:species", ListingController.getAllListingsBySpecies);
+router.get('/species/:species', ListingController.getAllListingsBySpecies);
 
 /**
- * @route GET /api/pet-listings/:id
- * @desc Get a pet listing by ID
+ * @route GET /api/listings/:id
+ * @desc Get a listing by ID
  * @access Public
  */
-router.get("/:id", ListingController.getListingById);
+router.get('/:id', ListingController.getListingById);
 
 /**
- * @route PUT /api/pet-listings/:id
- * @desc Update a pet listing by ID
+ * @route PUT /api/listings/:id
+ * @desc Update a listing by ID
  * @access Private
  */
-router.put("/:id", ListingController.updateListingById);
+router.put('/:id', ListingController.updateListingById);
 
 /**
- * @route DELETE /api/pet-listings/:id
- * @desc Delete a pet listing by ID
+ * @route DELETE /api/listings/:id
+ * @desc Delete a listing by ID
  * @access Private
  */
-router.delete("/:id", ListingController.deleteListingById);
-
+router.delete('/:id', ListingController.deleteListingById);
 
 module.exports = router;

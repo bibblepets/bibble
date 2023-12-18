@@ -19,7 +19,7 @@ export const fetchListings = createAsyncThunk(
   '/kennelSlice/fetchListings',
   async () => {
     return await axios
-      .get('/api/pet-listings')
+      .get('/api/listings')
       .then((response) => {
         return response.data;
       })

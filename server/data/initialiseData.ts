@@ -10,15 +10,9 @@ import {
   BusinessProfileModel,
   IBusinessProfile
 } from '../src/models/user/businessProfile.model';
-import {
-  ListingModel,
-  IListing
-} from '../src/models/listing/listing.model';
+import { ListingModel, IListing } from '../src/models/listing/listing.model';
 import { DogModel, IDog } from '../src/models/listing/animal/dog/dog.model';
-import {
-  BreedModel,
-  IBreed
-} from '../src/models/listing/animal/breed.model';
+import { BreedModel, IBreed } from '../src/models/listing/animal/breed.model';
 import {
   VaccineModel,
   IVaccine
@@ -32,6 +26,13 @@ import {
 const User: UserModel = require('../src/models/user/user.model');
 const BuyerProfile: BuyerProfileModel = require('../src/models/user/buyerProfile.model');
 const BusinessProfile: BusinessProfileModel = require('../src/models/user/businessProfile.model');
+const {
+  sizes,
+  genders
+}: {
+  sizes: string[];
+  genders: string[];
+} = require('../src/models/listing/animal/animal.model');
 const {
   Listing,
   saleTypes,
@@ -47,14 +48,10 @@ const {
 } = require('../src/models/listing/listing.model');
 const {
   Dog,
-  sizes,
-  hairCoats,
-  genders
+  hairCoats
 }: {
   Dog: DogModel;
-  sizes: string[];
   hairCoats: string[];
-  genders: string[];
 } = require('../src/models/listing/animal/dog/dog.model');
 const Breed: BreedModel = require('../src/models/listing/animal/breed.model');
 const Vaccine: VaccineModel = require('../src/models/listing/animal/vaccine.model');
@@ -181,12 +178,10 @@ const initDogBreeds = async (): Promise<IBreed[]> => {
 };
 
 const initDogVaccines = async (): Promise<IVaccine[]> => {
-  return await Vaccine.create(dogVaccines).then(
-    (dogVaccines: IVaccine[]) => {
-      console.log('Dog Vaccines initialised');
-      return dogVaccines;
-    }
-  );
+  return await Vaccine.create(dogVaccines).then((dogVaccines: IVaccine[]) => {
+    console.log('Dog Vaccines initialised');
+    return dogVaccines;
+  });
 };
 
 const initCountries = async (): Promise<ICountry[]> => {
