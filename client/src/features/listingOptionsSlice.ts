@@ -6,7 +6,9 @@ import { RootState } from '../store';
 interface ListingOptionsSlice {
   breeds: Breed[];
   countries: Country[];
+  hairCoats: string[];
   vaccines: Vaccine[];
+  legalTags: string[];
   status: StatusType;
   error?: string;
 }
@@ -14,7 +16,9 @@ interface ListingOptionsSlice {
 const initialState: ListingOptionsSlice = {
   breeds: [],
   countries: [],
+  hairCoats: [],
   vaccines: [],
+  legalTags: [],
   status: 'DEFAULT',
   error: undefined
 };
@@ -47,11 +51,39 @@ export const fetchAllCountries = createAsyncThunk(
   }
 );
 
+export const fetchAllHairCoats = createAsyncThunk(
+  '/listingOptionsSlice/fetchAllHairCoats',
+  async () => {
+    return await axios
+      .get(`/api/developer/hair-coats/${'Dog'}`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
 export const fetchAllVaccines = createAsyncThunk(
   '/listingOptionsSlice/fetchAllVaccines',
   async () => {
     return await axios
       .get(`/api/developer/vaccines/${'Dog'}`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
+export const fetchAllLegalTags = createAsyncThunk(
+  '/listingOptionsSlice/fetchAllLegalTags',
+  async () => {
+    return await axios
+      .get(`/api/developer/legal-tags/${'Dog'}`)
       .then((response) => {
         return response.data;
       })
@@ -88,6 +120,17 @@ export const listingOptionsSlice = createSlice({
       state.status = 'ERROR';
       state.error = action.error.message;
     });
+    builder.addCase(fetchAllHairCoats.pending, (state) => {
+      state.status = 'LOADING';
+    });
+    builder.addCase(fetchAllHairCoats.fulfilled, (state, action) => {
+      state.status = 'SUCCESS';
+      state.hairCoats = action.payload;
+    });
+    builder.addCase(fetchAllHairCoats.rejected, (state, action) => {
+      state.status = 'ERROR';
+      state.error = action.error.message;
+    });
     builder.addCase(fetchAllVaccines.pending, (state) => {
       state.status = 'LOADING';
     });
@@ -99,21 +142,30 @@ export const listingOptionsSlice = createSlice({
       state.status = 'ERROR';
       state.error = action.error.message;
     });
+    builder.addCase(fetchAllLegalTags.pending, (state) => {
+      state.status = 'LOADING';
+    });
+    builder.addCase(fetchAllLegalTags.fulfilled, (state, action) => {
+      state.status = 'SUCCESS';
+      state.legalTags = action.payload;
+    });
+    builder.addCase(fetchAllLegalTags.rejected, (state, action) => {
+      state.status = 'ERROR';
+      state.error = action.error.message;
+    });
   }
 });
 
-export const selectListingOptionsBreeds =
-  (species?: string) => (state: RootState) =>
-    state.listingOptions.breeds
-      .filter((breed) => breed.species === species)
-      .sort((a, b) => a.name.localeCompare(b.name));
+export const selectListingOptionsBreeds = (state: RootState) =>
+  state.listingOptions.breeds;
 export const selectListingOptionsCountries = (state: RootState) =>
   state.listingOptions.countries;
-export const selectListingOptionsVaccines =
-  (species?: string) => (state: RootState) =>
-    state.listingOptions.vaccines.filter(
-      (vaccine) => vaccine.species === species
-    );
+export const selectListingOptionsHairCoats = (state: RootState) =>
+  state.listingOptions.hairCoats;
+export const selectListingOptionsVaccines = (state: RootState) =>
+  state.listingOptions.vaccines;
+export const selectListingOptionsLegalTags = (state: RootState) =>
+  state.listingOptions.legalTags;
 export const selectListingOptionsStatus = (state: RootState) =>
   state.listingOptions.status;
 export const selectListingOptionsError = (state: RootState) =>

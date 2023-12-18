@@ -5,11 +5,11 @@ import OriginDropdown from '../../components/listing/biography/OriginDropdown';
 import BreedDropdown from '../../components/listing/biology/BreedDropdown';
 import SpeciesOptions from '../../components/listing/biology/SpeciesOptions';
 import AvsLicenseInput from '../../components/listing/legal/AvsLicenseInput';
-import LicenseList from '../../components/listing/legal/LicenseList';
+import LegalTagList from '../../components/listing/legal/LegalTagList';
 import ListingSection from '../../components/listing/listing/ListingSection';
 import ListingStage from '../../components/listing/listing/ListingStage';
 import MediaUpload from '../../components/listing/media/MediaUpload';
-import HairCoatInput from '../../components/listing/medical/HairCoatInput';
+import HairCoatSelect from '../../components/listing/medical/HairCoatSelect';
 import SizeOptions from '../../components/listing/medical/SizeOptions';
 import VaccinationList from '../../components/listing/medical/VaccinationList';
 import WeightInput from '../../components/listing/medical/WeightInput';
@@ -56,7 +56,7 @@ const Summary = () => {
         </ListingSection>
 
         <ListingSection title="Hair Coat">
-          <HairCoatInput readOnly />
+          <HairCoatSelect readOnly />
         </ListingSection>
 
         <ListingSection title="Vaccinations">
@@ -68,7 +68,7 @@ const Summary = () => {
         </ListingSection>
 
         <ListingSection title="Licenses">
-          <LicenseList readOnly />
+          <LegalTagList readOnly />
         </ListingSection>
 
         <ListingSection title="Media">

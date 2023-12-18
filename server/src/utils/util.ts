@@ -1,5 +1,5 @@
-import { Response } from 'express';
-import { Error } from 'mongoose';
+import { Request, Response } from 'express';
+import { Error, MongooseError } from 'mongoose';
 
 export const handleError = async (res: Response, error: any) => {
   const errors = [];
@@ -12,7 +12,10 @@ export const handleError = async (res: Response, error: any) => {
 
   if (error instanceof Error.CastError) {
     errors.push(error.message);
-    return res.status(400).json({ message: error.message });
+  }
+
+  if (error instanceof MongooseError) {
+    errors.push(error.message);
   }
 
   if (error.code === 11000) {
@@ -32,12 +35,22 @@ export const handleError = async (res: Response, error: any) => {
   return res.status(500).json({ message: error.message });
 };
 
-export const mapSpeciesToFunction = (
-  species: string,
-  funcArr: Function[]
-): Function | null => {
-  if (species === 'Dog') {
-    return funcArr[0];
+export const assertFields = (fields: string[], req: Request) => {
+  const missingFields: string[] = fields.filter((field) => {
+    const value = req.body[field];
+    return (
+      !value ||
+      value === null ||
+      value === undefined ||
+      (Array.isArray(value) && value.length === 0)
+    );
+  });
+
+  if (missingFields.length) {
+    throw new MongooseError(
+      `${
+        missingFields[0].charAt(0).toUpperCase() + missingFields[0].slice(1)
+      } required`
+    );
   }
-  return null;
 };

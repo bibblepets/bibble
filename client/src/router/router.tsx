@@ -11,7 +11,7 @@ import Media from '../modules/listing/Media';
 import Medical from '../modules/listing/Medical';
 import Price from '../modules/listing/Price';
 import Summary from '../modules/listing/Summary';
-import { kennelLoader, listingLoader } from './loaders';
+import { kennelLoader, listingIdLoader, listingLoader } from './loaders';
 
 export const router = createBrowserRouter([
   {
@@ -43,32 +43,38 @@ export const router = createBrowserRouter([
             element: <Listing />
           },
           {
-            path: 'biology',
-            element: <Biology />
-          },
-          {
-            path: 'biography',
-            element: <Biography />
-          },
-          {
-            path: 'medical',
-            element: <Medical />
-          },
-          {
-            path: 'legal',
-            element: <Legal />
-          },
-          {
-            path: 'media',
-            element: <Media />
-          },
-          {
-            path: 'price',
-            element: <Price />
-          },
-          {
-            path: 'summary',
-            element: <Summary />
+            path: ':id/*',
+            loader: listingIdLoader,
+            children: [
+              {
+                path: 'biology',
+                element: <Biology />
+              },
+              {
+                path: 'biography',
+                element: <Biography />
+              },
+              {
+                path: 'medical',
+                element: <Medical />
+              },
+              {
+                path: 'legal',
+                element: <Legal />
+              },
+              {
+                path: 'media',
+                element: <Media />
+              },
+              {
+                path: 'price',
+                element: <Price />
+              },
+              {
+                path: 'summary',
+                element: <Summary />
+              }
+            ]
           }
         ]
       }

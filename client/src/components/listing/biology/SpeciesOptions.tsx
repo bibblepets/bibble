@@ -6,7 +6,7 @@ import {
   GiSittingDog
 } from 'react-icons/gi';
 import { useSelector } from 'react-redux';
-import { selectListingSpecies } from '../../../features/listingSlice';
+import { selectListingSpecies } from '../../../features/listingCreatorSlice';
 import { toCamelCase } from '../../../utils/string';
 import SpeciesBox from './SpeciesBox';
 

@@ -1,13 +1,18 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectListingWeight, setWeight } from '../../../features/listingSlice';
+import {
+  selectListingWeight,
+  setWeight
+} from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
+import { useDropdown } from '../hooks';
 
 const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
   const weight = useSelector(selectListingWeight) || 0;
   const [unit, setUnit] = useState('kg');
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleOpen = useCallback(() => {
     setIsOpen(!isOpen);
@@ -57,6 +62,8 @@ const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
   const weightInKg = convertToKg(weight, unit);
   const formattedWeight = formatWeight(weightInKg, unit);
 
+  useDropdown(dropdownRef, isOpen, setIsOpen);
+
   if (readOnly) {
     return (
       <a className="text-sm font-medium text-gray-700">{formattedWeight}</a>
@@ -81,7 +88,7 @@ const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative" ref={dropdownRef}>
           <button
             onClick={toggleOpen}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"

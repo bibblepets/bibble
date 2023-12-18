@@ -58,7 +58,7 @@ export const getHairCoatsBySpecies = async (
   const { species } = req.params;
 
   if (species === 'Dog') {
-    return res.status(200).json({ dogHairCoats: dogHairCoats });
+    return res.status(200).json(dogHairCoats);
   } // else if...
 
   return res.status(400).json({ message: 'Invalid species.' });
@@ -71,7 +71,7 @@ export const getLegalTagsBySpecies = async (
   const { species } = req.params;
 
   if (species === 'Dog') {
-    return res.status(200).json({ legalTags: dogLegalTags });
+    return res.status(200).json(dogLegalTags);
   } // else if...
 
   return res.status(400).json({ message: 'Invalid species.' });

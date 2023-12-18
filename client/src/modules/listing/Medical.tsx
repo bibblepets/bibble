@@ -1,6 +1,6 @@
 import ListingSection from '../../components/listing/listing/ListingSection';
 import ListingStage from '../../components/listing/listing/ListingStage';
-import HairCoatInput from '../../components/listing/medical/HairCoatInput';
+import HairCoatSelect from '../../components/listing/medical/HairCoatSelect';
 import SizeOptions from '../../components/listing/medical/SizeOptions';
 import VaccinationList from '../../components/listing/medical/VaccinationList';
 import WeightInput from '../../components/listing/medical/WeightInput';
@@ -22,7 +22,7 @@ const Medical = () => {
 
         {/* HAIR COAT */}
         <ListingSection title="Hair Coat">
-          <HairCoatInput />
+          <HairCoatSelect />
         </ListingSection>
 
         {/* VACCINATIONS */}

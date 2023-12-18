@@ -12,7 +12,11 @@ const ListingRow: React.FC<ListingRowProps> = ({ listing }) => {
         {listing.media ? (
           <img
             className="rounded-lg w-[52px] h-[52px] object-cover"
-            src={listing.media.find((e) => e.type === 'Image')?.url}
+            src={
+              // listing.media.find((e) => e.file.type.startsWith('image'))?.url
+              // TODO TITUS: Revert
+              listing.media[0]?.url
+            }
           />
         ) : (
           <div className="p-4 bg-gray-300 rounded-lg">

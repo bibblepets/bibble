@@ -1,49 +1,35 @@
 import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { store } from '../../../store';
-import { createListing, selectListing } from '../../../features/listingSlice';
+import { selectListing } from '../../../features/listingCreatorSlice';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../features/authSlice';
+import { ListingStage } from '../../../types';
+import { useProgress } from './hooks';
 
 const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const pathname = location.pathname.replace(/^\/listing\/*/, '');
-  const currentUser = useSelector(selectCurrentUser);
-  const listing = useSelector(selectListing);
+  const [, , listingId, stage] = location.pathname.split('/');
 
-  const stages = [
+  const stages: ListingStage[] = [
     '',
-    'biology',
-    'biography',
-    'medical',
-    'legal',
-    'media',
-    'price',
-    'summary'
+    'Biology',
+    'Biography',
+    'Medical',
+    'Legal',
+    'Media',
+    'Price',
+    'Summary'
   ];
 
-  const index = stages.indexOf(pathname);
+  const { onBack, onNext } = useProgress(
+    navigate,
+    stage as ListingStage,
+    listingId
+  );
 
-  const onBack = useCallback(() => {
-    if (index > 0) {
-      navigate(
-        '/listing' + (stages[index - 1] === '' ? '' : '/' + stages[index - 1])
-      );
-    }
-  }, [stages, pathname, navigate]);
-
-  const onNext = useCallback(() => {
-    if (currentUser && index < stages.length - 1) {
-      navigate(
-        '/listing' + (stages[index + 1] === '' ? '' : '/' + stages[index + 1])
-      );
-    } else if (currentUser) {
-      store.dispatch(createListing({ currentUser, listing }));
-    }
-  }, [stages, pathname, navigate, currentUser, listing]);
-
-  if (pathname === '') {
+  if (stage === '') {
     return <a className="fixed w-full bottom-0 z-40 bg-white h-[84px]" />;
   }
 
@@ -58,7 +44,7 @@ const Footer = () => {
           onClick={onNext}
           className="px-8 py-3 my-4 mx-8 rounded-lg bg-gray-800 transition hover:bg-gray-900 text-white font-semibold"
         >
-          {pathname !== stages[stages.length - 1] ? 'Next' : 'Finish'}
+          {stage !== stages[stages.length - 1] ? 'Next' : 'Finish'}
         </button>
       </div>
     </footer>

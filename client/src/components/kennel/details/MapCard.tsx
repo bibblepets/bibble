@@ -34,7 +34,7 @@ const MapCard: React.FC<MapCardProps> = ({ location }) => {
             };
           })
           .catch((error) => {
-            console.log(error);
+            // Handle
           });
       });
       return data;

@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice
+} from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../store';
 import { Listing, StatusType } from '../types';
@@ -51,10 +55,12 @@ const kennelSlice = createSlice({
 export const selectKennelListings = (state: RootState) => state.kennel.listings;
 export const selectKennelStatus = (state: RootState) => state.kennel.status;
 export const selectKennelError = (state: RootState) => state.kennel.error;
-export const selectMyListings = (state: RootState) =>
-  state.kennel.listings.filter(
-    (listing) => listing.lister._id === state.authentication.currentUser?._id
-  );
+export const selectMyListings = createSelector(
+  (state: RootState) => state.kennel.listings,
+  (state: RootState) => state.authentication.currentUser?._id,
+  (listings, userId) =>
+    listings.filter((listing) => listing.lister._id === userId)
+);
 export const selectListingById = (id: string) => (state: RootState) =>
   state.kennel.listings?.find((listing) => listing._id === id);
 

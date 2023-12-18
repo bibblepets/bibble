@@ -14,7 +14,6 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
           <h1 className="text-2xl font-semibold text-gray-800">{`${listing.animal.breeds
             .map((breed) => breed.name)
             .join(', ')} ${listing.species}`}</h1>
-          <p className="font-light text-gray-500">{'what to put here'}</p>
         </div>
         <div className="flex items-center place-self-end gap-4">
           <button className="flex items-center gap-2 text-neutral-700">
@@ -40,7 +39,7 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
       <div className="grid grid-cols-2 gap-2">
         {/* Cover Image */}
         <div className="w-full aspect-square overflow-hidden rounded-2xl relative">
-          <img src={listing.media[0].url} className="object-cover w-full" />
+          <img src={listing.media[0]?.url} className="object-cover w-full" />
         </div>
 
         {/* Grid of 4 Images */}

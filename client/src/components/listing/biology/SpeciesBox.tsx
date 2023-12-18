@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import {
   selectListingSpecies,
   setSpecies
-} from '../../../features/listingSlice';
+} from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 import { Species } from '../../../types';
 import { toCamelCase } from '../../../utils/string';

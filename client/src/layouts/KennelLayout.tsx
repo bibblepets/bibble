@@ -9,7 +9,7 @@ interface KennelLayoutProps {
 const KennelLayout: React.FC<KennelLayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col items-center">
-      <div className="w-full max-w-[2000px]">
+      <div className="w-full">
         <Navbar />
         <main className="min-h-screen mt-4">{children}</main>
         <Footer />

@@ -1,6 +1,9 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { selectListingSize, setSize } from '../../../features/listingSlice';
+import {
+  selectListingSize,
+  setSize
+} from '../../../features/listingCreatorSlice';
 import { Size } from '../../../types';
 import { store } from '../../../store';
 import { toCamelCase } from '../../../utils/string';

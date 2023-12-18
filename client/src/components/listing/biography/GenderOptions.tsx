@@ -1,7 +1,10 @@
 import { useCallback } from 'react';
 import { BiFemaleSign, BiMaleSign } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
-import { selectListingGender, setGender } from '../../../features/listingSlice';
+import {
+  selectListingGender,
+  setGender
+} from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 import { Gender } from '../../../types';
 import { toCamelCase } from '../../../utils/string';

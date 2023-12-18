@@ -95,7 +95,7 @@ export type Species = string;
 export type Breed = {
   _id?: string;
   name: string;
-  species: string;
+  species: Species;
 };
 
 export type Country = {
@@ -107,26 +107,34 @@ export type Gender = 'Male' | 'Female';
 
 export type Size = 'Small' | 'Medium' | 'Large';
 
+export type HairCoat = string;
+
 export type Vaccine = {
   _id?: string;
   name: string;
-  species: string;
+  species: Species;
   isCore: boolean;
 };
 
-export type License =
-  | 'isHypoallergenic'
-  | 'isMicrochipped'
-  | 'isNeutered'
-  | 'isHdbApproved';
+export type LegalTag = string;
 
 export type Media = {
   _id?: string;
-  type: MediaType;
+  file: File;
   url: string;
 };
 
-export type MediaType = 'Image' | 'Video';
+export type MediaType = 'image/png' | 'image/jpeg' | 'image/jpg';
+
+export type ListingStage =
+  | ''
+  | 'Biology'
+  | 'Biography'
+  | 'Medical'
+  | 'Legal'
+  | 'Media'
+  | 'Price'
+  | 'Summary';
 
 export type GeocodeResponse = {
   results: [

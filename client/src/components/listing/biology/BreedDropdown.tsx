@@ -1,21 +1,27 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   addBreed,
   removeBreed,
   selectListingBreeds,
   selectListingSpecies
-} from '../../../features/listingSlice';
+} from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 import { Breed } from '../../../types';
 import { selectListingOptionsBreeds } from '../../../features/listingOptionsSlice';
+import { useDropdown } from '../hooks';
 
 const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedSpecies = useSelector(selectListingSpecies);
   const selectedBreeds = useSelector(selectListingBreeds);
-  const breeds = useSelector(selectListingOptionsBreeds(selectedSpecies));
+  const allBreeds = useSelector(selectListingOptionsBreeds);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const breeds = allBreeds
+    .filter((breed) => breed.species === selectedSpecies)
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -32,6 +38,8 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
     [store, selectedBreeds]
   );
 
+  useDropdown(dropdownRef, isOpen, setIsOpen);
+
   if (readOnly) {
     return (
       <a className="text-sm font-medium text-gray-700">{`${
@@ -42,7 +50,7 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
         className="flex items-center justify-between w-full px-4 p-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none"

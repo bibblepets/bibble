@@ -5,6 +5,7 @@ import ItemInfo from '../../components/kennel/details/ItemInfo';
 import ListerInfo from '../../components/kennel/details/ListerInfo';
 import { selectListingById } from '../../features/kennelSlice';
 import KennelLayout from '../../layouts/KennelLayout';
+import AppointmentBox from '../../components/kennel/details/AppointmentBox';
 
 const Details = () => {
   const location = useLocation();
@@ -18,7 +19,7 @@ const Details = () => {
   return (
     <>
       <KennelLayout>
-        <div className="max-w-screen-lg mx-auto m-8 p-8">
+        <div className="max-w-screen-xl mx-auto m-8 p-8">
           <div className="flex flex-col gap-6">
             <DetailsHeader listing={listing} />
 
@@ -27,10 +28,8 @@ const Details = () => {
                 {/* CHANGE INFO COMPONENT ACCORDING TO LISTING */}
                 <ItemInfo listing={listing} />
               </div>
-              <div className="lg:col-span-2">
-                <div className="flex w-full h-full items-center justify-center border border-lime-500">
-                  APPOINTMENT BOX
-                </div>
+              <div className="lg:col-span-2 mx-8">
+                <AppointmentBox listing={listing} />
               </div>
             </div>
 

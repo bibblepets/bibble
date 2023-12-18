@@ -1,11 +1,13 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   selectListingBirthdate,
   setBirthdate
-} from '../../../features/listingSlice';
+} from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
+import { isDate } from 'util/types';
+import { useDropdown } from '../hooks';
 
 const months = [
   'January',
@@ -27,7 +29,12 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
   const [isMonthOpen, setMonthIsOpen] = useState(false);
   const [isYearOpen, setYearIsOpen] = useState(false);
 
-  const birthdate = useSelector(selectListingBirthdate) || new Date(Date.now());
+  const dateDropdownRef = useRef<HTMLDivElement>(null);
+  const monthDropdownRef = useRef<HTMLDivElement>(null);
+  const yearDropdownRef = useRef<HTMLDivElement>(null);
+
+  const birthdateString = useSelector(selectListingBirthdate);
+  const birthdate = new Date(birthdateString || Date.now());
 
   const toggleDate = useCallback(() => {
     setDateIsOpen(!isDateOpen);
@@ -50,7 +57,7 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
       const newBirthdate = new Date(birthdate);
       newBirthdate.setDate(date);
 
-      store.dispatch(setBirthdate(newBirthdate));
+      store.dispatch(setBirthdate(newBirthdate.toISOString()));
       setDateIsOpen(false);
     },
     [store, birthdate]
@@ -60,7 +67,7 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
     (month: number) => {
       const newBirthdate = new Date(birthdate);
       newBirthdate.setMonth(month);
-      store.dispatch(setBirthdate(newBirthdate));
+      store.dispatch(setBirthdate(newBirthdate.toISOString()));
       setMonthIsOpen(false);
     },
     [store, birthdate]
@@ -70,11 +77,15 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
     (year: number) => {
       const newBirthdate = new Date(birthdate);
       newBirthdate.setFullYear(year);
-      store.dispatch(setBirthdate(newBirthdate));
+      store.dispatch(setBirthdate(newBirthdate.toISOString()));
       setYearIsOpen(false);
     },
     [store, birthdate]
   );
+
+  useDropdown(dateDropdownRef, isDateOpen, setDateIsOpen);
+  useDropdown(monthDropdownRef, isMonthOpen, setMonthIsOpen);
+  useDropdown(yearDropdownRef, isYearOpen, setYearIsOpen);
 
   if (readOnly) {
     return (
@@ -89,7 +100,7 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
       {/* DATE */}
       <div className="flex flex-col gap-2 w-full">
         <a className="text-sm font-light text-gray-500">Date</a>
-        <div className="relative">
+        <div className="relative" ref={dateDropdownRef}>
           <button
             onClick={toggleDate}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
@@ -126,7 +137,7 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
       {/* MONTH */}
       <div className="flex flex-col gap-2 w-full">
         <a className="text-sm font-light text-gray-500">Month</a>
-        <div className="relative">
+        <div className="relative" ref={monthDropdownRef}>
           <button
             onClick={toggleMonth}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
@@ -168,7 +179,7 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
       {/* YEAR */}
       <div className="flex flex-col gap-2 w-full">
         <a className="text-sm font-light text-gray-500">Year</a>
-        <div className="relative">
+        <div className="relative" ref={yearDropdownRef}>
           <button
             onClick={toggleYear}
             className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"

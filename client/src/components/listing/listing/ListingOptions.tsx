@@ -1,17 +1,27 @@
 import { ArrowRightIcon, SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { setSaleType } from '../../../features/listingSlice';
 import { store } from '../../../store';
 import { SaleType } from '../../../types';
+import { initListingCreator } from '../../../features/listingCreatorSlice';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../features/authSlice';
 
 const ListingOptions = () => {
+  const currentUser = useSelector(selectCurrentUser);
   const navigate = useNavigate();
 
   const onStart = useCallback(
-    (saleType: SaleType) => {
-      store.dispatch(setSaleType(saleType));
-      navigate('/listing/biology');
+    async (saleType: SaleType) => {
+      if (!currentUser) {
+        return;
+      }
+
+      const response = await store.dispatch(
+        initListingCreator({ currentUser, saleType })
+      );
+      const { _id } = response.payload;
+      navigate(`/listing/${_id}/Biology`);
     },
     [store, navigate]
   );

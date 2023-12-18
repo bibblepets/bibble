@@ -1,5 +1,5 @@
 import AvsLicenseInput from '../../components/listing/legal/AvsLicenseInput';
-import LicenseList from '../../components/listing/legal/LicenseList';
+import LegalTagList from '../../components/listing/legal/LegalTagList';
 import ListingSection from '../../components/listing/listing/ListingSection';
 import ListingStage from '../../components/listing/listing/ListingStage';
 import ListingLayout from '../../layouts/ListingLayout';
@@ -14,8 +14,8 @@ const Legal = () => {
         </ListingSection>
 
         {/* LICENSES */}
-        <ListingSection title="Licenses">
-          <LicenseList />
+        <ListingSection title="Legal Tags">
+          <LegalTagList />
         </ListingSection>
       </ListingStage>
     </ListingLayout>

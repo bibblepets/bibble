@@ -36,8 +36,9 @@ export interface ListingModel extends Model<IListing, {}, IListingMethods> {}
 export interface ICreateListingRequest extends Request {
   body: Omit<
     IListing,
-    '_id' | 'createdAt' | 'updatedAt' | 'expiryDate' | 'lister' | 'animal'
+    '_id' | 'createdAt' | 'updatedAt' | 'expiryDate' | 'lister' | 'animal' | 'saleStatus'
   > & {
+    listingCreatorId: Schema.Types.ObjectId;
     lister: IUser['_id'];
     animal: ICreateAnimalRequest['body'];
   };

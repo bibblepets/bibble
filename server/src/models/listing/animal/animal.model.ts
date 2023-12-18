@@ -60,3 +60,9 @@ export interface ICreateAnimalRequest extends Request {
 export interface IUpdateAnimalRequest extends Request {
   body: Partial<ICreateAnimalRequest['body']>;
 }
+
+
+export function validateAVSLicenseNumber(avsLicenseNumber: string): boolean {
+  // TODO: Implement AVS license number validation
+  return true;
+}

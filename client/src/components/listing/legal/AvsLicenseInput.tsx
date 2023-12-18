@@ -4,10 +4,10 @@ import { store } from '../../../store';
 import {
   selectListingAvsLicenseNumber,
   setAvsLicenseNumber
-} from '../../../features/listingSlice';
+} from '../../../features/listingCreatorSlice';
 
 const AvsLicenseInput = ({ readOnly }: { readOnly?: boolean }) => {
-  const avsLicenseNumber = useSelector(selectListingAvsLicenseNumber);
+  const avsLicenseNumber = useSelector(selectListingAvsLicenseNumber) || '';
 
   const handleAvsLicenseNumberChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

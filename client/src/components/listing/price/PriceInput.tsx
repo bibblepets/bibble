@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectListingPrice, setPrice } from '../../../features/listingSlice';
+import {
+  selectListingPrice,
+  setPrice
+} from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 
 const PriceInput = ({ readOnly }: { readOnly?: boolean }) => {

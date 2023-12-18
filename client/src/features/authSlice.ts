@@ -103,7 +103,6 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     resetStatus: (state) => {
-      console.log('reseting Auth Slice status...');
       state.status = 'DEFAULT';
     }
   },

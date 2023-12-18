@@ -1,6 +1,13 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model } from 'mongoose';
-import { IAnimal, ICreateAnimalRequest, IUpdateAnimalRequest, genders, sizes } from '../animal.model';
+import {
+  IAnimal,
+  ICreateAnimalRequest,
+  IUpdateAnimalRequest,
+  genders,
+  sizes,
+  validateAVSLicenseNumber
+} from '../animal.model';
 import { IBreed } from '../breed.model';
 import { ICountry } from '../../../country.model';
 import { IVaccine } from '../vaccine.model';
@@ -15,7 +22,12 @@ const hairCoats = [
   'Medium',
   'Short'
 ];
-const legalTags = ["isHypoallergenic", "isMicrochipped", "isNeutered", "isHdbApproved"];
+const legalTags = [
+  'isHypoallergenic',
+  'isMicrochipped',
+  'isNeutered',
+  'isHdbApproved'
+];
 
 export interface IDog extends IAnimal {
   hairCoat: string;
@@ -142,11 +154,6 @@ const dogSchema = new Schema(
 const Dog = mongoose.model<IDog, DogModel>('Dog', dogSchema);
 
 module.exports = { Dog, hairCoats, legalTags };
-
-function validateAVSLicenseNumber(avsLicenseNumber: string): boolean {
-  // TODO: Implement AVS license number validation
-  return true;
-}
 
 function determineIsHDBApproved(dogBreed: IBreed): boolean {
   // TODO: Implement HDB approval logic

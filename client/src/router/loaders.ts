@@ -7,11 +7,15 @@ import {
 import {
   fetchAllBreeds,
   fetchAllCountries,
+  fetchAllHairCoats,
+  fetchAllLegalTags,
   fetchAllVaccines
 } from '../features/listingOptionsSlice';
 import { store } from '../store';
+import { fetchListingCreatorById } from '../features/listingCreatorSlice';
+import { LoaderFunction } from 'react-router-dom';
 
-export const kennelLoader = async () => {
+export const kennelLoader: LoaderFunction<any> = async () => {
   await store.dispatch(checkAuthStatus());
   await store.dispatch(fetchListings());
   store.dispatch(generateRegisterModalTitle());
@@ -19,9 +23,17 @@ export const kennelLoader = async () => {
   return null;
 };
 
-export const listingLoader = async () => {
+export const listingLoader: LoaderFunction<any> = async () => {
   await store.dispatch(fetchAllBreeds());
   await store.dispatch(fetchAllCountries());
+  await store.dispatch(fetchAllHairCoats());
   await store.dispatch(fetchAllVaccines());
+  await store.dispatch(fetchAllLegalTags());
+  return null;
+};
+
+export const listingIdLoader: LoaderFunction<any> = async ({ params }) => {
+  const listingId = params.id || '';
+  await store.dispatch(fetchListingCreatorById(listingId));
   return null;
 };
