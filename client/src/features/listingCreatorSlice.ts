@@ -159,9 +159,17 @@ export const updateMedia = createAsyncThunk(
     const state = getState() as RootState;
     const media = state.listingCreator.media || [];
 
-    // TODO TITUS
+    const formData = new FormData();
+    formData.append('_id', state.listingCreator._id || '');
+    formData.append('stage', '5');
+    media.forEach((media) => {
+      formData.append('media', media.file);
+    });
+
     return await axios
-      .get(`/api/listing-creator/${state.listingCreator._id}`)
+      .post('/api/listing-creator/media', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
       .then((response) => {
         return response.data;
       })

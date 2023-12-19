@@ -8,7 +8,7 @@ import {
 import { IGetAllCountriesOfOriginRequest } from '../models/country.model';
 
 const {
-  hairCoats : dogHairCoats,
+  hairCoats: dogHairCoats,
   legalTags: dogLegalTags
 }: {
   hairCoats: string[];
@@ -75,4 +75,4 @@ export const getLegalTagsBySpecies = async (
   } // else if...
 
   return res.status(400).json({ message: 'Invalid species.' });
-}
+};

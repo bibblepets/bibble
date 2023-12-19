@@ -5,6 +5,7 @@ import { IBreed } from './animal/breed.model';
 import { IVaccine } from './animal/vaccine.model';
 import { ICountry } from '../country.model';
 import { validateAVSLicenseNumber } from './animal/animal.model';
+import { getMediaUrl } from '../../services/s3.service';
 
 const { saleTypes }: { saleTypes: string[] } = require('./listing.model');
 const {
@@ -143,7 +144,7 @@ export interface ISubmitListingRequest extends Request {
   };
 }
 
-const listingCreatorSchema = new Schema(
+const ListingCreatorSchema = new Schema(
   {
     stage: {
       type: Number,
@@ -249,9 +250,19 @@ const listingCreatorSchema = new Schema(
   { collection: 'listingCreators', timestamps: true }
 );
 
+ListingCreatorSchema.post('findOne', async function (doc) {
+  if (!doc) {
+    return;
+  }
+
+  if (Array.isArray(doc.media)) {
+    doc.media = await Promise.all(doc.media.map(getMediaUrl));
+  }
+});
+
 const ListingCreator = mongoose.model<IListingCreator, ListingCreatorModel>(
   'ListingCreator',
-  listingCreatorSchema
+  ListingCreatorSchema
 );
 
 module.exports = {

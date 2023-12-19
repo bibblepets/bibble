@@ -17,37 +17,7 @@ import {
   ListingModel
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
-import {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand
-} from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import crypto from 'crypto';
-
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const awsBucketName = process.env.AWS_BUCKET_NAME;
-const awsBucketRegion = process.env.AWS_BUCKET_REGION;
-const awsAccessKey = process.env.AWS_ACCESS_KEY;
-const awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-
-if (!awsAccessKey || !awsSecretAccessKey || !awsBucketRegion) {
-  throw new Error('AWS credentials or region are not defined');
-}
-
-const s3Client = new S3Client({
-  credentials: {
-    accessKeyId: awsAccessKey,
-    secretAccessKey: awsSecretAccessKey
-  },
-  region: awsBucketRegion
-});
-
-const generateImageName = (bytes = 32) =>
-  crypto.randomBytes(bytes).toString('hex');
+import { putMedia } from '../services/s3.service';
 
 const {
   Listing
@@ -251,30 +221,7 @@ export const updateMedia = async (req: any, res: Response) => {
 
     assertFields(['_id', 'stage'], req);
 
-    const media = [];
-
-    for (const file of files) {
-      const imageName = generateImageName();
-
-      const putCommand = new PutObjectCommand({
-        Bucket: awsBucketName,
-        Key: imageName,
-        Body: file.buffer
-      });
-
-      await s3Client.send(putCommand);
-
-      const getCommand = new GetObjectCommand({
-        Bucket: awsBucketName,
-        Key: imageName
-      });
-
-      const url = await getSignedUrl(s3Client, getCommand, {
-        expiresIn: 60
-      });
-
-      media.push({ url });
-    }
+    const media = await putMedia(files);
 
     const listingCreator = await ListingCreator.findByIdAndUpdate(
       _id,
