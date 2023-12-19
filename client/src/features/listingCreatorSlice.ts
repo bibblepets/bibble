@@ -6,6 +6,7 @@ import {
   Gender,
   HairCoat,
   LegalTag,
+  ListingCreator,
   Media,
   SaleType,
   Size,
@@ -16,34 +17,7 @@ import {
 } from '../types';
 import axios from 'axios';
 
-interface ListingCreatorState {
-  _id?: string;
-  stage: number;
-  saleType?: SaleType;
-  lister?: User;
-  biology?: {
-    species?: Species;
-    breeds?: Breed[];
-  };
-  biography?: {
-    origin?: Country;
-    gender?: Gender;
-    birthdate?: string;
-    description?: string;
-  };
-  medical?: {
-    size?: Size;
-    weight?: number;
-    hairCoat?: HairCoat;
-    vaccines?: Vaccine[];
-  };
-  legal?: {
-    avsLicenseNumber?: string;
-    legalTags?: LegalTag[];
-  };
-  media?: Media[];
-  price?: number;
-
+interface ListingCreatorState extends ListingCreator {
   status: StatusType;
   error?: string;
 }

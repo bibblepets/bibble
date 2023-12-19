@@ -57,6 +57,35 @@ export type BusinessProfile = {
   updatedAt: Date;
 };
 
+export type ListingCreator = {
+  _id?: string;
+  stage: number;
+  saleType?: SaleType;
+  lister?: User;
+  biology?: {
+    species?: Species;
+    breeds?: Breed[];
+  };
+  biography?: {
+    origin?: Country;
+    gender?: Gender;
+    birthdate?: string;
+    description?: string;
+  };
+  medical?: {
+    size?: Size;
+    weight?: number;
+    hairCoat?: HairCoat;
+    vaccines?: Vaccine[];
+  };
+  legal?: {
+    avsLicenseNumber?: string;
+    legalTags?: LegalTag[];
+  };
+  media?: Media[];
+  price?: number;
+};
+
 export type Listing = {
   _id?: string;
   lister: User;

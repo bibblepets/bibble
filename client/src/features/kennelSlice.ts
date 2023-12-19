@@ -55,12 +55,6 @@ const kennelSlice = createSlice({
 export const selectKennelListings = (state: RootState) => state.kennel.listings;
 export const selectKennelStatus = (state: RootState) => state.kennel.status;
 export const selectKennelError = (state: RootState) => state.kennel.error;
-export const selectMyListings = createSelector(
-  (state: RootState) => state.kennel.listings,
-  (state: RootState) => state.authentication.currentUser?._id,
-  (listings, userId) =>
-    listings.filter((listing) => listing.lister._id === userId)
-);
 export const selectListingById = (id: string) => (state: RootState) =>
   state.kennel.listings?.find((listing) => listing._id === id);
 
