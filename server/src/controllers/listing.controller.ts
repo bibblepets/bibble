@@ -7,9 +7,11 @@ import {
   IGetAllListingsRequest,
   IGetAllListingsBySpeciesRequest,
   IGetListingByIdRequest,
-  IDeleteListingByIdRequest
+  IDeleteListingByIdRequest,
+  IGetMyListingsRequest
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
+import { BibbleError } from '../errors/errors.class';
 
 require('../models/country.model');
 const {
@@ -29,7 +31,7 @@ export const createListing = async (
 ) => {
   // Extract fields from request body
   // Pet listing fields
-  const { lister, price, description, saleType, media, animal, species } =
+  const { user, price, description, saleType, media, animal, species } =
     req.body;
 
   let createdAnimal;
@@ -38,11 +40,10 @@ export const createListing = async (
   try {
     // Validate request
     console.log('Validating request body...');
-    // TODO: Validate lister in middleware
     await validateCreateAnimal(req);
     await Listing.validate(
       {
-        lister: lister,
+        lister: user._id,
         price: price,
         description: description,
         saleType: saleType,
@@ -61,7 +62,7 @@ export const createListing = async (
     // Create pet listing
     console.log('Creating pet listing...');
     createdListing = await Listing.create({
-      lister: lister,
+      lister: user._id,
       price: price,
       description: description,
       saleType: saleType,
@@ -117,7 +118,7 @@ const createAnimal = async (req: ICreateListingRequest) => {
   } // else if...
 
   if (!createdAnimal) {
-    throw new Error('Error creating animal.');
+    throw new BibbleError('Error creating animal.');
   }
 
   return createdAnimal;
@@ -177,6 +178,24 @@ export const getListingById = async (
     return handleError(res, error);
   }
 };
+
+export const getMyListings = async (
+  req: IGetMyListingsRequest,
+  res: Response
+) => {
+  const { user } = req.body;
+
+  try {
+    console.log('Getting my listings...');
+    const myListings = await Listing.find({ lister: user._id }).populate([
+      { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
+      { path: 'animal', populate: { path: 'breeds vaccines origin' } }
+    ]);
+    return res.status(200).json(myListings);
+  } catch (error: any) {
+    return handleError(res, error);
+  }
+}
 
 export const updateListingById = async (
   req: IUpdateListingRequest,
@@ -253,7 +272,7 @@ const validateUpdateAnimal = async (
 ) => {
   if (species == 'Dog') {
     console.log('Validating Dog request body...');
-    return await Dog.validate(req.body.animal, Object.keys(req.body.animal));
+    return await Dog.validate(req.body.animal, Object.keys(req.body.animal ? req.body.animal : {}));
   } // else if...
 };
 
@@ -271,7 +290,7 @@ const updateAnimal = async (
   } // else if...
 
   if (!updatedAnimal) {
-    throw new Error('Animal not found.');
+    throw new BibbleError('Animal not found.');
   }
   return updatedAnimal;
 };
@@ -323,5 +342,5 @@ const deleteAnimalById = async (
     return await Dog.findByIdAndDelete(animalId);
   } // else if...
 
-  throw new Error('Error deleting animal.');
+  throw new BibbleError('Error deleting animal.');
 };

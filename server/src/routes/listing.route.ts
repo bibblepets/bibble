@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as ListingController from '../controllers/listing.controller';
+import * as AuthMiddleware from '../middleware/auth.middleware';
 
 const router = Router();
 
@@ -8,14 +9,23 @@ const router = Router();
  * @desc Create a new listing
  * @access Private
  */
-router.post('/', ListingController.createListing);
+router.post(
+  '/',
+  AuthMiddleware.getUserFromAuthToken,
+  AuthMiddleware.validateBibbleTier,
+  ListingController.createListing
+);
 
 /**
  * @route GET /api/listings
  * @desc Get all listings
  * @access Public
  */
-router.get('/', ListingController.getAllListings);
+router.get(
+  '/self',
+  AuthMiddleware.getUserFromAuthToken,
+  ListingController.getMyListings
+);
 
 /**
  * @route GET /api/listings/species/:species
@@ -32,17 +42,34 @@ router.get('/species/:species', ListingController.getAllListingsBySpecies);
 router.get('/:id', ListingController.getListingById);
 
 /**
+ * @route GET /api/listings
+ * @desc Get all listings
+ * @access Public
+ */
+router.get('/', ListingController.getAllListings);
+
+/**
  * @route PUT /api/listings/:id
  * @desc Update a listing by ID
  * @access Private
  */
-router.put('/:id', ListingController.updateListingById);
+router.put(
+  '/:id',
+  AuthMiddleware.getUserFromAuthToken,
+  AuthMiddleware.validateBibbleTier,
+  ListingController.updateListingById
+);
 
 /**
  * @route DELETE /api/listings/:id
  * @desc Delete a listing by ID
  * @access Private
  */
-router.delete('/:id', ListingController.deleteListingById);
+router.delete(
+  '/:id',
+  AuthMiddleware.getUserFromAuthToken,
+  AuthMiddleware.validateBibbleTier,
+  ListingController.deleteListingById
+);
 
 module.exports = router;

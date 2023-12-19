@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { Error, MongooseError } from 'mongoose';
+import { Error } from 'mongoose';
+import { BibbleError, FieldAssertionError } from '../errors/errors.class';
 
 export const handleError = async (res: Response, error: any) => {
   const errors = [];
@@ -14,7 +15,7 @@ export const handleError = async (res: Response, error: any) => {
     errors.push(error.message);
   }
 
-  if (error instanceof MongooseError) {
+  if (error instanceof BibbleError) {
     errors.push(error.message);
   }
 
@@ -47,7 +48,7 @@ export const assertFields = (fields: string[], req: Request) => {
   });
 
   if (missingFields.length) {
-    throw new MongooseError(
+    throw new FieldAssertionError(
       `${
         missingFields[0].charAt(0).toUpperCase() + missingFields[0].slice(1)
       } required`

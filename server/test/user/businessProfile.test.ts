@@ -8,8 +8,8 @@ import {
 } from '../../src/models/user/business-profile.model';
 import { LicensedPetShopModel } from '../../src/models/licensed-pet-shop.model';
 
-const BusinessProfile: BusinessProfileModel = require('../../src/models/user/businessProfile.model');
-const LicensedPetShop: LicensedPetShopModel = require('../../src/models/licensedPetShop.model');
+const BusinessProfile: BusinessProfileModel = require('../../src/models/user/business-profile.model');
+const LicensedPetShop: LicensedPetShopModel = require('../../src/models/licensed-pet-shop.model');
 
 const existingLicensedPetShopNumber: string = 'AS19J00045'; // This is a valid license number for '181 AQUARIUM'.
 

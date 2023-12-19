@@ -4,7 +4,8 @@ import { Schema } from 'mongoose';
 import {
   UserModel,
   ICreateUserRequest,
-  IUpdateUserRequest
+  IUpdateUserRequest,
+  IPopulatedUser
 } from '../../src/models/user/user.model';
 import {
   BuyerProfileModel,
@@ -18,8 +19,8 @@ import {
 } from '../../src/models/user/business-profile.model';
 
 const User: UserModel = require('../../src/models/user/user.model');
-const BuyerProfile: BuyerProfileModel = require('../../src/models/user/buyerProfile.model');
-const BusinessProfile: BusinessProfileModel = require('../../src/models/user/businessProfile.model');
+const BuyerProfile: BuyerProfileModel = require('../../src/models/user/buyer-profile.model');
+const BusinessProfile: BusinessProfileModel = require('../../src/models/user/business-profile.model');
 
 describe('User model (CREATE)', () => {
   afterEach(async function () {
@@ -40,10 +41,18 @@ describe('User model (CREATE)', () => {
     expect(savedBuyerProfile.firstName).to.equal(buyerProfileData.firstName);
     expect(savedBuyerProfile.lastName).to.equal(buyerProfileData.lastName);
 
+    const businessProfile = new BusinessProfile();
+    const savedBusinessProfile = await businessProfile.save();
+
+    expect(savedBusinessProfile._id).to.exist;
+
+    expect(savedBusinessProfile.bibbleTier).to.equal('Basic');
+
     const userData: ICreateUserRequest['body'] = {
       email: 'test@example.com',
       password: 'password',
-      buyerProfile: savedBuyerProfile
+      buyerProfile: savedBuyerProfile,
+      businessProfile: savedBusinessProfile
     };
     const user = new User(userData);
     const savedUser = await user.save();
@@ -52,6 +61,8 @@ describe('User model (CREATE)', () => {
     expect(savedUser.email).to.equal(userData.email);
     expect(savedUser.buyerProfile).to.exist;
     expect(savedUser.buyerProfile).to.be.equal(savedBuyerProfile);
+    expect(savedUser.businessProfile).to.exist;
+    expect(savedUser.businessProfile).to.be.equal(savedBusinessProfile);
   });
 
   it('+ Create User with Buyer and Business Profile (only required fields)', async function () {
@@ -236,7 +247,7 @@ describe('User model (READ)', () => {
     password: 'password'
   };
 
-  let existingUserId: Schema.Types.ObjectId;
+  let existingUser: IPopulatedUser;
 
   beforeEach(async function () {
     const buyerProfile = new BuyerProfile(existingBuyerProfileData);
@@ -248,7 +259,7 @@ describe('User model (READ)', () => {
     });
     const savedUser = await user.save();
 
-    existingUserId = savedUser._id;
+    existingUser = await savedUser.populate('buyerProfile businessProfile');
   });
 
   afterEach(async function () {
@@ -256,17 +267,17 @@ describe('User model (READ)', () => {
   });
 
   it('+ Get User (by `id`)', async function () {
-    const user = await User.findById(existingUserId);
+    const user = await User.findById(existingUser._id);
 
     expect(user).to.exist;
-    expect(user?._id.toString()).to.be.equal(existingUserId.toString());
+    expect(user?._id.toString()).to.be.equal(existingUser._id.toString());
   });
 
   it('+ Get User (by `email`)', async function () {
     const user = await User.findOne({ email: existingUserData.email });
 
     expect(user).to.exist;
-    expect(user?._id.toString()).to.be.equal(existingUserId.toString());
+    expect(user?._id.toString()).to.be.equal(existingUser._id.toString());
   });
 
   it('- Get User (invalid `id`)', async function () {
@@ -303,7 +314,7 @@ describe('User model (UPDATE)', () => {
     password: 'password'
   };
 
-  let existingUserId: Schema.Types.ObjectId;
+  let existingUser: IPopulatedUser;
 
   beforeEach(async function () {
     const buyerProfile = new BuyerProfile(existingBuyerProfileData);
@@ -315,7 +326,7 @@ describe('User model (UPDATE)', () => {
     });
     const savedUser = await user.save();
 
-    existingUserId = savedUser._id;
+    existingUser = await savedUser.populate('buyerProfile businessProfile');
   });
 
   afterEach(async function () {
@@ -324,35 +335,37 @@ describe('User model (UPDATE)', () => {
 
   it('+ Update User (only `email`)', async function () {
     const updateUserData: IUpdateUserRequest['body'] = {
+      user: existingUser,
       email: 'updated@example.com'
     };
 
     const updatedUser = await User.findOneAndUpdate(
-      { _id: existingUserId },
+      { _id: existingUser._id },
       updateUserData,
       { new: true }
     );
 
     expect(updatedUser).to.exist;
 
-    expect(updatedUser?._id.toString()).to.be.equal(existingUserId.toString());
+    expect(updatedUser?._id.toString()).to.be.equal(existingUser._id.toString());
     expect(updatedUser?.email).to.equal(updateUserData.email);
   });
 
   it('+ Update User (only `password`)', async function () {
     const updateUserData: IUpdateUserRequest['body'] = {
+      user: existingUser,
       password: 'updatedPassword'
     };
 
     const updatedUser = await User.findOneAndUpdate(
-      { _id: existingUserId },
+      { _id: existingUser._id },
       updateUserData,
       { new: true }
     );
 
     expect(updatedUser).to.exist;
 
-    expect(updatedUser?._id.toString()).to.be.equal(existingUserId.toString());
+    expect(updatedUser?._id.toString()).to.be.equal(existingUser._id.toString());
     expect(updatedUser?.password).to.not.equal(updateUserData.password);
     expect(updatedUser?.password).to.not.equal(existingUserData.password);
     expect(updatedUser?.isCorrectPassword(existingUserData.password)).to.be
@@ -362,19 +375,20 @@ describe('User model (UPDATE)', () => {
 
   it('+ Update User (all fields excluding profiles)', async function () {
     const updateUserData: IUpdateUserRequest['body'] = {
+      user: existingUser,
       email: 'updated@example.com',
       password: 'updatedPassword'
     };
 
     const updatedUser = await User.findOneAndUpdate(
-      { _id: existingUserId },
+      { _id: existingUser._id },
       updateUserData,
       { new: true }
     );
 
     expect(updatedUser).to.exist;
 
-    expect(updatedUser?._id.toString()).to.be.equal(existingUserId.toString());
+    expect(updatedUser?._id.toString()).to.be.equal(existingUser._id.toString());
     expect(updatedUser?.email).to.equal(updateUserData.email);
     expect(updatedUser?.password).to.not.equal(updateUserData.password);
     expect(updatedUser?.password).to.not.equal(existingUserData.password);
@@ -386,10 +400,11 @@ describe('User model (UPDATE)', () => {
   it('- Update User (invalid `email`)', async function () {
     try {
       const updateUserData: IUpdateUserRequest['body'] = {
+        user: existingUser,
         email: 'updated'
       };
 
-      await User.findOneAndUpdate({ _id: existingUserId }, updateUserData, {
+      await User.findOneAndUpdate({ _id: existingUser._id }, updateUserData, {
         new: true
       });
     } catch (error: any) {
@@ -400,10 +415,11 @@ describe('User model (UPDATE)', () => {
   it('- Update User (invalid `password`)', async function () {
     try {
       const updateUserData: IUpdateUserRequest['body'] = {
+        user: existingUser,
         password: 'pass'
       };
 
-      await User.findOneAndUpdate({ _id: existingUserId }, updateUserData, {
+      await User.findOneAndUpdate({ _id: existingUser._id }, updateUserData, {
         new: true
       });
     } catch (error: any) {

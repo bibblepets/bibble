@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model, Document } from 'mongoose';
-import { IUser } from '../user/user.model';
+import { IPopulatedUser, IUser, IUserRequest } from '../user/user.model';
 import {
   IAnimal,
   ICreateAnimalRequest,
@@ -33,20 +33,22 @@ interface IListingMethods {
 
 export interface ListingModel extends Model<IListing, {}, IListingMethods> {}
 
-export interface ICreateListingRequest extends Request {
+export interface ICreateListingRequest extends IUserRequest {
   body: Omit<
     IListing,
     '_id' | 'createdAt' | 'updatedAt' | 'expiryDate' | 'lister' | 'animal' | 'saleStatus'
   > & {
     listingCreatorId: Schema.Types.ObjectId;
-    lister: IUser['_id'];
+    user: IPopulatedUser;
     animal: ICreateAnimalRequest['body'];
   };
 }
 
-export interface IUpdateListingRequest extends Request {
-  body: Partial<Omit<ICreateListingRequest['body'], 'animal'>> & {
+export interface IUpdateListingRequest extends IUserRequest {
+  body: Partial<Omit<ICreateListingRequest['body'], 'animal'> & {
     animal: IUpdateAnimalRequest['body'];
+  }> & {
+    user: IPopulatedUser;
   };
 }
 
@@ -64,7 +66,9 @@ export interface IGetListingByIdRequest extends Request {
   };
 }
 
-export interface IDeleteListingByIdRequest extends Request {
+export interface IGetMyListingsRequest extends IUserRequest {}
+
+export interface IDeleteListingByIdRequest extends IUserRequest {
   params: {
     id: string;
   };

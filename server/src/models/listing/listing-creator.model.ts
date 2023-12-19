@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import mongoose, { Model, Schema } from 'mongoose';
-import { IUser } from '../user/user.model';
+import { IPopulatedUser, IUser, IUserRequest } from '../user/user.model';
 import { IBreed } from './animal/breed.model';
 import { IVaccine } from './animal/vaccine.model';
 import { ICountry } from '../country.model';
@@ -76,30 +76,36 @@ export interface IPopulatedListingCreator {
 
 export interface ListingCreatorModel extends Model<IListingCreator> {}
 
-export interface ICreateListingCreatorRequest extends Request {
-  body: Pick<IListingCreator, 'saleType' | 'lister'> & {
+export interface ICreateListingCreatorRequest extends IUserRequest {
+  body: Pick<IListingCreator, 'saleType' > & {
+    user: IPopulatedUser;
     [key: string]: any;
   };
 }
 
-export interface IUpdateListingCreatorRequest extends Request {
-  body: Partial<IListingCreator> & {
-    lister: IUser['_id'];
-    stage: number;
-    saleType: string;
+export interface IGetMyListingCreatorsRequest extends IUserRequest {}
+
+export interface IUpdateListingCreatorRequest extends IUserRequest {
+  params: {
+    id: string;
   };
+  body: Partial<IListingCreator> & {
+    user: IPopulatedUser;
+  }
 }
 
-export interface IUpdateBiologyRequest extends Request {
+export interface IUpdateBiologyRequest extends IUserRequest {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
+    user: IPopulatedUser;
     species?: string;
     breeds?: IBreed['_id'][];
     [key: string]: any;
   };
 }
 
-export interface IUpdateBiographyRequest extends Request {
+export interface IUpdateBiographyRequest extends IUserRequest {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
+    user: IPopulatedUser;
     origin?: ICountry['_id'];
     gender?: string;
     birthdate?: string;
@@ -108,8 +114,9 @@ export interface IUpdateBiographyRequest extends Request {
   };
 }
 
-export interface IUpdateMedicalRequest extends Request {
+export interface IUpdateMedicalRequest extends IUserRequest {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
+    user: IPopulatedUser;
     size?: string;
     weight?: number;
     hairCoat?: string;
@@ -118,8 +125,9 @@ export interface IUpdateMedicalRequest extends Request {
   };
 }
 
-export interface IUpdateLegalRequest extends Request {
+export interface IUpdateLegalRequest extends IUserRequest {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
+    user: IPopulatedUser;
     avsLicenseNumber?: string;
     isHypoallergenic?: boolean;
     isMicrochipped?: boolean;
@@ -129,18 +137,36 @@ export interface IUpdateLegalRequest extends Request {
   };
 }
 
-export interface IUpdateMediaRequest extends Request {}
+export interface IUpdateMediaRequest extends IUserRequest {
+  body: {
+    user: IPopulatedUser;
+  }
+}
 
-export interface IUpdatePriceRequest extends Request {
+export interface IUpdatePriceRequest extends IUserRequest {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
+    user: IPopulatedUser;
     price?: number;
     [key: string]: any;
   };
 }
 
-export interface ISubmitListingRequest extends Request {
+export interface ISubmitListingRequest extends IUserRequest {
   body: Pick<IListingCreator, '_id'> & {
+    user: IPopulatedUser;
     [key: string]: any;
+  };
+}
+
+export interface IDeleteListingCreatorRequest extends IUserRequest {
+  params: {
+    id: string;
+  };
+}
+
+export interface IDeleteListingCreatorRequest extends IUserRequest {
+  params: {
+    id: string;
   };
 }
 

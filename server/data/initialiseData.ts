@@ -79,7 +79,7 @@ const adminBusinessProfile: Omit<
   petShopLicenseNumber: 'AS08G00025' // Pet Lovers Centre Marine Parade
 };
 
-const admin: Omit<IUser, '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile'> = {
+const admin: Omit<IUser, '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile' | 'businessProfile'> = {
   email: 'admin@bibble.com',
   password: '123456'
 };

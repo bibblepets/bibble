@@ -15,11 +15,17 @@ import {
 export interface IUser {
   _id: Schema.Types.ObjectId;
   buyerProfile: IBuyerProfile['_id'];
-  businessProfile?: IBusinessProfile['_id'];
+  businessProfile: IBusinessProfile['_id'];
   email: string;
   password: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IPopulatedUser
+  extends Omit<IUser, 'buyerProfile' | 'businessProfile'> {
+  buyerProfile: IBuyerProfile;
+  businessProfile: IBusinessProfile;
 }
 
 interface IUserMethods {
@@ -27,6 +33,12 @@ interface IUserMethods {
 }
 
 export interface UserModel extends Model<IUser, {}, IUserMethods> {}
+
+export interface IUserRequest extends Request {
+  body: {
+    user: IPopulatedUser;
+  };
+}
 
 export interface ICreateUserRequest extends Request {
   body: Omit<
@@ -38,12 +50,14 @@ export interface ICreateUserRequest extends Request {
   };
 }
 
-export interface IUpdateUserRequest extends Request {
+export interface IUpdateUserRequest extends IUserRequest {
   body: Partial<
-    Omit<ICreateUserRequest['body'], 'buyerProfile' | 'businessProfile'>
+    Omit<ICreateUserRequest['body'], 'buyerProfile' | 'businessProfile'> & {
+      buyerProfile: IUpdateBuyerProfileRequest['body'];
+      businessProfile: IUpdateBusinessProfileRequest['body'];
+    }
   > & {
-    buyerProfile?: IUpdateBuyerProfileRequest['body'];
-    businessProfile?: IUpdateBusinessProfileRequest['body'];
+    user: IPopulatedUser;
   };
 }
 
