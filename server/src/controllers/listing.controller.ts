@@ -29,7 +29,7 @@ export const createListing = async (
 ) => {
   // Extract fields from request body
   // Pet listing fields
-  const { lister, price, description, saleType, media, animal, species } =
+  const { user, price, description, saleType, media, animal, species } =
     req.body;
 
   let createdAnimal;
@@ -41,7 +41,7 @@ export const createListing = async (
     await validateCreateAnimal(req);
     await Listing.validate(
       {
-        lister: lister,
+        lister: user._id,
         price: price,
         description: description,
         saleType: saleType,
@@ -60,7 +60,7 @@ export const createListing = async (
     // Create pet listing
     console.log('Creating pet listing...');
     createdListing = await Listing.create({
-      lister: lister,
+      lister: user._id,
       price: price,
       description: description,
       saleType: saleType,
@@ -116,7 +116,7 @@ const createAnimal = async (req: ICreateListingRequest) => {
   } // else if...
 
   if (!createdAnimal) {
-    throw new Error('Error creating animal.');
+    throw new BibbleError('Error creating animal.');
   }
 
   return createdAnimal;
@@ -252,7 +252,7 @@ const validateUpdateAnimal = async (
 ) => {
   if (species == 'Dog') {
     console.log('Validating Dog request body...');
-    return await Dog.validate(req.body.animal, Object.keys(req.body.animal));
+    return await Dog.validate(req.body.animal, Object.keys(req.body.animal ? req.body.animal : {}));
   } // else if...
 };
 
@@ -270,7 +270,7 @@ const updateAnimal = async (
   } // else if...
 
   if (!updatedAnimal) {
-    throw new Error('Animal not found.');
+    throw new BibbleError('Animal not found.');
   }
   return updatedAnimal;
 };
@@ -322,5 +322,5 @@ const deleteAnimalById = async (
     return await Dog.findByIdAndDelete(animalId);
   } // else if...
 
-  throw new Error('Error deleting animal.');
+  throw new BibbleError('Error deleting animal.');
 };

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as AuthController from '../controllers/auth.controller';
+import * as AuthMiddleware from '../middleware/auth.middleware';
 
 const router = Router();
 
@@ -36,6 +37,6 @@ router.post('/logout', AuthController.logoutUser);
  * @desc Update an existing user
  * @access Private
  */
-router.put('/update/:id', AuthController.updateUser);
+router.put('/update/:id', AuthMiddleware.getUserFromAuthToken, AuthController.updateUser);
 
 module.exports = router;

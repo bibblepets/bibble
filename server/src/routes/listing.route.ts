@@ -9,7 +9,7 @@ const router = Router();
  * @desc Create a new listing
  * @access Private
  */
-router.post('/', AuthMiddleware.checkBibbleTier, ListingController.createListing);
+router.post('/', AuthMiddleware.validateBibbleTier, ListingController.createListing);
 
 /**
  * @route GET /api/listings
@@ -37,13 +37,13 @@ router.get('/:id', ListingController.getListingById);
  * @desc Update a listing by ID
  * @access Private
  */
-router.put('/:id', AuthMiddleware.checkBibbleTier, ListingController.updateListingById);
+router.put('/:id', AuthMiddleware.validateBibbleTier, ListingController.updateListingById);
 
 /**
  * @route DELETE /api/listings/:id
  * @desc Delete a listing by ID
  * @access Private
  */
-router.delete('/:id', AuthMiddleware.checkBibbleTier, ListingController.deleteListingById);
+router.delete('/:id', AuthMiddleware.validateBibbleTier, ListingController.deleteListingById);
 
 module.exports = router;

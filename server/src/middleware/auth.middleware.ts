@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verify, sign } from 'jsonwebtoken';
-import { IUser, UserModel } from '../models/user/user.model';
-import { IBuyerProfile } from '../models/user/buyer-profile.model';
-import { IBusinessProfile } from '../models/user/business-profile.model';
+import { IPopulatedUser, UserModel } from '../models/user/user.model';
 
 const User: UserModel = require('../models/user/user.model');
 
@@ -14,12 +12,12 @@ const COOKIE_OPTIONS = {
   maxAge: 1000 * 60 * 60 * 24 * 7
 };
 
-export const checkBibbleTier = async (
+export const getUserFromAuthToken = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  console.log('Checking Bibble Tier...');
+  console.log('Getting User from Auth Token...');
   const { authToken }: { authToken: string } = req.cookies;
 
   if (!authToken) {
@@ -28,13 +26,13 @@ export const checkBibbleTier = async (
 
   try {
     if (!SECRET_JWT_CODE) {
-      throw new Error('Secret JWT code not found.');
+      throw new BibbleError('Secret JWT code not found.');
     }
 
     const decoded = verify(authToken, SECRET_JWT_CODE);
 
     if (typeof decoded === 'string') {
-      throw new Error('Decoded JWT is a string.');
+      throw new BibbleError('Decoded JWT is a string.');
     }
 
     const authUser = await User.findById(decoded.id);
@@ -48,27 +46,34 @@ export const checkBibbleTier = async (
       SECRET_JWT_CODE
     );
 
-    const populatedUser: IUser & {
-      buyerProfile: IBuyerProfile;
-      businessProfile: IBusinessProfile;
-    } = await authUser.populate('buyerProfile businessProfile');
-
-    if (!populatedUser.businessProfile) {
-      return res
-        .status(401)
-        .json({
-          message: 'Please create a Business Profile to access this privillege.'
-        });
-    } else if (populatedUser.businessProfile.bibbleTier === 'Basic') {
-      return res
-        .status(401)
-        .json({
-          message:
-            'You do not have the required minimum Bibble Tier privilleges.'
-        });
-    }
+    const populatedUser = await authUser.populate('buyerProfile businessProfile');
 
     res.cookie('authToken', token, COOKIE_OPTIONS);
+    req.body = {
+      ...req.body,
+      user: populatedUser
+    };
+    next();
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const validateBibbleTier = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log('Checking Bibble Tier...');
+  try {
+    const user: IPopulatedUser = req.body.user
+
+    if (user.businessProfile.bibbleTier === 'Basic') {
+      return res.status(401).json({
+        message: 'You do not have the required minimum Bibble Tier privilleges.'
+      });
+    }
+
     next();
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
