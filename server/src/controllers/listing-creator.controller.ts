@@ -11,15 +11,43 @@ import {
   IUpdateListingCreatorRequest,
   ListingCreatorModel
 } from '../models/listing/listing-creator.model';
-import {
-  IAnimal,
-  ICreateAnimalRequest
-} from '../models/listing/animal/animal.model';
+import { ICreateAnimalRequest } from '../models/listing/animal/animal.model';
 import {
   ICreateListingRequest,
   ListingModel
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import crypto from 'crypto';
+
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const awsBucketName = process.env.AWS_BUCKET_NAME;
+const awsBucketRegion = process.env.AWS_BUCKET_REGION;
+const awsAccessKey = process.env.AWS_ACCESS_KEY;
+const awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+
+if (!awsAccessKey || !awsSecretAccessKey || !awsBucketRegion) {
+  throw new Error('AWS credentials or region are not defined');
+}
+
+const s3Client = new S3Client({
+  credentials: {
+    accessKeyId: awsAccessKey,
+    secretAccessKey: awsSecretAccessKey
+  },
+  region: awsBucketRegion
+});
+
+const generateImageName = (bytes = 32) =>
+  crypto.randomBytes(bytes).toString('hex');
 
 const {
   Listing
@@ -217,13 +245,51 @@ export const updateLegal = async (req: IUpdateLegalRequest, res: Response) => {
 };
 
 export const updateMedia = async (req: any, res: Response) => {
-  // TODO TITUS
-  const { _id, stage } = req.body;
-  const files = req.files;
+  try {
+    const { _id, stage } = req.body;
+    const files = req.files;
 
-  assertFields(['_id', 'stage'], req);
+    assertFields(['_id', 'stage'], req);
 
-  console.log(files);
+    const media = [];
+
+    for (const file of files) {
+      const imageName = generateImageName();
+
+      const putCommand = new PutObjectCommand({
+        Bucket: awsBucketName,
+        Key: imageName,
+        Body: file.buffer
+      });
+
+      await s3Client.send(putCommand);
+
+      const getCommand = new GetObjectCommand({
+        Bucket: awsBucketName,
+        Key: imageName
+      });
+
+      const url = await getSignedUrl(s3Client, getCommand, {
+        expiresIn: 60
+      });
+
+      media.push({ url });
+    }
+
+    const listingCreator = await ListingCreator.findByIdAndUpdate(
+      _id,
+      {
+        stage,
+        media
+      },
+      { new: true }
+    );
+    const populatedListingCreator = await populateFields(listingCreator);
+
+    return res.status(200).json(populatedListingCreator);
+  } catch (error: any) {
+    return handleError(res, error);
+  }
 };
 
 export const updatePrice = async (req: IUpdatePriceRequest, res: Response) => {
