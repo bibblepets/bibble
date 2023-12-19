@@ -395,8 +395,7 @@ const generateMedia = (mediaTypes: string[]) => {
   const media = [];
   for (let i = 0; i < numMedia; i++) {
     media.push({
-      type: mediaTypes[Math.floor(Math.random() * mediaTypes.length)],
-      url: 'https://i.pinimg.com/1200x/a2/bd/c5/a2bdc5f89c08b4955867e62141bf614d.jpg'
+      name: 'palceholder_dog.jpg',
     });
   }
   return media;

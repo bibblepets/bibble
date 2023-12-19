@@ -1,5 +1,4 @@
-import { Request } from 'express';
-import mongoose, { Model, Schema } from 'mongoose';
+import mongoose, { Model, Schema, Document } from 'mongoose';
 import { IPopulatedUser, IUser, IUserRequest } from '../user/user.model';
 import { IBreed } from './animal/breed.model';
 import { IVaccine } from './animal/vaccine.model';
@@ -41,7 +40,10 @@ export interface IListingCreator {
     avsLicenseNumber?: string;
     legalTags?: string[];
   };
-  media?: any[]; // TODO TITUS
+  media?: {
+    name?: string;
+    url?: string;
+  }[];
   price?: number;
 }
 
@@ -70,14 +72,17 @@ export interface IPopulatedListingCreator {
     avsLicenseNumber?: string;
     legalTags?: string[];
   };
-  media?: any[]; // TODO TITUS
+  media?: {
+    name?: string;
+    url?: string;
+  }[];
   price?: number;
 }
 
 export interface ListingCreatorModel extends Model<IListingCreator> {}
 
 export interface ICreateListingCreatorRequest extends IUserRequest {
-  body: Pick<IListingCreator, 'saleType' > & {
+  body: Pick<IListingCreator, 'saleType'> & {
     user: IPopulatedUser;
     [key: string]: any;
   };
@@ -91,7 +96,7 @@ export interface IUpdateListingCreatorRequest extends IUserRequest {
   };
   body: Partial<IListingCreator> & {
     user: IPopulatedUser;
-  }
+  };
 }
 
 export interface IUpdateBiologyRequest extends IUserRequest {
@@ -138,9 +143,10 @@ export interface IUpdateLegalRequest extends IUserRequest {
 }
 
 export interface IUpdateMediaRequest extends IUserRequest {
-  body: {
+  body: Pick<IListingCreator, '_id' | 'stage'> & {
     user: IPopulatedUser;
-  }
+    [key: string]: any;
+  };
 }
 
 export interface IUpdatePriceRequest extends IUserRequest {
@@ -266,7 +272,14 @@ const ListingCreatorSchema = new Schema(
         case: 'Legal tags of `{VALUE}` is invalid.'
       }
     },
-    media: [],
+    media: [
+      {
+        name: {
+          type: String,
+          required: [true, 'Please specify the name of this asset.']
+        }
+      }
+    ],
     price: {
       type: Number,
       min: [0.0, 'Price must be greater than or equal to 0.'],
@@ -276,15 +289,38 @@ const ListingCreatorSchema = new Schema(
   { collection: 'listingCreators', timestamps: true }
 );
 
-ListingCreatorSchema.post('findOne', async function (doc) {
-  if (!doc) {
-    return;
-  }
+ListingCreatorSchema.post(
+  'findOne',
+  async function (
+    doc:
+      | (Document<unknown, {}, IListingCreator> &
+          IListingCreator &
+          Required<{
+            _id: Schema.Types.ObjectId;
+          }>)
+      | null
+  ) {
+    if (!doc) {
+      return;
+    }
 
-  if (Array.isArray(doc.media)) {
-    doc.media = await Promise.all(doc.media.map(getMediaUrl));
+    if (!doc.media) {
+      return;
+    }
+
+    if (doc.media.length === 0) {
+      return;
+    }
+
+    if (Array.isArray(doc.media)) {
+      doc.media = await Promise.all(
+        doc.media.map(
+          async (media) => await getMediaUrl(media as { name: string })
+        )
+      );
+    }
   }
-});
+);
 
 const ListingCreator = mongoose.model<IListingCreator, ListingCreatorModel>(
   'ListingCreator',

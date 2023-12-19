@@ -4,6 +4,8 @@ import * as ListingCreatorController from '../controllers/listing-creator.contro
 import * as AuthMiddleware from '../middleware/auth.middleware';
 
 const router = Router();
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 router.use(
   AuthMiddleware.getUserFromAuthToken,

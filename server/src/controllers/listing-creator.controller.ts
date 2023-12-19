@@ -18,11 +18,8 @@ import {
   ListingModel
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
-<<<<<<< HEAD
-import { putMedia } from '../services/s3.service';
-=======
 import { BibbleError } from '../errors/errors.class';
->>>>>>> backend/listing
+import { putMedia } from '../services/s3.service';
 
 const {
   Listing
@@ -94,12 +91,7 @@ export const updateListingCreatorById = async (
     const { id } = req.params;
 
     const listingCreator = await ListingCreator.findByIdAndUpdate(
-<<<<<<< HEAD
-      _id,
-      {
-=======
       id, {
->>>>>>> backend/listing
         ...req.body
       },
       { new: true }
@@ -231,12 +223,16 @@ export const updateLegal = async (req: IUpdateLegalRequest, res: Response) => {
   }
 };
 
-export const updateMedia = async (req: any, res: Response) => {
+export const updateMedia = async (req: IUpdateMediaRequest, res: Response) => {
   try {
     const { _id, stage } = req.body;
-    const files = req.files;
+    const files = req.files as Express.Multer.File[];
 
     assertFields(['_id', 'stage'], req);
+    
+    if (!files) {
+      throw new BibbleError('No files were uploaded.');
+    }
 
     const media = await putMedia(files);
 
@@ -416,7 +412,6 @@ const createAnimal = async (
 
   return createdAnimal;
 };
-
 
 async function populateFields(listingCreator: any) {
   const populatedListingCreator = await listingCreator.populate([

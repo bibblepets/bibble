@@ -12,6 +12,7 @@ import {
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
 import { BibbleError } from '../errors/errors.class';
+import { getMediaUrl } from '../services/s3.service';
 
 require('../models/country.model');
 const {
@@ -133,7 +134,18 @@ export const getAllListings = async (
       { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
       { path: 'animal', populate: { path: 'breeds vaccines origin' } }
     ]);
-    return res.status(200).json(allListings);
+
+    const populatedMediaListings = await Promise.all(
+      allListings.map(async (listing) => {
+        const docCopy = listing.toObject();
+
+        docCopy.media = await Promise.all(listing.media.map(getMediaUrl));
+
+        return docCopy;
+      })
+    );
+    console.log(populatedMediaListings[0].media[0].url);
+    return res.status(200).json(populatedMediaListings);
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -195,7 +207,7 @@ export const getMyListings = async (
   } catch (error: any) {
     return handleError(res, error);
   }
-}
+};
 
 export const updateListingById = async (
   req: IUpdateListingRequest,
@@ -272,7 +284,10 @@ const validateUpdateAnimal = async (
 ) => {
   if (species == 'Dog') {
     console.log('Validating Dog request body...');
-    return await Dog.validate(req.body.animal, Object.keys(req.body.animal ? req.body.animal : {}));
+    return await Dog.validate(
+      req.body.animal,
+      Object.keys(req.body.animal ? req.body.animal : {})
+    );
   } // else if...
 };
 

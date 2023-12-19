@@ -1,12 +1,13 @@
-import { Request } from 'express';
+import * as multer from 'multer';
+import { Schema } from 'mongoose';
 import {
   S3Client,
   PutObjectCommand,
-  GetObjectCommand
+  GetObjectCommand,
+  DeleteObjectCommand
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import crypto from 'crypto';
-
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -28,20 +29,11 @@ const s3Client = new S3Client({
   region: awsBucketRegion
 });
 
-const generateImageName = (bytes = 32) =>
-  crypto.randomBytes(bytes).toString('hex');
-
-export interface IGetUrlFromImageRequest extends Request {
-  body: {
-    name: string;
-  };
-}
-
 export const putMedia = async (files: Express.Multer.File[]) => {
   const media = [];
 
   for (const file of files) {
-    const name = generateImageName();
+    const name = generateName();
 
     const putCommand = new PutObjectCommand({
       Bucket: awsBucketName,
@@ -51,21 +43,32 @@ export const putMedia = async (files: Express.Multer.File[]) => {
 
     await s3Client.send(putCommand);
 
-    media.push({ name });
+    media.push({ name: name, url: undefined });
   }
 
   return media;
 };
 
-export const getMediaUrl = async (media: { name: string }) => {
+export const getMediaUrl = async (media: { name: string}) => {
   const getCommand = new GetObjectCommand({
     Bucket: awsBucketName,
     Key: media.name
   });
 
   const url = await getSignedUrl(s3Client, getCommand, {
-    expiresIn: 5
+    expiresIn: 60 * 60 * 24 // 1 day
   });
 
-  return { url };
+  return { name: media.name, url: url };
 };
+
+export const deleteMedia = async (media: { name: string }) => {
+  const deleteCommand = new DeleteObjectCommand({
+    Bucket: awsBucketName,
+    Key: media.name
+  });
+
+  await s3Client.send(deleteCommand);
+};
+
+const generateName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');

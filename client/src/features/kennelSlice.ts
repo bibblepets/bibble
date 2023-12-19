@@ -25,6 +25,7 @@ export const fetchListings = createAsyncThunk(
     return await axios
       .get('/api/listings')
       .then((response) => {
+        console.log(response.data);
         return response.data;
       })
       .catch((error) => {

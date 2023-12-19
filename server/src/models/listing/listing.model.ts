@@ -19,7 +19,7 @@ export interface IListing {
   description: string;
   saleType: string;
   saleStatus: string;
-  media: { type: string; url: string }[];
+  media: { name: string; url?: string }[];
   animal: IAnimal['_id'];
   species: string;
   createdAt: Date;
@@ -36,7 +36,13 @@ export interface ListingModel extends Model<IListing, {}, IListingMethods> {}
 export interface ICreateListingRequest extends IUserRequest {
   body: Omit<
     IListing,
-    '_id' | 'createdAt' | 'updatedAt' | 'expiryDate' | 'lister' | 'animal' | 'saleStatus'
+    | '_id'
+    | 'createdAt'
+    | 'updatedAt'
+    | 'expiryDate'
+    | 'lister'
+    | 'animal'
+    | 'saleStatus'
   > & {
     listingCreatorId: Schema.Types.ObjectId;
     user: IPopulatedUser;
@@ -45,9 +51,11 @@ export interface ICreateListingRequest extends IUserRequest {
 }
 
 export interface IUpdateListingRequest extends IUserRequest {
-  body: Partial<Omit<ICreateListingRequest['body'], 'animal'> & {
-    animal: IUpdateAnimalRequest['body'];
-  }> & {
+  body: Partial<
+    Omit<ICreateListingRequest['body'], 'animal'> & {
+      animal: IUpdateAnimalRequest['body'];
+    }
+  > & {
     user: IPopulatedUser;
   };
 }
@@ -110,17 +118,9 @@ const ListingSchema = new Schema<IListing, ListingModel, IListingMethods>(
     },
     media: [
       {
-        type: {
+        name: {
           type: String,
-          enum: {
-            values: mediaTypes,
-            message: 'Media type of `{VALUE}` is not yet supported.'
-          },
-          required: [true, 'Please specify the media type of this asset.']
-        },
-        url: {
-          type: String,
-          required: [true, 'Please specify the URL of this asset.']
+          required: [true, 'Please specify the name of this media asset.']
         }
       }
     ],
@@ -175,7 +175,7 @@ ListingSchema.pre('save', function (next) {
 
 ListingSchema.post(
   'findOne',
-  function (
+  async function (
     doc:
       | (Document<unknown, {}, IListing> &
           Omit<
@@ -192,8 +192,30 @@ ListingSchema.post(
       return;
     }
 
-    doc.updateSaleStatus(); // Update sale status based on expiration date
-    doc.save();
+    await doc.save(); // Trigger update sale status
+  }
+);
+
+ListingSchema.post(
+  'find',
+  async function (
+    docs:
+      | (Document<unknown, {}, IListing> &
+          Omit<
+            IListing &
+              Required<{
+                _id: Schema.Types.ObjectId;
+              }>,
+            'updateSaleStatus'
+          > &
+          IListingMethods)[]
+      | null
+  ) {
+    if (!docs) {
+      return;
+    }
+
+    docs.forEach(async (doc) => await doc.save()); // Trigger update sale status
   }
 );
 
