@@ -68,8 +68,8 @@ export const fetchListingCreatorById = createAsyncThunk(
   }
 );
 
-export const initListingCreator = createAsyncThunk(
-  '/listingCreator/initListingCreator',
+export const createListingCreator = createAsyncThunk(
+  '/listingCreator/createListingCreator',
   async (payload: { currentUser: User; saleType: SaleType }) => {
     return await axios
       .post('/api/listing-creator', {
@@ -218,8 +218,8 @@ export const updatePrice = createAsyncThunk(
   }
 );
 
-export const submitListing = createAsyncThunk(
-  '/listingCreator/submitListing',
+export const createListing = createAsyncThunk(
+  '/listingCreator/createListing',
   async (_, { getState }) => {
     const state = getState() as RootState;
 
@@ -385,15 +385,15 @@ const listingCreatorSlice = createSlice({
         state.status = 'ERROR';
         state.error = action.error.message;
       })
-      .addCase(initListingCreator.pending, (state) => {
+      .addCase(createListingCreator.pending, (state) => {
         state.status = 'LOADING';
       })
-      .addCase(initListingCreator.fulfilled, (state, action) => {
+      .addCase(createListingCreator.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
         state._id = action.payload._id;
         setState(state, action);
       })
-      .addCase(initListingCreator.rejected, (state, action) => {
+      .addCase(createListingCreator.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       })
@@ -463,14 +463,14 @@ const listingCreatorSlice = createSlice({
         state.status = 'ERROR';
         state.error = action.error.message;
       })
-      .addCase(submitListing.pending, (state) => {
+      .addCase(createListing.pending, (state) => {
         state.status = 'LOADING';
       })
-      .addCase(submitListing.fulfilled, (state, action) => {
+      .addCase(createListing.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
         resetState(state);
       })
-      .addCase(submitListing.rejected, (state, action) => {
+      .addCase(createListing.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       });

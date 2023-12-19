@@ -3,7 +3,7 @@ import { ListingStage } from '../../../types';
 import { NavigateFunction } from 'react-router-dom';
 import { store } from '../../../store';
 import {
-  submitListing,
+  createListing,
   updateBiography,
   updateBiology,
   updateLegal,
@@ -56,7 +56,7 @@ export const useProgress = (
     case 'Summary':
       back = 'Price';
       next = '';
-      update = submitListing;
+      update = createListing;
     default:
       break;
   }
