@@ -77,6 +77,8 @@ export interface ICreateListingCreatorRequest extends IUserRequest {
   };
 }
 
+export interface IGetMyListingCreatorsRequest extends IUserRequest {}
+
 export interface IUpdateListingCreatorRequest extends IUserRequest {
   params: {
     id: string;

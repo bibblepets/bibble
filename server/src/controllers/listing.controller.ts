@@ -7,9 +7,11 @@ import {
   IGetAllListingsRequest,
   IGetAllListingsBySpeciesRequest,
   IGetListingByIdRequest,
-  IDeleteListingByIdRequest
+  IDeleteListingByIdRequest,
+  IGetMyListingsRequest
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
+import { BibbleError } from '../errors/errors.class';
 
 require('../models/country.model');
 const {
@@ -176,6 +178,24 @@ export const getListingById = async (
     return handleError(res, error);
   }
 };
+
+export const getMyListings = async (
+  req: IGetMyListingsRequest,
+  res: Response
+) => {
+  const { user } = req.body;
+
+  try {
+    console.log('Getting my listings...');
+    const myListings = await Listing.find({ lister: user._id }).populate([
+      { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
+      { path: 'animal', populate: { path: 'breeds vaccines origin' } }
+    ]);
+    return res.status(200).json(myListings);
+  } catch (error: any) {
+    return handleError(res, error);
+  }
+}
 
 export const updateListingById = async (
   req: IUpdateListingRequest,

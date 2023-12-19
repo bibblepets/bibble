@@ -66,6 +66,8 @@ export interface IGetListingByIdRequest extends Request {
   };
 }
 
+export interface IGetMyListingsRequest extends IUserRequest {}
+
 export interface IDeleteListingByIdRequest extends IUserRequest {
   params: {
     id: string;

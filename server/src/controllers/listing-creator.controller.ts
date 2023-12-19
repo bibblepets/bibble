@@ -9,7 +9,8 @@ import {
   IUpdateMedicalRequest,
   IUpdatePriceRequest,
   IUpdateListingCreatorRequest,
-  ListingCreatorModel
+  ListingCreatorModel,
+  IGetMyListingCreatorsRequest
 } from '../models/listing/listing-creator.model';
 import {
   IAnimal,
@@ -20,6 +21,7 @@ import {
   ListingModel
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
+import { BibbleError } from '../errors/errors.class';
 
 const {
   Listing
@@ -33,14 +35,22 @@ const {
   Dog
 }: { Dog: DogModel } = require('../models/listing/animal/dog/dog.model');
 
-export const getAllMyListingCreators = async (req: Request, res: Response) => {
+export const getMyListingCreators = async (req: IGetMyListingCreatorsRequest, res: Response) => {
   try {
-    const listingCreators = await ListingCreator.find();
-    return res.status(200).json(listingCreators);
+    const { user } = req.body;
+
+    const listingCreators = await ListingCreator.find({ lister: user._id });
+    const populatedListingCreators = await Promise.all(
+      listingCreators.map(async (listingCreator) => {
+        return await populateFields(listingCreator);
+      })
+    );
+
+    return res.status(200).json(populatedListingCreators);
   } catch (error: any) {
     return handleError(res, error);
   }
-};
+}
 
 export const getListingCreatorById = async (req: any, res: Response) => {
   try {

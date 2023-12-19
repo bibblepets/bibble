@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { verify, sign } from 'jsonwebtoken';
 import { IPopulatedUser, UserModel } from '../models/user/user.model';
+import { BibbleError } from '../errors/errors.class';
 
 const User: UserModel = require('../models/user/user.model');
 

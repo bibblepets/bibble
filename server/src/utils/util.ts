@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Error } from 'mongoose';
+import { BibbleError, FieldAssertionError } from '../errors/errors.class';
 
 export const handleError = async (res: Response, error: any) => {
   const errors = [];

@@ -4,14 +4,17 @@ import * as AuthMiddleware from '../middleware/auth.middleware';
 
 const router = Router();
 
-router.use(AuthMiddleware.getUserFromAuthToken, AuthMiddleware.validateBibbleTier);
+router.use(
+  AuthMiddleware.getUserFromAuthToken,
+  AuthMiddleware.validateBibbleTier
+);
 
 /**
- * @route GET /api/listing-creator
+ * @route GET /api/listing-creator/self
  * @desc Get all listing creators
  * @access Private
  */
-router.get('/', ListingCreatorController.getAllMyListingCreators);
+router.get('/self', ListingCreatorController.getMyListingCreators);
 
 /**
  * @route GET /api/listing-creator/:id

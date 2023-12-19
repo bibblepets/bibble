@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { verify, sign } from 'jsonwebtoken';
-import { Error } from 'mongoose';
+import { BibbleError } from '../errors/errors.class';
 import { handleError } from '../utils/util';
 import {
   ICreateUserRequest,
