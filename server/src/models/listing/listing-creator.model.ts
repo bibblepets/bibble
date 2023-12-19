@@ -7,8 +7,13 @@ import { ICountry } from '../country.model';
 import { validateAVSLicenseNumber } from './animal/animal.model';
 
 const { saleTypes }: { saleTypes: string[] } = require('./listing.model');
-const { genders, sizes }: { genders: string[]; sizes: string[] } = require('./animal/animal.model');
-const { hairCoats: dogHairCoats }: { hairCoats: string[] } = require('./animal/dog/dog.model');
+const {
+  genders,
+  sizes
+}: { genders: string[]; sizes: string[] } = require('./animal/animal.model');
+const {
+  hairCoats: dogHairCoats
+}: { hairCoats: string[] } = require('./animal/dog/dog.model');
 
 export interface IListingCreator {
   _id: Schema.Types.ObjectId;
@@ -81,7 +86,7 @@ export interface IUpdateListingCreatorRequest extends Request {
     lister: IUser['_id'];
     stage: number;
     saleType: string;
-  }
+  };
 }
 
 export interface IUpdateBiologyRequest extends Request {

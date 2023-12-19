@@ -1,6 +1,10 @@
 import { Router } from 'express';
+import multer from 'multer';
 import * as ListingCreatorController from '../controllers/listing-creator.controller';
+
 const router = Router();
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 /**
  * @route GET /api/listing-creator
@@ -63,7 +67,11 @@ router.post('/legal', ListingCreatorController.updateLegal);
  * @desc Update the media of a listing
  * @access Private
  */
-router.post('/media', ListingCreatorController.updateMedia);
+router.post(
+  '/media',
+  upload.array('media'),
+  ListingCreatorController.updateMedia
+);
 
 /**
  * @route POST /api/listing-creator/price

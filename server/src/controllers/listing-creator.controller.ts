@@ -83,7 +83,8 @@ export const updateListingCreatorById = async (
     const { _id } = req.body;
 
     const listingCreator = await ListingCreator.findByIdAndUpdate(
-      _id, {
+      _id,
+      {
         ...req.body
       },
       { new: true }
@@ -215,8 +216,14 @@ export const updateLegal = async (req: IUpdateLegalRequest, res: Response) => {
   }
 };
 
-export const updateMedia = async (req: IUpdateMediaRequest, res: Response) => {
+export const updateMedia = async (req: any, res: Response) => {
   // TODO TITUS
+  const { _id, stage } = req.body;
+  const files = req.files;
+
+  assertFields(['_id', 'stage'], req);
+
+  console.log(files);
 };
 
 export const updatePrice = async (req: IUpdatePriceRequest, res: Response) => {
@@ -327,7 +334,9 @@ export const createListing = async (
 
     // Delete listing creator
     console.log('Deleting listing creator...');
-    const listingCreatorToDelete = await ListingCreator.findById(listingCreatorId);
+    const listingCreatorToDelete = await ListingCreator.findById(
+      listingCreatorId
+    );
     await listingCreatorToDelete!.deleteOne();
     console.log('Listing creator deleted.');
 
