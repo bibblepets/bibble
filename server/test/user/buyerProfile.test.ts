@@ -7,7 +7,7 @@ import {
   IUpdateBuyerProfileRequest
 } from '../../src/models/user/buyer-profile.model';
 
-const BuyerProfile: BuyerProfileModel = require('../../src/models/user/buyerProfile.model');
+const BuyerProfile: BuyerProfileModel = require('../../src/models/user/buyer-profile.model');
 
 describe('Buyer Profile model (CREATE)', () => {
   afterEach(async function () {
