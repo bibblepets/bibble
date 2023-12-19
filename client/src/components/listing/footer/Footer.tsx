@@ -29,7 +29,7 @@ const Footer = () => {
     listingId
   );
 
-  if (stage === '') {
+  if (!stage || stage === '') {
     return <a className="fixed w-full bottom-0 z-40 bg-white h-[84px]" />;
   }
 

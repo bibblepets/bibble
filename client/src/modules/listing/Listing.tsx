@@ -1,11 +1,17 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ListingOptions from '../../components/listing/listing/ListingOptions';
 import ListingRow from '../../components/listing/listing/ListingRow';
 import ListingLayout from '../../layouts/ListingLayout';
-import { selectMyListings } from '../../features/kennelSlice';
+import { fetchListings, selectMyListings } from '../../features/kennelSlice';
+import { useEffect } from 'react';
+import { store } from '../../store';
 
 const Listing = () => {
   const listings = useSelector(selectMyListings);
+
+  useEffect(() => {
+    store.dispatch(fetchListings());
+  }, [store]);
 
   return (
     <>
