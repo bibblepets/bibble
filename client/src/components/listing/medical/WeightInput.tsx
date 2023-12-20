@@ -2,14 +2,14 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import React, { useCallback, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  selectListingWeight,
+  selectListingCreatorWeight,
   setWeight
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 import { useDropdown } from '../hooks';
 
 const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
-  const weight = useSelector(selectListingWeight) || 0;
+  const weight = useSelector(selectListingCreatorWeight) || 0;
   const [unit, setUnit] = useState('kg');
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);

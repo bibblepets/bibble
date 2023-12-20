@@ -535,38 +535,38 @@ export const {
   setPrice
 } = listingCreatorSlice.actions;
 
-export const selectListing = (state: RootState) => state.listingCreator;
-export const selectListingSpecies = (state: RootState) =>
+export const selectListingCreator = (state: RootState) => state.listingCreator;
+export const selectListingCreatorSpecies = (state: RootState) =>
   state.listingCreator.biology?.species;
-export const selectListingBreeds = (state: RootState) =>
+export const selectListingCreatorBreeds = (state: RootState) =>
   state.listingCreator.biology?.breeds;
-export const selectListingOrigin = (state: RootState) =>
+export const selectListingCreatorOrigin = (state: RootState) =>
   state.listingCreator.biography?.origin;
-export const selectListingGender = (state: RootState) =>
+export const selectListingCreatorGender = (state: RootState) =>
   state.listingCreator.biography?.gender;
-export const selectListingBirthdate = (state: RootState) =>
+export const selectListingCreatorBirthdate = (state: RootState) =>
   state.listingCreator.biography?.birthdate;
-export const selectListingDescription = (state: RootState) =>
+export const selectListingCreatorDescription = (state: RootState) =>
   state.listingCreator.biography?.description;
-export const selectListingSize = (state: RootState) =>
+export const selectListingCreatorSize = (state: RootState) =>
   state.listingCreator.medical?.size;
-export const selectListingWeight = (state: RootState) =>
+export const selectListingCreatorWeight = (state: RootState) =>
   state.listingCreator.medical?.weight;
-export const selectListingHairCoat = (state: RootState) =>
+export const selectListingCreatorHairCoat = (state: RootState) =>
   state.listingCreator.medical?.hairCoat;
-export const selectListingVaccines = (state: RootState) =>
+export const selectListingCreatorVaccines = (state: RootState) =>
   state.listingCreator.medical?.vaccines;
-export const selectListingAvsLicenseNumber = (state: RootState) =>
+export const selectListingCreatorAvsLicenseNumber = (state: RootState) =>
   state.listingCreator.legal?.avsLicenseNumber;
-export const selectListingLegalTags = (state: RootState) =>
+export const selectListingCreatorLegalTags = (state: RootState) =>
   state.listingCreator.legal?.legalTags;
-export const selectListingMedia = (state: RootState) =>
+export const selectListingCreatorMedia = (state: RootState) =>
   state.listingCreator.media;
-export const selectListingPrice = (state: RootState) =>
+export const selectListingCreatorPrice = (state: RootState) =>
   state.listingCreator.price;
-export const selectListingStatus = (state: RootState) =>
+export const selectListingCreatorStatus = (state: RootState) =>
   state.listingCreator.status;
-export const selectListingError = (state: RootState) =>
+export const selectListingCreatorError = (state: RootState) =>
   state.listingCreator.error;
 
 export default listingCreatorSlice.reducer;

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  selectListingPrice,
+  selectListingCreatorPrice,
   setPrice
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 
 const PriceInput = ({ readOnly }: { readOnly?: boolean }) => {
-  const price = useSelector(selectListingPrice) || 0;
+  const price = useSelector(selectListingCreatorPrice) || 0;
   const [sliderValue, setSliderValue] = useState(0);
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {

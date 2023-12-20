@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  selectListingDescription,
+  selectListingCreatorDescription,
   setDescription
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 
 const DescriptionInput = ({ readOnly }: { readOnly?: boolean }) => {
-  const description = useSelector(selectListingDescription) || '';
+  const description = useSelector(selectListingCreatorDescription) || '';
   const displayDescription = description.replace(/\[newline\]/g, '\n');
 
   const handleDescriptionChange = useCallback(

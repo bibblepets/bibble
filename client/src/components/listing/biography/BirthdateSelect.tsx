@@ -2,7 +2,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  selectListingBirthdate,
+  selectListingCreatorBirthdate,
   setBirthdate
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
@@ -33,7 +33,7 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
   const monthDropdownRef = useRef<HTMLDivElement>(null);
   const yearDropdownRef = useRef<HTMLDivElement>(null);
 
-  const birthdateString = useSelector(selectListingBirthdate);
+  const birthdateString = useSelector(selectListingCreatorBirthdate);
   const birthdate = new Date(birthdateString || Date.now());
 
   const toggleDate = useCallback(() => {

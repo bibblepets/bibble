@@ -4,14 +4,14 @@ import { useSelector } from 'react-redux';
 import {
   addLegalTag,
   removeLegalTag,
-  selectListingLegalTags
+  selectListingCreatorLegalTags
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 import { LegalTag } from '../../../types';
 import { selectListingOptionsLegalTags } from '../../../features/listingOptionsSlice';
 
 const LegalTagList = ({ readOnly }: { readOnly?: boolean }) => {
-  const selectedLegalTags = useSelector(selectListingLegalTags);
+  const selectedLegalTags = useSelector(selectListingCreatorLegalTags);
   const legalTags = useSelector(selectListingOptionsLegalTags);
 
   const handleClick = useCallback(

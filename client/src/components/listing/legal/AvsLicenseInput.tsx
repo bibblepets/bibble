@@ -2,12 +2,13 @@ import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { store } from '../../../store';
 import {
-  selectListingAvsLicenseNumber,
+  selectListingCreatorAvsLicenseNumber,
   setAvsLicenseNumber
 } from '../../../features/listingCreatorSlice';
 
 const AvsLicenseInput = ({ readOnly }: { readOnly?: boolean }) => {
-  const avsLicenseNumber = useSelector(selectListingAvsLicenseNumber) || '';
+  const avsLicenseNumber =
+    useSelector(selectListingCreatorAvsLicenseNumber) || '';
 
   const handleAvsLicenseNumberChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

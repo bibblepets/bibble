@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import {
   addBreed,
   removeBreed,
-  selectListingBreeds,
-  selectListingSpecies
+  selectListingCreatorBreeds,
+  selectListingCreatorSpecies
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 import { Breed } from '../../../types';
@@ -14,8 +14,8 @@ import { useDropdown } from '../hooks';
 
 const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const selectedSpecies = useSelector(selectListingSpecies);
-  const selectedBreeds = useSelector(selectListingBreeds);
+  const selectedSpecies = useSelector(selectListingCreatorSpecies);
+  const selectedBreeds = useSelector(selectListingCreatorBreeds);
   const allBreeds = useSelector(selectListingOptionsBreeds);
   const dropdownRef = useRef<HTMLDivElement>(null);
 

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { IconType } from 'react-icons';
 import { useSelector } from 'react-redux';
 import {
-  selectListingSpecies,
+  selectListingCreatorSpecies,
   setSpecies
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
@@ -20,7 +20,7 @@ const SpeciesBox: React.FC<SpeciesBoxProps> = ({
   icon: Icon,
   disabled
 }) => {
-  const selectedSpecies = useSelector(selectListingSpecies);
+  const selectedSpecies = useSelector(selectListingCreatorSpecies);
 
   const onSelect = useCallback(
     (s: Species) => {

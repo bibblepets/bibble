@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { BiFemaleSign, BiMaleSign } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 import {
-  selectListingGender,
+  selectListingCreatorGender,
   setGender
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
@@ -10,7 +10,7 @@ import { Gender } from '../../../types';
 import { toCamelCase } from '../../../utils/string';
 
 const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
-  const selectedGender = useSelector(selectListingGender);
+  const selectedGender = useSelector(selectListingCreatorGender);
 
   const handleClick = useCallback(
     (gender: Gender) => {

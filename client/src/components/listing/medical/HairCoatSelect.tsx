@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  selectListingHairCoat,
+  selectListingCreatorHairCoat,
   setHairCoat
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
@@ -11,7 +11,7 @@ import { useDropdown } from '../hooks';
 
 const HairCoatSelect = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const selectedHairCoat = useSelector(selectListingHairCoat);
+  const selectedHairCoat = useSelector(selectListingCreatorHairCoat);
   const hairCoats = useSelector(selectListingOptionsHairCoats);
   const dropdownRef = useRef<HTMLDivElement>(null);
 

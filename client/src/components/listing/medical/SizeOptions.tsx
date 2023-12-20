@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  selectListingSize,
+  selectListingCreatorSize,
   setSize
 } from '../../../features/listingCreatorSlice';
 import { Size } from '../../../types';
@@ -11,7 +11,7 @@ import { toCamelCase } from '../../../utils/string';
 const sizes: Size[] = ['Small', 'Medium', 'Large'];
 
 const SizeOptions = ({ readOnly }: { readOnly?: boolean }) => {
-  const selectedSize = useSelector(selectListingSize);
+  const selectedSize = useSelector(selectListingCreatorSize);
 
   const handleClick = useCallback(
     (size: Size) => {

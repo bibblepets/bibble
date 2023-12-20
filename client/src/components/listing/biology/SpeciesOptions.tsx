@@ -6,7 +6,7 @@ import {
   GiSittingDog
 } from 'react-icons/gi';
 import { useSelector } from 'react-redux';
-import { selectListingSpecies } from '../../../features/listingCreatorSlice';
+import { selectListingCreatorSpecies } from '../../../features/listingCreatorSlice';
 import { toCamelCase } from '../../../utils/string';
 import SpeciesBox from './SpeciesBox';
 
@@ -38,7 +38,7 @@ const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
     }
   ];
 
-  const selectedSpecies = useSelector(selectListingSpecies);
+  const selectedSpecies = useSelector(selectListingCreatorSpecies);
 
   if (readOnly) {
     return (

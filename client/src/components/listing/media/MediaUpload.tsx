@@ -5,14 +5,14 @@ import { useSelector } from 'react-redux';
 import {
   addMedia,
   removeMedia,
-  selectListingMedia
+  selectListingCreatorMedia
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 import { Media } from '../../../types';
 import toast from 'react-hot-toast';
 
 const MediaUpload = ({ readOnly }: { readOnly?: boolean }) => {
-  const media = useSelector(selectListingMedia) || [];
+  const media = useSelector(selectListingCreatorMedia) || [];
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {

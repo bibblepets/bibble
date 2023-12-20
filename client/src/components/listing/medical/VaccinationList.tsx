@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import {
   addVaccination,
   removeVaccination,
-  selectListingSpecies,
-  selectListingVaccines
+  selectListingCreatorSpecies,
+  selectListingCreatorVaccines
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 import { Vaccine } from '../../../types';
@@ -13,10 +13,10 @@ import { toCamelCase } from '../../../utils/string';
 import { selectListingOptionsVaccines } from '../../../features/listingOptionsSlice';
 
 const VaccinationList = ({ readOnly }: { readOnly?: boolean }) => {
-  const species = useSelector(selectListingSpecies);
+  const species = useSelector(selectListingCreatorSpecies);
   const allVaccines = useSelector(selectListingOptionsVaccines);
   const vaccines = allVaccines.filter((vaccine) => vaccine.species === species);
-  const selectedVaccines = useSelector(selectListingVaccines);
+  const selectedVaccines = useSelector(selectListingCreatorVaccines);
 
   const handleClick = useCallback(
     (vaccine: Vaccine) => {
