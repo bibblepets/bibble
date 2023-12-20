@@ -9,7 +9,6 @@ import {
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 import { Vaccine } from '../../../types';
-import { toCamelCase } from '../../../utils/string';
 import { selectListingOptionsVaccines } from '../../../features/listingOptionsSlice';
 
 const VaccinationList = ({ readOnly }: { readOnly?: boolean }) => {
@@ -45,7 +44,7 @@ const VaccinationList = ({ readOnly }: { readOnly?: boolean }) => {
             )}
           </button>
           <a key={index} className="text-sm font-light text-gray-500">
-            {toCamelCase(vaccine.name)}
+            {vaccine.name}
           </a>
         </div>
       ))}
