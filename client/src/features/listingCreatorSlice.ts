@@ -50,13 +50,13 @@ export const updateListingCreatorById = createAsyncThunk(
       state.listingCreator;
 
     return await axios
-      .post(`/api/listing-creator/${_id}`, {
+      .post(`/api/listing-creator/update/${_id}`, {
         stage,
         biology,
         biography,
         medical,
         legal,
-        media,
+        // Media not saveable,
         price
       })
       .then((response) => {

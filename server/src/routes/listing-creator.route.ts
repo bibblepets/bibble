@@ -34,11 +34,11 @@ router.get('/:id', ListingCreatorController.getListingCreatorById);
 router.post('/', ListingCreatorController.createListingCreator);
 
 /**
- * @route POST /api/listing-creator/:id
+ * @route POST /api/listing-creator/update/:id
  * @desc Update a listing creator
  * @access Private
  */
-router.post('/:id', ListingCreatorController.updateListingCreatorById);
+router.post('/update/:id', ListingCreatorController.updateListingCreatorById);
 
 /**
  * @route POST /api/listing-creator/biology
