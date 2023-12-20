@@ -1,9 +1,4 @@
-import { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { store } from '../../../store';
-import { selectListing } from '../../../features/listingCreatorSlice';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../features/authSlice';
 import { ListingStage } from '../../../types';
 import { useProgress } from './hooks';
 

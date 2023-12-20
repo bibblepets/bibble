@@ -50,7 +50,7 @@ export const updateListingCreatorById = createAsyncThunk(
       state.listingCreator;
 
     return await axios
-      .post(`/api/listing-creator/update/${_id}`, {
+      .put(`/api/listing-creator/${_id}`, {
         stage,
         biology,
         biography,
