@@ -24,11 +24,11 @@ const Listing = () => {
   return (
     <>
       <ListingLayout>
-        <div className="flex flex-col w-full md:w-[756px] justify-center h-[75vh] px-4">
+        <div className="flex flex-col w-full md:w-[756px] justify-center h-[75vh] px-4 overflow-hidden">
           <div className="flex flex-col flex-grow gap-8 overflow-hidden">
             <h1 className="text-3xl font-medium">Welcome back, Titus</h1>
 
-            <div className="flex flex-col gap-4 h-full overflow-hidden">
+            <div className="flex flex-col gap-4 h-full overflow-auto">
               <div className="flex flex-col gap-4 h-1/2">
                 <a className="font-medium">Continue where you left off</a>
                 {listingCreators.length > 0 ? (
@@ -63,9 +63,8 @@ const Listing = () => {
                 )}
               </div>
               <hr className="border-gray-200 my-4" />
-
-              <ListingOptions />
             </div>
+            <ListingOptions />
           </div>
         </div>
       </ListingLayout>

@@ -7,7 +7,6 @@ interface ListingRowProps {
 }
 
 const ListingRow: React.FC<ListingRowProps> = ({ listing }) => {
-  console.log(listing.expiryDate);
   return (
     <button onClick={() => alert('implement')} className="flex flex-row gap-4">
       <div className="rounded-lg">
