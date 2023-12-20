@@ -9,7 +9,7 @@ import { store } from '../../../store';
 import { useDropdown } from '../hooks';
 
 const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
-  const weight = useSelector(selectListingWeight);
+  const weight = useSelector(selectListingCreatorWeight);
   const [unit, setUnit] = useState('kg');
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
