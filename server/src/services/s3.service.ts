@@ -1,3 +1,4 @@
+import * as multer from 'multer';
 import { Schema } from 'mongoose';
 import {
   S3Client,
