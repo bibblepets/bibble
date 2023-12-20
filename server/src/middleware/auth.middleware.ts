@@ -18,7 +18,6 @@ export const getUserFromAuthToken = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('Getting User from Auth Token...');
   const { authToken }: { authToken: string } = req.cookies;
 
   if (!authToken) {
@@ -65,7 +64,6 @@ export const validateBibbleTier = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('Checking Bibble Tier...');
   try {
     const user: IPopulatedUser = req.body.user
 

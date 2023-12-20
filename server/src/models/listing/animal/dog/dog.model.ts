@@ -1,4 +1,3 @@
-import { Request } from 'express';
 import mongoose, { Schema, Model } from 'mongoose';
 import {
   IAnimal,
