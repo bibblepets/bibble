@@ -19,7 +19,7 @@ import {
   ListingModel
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
-import { BibbleError } from '../errors/errors.class';
+import { BibbleError, FieldAssertionError } from '../errors/errors.class';
 import { putMedia } from '../services/s3.service';
 
 const {
@@ -235,8 +235,8 @@ export const updateMedia = async (req: IUpdateMediaRequest, res: Response) => {
 
     assertFields(['_id', 'stage'], req);
 
-    if (!files) {
-      throw new BibbleError('No files were uploaded.');
+    if ((!mediaNames || mediaNames.length === 0) && files.length === 0) {
+      throw new FieldAssertionError('media');
     }
 
     let media;
