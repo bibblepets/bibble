@@ -151,6 +151,7 @@ export interface IUpdateLegalRequest extends IUserRequest {
 export interface IUpdateMediaRequest extends IUserRequest {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
     user: IPopulatedUser;
+    mediaNames?: string[];
     [key: string]: any;
   };
 }

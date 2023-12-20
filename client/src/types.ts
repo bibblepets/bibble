@@ -149,7 +149,8 @@ export type LegalTag = string;
 
 export type Media = {
   _id?: string;
-  file: File;
+  name?: string;
+  file?: File;
   url: string;
 };
 

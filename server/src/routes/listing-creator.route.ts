@@ -75,7 +75,7 @@ router.post('/legal', ListingCreatorController.updateLegal);
  */
 router.post(
   '/media',
-  upload.array('media'),
+  upload.array('data'),
   ListingCreatorController.updateMedia
 );
 

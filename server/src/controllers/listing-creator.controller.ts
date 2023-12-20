@@ -229,7 +229,7 @@ export const updateLegal = async (req: IUpdateLegalRequest, res: Response) => {
 
 export const updateMedia = async (req: IUpdateMediaRequest, res: Response) => {
   try {
-    const { _id, stage } = req.body;
+    const { _id, stage, mediaNames } = req.body;
     const files = req.files as Express.Multer.File[];
 
     assertFields(['_id', 'stage'], req);
@@ -238,13 +238,19 @@ export const updateMedia = async (req: IUpdateMediaRequest, res: Response) => {
       throw new BibbleError('No files were uploaded.');
     }
 
-    const media = await putMedia(files);
+    let media;
+
+    if (Array.isArray(mediaNames) && mediaNames.length > 0) {
+      media = mediaNames.map((name) => ({ name, url: undefined }));
+    }
+
+    const uploadedMedia = await putMedia(_id, files, media);
 
     const listingCreator = await ListingCreator.findByIdAndUpdate(
       _id,
       {
         stage,
-        media
+        media: uploadedMedia
       },
       { new: true }
     ).then(async (listingCreator) => await listingCreator?.populateAll());

@@ -163,7 +163,10 @@ export const updateMedia = createAsyncThunk(
     formData.append('_id', state.listingCreator._id || '');
     formData.append('stage', '5');
     media.forEach((media) => {
-      formData.append('media', media.file);
+      media.name && formData.append('mediaNames[]', media.name);
+    });
+    media.forEach((media) => {
+      media.file && formData.append('data', media.file);
     });
 
     return await axios
