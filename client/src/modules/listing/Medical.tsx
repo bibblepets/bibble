@@ -11,22 +11,22 @@ const Medical = () => {
     <ListingLayout>
       <ListingStage title="Medical" subtitle="We need their medical details...">
         {/* SIZE */}
-        <ListingSection title="Size">
+        <ListingSection title="Size" field="size">
           <SizeOptions />
         </ListingSection>
 
         {/* WEIGHT */}
-        <ListingSection title="Weight">
+        <ListingSection title="Weight" field="weight">
           <WeightInput />
         </ListingSection>
 
         {/* HAIR COAT */}
-        <ListingSection title="Hair Coat">
+        <ListingSection title="Hair Coat" field="hairCoat">
           <HairCoatSelect />
         </ListingSection>
 
         {/* VACCINATIONS */}
-        <ListingSection title="Vaccinations">
+        <ListingSection title="Vaccinations" field="vaccines">
           <VaccinationList />
         </ListingSection>
       </ListingStage>

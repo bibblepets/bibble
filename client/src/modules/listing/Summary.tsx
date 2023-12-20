@@ -23,59 +23,59 @@ const Summary = () => {
         title="Summary"
         subtitle="Double check all their details..."
       >
-        <ListingSection title="Species">
+        <ListingSection title="Species" field="species">
           <SpeciesOptions readOnly />
         </ListingSection>
 
-        <ListingSection title="Breed">
+        <ListingSection title="Breed" field="breed">
           <BreedDropdown readOnly />
         </ListingSection>
 
-        <ListingSection title="Origin">
+        <ListingSection title="Origin" field="origin">
           <OriginDropdown readOnly />
         </ListingSection>
 
-        <ListingSection title="Gender">
+        <ListingSection title="Gender" field="gender">
           <GenderOptions readOnly />
         </ListingSection>
 
-        <ListingSection title="Birthdate">
+        <ListingSection title="Birthdate" field="birthdate">
           <BirthdateSelect readOnly />
         </ListingSection>
 
-        <ListingSection title="Description">
+        <ListingSection title="Description" field="description">
           <DescriptionInput readOnly />
         </ListingSection>
 
-        <ListingSection title="Size">
+        <ListingSection title="Size" field="size">
           <SizeOptions readOnly />
         </ListingSection>
 
-        <ListingSection title="Weight">
+        <ListingSection title="Weight" field="weight">
           <WeightInput readOnly />
         </ListingSection>
 
-        <ListingSection title="Hair Coat">
+        <ListingSection title="Hair Coat" field="hairCoat">
           <HairCoatSelect readOnly />
         </ListingSection>
 
-        <ListingSection title="Vaccinations">
+        <ListingSection title="Vaccinations" field="vaccines">
           <VaccinationList readOnly />
         </ListingSection>
 
-        <ListingSection title="AVS License Number">
+        <ListingSection title="AVS License Number" field="avsLicenseNumber">
           <AvsLicenseInput readOnly />
         </ListingSection>
 
-        <ListingSection title="Licenses">
+        <ListingSection title="Legal Tags" field="legalTags">
           <LegalTagList readOnly />
         </ListingSection>
 
-        <ListingSection title="Media">
+        <ListingSection title="Media" field="media">
           <MediaUpload readOnly />
         </ListingSection>
 
-        <ListingSection title="Price">
+        <ListingSection title="Price" field="price">
           <PriceInput readOnly />
         </ListingSection>
       </ListingStage>

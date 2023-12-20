@@ -10,12 +10,12 @@ const Biology = () => {
     <ListingLayout>
       <ListingStage title="Biology" subtitle="What's their breed and species?">
         {/* SPECIES */}
-        <ListingSection title="Species">
+        <ListingSection title="Species" field="species">
           <SpeciesOptions />
         </ListingSection>
 
         {/* BREED */}
-        <ListingSection title="Breed">
+        <ListingSection title="Breed" field="breed">
           <BreedDropdown />
         </ListingSection>
       </ListingStage>

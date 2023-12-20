@@ -1,14 +1,23 @@
 import { useSelector } from 'react-redux';
-import { selectListingCreatorError } from '../../../features/listingCreatorSlice';
+import {
+  selectListingCreatorError,
+  selectListingCreatorStatus
+} from '../../../features/listingCreatorSlice';
 
 interface ListingSectionProps {
   title: string;
+  field: string;
   children: React.ReactNode;
 }
 
-const ListingSection: React.FC<ListingSectionProps> = ({ title, children }) => {
+const ListingSection: React.FC<ListingSectionProps> = ({
+  title,
+  field,
+  children
+}) => {
+  const status = useSelector(selectListingCreatorStatus);
   const error = useSelector(selectListingCreatorError);
-  const isError = error?.toLowerCase().includes(title.toLowerCase());
+  const isError = status === 'ERROR' && error?.includes(field);
 
   return (
     <div className="flex flex-col gap-6">

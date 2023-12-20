@@ -9,12 +9,12 @@ const Legal = () => {
     <ListingLayout>
       <ListingStage title="Legal" subtitle="Now for some legal details...">
         {/* AVS */}
-        <ListingSection title="AVS License Number">
+        <ListingSection title="AVS License Number" field="avsLicenseNumber">
           <AvsLicenseInput />
         </ListingSection>
 
         {/* LICENSES */}
-        <ListingSection title="Legal Tags">
+        <ListingSection title="Legal Tags" field="legalTags">
           <LegalTagList />
         </ListingSection>
       </ListingStage>

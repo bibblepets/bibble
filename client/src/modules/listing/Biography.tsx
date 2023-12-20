@@ -14,22 +14,22 @@ const Biography = () => {
         subtitle="Tell us more about your friend..."
       >
         {/* ORIGIN */}
-        <ListingSection title="Origin">
+        <ListingSection title="Origin" field="origin">
           <OriginDropdown />
         </ListingSection>
 
         {/* GENDER */}
-        <ListingSection title="Gender">
+        <ListingSection title="Gender" field="gender">
           <GenderOptions />
         </ListingSection>
 
         {/* BIRTHDATE */}
-        <ListingSection title="Birthdate">
+        <ListingSection title="Birthdate" field="birthdate">
           <BirthdateSelect />
         </ListingSection>
 
         {/* DESCRIPTION */}
-        <ListingSection title="Description">
+        <ListingSection title="Description" field="description">
           <DescriptionInput />
         </ListingSection>
       </ListingStage>
