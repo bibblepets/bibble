@@ -10,6 +10,7 @@ import { selectCurrentUser } from '../../../features/authSlice';
 const ListingOptions = () => {
   const currentUser = useSelector(selectCurrentUser);
   const navigate = useNavigate();
+  const canListSale = currentUser?.businessProfile?.bibbleTier !== 'Basic';
 
   const onStart = useCallback(
     async (saleType: SaleType) => {
@@ -46,17 +47,36 @@ const ListingOptions = () => {
         </div>
       </button>
 
-      <button onClick={() => onStart('Sale')} className="flex flex-row gap-4">
-        <div className="p-4 bg-rose-500 rounded-lg">
+      <button
+        disabled={!canListSale}
+        onClick={() => onStart('Sale')}
+        className="flex flex-row gap-4"
+      >
+        <div
+          className={`p-4 ${
+            canListSale ? 'bg-rose-500' : 'bg-gray-500'
+          } rounded-lg`}
+        >
           <SquaresPlusIcon className="w-5 h-5 text-white" />
         </div>
         <div className="flex flex-col gap-1 p-1">
           <div className="flex flex-row items-center gap-2">
-            <a className="text-sm font-medium">List a Sale</a>
-            <ArrowRightIcon className="w-3 h-3" strokeWidth={3} />
+            <a
+              className={`text-sm font-medium ${
+                !canListSale && 'text-gray-500'
+              }`}
+            >
+              List a Sale
+            </a>
+            <ArrowRightIcon
+              className={`w-3 h-3 ${!canListSale && 'text-gray-500'}`}
+              strokeWidth={3}
+            />
           </div>
           <p className="text-sm font-light text-gray-500 whitespace-nowrap overflow-hidden">
-            Create a listing for sale
+            {canListSale
+              ? 'Create a listing for sale'
+              : 'Upgrade your Bibble Tier to list a sale'}
           </p>
         </div>
       </button>

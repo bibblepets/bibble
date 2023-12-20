@@ -57,6 +57,8 @@ export type BusinessProfile = {
   updatedAt: Date;
 };
 
+export type BibbleTier = 'Basic' | 'Verified' | 'Partner' | 'Super';
+
 export type ListingCreator = {
   _id?: string;
   stage: number;
