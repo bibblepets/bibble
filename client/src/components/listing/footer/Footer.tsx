@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ListingStage } from '../../../types';
 import { useProgress } from './hooks';
+import ProgressBar from './ProgressBar';
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -30,7 +31,10 @@ const Footer = () => {
 
   return (
     <footer className="fixed w-full bottom-0 z-40">
-      <hr className="border-gray-200 border-b-4" />
+      <ProgressBar
+        stage={stages.indexOf(stage as ListingStage)}
+        totalStages={stages.length}
+      />
       <div className="flex justify-between bg-white">
         <button onClick={onBack} className="px-8 py-3 m-4 underline">
           {'Back'}
