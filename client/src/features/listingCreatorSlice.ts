@@ -68,6 +68,23 @@ export const updateListingCreatorById = createAsyncThunk(
   }
 );
 
+export const deleteListingCreatorById = createAsyncThunk(
+  '/listingCreator/deleteListingCreatorById',
+  async (_, { getState }) => {
+    const state = getState() as RootState;
+    const { _id } = state.listingCreator;
+
+    return await axios
+      .delete(`/api/listing-creator/${_id}`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
 export const createListingCreator = createAsyncThunk(
   '/listingCreator/createListingCreator',
   async (payload: { currentUser: User; saleType: SaleType }) => {
@@ -490,6 +507,28 @@ const listingCreatorSlice = createSlice({
         resetState(state);
       })
       .addCase(createListing.rejected, (state, action) => {
+        state.status = 'ERROR';
+        state.error = action.error.message;
+      })
+      .addCase(updateListingCreatorById.pending, (state) => {
+        state.status = 'LOADING';
+      })
+      .addCase(updateListingCreatorById.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        resetState(state);
+      })
+      .addCase(updateListingCreatorById.rejected, (state, action) => {
+        state.status = 'ERROR';
+        state.error = action.error.message;
+      })
+      .addCase(deleteListingCreatorById.pending, (state) => {
+        state.status = 'LOADING';
+      })
+      .addCase(deleteListingCreatorById.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        resetState(state);
+      })
+      .addCase(deleteListingCreatorById.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       });

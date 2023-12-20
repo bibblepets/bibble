@@ -1,10 +1,16 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
-import { LoginModalType, RegisterModalType } from '../types';
+import {
+  ConfirmDeleteModaltype,
+  LoginModalType,
+  RegisterModalType
+} from '../types';
+import { NavigateFunction } from 'react-router-dom';
 
 interface ModalsState {
   registerModal: RegisterModalType;
   loginModal: LoginModalType;
+  confirmDeleteModal: ConfirmDeleteModaltype;
 }
 
 const initialState: ModalsState = {
@@ -23,6 +29,10 @@ const initialState: ModalsState = {
     email: '',
     password: '',
     title: ''
+  },
+  confirmDeleteModal: {
+    isOpen: false,
+    status: 'DEFAULT'
   }
 };
 
@@ -88,6 +98,16 @@ export const modalsSlice = createSlice({
 
       state.loginModal.title =
         titles[Math.floor(Math.random() * titles.length)];
+    },
+    openConfirmDeleteModal: (
+      state,
+      action: PayloadAction<NavigateFunction>
+    ) => {
+      state.confirmDeleteModal.isOpen = true;
+      state.confirmDeleteModal.navigate = action.payload;
+    },
+    closeConfirmDeleteModal: (state) => {
+      state.confirmDeleteModal.isOpen = false;
     }
   }
 });
@@ -106,7 +126,9 @@ export const {
   updateLoginModalEmail,
   updateLoginModalPassword,
   resetLoginModal,
-  generateLoginModalTitle
+  generateLoginModalTitle,
+  openConfirmDeleteModal,
+  closeConfirmDeleteModal
 } = modalsSlice.actions;
 
 export const selectIsRegisterModalOpen = (state: RootState) =>
@@ -133,5 +155,9 @@ export const selectLoginModalPassword = (state: RootState) =>
   state.modals.loginModal.password;
 export const selectLoginModalTitle = (state: RootState) =>
   state.modals.loginModal.title;
+export const selectConfirmDeleteModalIsOpen = (state: RootState) =>
+  state.modals.confirmDeleteModal.isOpen;
+export const selectConfirmDeleteModalNavigate = (state: RootState) =>
+  state.modals.confirmDeleteModal.navigate;
 
 export default modalsSlice.reducer;
