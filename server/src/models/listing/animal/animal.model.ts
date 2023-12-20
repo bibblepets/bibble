@@ -22,6 +22,21 @@ export interface IAnimal {
   updatedAt: Date;
 }
 
+export interface IPopulatedAnimal {
+  _id: Schema.Types.ObjectId;
+  breeds: IBreed[];
+  vaccines?: IVaccine[];
+  origin: ICountry;
+  name?: string;
+  gender: string;
+  birthdate: Date;
+  size: string;
+  weight: number;
+  avsLicenseNumber: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface IGetBreedsBySpeciesRequest extends Request {
   params: {
     species: string;

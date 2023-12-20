@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import { BibbleError } from '../errors/errors.class';
 import { handleError } from '../utils/util';
 import {
   ListingModel,
@@ -11,8 +12,6 @@ import {
   IGetMyListingsRequest
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
-import { BibbleError } from '../errors/errors.class';
-import { getMediaUrl } from '../services/s3.service';
 
 require('../models/country.model');
 const {
@@ -75,10 +74,7 @@ export const createListing = async (
 
     // Populate pet listing
     console.log('Populating pet listing...');
-    const populatedListing = await createdListing.populate([
-      { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
-      { path: 'animal', populate: { path: 'breeds vaccines origin' } }
-    ]);
+    const populatedListing = await createdListing.populateAll();
     console.log('Pet listing populated.');
 
     return res.status(201).json({
@@ -130,22 +126,14 @@ export const getAllListings = async (
   res: Response
 ) => {
   try {
-    const allListings = await Listing.find().populate([
-      { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
-      { path: 'animal', populate: { path: 'breeds vaccines origin' } }
-    ]);
-
-    const populatedMediaListings = await Promise.all(
-      allListings.map(async (listing) => {
-        const docCopy = listing.toObject();
-
-        docCopy.media = await Promise.all(listing.media.map(getMediaUrl));
-
-        return docCopy;
-      })
+    const allListings = await Listing.find().then(
+      async (listings) =>
+        await Promise.all(
+          listings.map(async (listing) => await listing.populateAll())
+        )
     );
-    console.log(populatedMediaListings[0].media[0].url);
-    return res.status(200).json(populatedMediaListings);
+
+    return res.status(200).json(allListings);
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -158,10 +146,12 @@ export const getAllListingsBySpecies = async (
   const { species } = req.params;
 
   try {
-    const speciesListings = await Listing.find({ species }).populate([
-      { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
-      { path: 'animal', populate: { path: 'breeds vaccines origin' } }
-    ]);
+    const speciesListings = await Listing.find({ species }).then(
+      async (listings) =>
+        await Promise.all(
+          listings.map(async (listing) => await listing.populateAll())
+        )
+    );
     return res.status(200).json(speciesListings);
   } catch (error: any) {
     return handleError(res, error);
@@ -176,15 +166,9 @@ export const getListingById = async (
 
   try {
     const listing = await Listing.findById(id).then(
-      async (listing) =>
-        await listing?.populate([
-          {
-            path: 'lister',
-            populate: { path: 'buyerProfile businessProfile' }
-          },
-          { path: 'animal', populate: { path: 'breeds vaccines origin' } }
-        ])
+      async (listing) => await listing?.populateAll()
     );
+
     return res.status(200).json(listing);
   } catch (error: any) {
     return handleError(res, error);
@@ -199,10 +183,12 @@ export const getMyListings = async (
 
   try {
     console.log('Getting my listings...');
-    const myListings = await Listing.find({ lister: user._id }).populate([
-      { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
-      { path: 'animal', populate: { path: 'breeds vaccines origin' } }
-    ]);
+    const myListings = await Listing.find({ lister: user._id }).then(
+      async (listings) =>
+        await Promise.all(
+          listings.map(async (listing) => await listing.populateAll())
+        )
+    );
     return res.status(200).json(myListings);
   } catch (error: any) {
     return handleError(res, error);
@@ -263,14 +249,12 @@ export const updateListingById = async (
 
     // Populate pet listing
     console.log('Populating pet listing...');
-    const updatedListing = await Listing.findById(id);
-    const populatedListing = await updatedListing?.populate([
-      { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
-      { path: 'animal', populate: { path: 'breeds vaccines origin' } }
-    ]);
+    const updatedListing = await Listing.findById(id).then(async (listing) =>
+      listing?.populateAll()
+    );
 
     return res.status(200).json({
-      listing: populatedListing,
+      listing: updatedListing,
       message: 'Pet listing updated successfully.'
     });
   } catch (error: any) {

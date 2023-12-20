@@ -395,7 +395,7 @@ const generateMedia = (mediaTypes: string[]) => {
   const media = [];
   for (let i = 0; i < numMedia; i++) {
     media.push({
-      name: 'palceholder_dog.jpg',
+      name: 'placeholder_dog.jpg',
     });
   }
   return media;

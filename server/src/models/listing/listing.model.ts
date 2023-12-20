@@ -4,8 +4,10 @@ import { IPopulatedUser, IUser, IUserRequest } from '../user/user.model';
 import {
   IAnimal,
   ICreateAnimalRequest,
+  IPopulatedAnimal,
   IUpdateAnimalRequest
 } from './animal/animal.model';
+import { getMediaUrl } from '../../services/s3.service';
 
 const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
 const mediaTypes = ['Image']; // Add more types here: 'video', etc.
@@ -27,8 +29,25 @@ export interface IListing {
   expiryDate: Date;
 }
 
+export interface IPopulatedListing {
+  _id: Schema.Types.ObjectId;
+  lister: IPopulatedUser;
+  price: number;
+  description: string;
+  saleType: string;
+  saleStatus: string;
+  media: { name: string; url?: string }[];
+  animal: IPopulatedAnimal;
+  species: string;
+  createdAt: Date;
+  updatedAt: Date;
+  expiryDate: Date;
+}
+
 interface IListingMethods {
   updateSaleStatus(): void;
+  populateMedia(): Promise<IListing>;
+  populateAll(): Promise<IPopulatedListing>;
 }
 
 export interface ListingModel extends Model<IListing, {}, IListingMethods> {}
@@ -165,6 +184,21 @@ ListingSchema.method('updateSaleStatus', function () {
   } else {
     this.saleStatus = 'Available';
   }
+});
+
+ListingSchema.method('populateMedia', async function () {
+  const docCopy: IPopulatedListing = this.toObject();
+
+  docCopy.media = await Promise.all(this.media.map(getMediaUrl));
+
+  return docCopy;
+});
+
+ListingSchema.method('populateAll', async function () {
+  return await this.populate([
+    { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
+    { path: 'animal', populate: { path: 'breeds vaccines origin' } }
+  ]).then(async (listing) => await listing.populateMedia());
 });
 
 ListingSchema.pre('save', function (next) {

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { assertFields, handleError } from '../utils/util';
 import {
   ICreateListingCreatorRequest,
@@ -33,31 +33,39 @@ const {
   Dog
 }: { Dog: DogModel } = require('../models/listing/animal/dog/dog.model');
 
-export const getMyListingCreators = async (req: IGetMyListingCreatorsRequest, res: Response) => {
+export const getMyListingCreators = async (
+  req: IGetMyListingCreatorsRequest,
+  res: Response
+) => {
   try {
     const { user } = req.body;
 
-    const listingCreators = await ListingCreator.find({ lister: user._id });
-    const populatedListingCreators = await Promise.all(
-      listingCreators.map(async (listingCreator) => {
-        return await populateFields(listingCreator);
-      })
+    const listingCreators = await ListingCreator.find({
+      lister: user._id
+    }).then(
+      async (listingCreators) =>
+        await Promise.all(
+          listingCreators.map(
+            async (listingCreator) => await listingCreator.populateAll()
+          )
+        )
     );
 
-    return res.status(200).json(populatedListingCreators);
+    return res.status(200).json(listingCreators);
   } catch (error: any) {
     return handleError(res, error);
   }
-}
+};
 
 export const getListingCreatorById = async (req: any, res: Response) => {
   try {
     const { id } = req.params;
 
-    const listingCreator = await ListingCreator.findById(id);
-    const populatedListingCreator = await populateFields(listingCreator);
+    const listingCreator = await ListingCreator.findById(id).then(
+      async (listingCreator) => await listingCreator?.populateAll()
+    );
 
-    return res.status(200).json(populatedListingCreator);
+    return res.status(200).json(listingCreator);
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -74,10 +82,9 @@ export const createListingCreator = async (
       stage: 0,
       saleType: saleType,
       lister: user._id
-    });
-    const populatedListingCreator = await populateFields(listingCreator);
+    }).then(async (listingCreator) => await listingCreator.populateAll());
 
-    return res.status(201).json(populatedListingCreator);
+    return res.status(201).json(listingCreator);
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -91,14 +98,14 @@ export const updateListingCreatorById = async (
     const { id } = req.params;
 
     const listingCreator = await ListingCreator.findByIdAndUpdate(
-      id, {
+      id,
+      {
         ...req.body
       },
       { new: true }
-    );
-    const populatedListingCreator = await populateFields(listingCreator);
+    ).then(async (listingCreator) => await listingCreator?.populateAll());
 
-    return res.status(200).json(populatedListingCreator);
+    return res.status(200).json(listingCreator);
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -123,10 +130,9 @@ export const updateBiology = async (
         }
       },
       { new: true }
-    );
-    const populatedListingCreator = await populateFields(listingCreator);
+    ).then(async (listingCreator) => await listingCreator?.populateAll());
 
-    return res.status(200).json(populatedListingCreator);
+    return res.status(200).json(listingCreator);
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -137,7 +143,8 @@ export const updateBiography = async (
   res: Response
 ) => {
   try {
-    const { _id, stage, origin, gender, birthdate, description, user } = req.body;
+    const { _id, stage, origin, gender, birthdate, description, user } =
+      req.body;
 
     assertFields(
       ['_id', 'stage', 'origin', 'gender', 'birthdate', 'description'],
@@ -156,10 +163,9 @@ export const updateBiography = async (
         }
       },
       { new: true }
-    );
-    const populatedListingCreator = await populateFields(listingCreator);
+    ).then(async (listingCreator) => await listingCreator?.populateAll());
 
-    return res.status(200).json(populatedListingCreator);
+    return res.status(200).json(listingCreator);
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -189,10 +195,9 @@ export const updateMedical = async (
         }
       },
       { new: true }
-    );
-    const populatedListingCreator = await populateFields(listingCreator);
+    ).then(async (listingCreator) => await listingCreator?.populateAll());
 
-    return res.status(200).json(populatedListingCreator);
+    return res.status(200).json(listingCreator);
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -214,10 +219,9 @@ export const updateLegal = async (req: IUpdateLegalRequest, res: Response) => {
         }
       },
       { new: true }
-    );
-    const populatedListingCreator = await populateFields(listingCreator);
+    ).then(async (listingCreator) => await listingCreator?.populateAll());
 
-    return res.status(200).json(populatedListingCreator);
+    return res.status(200).json(listingCreator);
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -229,7 +233,7 @@ export const updateMedia = async (req: IUpdateMediaRequest, res: Response) => {
     const files = req.files as Express.Multer.File[];
 
     assertFields(['_id', 'stage'], req);
-    
+
     if (!files) {
       throw new BibbleError('No files were uploaded.');
     }
@@ -243,10 +247,9 @@ export const updateMedia = async (req: IUpdateMediaRequest, res: Response) => {
         media
       },
       { new: true }
-    );
-    const populatedListingCreator = await populateFields(listingCreator);
+    ).then(async (listingCreator) => await listingCreator?.populateAll());
 
-    return res.status(200).json(populatedListingCreator);
+    return res.status(200).json(listingCreator);
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -265,10 +268,9 @@ export const updatePrice = async (req: IUpdatePriceRequest, res: Response) => {
         price
       },
       { new: true }
-    );
-    const populatedListingCreator = await populateFields(listingCreator);
+    ).then(async (listingCreator) => await listingCreator?.populateAll());
 
-    return res.status(200).json(populatedListingCreator);
+    return res.status(200).json(listingCreator);
   } catch (error: any) {
     return handleError(res, error);
   }
@@ -287,7 +289,12 @@ export const createListing = async (
     assertFields(['listingCreatorId'], req);
 
     const listingCreator = await ListingCreator.findById(listingCreatorId);
-    const populatedListingCreator = await populateFields(listingCreator);
+
+    if (!listingCreator) {
+      throw new BibbleError('Listing creator not found.');
+    }
+
+    const populatedListingCreator = await listingCreator.populateAll();
 
     const lister = populatedListingCreator.lister;
     const price = populatedListingCreator.price;
@@ -296,9 +303,13 @@ export const createListing = async (
     const media = populatedListingCreator.media;
     const species = populatedListingCreator.biology?.species;
     const animal = {
-      breeds: populatedListingCreator.biology?.breeds,
-      vaccines: populatedListingCreator.medical?.vaccines,
-      origin: populatedListingCreator.biography?.origin,
+      breeds: populatedListingCreator.biology?.breeds?.map(
+        (breed) => breed._id
+      ),
+      vaccines: populatedListingCreator.medical?.vaccines?.map(
+        (vaccine) => vaccine._id
+      ),
+      origin: populatedListingCreator.biography?.origin?._id,
       name: undefined,
       gender: populatedListingCreator.biography?.gender,
       birthdate: populatedListingCreator.biography?.birthdate,
@@ -388,19 +399,31 @@ export const createListing = async (
 };
 
 const validateCreateAnimal = async (
-  species: string,
+  species: string | undefined,
   animal: ICreateAnimalRequest['body']
 ) => {
+  if (!species) {
+    throw new BibbleError(
+      'Please specify the species of the animal in this listing.'
+    );
+  }
+
   if (species == 'Dog') {
     return await Dog.validate(animal);
   } // else if...
 };
 
 const createAnimal = async (
-  species: string,
+  species: string | undefined,
   animal: ICreateAnimalRequest['body']
 ) => {
   let createdAnimal;
+
+  if (!species) {
+    throw new BibbleError(
+      'Please specify the species of the animal in this listing.'
+    );
+  }
 
   if (species == 'Dog') {
     createdAnimal = await Dog.create(animal);
@@ -412,14 +435,3 @@ const createAnimal = async (
 
   return createdAnimal;
 };
-
-async function populateFields(listingCreator: any) {
-  const populatedListingCreator = await listingCreator.populate([
-    'lister',
-    'biology.breeds',
-    'biography.origin',
-    'medical.vaccines'
-  ]);
-
-  return populatedListingCreator;
-}

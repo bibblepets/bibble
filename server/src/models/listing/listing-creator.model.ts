@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema, Document } from 'mongoose';
+import mongoose, { Model, Schema } from 'mongoose';
 import { IPopulatedUser, IUser, IUserRequest } from '../user/user.model';
 import { IBreed } from './animal/breed.model';
 import { IVaccine } from './animal/vaccine.model';
@@ -27,7 +27,7 @@ export interface IListingCreator {
   biography?: {
     origin?: ICountry;
     gender?: string;
-    birthdate?: string;
+    birthdate?: Date;
     description?: string;
   };
   medical?: {
@@ -51,7 +51,7 @@ export interface IPopulatedListingCreator {
   _id: Schema.Types.ObjectId;
   stage: number;
   saleType: string;
-  lister: IUser;
+  lister: IPopulatedUser;
   biology?: {
     species?: string;
     breeds?: IBreed[];
@@ -59,7 +59,7 @@ export interface IPopulatedListingCreator {
   biography?: {
     origin?: ICountry;
     gender?: string;
-    birthdate?: string;
+    birthdate?: Date;
     description?: string;
   };
   medical?: {
@@ -79,7 +79,13 @@ export interface IPopulatedListingCreator {
   price?: number;
 }
 
-export interface ListingCreatorModel extends Model<IListingCreator> {}
+interface IListingCreatorMethods {
+  populateMedia(): Promise<IListingCreator>;
+  populateAll(): Promise<IPopulatedListingCreator>;
+}
+
+export interface ListingCreatorModel
+  extends Model<IListingCreator, {}, IListingCreatorMethods> {}
 
 export interface ICreateListingCreatorRequest extends IUserRequest {
   body: Pick<IListingCreator, 'saleType'> & {
@@ -176,7 +182,11 @@ export interface IDeleteListingCreatorRequest extends IUserRequest {
   };
 }
 
-const ListingCreatorSchema = new Schema(
+const ListingCreatorSchema = new Schema<
+  IListingCreator,
+  ListingCreatorModel,
+  IListingCreatorMethods
+>(
   {
     stage: {
       type: Number,
@@ -289,38 +299,36 @@ const ListingCreatorSchema = new Schema(
   { collection: 'listingCreators', timestamps: true }
 );
 
-ListingCreatorSchema.post(
-  'findOne',
-  async function (
-    doc:
-      | (Document<unknown, {}, IListingCreator> &
-          IListingCreator &
-          Required<{
-            _id: Schema.Types.ObjectId;
-          }>)
-      | null
-  ) {
-    if (!doc) {
-      return;
-    }
-
-    if (!doc.media) {
-      return;
-    }
-
-    if (doc.media.length === 0) {
-      return;
-    }
-
-    if (Array.isArray(doc.media)) {
-      doc.media = await Promise.all(
-        doc.media.map(
-          async (media) => await getMediaUrl(media as { name: string })
-        )
-      );
-    }
+ListingCreatorSchema.method('populateMedia', async function () {
+  if (!this.media) {
+    return this;
   }
-);
+
+  if (this.media.length === 0) {
+    return this;
+  }
+
+  const docCopy: IPopulatedListingCreator = this.toObject();
+
+  if (Array.isArray(docCopy.media)) {
+    docCopy.media = await Promise.all(
+      docCopy.media.map(
+        async (media) => await getMediaUrl(media as { name: string })
+      )
+    );
+
+    return docCopy;
+  }
+});
+
+ListingCreatorSchema.method('populateAll', async function () {
+  return await this.populate([
+    { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
+    { path: 'biology', populate: { path: 'breeds' } },
+    { path: 'biography', populate: { path: 'origin' } },
+    { path: 'medical', populate: { path: 'vaccines' } }
+  ]).then(async (listingCreator) => await listingCreator.populateMedia());
+});
 
 const ListingCreator = mongoose.model<IListingCreator, ListingCreatorModel>(
   'ListingCreator',
