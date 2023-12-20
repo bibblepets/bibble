@@ -10,6 +10,7 @@ import {
   selectMyListingCreators,
   selectMyListings
 } from '../../features/listingSlice';
+import ListingCreatorRow from '../../components/listing/listing/ListingCreatorRow';
 
 const Listing = () => {
   const listings = useSelector(selectMyListings);
@@ -28,32 +29,39 @@ const Listing = () => {
             <h1 className="text-3xl font-medium">Welcome back, Titus</h1>
 
             <div className="flex flex-col gap-4 h-full overflow-hidden">
-              <a className="font-medium">Continue where you left off</a>
-              {listingCreators.length > 0 ? (
-                <div className="flex flex-col gap-4 overflow-auto">
-                  {listingCreators.map((listing, index) => (
-                    <ListingRow key={index} listing={listing} />
-                  ))}
-                </div>
-              ) : (
-                <p className="font-light text-sm text-gray-500">
-                  You haven't listed any pets yet. Get started with a listing.
-                </p>
-              )}
+              <div className="flex flex-col gap-4 h-1/2">
+                <a className="font-medium">Continue where you left off</a>
+                {listingCreators.length > 0 ? (
+                  <div className="flex flex-col gap-4 overflow-auto">
+                    {listingCreators.map((listingCreator, index) => (
+                      <ListingCreatorRow
+                        key={index}
+                        listingCreator={listingCreator}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="font-light text-sm text-gray-500">
+                    You haven't listed any pets yet. Get started with a listing.
+                  </p>
+                )}
+              </div>
               <hr className="border-gray-200 my-4" />
 
-              <a className="font-medium">View your listed pets</a>
-              {listings.length > 0 ? (
-                <div className="flex flex-col gap-4 overflow-auto">
-                  {listings.map((listing, index) => (
-                    <ListingRow key={index} listing={listing} />
-                  ))}
-                </div>
-              ) : (
-                <p className="font-light text-sm text-gray-500">
-                  You haven't listed any pets yet. Get started with a listing.
-                </p>
-              )}
+              <div className="flex flex-col gap-4 h-1/2">
+                <a className="font-medium">View your listed pets</a>
+                {listings.length > 0 ? (
+                  <div className="flex flex-col gap-4 overflow-auto">
+                    {listings.map((listing, index) => (
+                      <ListingRow key={index} listing={listing} />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="font-light text-sm text-gray-500">
+                    You haven't listed any pets yet. Get started with a listing.
+                  </p>
+                )}
+              </div>
               <hr className="border-gray-200 my-4" />
 
               <ListingOptions />
