@@ -99,6 +99,7 @@ export type Listing = {
   species: Species;
   createdAt?: Date;
   updatedAt?: Date;
+  expiryDate?: Date;
 };
 
 export type Animal = {

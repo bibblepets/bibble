@@ -1,11 +1,13 @@
 import { PaperClipIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import { Listing } from '../../../types';
+import { toCountdown } from '../../../utils/date';
 
 interface ListingRowProps {
   listing: Listing;
 }
 
 const ListingRow: React.FC<ListingRowProps> = ({ listing }) => {
+  console.log(listing.expiryDate);
   return (
     <button onClick={() => alert('implement')} className="flex flex-row gap-4">
       <div className="rounded-lg">
@@ -32,7 +34,9 @@ const ListingRow: React.FC<ListingRowProps> = ({ listing }) => {
           </a>
           <PaperClipIcon className="w-3 h-3" strokeWidth={2} />
         </div>
-        <p className="text-sm font-light text-gray-500">{listing.saleType}</p>
+        <p className="text-sm font-light text-gray-500">
+          {listing.saleType}, Expires in {toCountdown(listing.expiryDate)}
+        </p>
       </div>
     </button>
   );
