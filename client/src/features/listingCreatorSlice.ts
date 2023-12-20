@@ -68,6 +68,23 @@ export const updateListingCreatorById = createAsyncThunk(
   }
 );
 
+export const deleteListingCreatorById = createAsyncThunk(
+  '/listingCreator/deleteListingCreatorById',
+  async (_, { getState }) => {
+    const state = getState() as RootState;
+    const { _id } = state.listingCreator;
+
+    return await axios
+      .delete(`/api/listing-creator/${_id}`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
 export const createListingCreator = createAsyncThunk(
   '/listingCreator/createListingCreator',
   async (payload: { currentUser: User; saleType: SaleType }) => {
@@ -111,13 +128,14 @@ export const updateBiography = createAsyncThunk(
   '/listingCreator/updateBiography',
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const { origin, gender, birthdate, description } =
+    const { name, origin, gender, birthdate, description } =
       state.listingCreator.biography || {};
 
     return await axios
       .post('/api/listing-creator/biography', {
         _id: state.listingCreator._id,
         stage: 2,
+        name,
         origin,
         gender,
         birthdate: birthdate || new Date(Date.now()),
@@ -277,6 +295,12 @@ const listingCreatorSlice = createSlice({
         (breed) => breed._id !== action.payload._id
       );
     },
+    setName: (state, action: PayloadAction<string>) => {
+      if (!state.biography) {
+        state.biography = {};
+      }
+      state.biography.name = action.payload;
+    },
     setOrigin: (state, action: PayloadAction<Country>) => {
       if (!state.biography) {
         state.biography = {};
@@ -380,8 +404,8 @@ const listingCreatorSlice = createSlice({
         (media) => media.url !== action.payload.url
       );
     },
-    setPrice: (state, action: PayloadAction<number>) => {
-      state.price = action.payload;
+    setPrice: (state, action: PayloadAction<number | ''>) => {
+      state.price = action.payload === '' ? undefined : action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -485,6 +509,28 @@ const listingCreatorSlice = createSlice({
       .addCase(createListing.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
+      })
+      .addCase(updateListingCreatorById.pending, (state) => {
+        state.status = 'LOADING';
+      })
+      .addCase(updateListingCreatorById.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        resetState(state);
+      })
+      .addCase(updateListingCreatorById.rejected, (state, action) => {
+        state.status = 'ERROR';
+        state.error = action.error.message;
+      })
+      .addCase(deleteListingCreatorById.pending, (state) => {
+        state.status = 'LOADING';
+      })
+      .addCase(deleteListingCreatorById.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        resetState(state);
+      })
+      .addCase(deleteListingCreatorById.rejected, (state, action) => {
+        state.status = 'ERROR';
+        state.error = action.error.message;
       });
   }
 });
@@ -519,6 +565,7 @@ export const {
   setSpecies,
   addBreed,
   removeBreed,
+  setName,
   setOrigin,
   setGender,
   setBirthdate,
@@ -541,6 +588,8 @@ export const selectListingCreatorSpecies = (state: RootState) =>
   state.listingCreator.biology?.species;
 export const selectListingCreatorBreeds = (state: RootState) =>
   state.listingCreator.biology?.breeds;
+export const selectListingCreatorName = (state: RootState) =>
+  state.listingCreator.biography?.name;
 export const selectListingCreatorOrigin = (state: RootState) =>
   state.listingCreator.biography?.origin;
 export const selectListingCreatorGender = (state: RootState) =>

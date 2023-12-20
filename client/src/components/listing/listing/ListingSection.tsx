@@ -7,12 +7,14 @@ import {
 interface ListingSectionProps {
   title: string;
   field: string;
+  optional?: boolean;
   children: React.ReactNode;
 }
 
 const ListingSection: React.FC<ListingSectionProps> = ({
   title,
   field,
+  optional,
   children
 }) => {
   const status = useSelector(selectListingCreatorStatus);
@@ -21,10 +23,11 @@ const ListingSection: React.FC<ListingSectionProps> = ({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex gap-2 justify-between items-center">
+      <div className="flex justify-between items-center">
         <h2 className={`font-medium text-lg ${isError && 'text-rose-500'}`}>
           {title}
         </h2>
+        {optional && <p className="text-sm text-gray-400">{'Optional'}</p>}
         {isError && <p className="text-sm text-rose-500">{'Required *'}</p>}
       </div>
       {children}

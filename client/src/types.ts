@@ -1,4 +1,7 @@
 // REDUX TYPES
+
+import { NavigateFunction } from 'react-router-dom';
+
 // ------------------------------
 export type StatusType = 'DEFAULT' | 'LOADING' | 'SUCCESS' | 'ERROR';
 
@@ -19,6 +22,10 @@ export type LoginModalType = ModalType & {
   email: string;
   password: string;
   title: string;
+};
+
+export type ConfirmDeleteModaltype = ModalType & {
+  navigate?: NavigateFunction;
 };
 
 // MODEL TYPES
@@ -69,6 +76,7 @@ export type ListingCreator = {
     breeds?: Breed[];
   };
   biography?: {
+    name?: string;
     origin?: Country;
     gender?: Gender;
     birthdate?: string;

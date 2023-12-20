@@ -1,3 +1,4 @@
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 
@@ -6,6 +7,7 @@ const ModalProvider = () => {
     <>
       <RegisterModal />
       <LoginModal />
+      <ConfirmDeleteModal />
     </>
   );
 };
