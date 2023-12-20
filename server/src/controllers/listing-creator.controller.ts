@@ -10,7 +10,8 @@ import {
   IUpdatePriceRequest,
   IUpdateListingCreatorRequest,
   ListingCreatorModel,
-  IGetMyListingCreatorsRequest
+  IGetMyListingCreatorsRequest,
+  IDeleteListingCreatorRequest
 } from '../models/listing/listing-creator.model';
 import { ICreateAnimalRequest } from '../models/listing/animal/animal.model';
 import {
@@ -440,4 +441,27 @@ const createAnimal = async (
   }
 
   return createdAnimal;
+};
+
+export const deleteListingCreatorById = async (
+  req: IDeleteListingCreatorRequest,
+  res: Response
+) => {
+  try {
+    const { id } = req.params;
+
+    const listingCreator = await ListingCreator.findById(id);
+
+    if (!listingCreator) {
+      throw new BibbleError('Listing creator not found.');
+    }
+
+    await listingCreator.deleteOne();
+
+    return res.status(200).json({
+      message: 'Listing creator deleted successfully.'
+    });
+  } catch (error: any) {
+    return handleError(res, error);
+  }
 };
