@@ -9,7 +9,7 @@ import { store } from '../../../store';
 import { useDropdown } from '../hooks';
 
 const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
-  const weight = useSelector(selectListingWeight) || 0;
+  const weight = useSelector(selectListingWeight);
   const [unit, setUnit] = useState('kg');
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -22,34 +22,12 @@ const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
     store.dispatch(setWeight(parseFloat(event.target.value)));
   };
 
-  const convertToKg = (value: number, unit: string) => {
+  const formatWeight = (value: number | undefined, unit: string) => {
     switch (unit) {
       case 'kg':
-        return value;
+        return `${value ? value.toFixed(1) : 0} kg`;
       case 'lbs':
-        return value / 2.20462;
-      default:
-        return 0;
-    }
-  };
-
-  const convertFromKg = (value: number, unit: string) => {
-    switch (unit) {
-      case 'kg':
-        return value;
-      case 'lbs':
-        return value * 2.20462;
-      default:
-        return 0;
-    }
-  };
-
-  const formatWeight = (value: number, unit: string) => {
-    switch (unit) {
-      case 'kg':
-        return `${value.toFixed(1) || 0} kg`;
-      case 'lbs':
-        return `${value.toFixed(1)} lbs`;
+        return `${value ? (value / 2.20462).toFixed(1) : 0} lbs`;
       default:
         return '';
     }
@@ -59,8 +37,7 @@ const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
     setUnit(unit);
   };
 
-  const weightInKg = convertToKg(weight, unit);
-  const formattedWeight = formatWeight(weightInKg, unit);
+  const formattedWeight = formatWeight(weight, unit);
 
   useDropdown(dropdownRef, isOpen, setIsOpen);
 
@@ -77,9 +54,9 @@ const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
           <input
             className="w-48 p-2 text-gray-700 text-sm border border-gray-300 rounded-md focus:outline-none focus:shadow-outline"
             type="number"
-            min="0"
+            min={0}
             step="0.1"
-            placeholder="0"
+            placeholder="Enter weight"
             value={weight}
             onChange={handleWeightChange}
           />
