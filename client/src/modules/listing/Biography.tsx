@@ -11,7 +11,7 @@ const Biography = () => {
     <ListingLayout>
       <ListingStage
         title="Biography"
-        subtitle="Tell us more about your friend..."
+        subtitle="Everyone's got a story to tell."
       >
         {/* ORIGIN */}
         <ListingSection title="Origin">

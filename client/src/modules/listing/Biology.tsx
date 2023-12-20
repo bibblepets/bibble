@@ -8,7 +8,7 @@ import ListingLayout from '../../layouts/ListingLayout';
 const Biology = () => {
   return (
     <ListingLayout>
-      <ListingStage title="Biology" subtitle="What's their breed and species?">
+      <ListingStage title="Biology" subtitle="Now, who do we have here?">
         {/* SPECIES */}
         <ListingSection title="Species">
           <SpeciesOptions />

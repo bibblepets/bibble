@@ -5,7 +5,7 @@ import ListingLayout from '../../layouts/ListingLayout';
 const Price = () => {
   return (
     <ListingLayout>
-      <ListingStage title="Price" subtitle="How much?">
+      <ListingStage title="Price" subtitle="An impossible question, we know.">
         {/* PRICE */}
         <PriceInput />
       </ListingStage>
