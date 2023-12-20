@@ -21,7 +21,7 @@ export const fetchMyListings = createAsyncThunk(
   '/listingSlice/fetchMyListings',
   async () => {
     return await axios
-      .get('/api/listings/my-listings') // TODO TITUS
+      .get('/api/listings/self')
       .then((response) => {
         return response.data;
       })
@@ -35,7 +35,7 @@ export const fetchMyListingCreators = createAsyncThunk(
   '/listingSlice/fetchMyListingCreators',
   async () => {
     return await axios
-      .get('/api/listing-creator/my-listing-creators') // TODO TITUS
+      .get('/api/listing-creator/self')
       .then((response) => {
         return response.data;
       })

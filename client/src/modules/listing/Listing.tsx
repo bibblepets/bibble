@@ -7,11 +7,13 @@ import { store } from '../../store';
 import {
   fetchMyListingCreators,
   fetchMyListings,
+  selectMyListingCreators,
   selectMyListings
 } from '../../features/listingSlice';
 
 const Listing = () => {
   const listings = useSelector(selectMyListings);
+  const listingCreators = useSelector(selectMyListingCreators);
 
   useEffect(() => {
     store.dispatch(fetchMyListings());
@@ -27,9 +29,9 @@ const Listing = () => {
 
             <div className="flex flex-col gap-4 h-full overflow-hidden">
               <a className="font-medium">Continue where you left off</a>
-              {listings.length > 0 ? (
+              {listingCreators.length > 0 ? (
                 <div className="flex flex-col gap-4 overflow-auto">
-                  {listings.map((listing, index) => (
+                  {listingCreators.map((listing, index) => (
                     <ListingRow key={index} listing={listing} />
                   ))}
                 </div>
