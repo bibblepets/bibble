@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import paw from '../../../assets/paw.jpeg';
+import placeholderPup from '../../../assets/placeholder-pup.png';
 import { Listing } from '../../../types';
 
 interface ListingCardProps {
@@ -16,7 +17,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
     >
       <img
         className="aspect-square object-cover rounded-3xl transition hover:scale-105 cursor-pointer"
-        src={listing.media[0]?.url}
+        src={listing.media[0] ?listing.media[0].url : placeholderPup}
       />
       <div className="flex flex-col items-center gap-2">
         <a className="text-neutral-800 whitespace-nowrap overflow-ellipsis">

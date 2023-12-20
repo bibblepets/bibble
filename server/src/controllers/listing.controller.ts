@@ -200,7 +200,7 @@ export const updateListingById = async (
   res: Response
 ) => {
   const { id } = req.params;
-  const { price, description, media } = req.body;
+  const { price, description, media, user } = req.body;
 
   try {
     // Get pet listing
@@ -216,6 +216,9 @@ export const updateListingById = async (
 
     // Validate request
     console.log('Validating request body...');
+    if (listerId != user._id) {
+      throw new BibbleError('Unauthorized.');
+    }
     console.log('Validating Animal request body...');
     await validateUpdateAnimal(req, species);
 

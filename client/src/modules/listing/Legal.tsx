@@ -7,7 +7,7 @@ import ListingLayout from '../../layouts/ListingLayout';
 const Legal = () => {
   return (
     <ListingLayout>
-      <ListingStage title="Legal" subtitle="Now for some legal details...">
+      <ListingStage title="Legal" subtitle="Papers please!">
         {/* AVS */}
         <ListingSection title="AVS License Number" field="avsLicenseNumber">
           <AvsLicenseInput />

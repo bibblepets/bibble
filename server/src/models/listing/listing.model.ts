@@ -70,6 +70,9 @@ export interface ICreateListingRequest extends IUserRequest {
 }
 
 export interface IUpdateListingRequest extends IUserRequest {
+  params: {
+    id: string;
+  };
   body: Partial<
     Omit<ICreateListingRequest['body'], 'animal'> & {
       animal: IUpdateAnimalRequest['body'];

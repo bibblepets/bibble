@@ -6,7 +6,7 @@ const Media = () => {
   return (
     <ListingLayout>
       {/* MEDIA */}
-      <ListingStage title="Media" subtitle="Lets see them!">
+      <ListingStage title="Media" subtitle="Say cheese!">
         <MediaUpload />
       </ListingStage>
     </ListingLayout>

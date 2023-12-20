@@ -177,12 +177,6 @@ export interface IDeleteListingCreatorRequest extends IUserRequest {
   };
 }
 
-export interface IDeleteListingCreatorRequest extends IUserRequest {
-  params: {
-    id: string;
-  };
-}
-
 const ListingCreatorSchema = new Schema<
   IListingCreator,
   ListingCreatorModel,

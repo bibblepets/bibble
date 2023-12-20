@@ -46,23 +46,19 @@ export const putMedia = async (
   if (Array.isArray(media) && media.length > 0) {
     clientMediaNames = media.map((media) => media.name);
 
-    const getParams = {
+    const listCommand = new ListObjectsV2Command({
       Bucket: awsBucketName,
       Prefix: listingId.toString() + '/',
       MaxKeys: 20
-    };
+    });
 
     s3MediaNames = await s3Client
-      .send(new ListObjectsV2Command(getParams))
+      .send(listCommand)
       .then((response) => response.Contents?.map((s3Object) => s3Object.Key));
-
-    console.log('S3 Media Names:', s3MediaNames);
 
     const deleteMediaNames = s3MediaNames?.filter(
       (s3MediaName) => !clientMediaNames?.includes(s3MediaName)
     );
-
-    console.log('Delete Media Names:', deleteMediaNames);
 
     if (Array.isArray(deleteMediaNames) && deleteMediaNames.length > 0) {
       for (const deleteMediaName of deleteMediaNames) {
@@ -108,15 +104,6 @@ export const getMediaUrl = async (media: { name: string }) => {
   });
 
   return { name: media.name, url: url };
-};
-
-export const deleteMedia = async (media: { name: string }) => {
-  const deleteCommand = new DeleteObjectCommand({
-    Bucket: awsBucketName,
-    Key: media.name
-  });
-
-  await s3Client.send(deleteCommand);
 };
 
 const generateName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');

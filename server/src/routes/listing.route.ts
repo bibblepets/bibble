@@ -49,12 +49,12 @@ router.get('/:id', ListingController.getListingById);
 router.get('/', ListingController.getAllListings);
 
 /**
- * @route PUT /api/listings/:id
+ * @route PUT /api/listings/update/:id
  * @desc Update a listing by ID
  * @access Private
  */
 router.put(
-  '/:id',
+  '/update/:id',
   AuthMiddleware.getUserFromAuthToken,
   AuthMiddleware.validateBibbleTier,
   ListingController.updateListingById

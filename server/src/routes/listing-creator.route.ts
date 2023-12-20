@@ -93,4 +93,11 @@ router.post('/price', ListingCreatorController.updatePrice);
  */
 router.post('/submit', ListingCreatorController.createListing);
 
+/**
+ * @route DELETE /api/listing-creator/:id
+ * @desc Delete a listing creator by ID
+ * @access Private
+ */
+router.delete('/:id', ListingCreatorController.deleteListingCreatorById);
+
 module.exports = router;

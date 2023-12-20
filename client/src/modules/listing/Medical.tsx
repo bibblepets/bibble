@@ -9,7 +9,7 @@ import ListingLayout from '../../layouts/ListingLayout';
 const Medical = () => {
   return (
     <ListingLayout>
-      <ListingStage title="Medical" subtitle="We need their medical details...">
+      <ListingStage title="Medical" subtitle="Don't worry, no needles here.">
         {/* SIZE */}
         <ListingSection title="Size" field="size">
           <SizeOptions />

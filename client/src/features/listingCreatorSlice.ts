@@ -307,11 +307,12 @@ const listingCreatorSlice = createSlice({
       }
       state.medical.size = action.payload;
     },
-    setWeight: (state, action: PayloadAction<number>) => {
+    setWeight: (state, action: PayloadAction<number | ''>) => {
       if (!state.medical) {
         state.medical = {};
       }
-      state.medical.weight = action.payload;
+
+      state.medical.weight = action.payload === '' ? undefined : action.payload;
     },
     setHairCoat: (state, action: PayloadAction<HairCoat>) => {
       if (!state.medical) {
