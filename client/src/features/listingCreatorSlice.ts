@@ -111,13 +111,14 @@ export const updateBiography = createAsyncThunk(
   '/listingCreator/updateBiography',
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const { origin, gender, birthdate, description } =
+    const { name, origin, gender, birthdate, description } =
       state.listingCreator.biography || {};
 
     return await axios
       .post('/api/listing-creator/biography', {
         _id: state.listingCreator._id,
         stage: 2,
+        name,
         origin,
         gender,
         birthdate: birthdate || new Date(Date.now()),
@@ -276,6 +277,12 @@ const listingCreatorSlice = createSlice({
       state.biology.breeds = state.biology.breeds.filter(
         (breed) => breed._id !== action.payload._id
       );
+    },
+    setName: (state, action: PayloadAction<string>) => {
+      if (!state.biography) {
+        state.biography = {};
+      }
+      state.biography.name = action.payload;
     },
     setOrigin: (state, action: PayloadAction<Country>) => {
       if (!state.biography) {
@@ -519,6 +526,7 @@ export const {
   setSpecies,
   addBreed,
   removeBreed,
+  setName,
   setOrigin,
   setGender,
   setBirthdate,
@@ -541,6 +549,8 @@ export const selectListingCreatorSpecies = (state: RootState) =>
   state.listingCreator.biology?.species;
 export const selectListingCreatorBreeds = (state: RootState) =>
   state.listingCreator.biology?.breeds;
+export const selectListingCreatorName = (state: RootState) =>
+  state.listingCreator.biography?.name;
 export const selectListingCreatorOrigin = (state: RootState) =>
   state.listingCreator.biography?.origin;
 export const selectListingCreatorGender = (state: RootState) =>

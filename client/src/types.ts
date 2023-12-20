@@ -69,6 +69,7 @@ export type ListingCreator = {
     breeds?: Breed[];
   };
   biography?: {
+    name?: string;
     origin?: Country;
     gender?: Gender;
     birthdate?: string;
