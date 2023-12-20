@@ -6,18 +6,27 @@ import {
 } from '../../../features/listingCreatorSlice';
 import { store } from '../../../store';
 
+const MAX_PRICE = 9999;
+
 const PriceInput = ({ readOnly }: { readOnly?: boolean }) => {
-  const price = useSelector(selectListingCreatorPrice) || 0;
+  const price = useSelector(selectListingCreatorPrice);
   const [sliderValue, setSliderValue] = useState(0);
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newPrice = parseFloat(event.target.value);
-    store.dispatch(setPrice(newPrice));
+    const value = event.target.value.replace(/\D/g, '');
+    const newPrice = parseFloat(value);
+
+    if (newPrice > MAX_PRICE) {
+      store.dispatch(setPrice(MAX_PRICE));
+    } else {
+      store.dispatch(setPrice(newPrice));
+    }
+
     setSliderValue(newPrice);
   };
 
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newSliderValue = parseFloat(event.target.value);
+    const newSliderValue = parseInt(event.target.value);
     setSliderValue(newSliderValue);
     store.dispatch(setPrice(newSliderValue));
   };
@@ -37,9 +46,9 @@ const PriceInput = ({ readOnly }: { readOnly?: boolean }) => {
         <input
           className="text-lg text-center w-full pl-8 pr-2 py-1 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline"
           type="number"
-          min="0"
+          min={0}
           step="10"
-          placeholder="0"
+          placeholder="Enter price"
           value={price}
           onChange={handlePriceChange}
         />
@@ -48,7 +57,7 @@ const PriceInput = ({ readOnly }: { readOnly?: boolean }) => {
         className="w-5/6"
         type="range"
         min="0"
-        max="10000"
+        max={MAX_PRICE}
         step="10"
         value={sliderValue}
         onChange={handleSliderChange}

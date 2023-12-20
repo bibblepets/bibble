@@ -404,8 +404,8 @@ const listingCreatorSlice = createSlice({
         (media) => media.url !== action.payload.url
       );
     },
-    setPrice: (state, action: PayloadAction<number>) => {
-      state.price = action.payload;
+    setPrice: (state, action: PayloadAction<number | ''>) => {
+      state.price = action.payload === '' ? undefined : action.payload;
     }
   },
   extraReducers: (builder) => {
