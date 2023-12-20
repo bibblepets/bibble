@@ -42,6 +42,32 @@ export const fetchListingCreatorById = createAsyncThunk(
   }
 );
 
+export const updateListingCreatorById = createAsyncThunk(
+  '/listingCreator/updateListingCreatorById',
+  async (_, { getState }) => {
+    const state = getState() as RootState;
+    const { _id, stage, biology, biography, medical, legal, media, price } =
+      state.listingCreator;
+
+    return await axios
+      .post(`/api/listing-creator/${_id}`, {
+        stage,
+        biology,
+        biography,
+        medical,
+        legal,
+        media,
+        price
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
 export const createListingCreator = createAsyncThunk(
   '/listingCreator/createListingCreator',
   async (payload: { currentUser: User; saleType: SaleType }) => {

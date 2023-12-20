@@ -47,7 +47,9 @@ export const getUserFromAuthToken = async (
       SECRET_JWT_CODE
     );
 
-    const populatedUser = await authUser.populate('buyerProfile businessProfile');
+    const populatedUser = await authUser.populate(
+      'buyerProfile businessProfile'
+    );
 
     res.cookie('authToken', token, COOKIE_OPTIONS);
     req.body = {
@@ -67,7 +69,7 @@ export const validateBibbleTier = async (
 ) => {
   console.log('Checking Bibble Tier...');
   try {
-    const user: IPopulatedUser = req.body.user
+    const user: IPopulatedUser = req.body.user;
 
     if (user.businessProfile.bibbleTier === 'Basic') {
       return res.status(401).json({
