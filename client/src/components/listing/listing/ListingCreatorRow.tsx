@@ -1,5 +1,7 @@
 import { PaperClipIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import { Listing, ListingCreator } from '../../../types';
+import { useNavigate } from 'react-router-dom';
+import { useResume } from './hooks';
 
 interface ListingCreatorRowProps {
   listingCreator: ListingCreator;
@@ -8,8 +10,11 @@ interface ListingCreatorRowProps {
 const ListingCreatorRow: React.FC<ListingCreatorRowProps> = ({
   listingCreator
 }) => {
+  const navigate = useNavigate();
+  const resume = useResume(listingCreator);
+
   return (
-    <button onClick={() => alert('implement')} className="flex flex-row gap-4">
+    <button onClick={resume} className="flex flex-row gap-4">
       <div className="rounded-lg">
         {listingCreator.media ? (
           <img
