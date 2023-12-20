@@ -104,7 +104,7 @@ export interface IDeleteListingByIdRequest extends IUserRequest {
   };
 }
 
-const ListingSchema = new Schema<IListing, ListingModel, IListingMethods>(
+const listingSchema = new Schema<IListing, ListingModel, IListingMethods>(
   {
     lister: {
       type: Schema.Types.ObjectId,
@@ -177,7 +177,7 @@ const ListingSchema = new Schema<IListing, ListingModel, IListingMethods>(
   { collection: 'listings', timestamps: true }
 );
 
-ListingSchema.method('updateSaleStatus', function () {
+listingSchema.method('updateSaleStatus', function () {
   if (this.saleStatus === 'Sold' || this.saleStatus === 'Expired') {
     return;
   }
@@ -189,7 +189,7 @@ ListingSchema.method('updateSaleStatus', function () {
   }
 });
 
-ListingSchema.method('populateMedia', async function () {
+listingSchema.method('populateMedia', async function () {
   const docCopy: IPopulatedListing = this.toObject();
 
   docCopy.media = await Promise.all(this.media.map(getMediaUrl));
@@ -197,20 +197,20 @@ ListingSchema.method('populateMedia', async function () {
   return docCopy;
 });
 
-ListingSchema.method('populateAll', async function () {
+listingSchema.method('populateAll', async function () {
   return await this.populate([
     { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
     { path: 'animal', populate: { path: 'breeds vaccines origin' } }
   ]).then(async (listing) => await listing.populateMedia());
 });
 
-ListingSchema.pre('save', function (next) {
+listingSchema.pre('save', function (next) {
   this.updateSaleStatus(); // Update sale status based on expiration date
 
   next();
 });
 
-ListingSchema.post(
+listingSchema.post(
   'findOne',
   async function (
     doc:
@@ -233,7 +233,7 @@ ListingSchema.post(
   }
 );
 
-ListingSchema.post(
+listingSchema.post(
   'find',
   async function (
     docs:
@@ -258,7 +258,7 @@ ListingSchema.post(
 
 const Listing = mongoose.model<IListing, ListingModel>(
   'Listing',
-  ListingSchema
+  listingSchema
 );
 
 module.exports = {

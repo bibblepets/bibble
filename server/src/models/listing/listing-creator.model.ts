@@ -177,7 +177,7 @@ export interface IDeleteListingCreatorRequest extends IUserRequest {
   };
 }
 
-const ListingCreatorSchema = new Schema<
+const listingCreatorSchema = new Schema<
   IListingCreator,
   ListingCreatorModel,
   IListingCreatorMethods
@@ -294,7 +294,7 @@ const ListingCreatorSchema = new Schema<
   { collection: 'listingCreators', timestamps: true }
 );
 
-ListingCreatorSchema.method('populateMedia', async function () {
+listingCreatorSchema.method('populateMedia', async function () {
   if (!this.media) {
     return this;
   }
@@ -316,7 +316,7 @@ ListingCreatorSchema.method('populateMedia', async function () {
   }
 });
 
-ListingCreatorSchema.method('populateAll', async function () {
+listingCreatorSchema.method('populateAll', async function () {
   return await this.populate([
     { path: 'lister', populate: { path: 'buyerProfile businessProfile' } },
     { path: 'biology', populate: { path: 'breeds' } },
@@ -327,7 +327,7 @@ ListingCreatorSchema.method('populateAll', async function () {
 
 const ListingCreator = mongoose.model<IListingCreator, ListingCreatorModel>(
   'ListingCreator',
-  ListingCreatorSchema
+  listingCreatorSchema
 );
 
 module.exports = {
