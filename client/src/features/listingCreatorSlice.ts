@@ -616,6 +616,8 @@ export const selectListingCreatorPrice = (state: RootState) =>
   state.listingCreator.price;
 export const selectListingCreatorStatus = (state: RootState) =>
   state.listingCreator.status;
+export const selectListingCreatorIsLoading = (state: RootState) =>
+  state.listingCreator.status === 'LOADING';
 export const selectListingCreatorError = (state: RootState) =>
   state.listingCreator.error;
 

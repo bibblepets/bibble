@@ -2,11 +2,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ListingStage } from '../../../types';
 import { useProgress } from './hooks';
 import ProgressBar from './ProgressBar';
+import { useSelector } from 'react-redux';
+import { selectListingCreatorIsLoading } from '../../../features/listingCreatorSlice';
+import './styles.css';
 
 const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [, , listingId, stage] = location.pathname.split('/');
+  const isLoading = useSelector(selectListingCreatorIsLoading);
 
   const stages: ListingStage[] = [
     '',
@@ -41,9 +45,24 @@ const Footer = () => {
         </button>
         <button
           onClick={onNext}
-          className="px-8 py-3 my-4 mx-8 rounded-lg bg-gray-800 transition hover:bg-gray-900 text-white font-semibold"
+          disabled={isLoading}
+          className={`px-8 py-3 my-4 mx-8 rounded-lg transition text-white font-semibold ${
+            isLoading ? 'bg-gray-300' : 'bg-gray-800 hover:bg-gray-900'
+          }`}
+          style={{ width: '100px' }}
         >
-          {stage !== stages[stages.length - 1] ? 'Next' : 'Finish'}
+          {/* {stage !== stages[stages.length - 1] ? 'Next' : 'Finish'} */}
+          {isLoading ? (
+            <div className="loader flex flex-row justify-center gap-1">
+              <span>.</span>
+              <span>.</span>
+              <span>.</span>
+            </div>
+          ) : stage !== stages[stages.length - 1] ? (
+            'Next'
+          ) : (
+            'Finish'
+          )}
         </button>
       </div>
     </footer>
