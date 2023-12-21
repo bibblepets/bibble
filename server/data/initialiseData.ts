@@ -107,7 +107,8 @@ const dogBreeds: Omit<IBreed, '_id'>[] = [
   { name: 'Shih Tzu', species: 'Dog' },
   { name: 'Boston Terrier', species: 'Dog' },
   { name: 'Pug', species: 'Dog' },
-  { name: 'Havanese', species: 'Dog' }
+  { name: 'Havanese', species: 'Dog' },
+  { name: 'Mongrel', species: 'Dog'}
 ];
 
 const dogVaccines: Omit<IVaccine, '_id'>[] = [
@@ -168,7 +169,10 @@ const countries: Omit<ICountry, '_id'>[] = [
   { name: 'Turkey' },
   { name: 'Sweden' },
   { name: 'Poland' },
-  { name: 'Belgium' }
+  { name: 'Belgium' },
+  { name: 'Singapore' },
+  { name: 'Malaysia' },
+  { name: 'Thailand' }
 ];
 
 const listingDescription =
