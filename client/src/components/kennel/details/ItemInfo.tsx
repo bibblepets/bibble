@@ -19,6 +19,7 @@ import paw from '../../../assets/paw.jpeg';
 import { Listing } from '../../../types';
 import InfoSection from './InfoSection';
 import SectionHeader from './SectionHeader';
+import { DateStringOptions, toAge, toListingAge } from '../../../utils/date';
 
 const Section = ({ children }: { children: React.ReactNode }) => {
   return <div className="flex flex-col gap-8">{children}</div>;
@@ -32,9 +33,6 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
   const listingDate = new Date(listing.createdAt!);
   const birthDate = new Date(listing.animal.birthdate!);
   const currentDate = new Date();
-  const daysAgo = Math.floor(
-    (currentDate.getTime() - listingDate.getTime()) / (1000 * 60 * 60 * 24)
-  );
 
   return (
     <div className="col-span-4 flex flex-col gap-12">
@@ -53,7 +51,7 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
                 )}
             </div>
             <p className="font-light text-neutral-500 text-sm">
-              Listed on {listingDate.toDateString()} {''}({daysAgo} days ago)
+              Listed on {listingDate.toLocaleDateString(undefined, DateStringOptions)} {''}({toListingAge(listingDate)})
             </p>
           </div>
           <img
@@ -81,7 +79,7 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
           />
 
           <InfoSection
-            string={birthDate.toDateString()}
+            string={`${birthDate.toLocaleDateString(undefined, DateStringOptions)} (${toAge(birthDate)})`}
             IconComponent={CalendarDaysIcon}
           />
 
