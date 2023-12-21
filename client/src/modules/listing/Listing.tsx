@@ -8,13 +8,20 @@ import {
   fetchMyListingCreators,
   fetchMyListings,
   selectMyListingCreators,
-  selectMyListings
+  selectMyListingCreatorsIsLoading,
+  selectMyListings,
+  selectMyListingsIsLoading
 } from '../../features/listingSlice';
 import ListingCreatorRow from '../../components/listing/listing/ListingCreatorRow';
+import SkeletonLoader from '../../components/loaders/SkeletonLoader';
 
 const Listing = () => {
   const listings = useSelector(selectMyListings);
   const listingCreators = useSelector(selectMyListingCreators);
+  const isListingsLoading = useSelector(selectMyListingsIsLoading);
+  const isListingCreatorsLoading = useSelector(
+    selectMyListingCreatorsIsLoading
+  );
 
   useEffect(() => {
     store.dispatch(fetchMyListings());
@@ -40,6 +47,8 @@ const Listing = () => {
                       />
                     ))}
                   </div>
+                ) : isListingCreatorsLoading ? (
+                  <SkeletonLoader />
                 ) : (
                   <p className="font-light text-sm text-gray-500">
                     You haven't listed any pets yet. Get started with a listing.
@@ -56,6 +65,8 @@ const Listing = () => {
                       <ListingRow key={index} listing={listing} />
                     ))}
                   </div>
+                ) : isListingsLoading ? (
+                  <SkeletonLoader />
                 ) : (
                   <p className="font-light text-sm text-gray-500">
                     You haven't listed any pets yet. Get started with a listing.
