@@ -79,7 +79,10 @@ const adminBusinessProfile: Omit<
   petShopLicenseNumber: 'AS08G00025' // Pet Lovers Centre Marine Parade
 };
 
-const admin: Omit<IUser, '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile' | 'businessProfile'> = {
+const admin: Omit<
+  IUser,
+  '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile' | 'businessProfile'
+> = {
   email: 'admin@bibble.com',
   password: '123456'
 };
@@ -167,6 +170,9 @@ const countries: Omit<ICountry, '_id'>[] = [
   { name: 'Poland' },
   { name: 'Belgium' }
 ];
+
+const listingDescription =
+  'Lorem ipsum, the is a description.\n\nDuis diam orci, lacinia vel ornare et, vestibulum non lacus. Etiam velit ipsum, tempus ut orci eu, efficitur aliquam mauris. Pellentesque et nulla tincidunt, faucibus enim non, tempor sapien. Nam orci lacus, suscipit eu augue ut, aliquet blandit felis. Cras libero sem, scelerisque vitae massa non, dignissim efficitur orci. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aliquam sodales erat diam, non placerat lacus semper id. Nam pellentesque eget massa a tincidunt. Sed pretium ut ipsum ut efficitur. Sed non auctor urna. Sed consectetur tincidunt ligula, a viverra dolor accumsan at. Praesent pharetra hendrerit erat ac gravida. Donec auctor malesuada egestas. Donec nec vulputate metus. Aliquam a bibendum erat, et pharetra leo.\n\nIn lectus ante, pulvinar et blandit a, dictum eu lorem. Aliquam vulputate quis ante id aliquet. Quisque commodo, turpis eu commodo tristique, massa augue dignissim odio, in pellentesque lectus ligula vitae orci. Proin dictum magna vel ligula tempor posuere. Nulla porta elementum orci a semper. Cras nec arcu id ligula egestas pulvinar vel nec risus. Aliquam convallis diam est, ut tristique sapien bibendum id.';
 // ----------------------------------------------------------------------------
 
 // Data Initialisation Functions ----------------------------------------------
@@ -272,7 +278,7 @@ const initListings = async (admin: IUser, dogList: IDog[]) => {
     await Listing.create({
       lister: admin._id,
       price: Math.floor(Math.random() * 10000) + 1,
-      description: 'Lorem ipsum, this is a description.',
+      description: listingDescription,
       saleType: saleTypes[Math.floor(Math.random() * saleTypes.length)],
       media: generateMedia(mediaTypes),
       animal: dog._id,
@@ -395,7 +401,7 @@ const generateMedia = (mediaTypes: string[]) => {
   const media = [];
   for (let i = 0; i < numMedia; i++) {
     media.push({
-      name: 'placeholder_dog.jpg',
+      name: 'placeholder_dog.jpg'
     });
   }
   return media;
