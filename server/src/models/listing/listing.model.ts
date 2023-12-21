@@ -8,6 +8,7 @@ import {
   IUpdateAnimalRequest
 } from './animal/animal.model';
 import { getMediaUrl } from '../../services/s3.service';
+import { IMedia, IPopulatedMedia } from './media.model';
 
 const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
 const mediaTypes = ['Image']; // Add more types here: 'video', etc.
@@ -21,7 +22,7 @@ export interface IListing {
   description: string;
   saleType: string;
   saleStatus: string;
-  media: { name: string; url?: string }[];
+  media: IMedia['_id'][];
   animal: IAnimal['_id'];
   species: string;
   createdAt: Date;
@@ -36,7 +37,7 @@ export interface IPopulatedListing {
   description: string;
   saleType: string;
   saleStatus: string;
-  media: { name: string; url?: string }[];
+  media: IPopulatedMedia[];
   animal: IPopulatedAnimal;
   species: string;
   createdAt: Date;
@@ -192,7 +193,12 @@ listingSchema.method('updateSaleStatus', function () {
 listingSchema.method('populateMedia', async function () {
   const docCopy: IPopulatedListing = this.toObject();
 
-  docCopy.media = await Promise.all(this.media.map(getMediaUrl));
+  docCopy.media = await Promise.all(
+    docCopy.media.map(async (media) => {
+      media.url = await getMediaUrl(media.name);
+      return media;
+    })
+  );
 
   return docCopy;
 });

@@ -37,8 +37,7 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
   );
 
   return (
-    <>
-      <div className="col-span-4 flex flex-col gap-12">
+    <div className="col-span-4 flex flex-col gap-12">
         {/* Listing Info Header */}
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col gap-4">
@@ -120,7 +119,7 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
           />
 
           <div className="flex flex-col items-start gap-4 text-gray-800 font-light">
-            <p className="line-clamp-6 tracking-wide leading-relaxed">
+            <p className="line-clamp-6 tracking-wide leading-relaxed whitespace-pre-line">
               {listing.description}
             </p>
 
@@ -208,7 +207,6 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
           />
         </Section>
       </div>
-    </>
   );
 };
 

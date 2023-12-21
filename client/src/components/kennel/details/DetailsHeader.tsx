@@ -11,9 +11,18 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
       {/* Head Banner */}
       <div className="flex justify-between">
         <div className="flex flex-col gap-4">
-          <h1 className="text-2xl font-semibold text-gray-800">{`${listing.animal.breeds
-            .map((breed) => breed.name)
-            .join(', ')} ${listing.species}`}</h1>
+          {listing.animal.name ? (
+            <>
+              <h1 className="text-2xl font-semibold text-gray-800">{`Hi, I'm ${listing.animal.name} 👋🏼`}</h1>
+              <h2 className="text-xl font-semibold text-gray-600">{`${listing.animal.breeds
+                .map((breed) => breed.name)
+                .join(', ')} ${listing.species}`}</h2>
+            </>
+          ) : (
+            <h1 className="text-2xl font-semibold text-gray-800">{`${listing.animal.breeds
+              .map((breed) => breed.name)
+              .join(', ')} ${listing.species}`}</h1>
+          )}
         </div>
         <div className="flex items-center place-self-end gap-4">
           <button className="flex items-center gap-2 text-neutral-700">

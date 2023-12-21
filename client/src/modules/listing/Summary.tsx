@@ -1,6 +1,7 @@
 import BirthdateSelect from '../../components/listing/biography/BirthdateSelect';
 import DescriptionInput from '../../components/listing/biography/DescriptionInput';
 import GenderOptions from '../../components/listing/biography/GenderOptions';
+import NameInput from '../../components/listing/biography/NameInput';
 import OriginDropdown from '../../components/listing/biography/OriginDropdown';
 import BreedDropdown from '../../components/listing/biology/BreedDropdown';
 import SpeciesOptions from '../../components/listing/biology/SpeciesOptions';
@@ -39,6 +40,10 @@ const Summary = () => {
           <GenderOptions readOnly />
         </ListingSection>
 
+        <ListingSection title="Name" field="name">
+          <NameInput readOnly />
+        </ListingSection>
+        
         <ListingSection title="Birthdate" field="birthdate">
           <BirthdateSelect readOnly />
         </ListingSection>

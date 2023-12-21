@@ -10,6 +10,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
+import { IMedia } from '../models/listing/media.model';
 
 dotenv.config();
 
@@ -33,15 +34,11 @@ const s3Client = new S3Client({
 export const putMedia = async (
   listingId: Schema.Types.ObjectId,
   files: Express.Multer.File[],
-  media?:
-    | {
-        name?: string;
-        url?: string;
-      }[]
+  media?: Omit<IMedia, '_id'>[]
 ) => {
   let clientMediaNames: Array<string | undefined> | undefined;
   let s3MediaNames: Array<string | undefined> | undefined;
-  const uploadedMedia = [];
+  const listingMedia: Omit<IMedia, '_id'>[] = [];
 
   if (Array.isArray(media) && media.length > 0) {
     clientMediaNames = media.map((media) => media.name);
@@ -72,7 +69,7 @@ export const putMedia = async (
     }
 
     clientMediaNames.forEach((clientMediaName) => {
-      uploadedMedia.push({ name: clientMediaName, url: undefined });
+      listingMedia.push({ name: clientMediaName!, url: undefined });
     });
   }
 
@@ -87,23 +84,23 @@ export const putMedia = async (
 
     await s3Client.send(putCommand);
 
-    uploadedMedia.push({ name: name, url: undefined });
+    listingMedia.push({ name: name, url: undefined });
   }
 
-  return uploadedMedia;
+  return listingMedia;
 };
 
-export const getMediaUrl = async (media: { name: string }) => {
+export const getMediaUrl = async (mediaName: string) => {
   const getCommand = new GetObjectCommand({
     Bucket: awsBucketName,
-    Key: media.name
+    Key: mediaName
   });
 
   const url = await getSignedUrl(s3Client, getCommand, {
     expiresIn: 60 * 60 * 24 // 1 day
   });
 
-  return { name: media.name, url: url };
+  return url;
 };
 
 const generateName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');

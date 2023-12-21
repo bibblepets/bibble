@@ -12,15 +12,14 @@ const DescriptionInput = ({ readOnly }: { readOnly?: boolean }) => {
 
   const handleDescriptionChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const value = e.target.value.replace(/\n/g, '[newline]');
-      store.dispatch(setDescription(value));
+      store.dispatch(setDescription(e.target.value));
     },
     [store]
   );
 
   if (readOnly) {
     return (
-      <p className="text-gray text-sm">
+      <p className="text-gray text-sm whitespace-pre-line">
         {displayDescription || 'No description provided'}
       </p>
     );
@@ -28,12 +27,12 @@ const DescriptionInput = ({ readOnly }: { readOnly?: boolean }) => {
 
   return (
     <textarea
-      className="w-full px-4 py-2 text-gray-700 text-sm border rounded-lg focus:outline-none focus:shadow-outline resize-none"
+      className="w-full px-4 py-2 text-gray-700 text-sm border whitespace-pre-line rounded-lg focus:outline-none focus:shadow-outline resize-none"
       placeholder="Introduce them!"
       value={displayDescription}
       onChange={handleDescriptionChange}
       style={{
-        height: `${Math.max(80, description.split('[newline]').length * 20)}px`
+        height: `${Math.max(80, description.split('\n').length * 20)}px`
       }}
     />
   );

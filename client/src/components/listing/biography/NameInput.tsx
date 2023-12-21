@@ -19,7 +19,7 @@ const NameInput = ({ readOnly }: { readOnly?: boolean }) => {
   if (readOnly) {
     return (
       <a className="text-sm font-medium text-gray-700">
-        {name || 'No AVS license number provided'}
+        {name || 'N/A'}
       </a>
     );
   }

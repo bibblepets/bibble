@@ -21,6 +21,7 @@ import {
 import { DogModel } from '../models/listing/animal/dog/dog.model';
 import { BibbleError, FieldAssertionError } from '../errors/errors.class';
 import { putMedia } from '../services/s3.service';
+import { IMedia } from '../models/listing/media.model';
 
 const {
   Listing
@@ -144,7 +145,7 @@ export const updateBiography = async (
   res: Response
 ) => {
   try {
-    const { _id, stage, origin, gender, birthdate, description, user } =
+    const { _id, stage, origin, gender, birthdate, description, name, user } =
       req.body;
 
     assertFields(
@@ -159,12 +160,15 @@ export const updateBiography = async (
         biography: {
           origin,
           gender,
+          name,
           birthdate,
           description
         }
       },
       { new: true }
     ).then(async (listingCreator) => await listingCreator?.populateAll());
+
+    console.log(listingCreator);
 
     return res.status(200).json(listingCreator);
   } catch (error: any) {
@@ -239,7 +243,7 @@ export const updateMedia = async (req: IUpdateMediaRequest, res: Response) => {
       throw new FieldAssertionError('media');
     }
 
-    let media;
+    let media: Omit<IMedia, '_id'>[] | undefined;
 
     if (Array.isArray(mediaNames) && mediaNames.length > 0) {
       media = mediaNames.map((name) => ({ name, url: undefined }));
@@ -317,7 +321,7 @@ export const createListing = async (
         (vaccine) => vaccine._id
       ),
       origin: populatedListingCreator.biography?.origin?._id,
-      name: undefined,
+      name: populatedListingCreator.biography?.name,
       gender: populatedListingCreator.biography?.gender,
       birthdate: populatedListingCreator.biography?.birthdate,
       size: populatedListingCreator.medical?.size,
@@ -335,7 +339,6 @@ export const createListing = async (
 
     // Validate request
     console.log('Validating request body...');
-    // TODO: Validate lister in middleware
     await validateCreateAnimal(species, animal);
     await Listing.validate(
       {

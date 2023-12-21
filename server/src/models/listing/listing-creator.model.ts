@@ -5,6 +5,7 @@ import { IVaccine } from './animal/vaccine.model';
 import { ICountry } from '../country.model';
 import { validateAVSLicenseNumber } from './animal/animal.model';
 import { getMediaUrl } from '../../services/s3.service';
+import { IMedia } from './media.model';
 
 const { saleTypes }: { saleTypes: string[] } = require('./listing.model');
 const {
@@ -20,63 +21,55 @@ export interface IListingCreator {
   stage: number;
   saleType: string;
   lister: IUser['_id'];
-  biology?: {
-    species?: string;
-    breeds?: IBreed['_id'][];
-  };
-  biography?: {
-    origin?: ICountry;
-    gender?: string;
-    birthdate?: Date;
-    description?: string;
-  };
-  medical?: {
-    size?: string;
-    weight?: number;
-    hairCoat?: string;
-    vaccines?: IVaccine['_id'][];
-  };
-  legal?: {
-    avsLicenseNumber?: string;
-    legalTags?: string[];
-  };
-  media?: {
-    name?: string;
-    url?: string;
-  }[];
+  biology?: IBiology;
+  biography?: IBiography;
+  medical?: IMedical;
+  legal?: ILegal;
+  media?: Partial<Omit<IMedia, '_id'>>[];
   price?: number;
 }
 
-export interface IPopulatedListingCreator {
-  _id: Schema.Types.ObjectId;
-  stage: number;
-  saleType: string;
+export interface IBiology {
+  species?: string;
+  breeds?: IBreed['_id'][];
+}
+
+export interface IBiography {
+  origin?: ICountry;
+  gender?: string;
+  birthdate?: Date;
+  name?: string;
+  description?: string;
+}
+
+export interface IMedical {
+  size?: string;
+  weight?: number;
+  hairCoat?: string;
+  vaccines?: IVaccine['_id'][];
+}
+
+export interface ILegal {
+  avsLicenseNumber?: string;
+  legalTags?: string[];
+}
+
+export interface IPopulatedListingCreator
+  extends Omit<
+    IListingCreator,
+    'lister' | 'biology' | 'biography' | 'medical' | 'media'
+  > {
   lister: IPopulatedUser;
-  biology?: {
-    species?: string;
+  biology?: Omit<IBiology, 'breeds'> & {
     breeds?: IBreed[];
   };
-  biography?: {
+  biography?: Omit<IBiography, 'origin'> & {
     origin?: ICountry;
-    gender?: string;
-    birthdate?: Date;
-    description?: string;
   };
-  medical?: {
-    size?: string;
-    weight?: number;
-    hairCoat?: string;
+  medical?: Omit<IMedical, 'vaccines'> & {
     vaccines?: IVaccine[];
   };
-  legal?: {
-    avsLicenseNumber?: string;
-    legalTags?: string[];
-  };
-  media?: {
-    name?: string;
-    url?: string;
-  }[];
-  price?: number;
+  media?: Omit<IMedia, '_id'>[]
 }
 
 interface IListingCreatorMethods {
@@ -119,6 +112,7 @@ export interface IUpdateBiographyRequest extends IUserRequest {
     user: IPopulatedUser;
     origin?: ICountry['_id'];
     gender?: string;
+    name?: string;
     birthdate?: string;
     description?: string;
     [key: string]: any;
@@ -231,6 +225,9 @@ const listingCreatorSchema = new Schema<
         type: Date,
         case: 'Birthdate of `{VALUE}` is invalid.'
       },
+      name: {
+        type: String
+      },
       description: {
         type: String
       }
@@ -307,10 +304,11 @@ listingCreatorSchema.method('populateMedia', async function () {
 
   if (Array.isArray(docCopy.media)) {
     docCopy.media = await Promise.all(
-      docCopy.media.map(
-        async (media) => await getMediaUrl(media as { name: string })
-      )
-    );
+      docCopy.media.map(async (media) => {
+        media.url = await getMediaUrl(media.name);
+        return media;
+      })
+    )
 
     return docCopy;
   }
