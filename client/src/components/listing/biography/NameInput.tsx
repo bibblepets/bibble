@@ -30,7 +30,7 @@ const NameInput = ({ readOnly }: { readOnly?: boolean }) => {
         <input
           className={`text-sm w-full p-2 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline`}
           type="text"
-          placeholder="They got a name?"
+          placeholder="Do we have a name yet?"
           value={name}
           onChange={handleNameChange}
         />
