@@ -75,7 +75,7 @@ const adminBusinessProfile: Omit<
   businessName: 'Bibble',
   businessEmail: 'teamsaturdaydevs@gmail.com',
   businessContact: '+6512345678',
-  businessAddress: '123 Bibble Street',
+  businessAddress: '10 Heng Mui Keng Terrace; Block A; 119617',
   petShopLicenseNumber: 'AS08G00025' // Pet Lovers Centre Marine Parade
 };
 

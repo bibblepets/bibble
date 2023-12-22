@@ -1,5 +1,5 @@
 import { ArrowPathIcon, MapPinIcon } from '@heroicons/react/24/outline';
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
 import { useEffect, useMemo, useState } from 'react';
 import { GeocodeResponse } from '../../../types';
 
@@ -7,7 +7,7 @@ import { GeocodeResponse } from '../../../types';
 const GOOGLE_MAPS_API_KEY = 'AIzaSyB7fMl7N6wsGHbbw5duRQUMPzY3lwGYRHE';
 
 interface MapCardProps {
-  location: string;
+  location?: string;
 }
 
 const MapCard: React.FC<MapCardProps> = ({ location }) => {
@@ -18,6 +18,7 @@ const MapCard: React.FC<MapCardProps> = ({ location }) => {
 
   useEffect(() => {
     const getCoordinates = async () => {
+      if (!location) return null;
       let request_url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
         location
       )}&key=${GOOGLE_MAPS_API_KEY}`;
@@ -68,7 +69,7 @@ const MapCard: React.FC<MapCardProps> = ({ location }) => {
           center={center}
           zoom={16}
         >
-          <Marker position={data.coordinates} />
+          <MarkerF position={data.coordinates} animation={google.maps.Animation.DROP} opacity={1} title="I'm over here!"/>
         </GoogleMap>
       </div>
     </div>
