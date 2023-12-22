@@ -1,6 +1,6 @@
-import Logo from './Logo';
 import NavTabGroup from './NavTabGroup';
-import UserMenu from './UserMenu';
+import UserMenu from '../../global/UserMenu';
+import Logo from '../../global/Logo';
 
 const Navbar = () => {
   const tabs = [

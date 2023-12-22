@@ -2,12 +2,9 @@ import { Bars3Icon, BellIcon } from '@heroicons/react/24/outline';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import paw from '/images/paw.jpeg';
-import { logoutUser, selectCurrentUser } from '../../../features/authSlice';
-import {
-  openLoginModal,
-  openRegisterModal
-} from '../../../features/modalsSlice';
-import { store } from '../../../store';
+import { logoutUser, selectCurrentUser } from '../../features/authSlice';
+import { openLoginModal, openRegisterModal } from '../../features/modalsSlice';
+import { store } from '../../store';
 
 interface UserMenuProps {
   tabs: { name: string; path: string }[];

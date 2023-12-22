@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import Logo from './Logo';
 import { useCallback } from 'react';
 import { store } from '../../../../store';
 import { updateListingCreatorById } from '../../../../features/listingCreatorSlice';
 import { openConfirmDeleteModal } from '../../../../features/modalsSlice';
+import Logo from '../../../global/Logo';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const Navbar = () => {
   return (
     <nav className="fixed w-full top-0 z-40">
       <div className="flex flex-row px-8 justify-between items-center p-6 bg-white">
-        <Logo />
+        <Logo small />
         <div className="flex gap-4">{buttons}</div>
       </div>
     </nav>
