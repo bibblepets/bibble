@@ -5,10 +5,10 @@ import {
   addLegalTag,
   removeLegalTag,
   selectListingCreatorLegalTags
-} from '../../../features/listingCreatorSlice';
-import { store } from '../../../store';
-import { LegalTag } from '../../../types';
-import { selectListingOptionsLegalTags } from '../../../features/listingOptionsSlice';
+} from '../../../../features/listingCreatorSlice';
+import { store } from '../../../../store';
+import { LegalTag } from '../../../../types';
+import { selectListingOptionsLegalTags } from '../../../../features/listingOptionsSlice';
 
 const LegalTagList = ({ readOnly }: { readOnly?: boolean }) => {
   const selectedLegalTags = useSelector(selectListingCreatorLegalTags);

@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { store } from '../../../store';
+import { store } from '../../../../store';
 import {
   selectListingCreatorName,
   setName
-} from '../../../features/listingCreatorSlice';
+} from '../../../../features/listingCreatorSlice';
 
 const NameInput = ({ readOnly }: { readOnly?: boolean }) => {
   const name = useSelector(selectListingCreatorName);
@@ -17,11 +17,7 @@ const NameInput = ({ readOnly }: { readOnly?: boolean }) => {
   );
 
   if (readOnly) {
-    return (
-      <a className="text-sm font-medium text-gray-700">
-        {name || 'N/A'}
-      </a>
-    );
+    return <a className="text-sm font-medium text-gray-700">{name || 'N/A'}</a>;
   }
 
   return (

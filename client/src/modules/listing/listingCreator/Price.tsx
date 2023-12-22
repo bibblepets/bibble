@@ -1,6 +1,6 @@
-import ListingStage from '../../components/listing/listing/ListingStage';
-import PriceInput from '../../components/listing/price/PriceInput';
-import ListingLayout from '../../layouts/ListingLayout';
+import ListingStage from '../../../components/listing/listing/ListingStage';
+import PriceInput from '../../../components/listing/listingCreator/price/PriceInput';
+import ListingLayout from '../../../layouts/ListingLayout';
 
 const Price = () => {
   return (

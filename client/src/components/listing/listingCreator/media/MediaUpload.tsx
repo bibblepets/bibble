@@ -6,9 +6,9 @@ import {
   addMedia,
   removeMedia,
   selectListingCreatorMedia
-} from '../../../features/listingCreatorSlice';
-import { store } from '../../../store';
-import { Media } from '../../../types';
+} from '../../../../features/listingCreatorSlice';
+import { store } from '../../../../store';
+import { Media } from '../../../../types';
 import toast from 'react-hot-toast';
 
 const MediaUpload = ({ readOnly }: { readOnly?: boolean }) => {

@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorHairCoat,
   setHairCoat
-} from '../../../features/listingCreatorSlice';
-import { store } from '../../../store';
-import { selectListingOptionsHairCoats } from '../../../features/listingOptionsSlice';
+} from '../../../../features/listingCreatorSlice';
+import { store } from '../../../../store';
+import { selectListingOptionsHairCoats } from '../../../../features/listingOptionsSlice';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
-import { useDropdown } from '../hooks';
+import { useDropdown } from '../../hooks';
 
 const HairCoatSelect = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);

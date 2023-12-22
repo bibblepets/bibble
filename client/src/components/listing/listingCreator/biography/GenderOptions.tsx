@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorGender,
   setGender
-} from '../../../features/listingCreatorSlice';
-import { store } from '../../../store';
-import { Gender } from '../../../types';
-import { toCamelCase } from '../../../utils/string';
+} from '../../../../features/listingCreatorSlice';
+import { store } from '../../../../store';
+import { Gender } from '../../../../types';
+import { toCamelCase } from '../../../../utils/string';
 
 const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
   const selectedGender = useSelector(selectListingCreatorGender);

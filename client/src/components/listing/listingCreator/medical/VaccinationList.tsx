@@ -6,10 +6,10 @@ import {
   removeVaccination,
   selectListingCreatorSpecies,
   selectListingCreatorVaccines
-} from '../../../features/listingCreatorSlice';
-import { store } from '../../../store';
-import { Vaccine } from '../../../types';
-import { selectListingOptionsVaccines } from '../../../features/listingOptionsSlice';
+} from '../../../../features/listingCreatorSlice';
+import { store } from '../../../../store';
+import { Vaccine } from '../../../../types';
+import { selectListingOptionsVaccines } from '../../../../features/listingOptionsSlice';
 
 const VaccinationList = ({ readOnly }: { readOnly?: boolean }) => {
   const species = useSelector(selectListingCreatorSpecies);

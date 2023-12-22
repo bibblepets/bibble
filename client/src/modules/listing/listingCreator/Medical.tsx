@@ -1,10 +1,10 @@
-import ListingSection from '../../components/listing/listing/ListingSection';
-import ListingStage from '../../components/listing/listing/ListingStage';
-import HairCoatSelect from '../../components/listing/medical/HairCoatSelect';
-import SizeOptions from '../../components/listing/medical/SizeOptions';
-import VaccinationList from '../../components/listing/medical/VaccinationList';
-import WeightInput from '../../components/listing/medical/WeightInput';
-import ListingLayout from '../../layouts/ListingLayout';
+import ListingSection from '../../../components/listing/listing/ListingSection';
+import ListingStage from '../../../components/listing/listing/ListingStage';
+import HairCoatSelect from '../../../components/listing/listingCreator/medical/HairCoatSelect';
+import SizeOptions from '../../../components/listing/listingCreator/medical/SizeOptions';
+import VaccinationList from '../../../components/listing/listingCreator/medical/VaccinationList';
+import WeightInput from '../../../components/listing/listingCreator/medical/WeightInput';
+import ListingLayout from '../../../layouts/ListingLayout';
 
 const Medical = () => {
   return (

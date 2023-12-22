@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorOrigin,
   setOrigin
-} from '../../../features/listingCreatorSlice';
-import { store } from '../../../store';
-import { Country } from '../../../types';
-import { selectListingOptionsCountries } from '../../../features/listingOptionsSlice';
-import { useDropdown } from '../hooks';
+} from '../../../../features/listingCreatorSlice';
+import { store } from '../../../../store';
+import { Country } from '../../../../types';
+import { selectListingOptionsCountries } from '../../../../features/listingOptionsSlice';
+import { useDropdown } from '../../hooks';
 
 const OriginDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);

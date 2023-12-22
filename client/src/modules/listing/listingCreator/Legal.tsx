@@ -1,8 +1,8 @@
-import AvsLicenseInput from '../../components/listing/legal/AvsLicenseInput';
-import LegalTagList from '../../components/listing/legal/LegalTagList';
-import ListingSection from '../../components/listing/listing/ListingSection';
-import ListingStage from '../../components/listing/listing/ListingStage';
-import ListingLayout from '../../layouts/ListingLayout';
+import AvsLicenseInput from '../../../components/listing/listingCreator/legal/AvsLicenseInput';
+import LegalTagList from '../../../components/listing/listingCreator/legal/LegalTagList';
+import ListingSection from '../../../components/listing/listing/ListingSection';
+import ListingStage from '../../../components/listing/listing/ListingStage';
+import ListingLayout from '../../../layouts/ListingLayout';
 
 const Legal = () => {
   return (

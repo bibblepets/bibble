@@ -1,21 +1,21 @@
-import BirthdateSelect from '../../components/listing/biography/BirthdateSelect';
-import DescriptionInput from '../../components/listing/biography/DescriptionInput';
-import GenderOptions from '../../components/listing/biography/GenderOptions';
-import NameInput from '../../components/listing/biography/NameInput';
-import OriginDropdown from '../../components/listing/biography/OriginDropdown';
-import BreedDropdown from '../../components/listing/biology/BreedDropdown';
-import SpeciesOptions from '../../components/listing/biology/SpeciesOptions';
-import AvsLicenseInput from '../../components/listing/legal/AvsLicenseInput';
-import LegalTagList from '../../components/listing/legal/LegalTagList';
-import ListingSection from '../../components/listing/listing/ListingSection';
-import ListingStage from '../../components/listing/listing/ListingStage';
-import MediaUpload from '../../components/listing/media/MediaUpload';
-import HairCoatSelect from '../../components/listing/medical/HairCoatSelect';
-import SizeOptions from '../../components/listing/medical/SizeOptions';
-import VaccinationList from '../../components/listing/medical/VaccinationList';
-import WeightInput from '../../components/listing/medical/WeightInput';
-import PriceInput from '../../components/listing/price/PriceInput';
-import ListingLayout from '../../layouts/ListingLayout';
+import ListingSection from '../../../components/listing/listing/ListingSection';
+import ListingStage from '../../../components/listing/listing/ListingStage';
+import ListingLayout from '../../../layouts/ListingLayout';
+import BirthdateSelect from '../../../components/listing/listingCreator/biography/BirthdateSelect';
+import DescriptionInput from '../../../components/listing/listingCreator/biography/DescriptionInput';
+import GenderOptions from '../../../components/listing/listingCreator/biography/GenderOptions';
+import NameInput from '../../../components/listing/listingCreator/biography/NameInput';
+import OriginDropdown from '../../../components/listing/listingCreator/biography/OriginDropdown';
+import BreedDropdown from '../../../components/listing/listingCreator/biology/BreedDropdown';
+import SpeciesOptions from '../../../components/listing/listingCreator/biology/SpeciesOptions';
+import AvsLicenseInput from '../../../components/listing/listingCreator/legal/AvsLicenseInput';
+import LegalTagList from '../../../components/listing/listingCreator/legal/LegalTagList';
+import MediaUpload from '../../../components/listing/listingCreator/media/MediaUpload';
+import HairCoatSelect from '../../../components/listing/listingCreator/medical/HairCoatSelect';
+import SizeOptions from '../../../components/listing/listingCreator/medical/SizeOptions';
+import VaccinationList from '../../../components/listing/listingCreator/medical/VaccinationList';
+import WeightInput from '../../../components/listing/listingCreator/medical/WeightInput';
+import PriceInput from '../../../components/listing/listingCreator/price/PriceInput';
 
 const Summary = () => {
   return (
@@ -43,7 +43,7 @@ const Summary = () => {
         <ListingSection title="Name" field="name">
           <NameInput readOnly />
         </ListingSection>
-        
+
         <ListingSection title="Birthdate" field="birthdate">
           <BirthdateSelect readOnly />
         </ListingSection>

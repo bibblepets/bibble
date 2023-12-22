@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorDescription,
   setDescription
-} from '../../../features/listingCreatorSlice';
-import { store } from '../../../store';
+} from '../../../../features/listingCreatorSlice';
+import { store } from '../../../../store';
 
 const DescriptionInput = ({ readOnly }: { readOnly?: boolean }) => {
   const description = useSelector(selectListingCreatorDescription) || '';

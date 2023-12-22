@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import BreedDropdown from '../../components/listing/biology/BreedDropdown';
-import SpeciesOptions from '../../components/listing/biology/SpeciesOptions';
-import ListingSection from '../../components/listing/listing/ListingSection';
-import ListingStage from '../../components/listing/listing/ListingStage';
-import ListingLayout from '../../layouts/ListingLayout';
+import BreedDropdown from '../../../components/listing/listingCreator/biology/BreedDropdown';
+import SpeciesOptions from '../../../components/listing/listingCreator/biology/SpeciesOptions';
+import ListingSection from '../../../components/listing/listing/ListingSection';
+import ListingStage from '../../../components/listing/listing/ListingStage';
+import ListingLayout from '../../../layouts/ListingLayout';
 
 const Biology = () => {
   return (

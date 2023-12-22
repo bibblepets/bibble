@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorWeight,
   setWeight
-} from '../../../features/listingCreatorSlice';
-import { store } from '../../../store';
-import { useDropdown } from '../hooks';
+} from '../../../../features/listingCreatorSlice';
+import { store } from '../../../../store';
+import { useDropdown } from '../../hooks';
 
 const WeightInput = ({ readOnly }: { readOnly?: boolean }) => {
   const weight = useSelector(selectListingCreatorWeight);

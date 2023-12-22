@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorSpecies,
   setSpecies
-} from '../../../features/listingCreatorSlice';
-import { store } from '../../../store';
-import { Species } from '../../../types';
-import { toCamelCase } from '../../../utils/string';
+} from '../../../../features/listingCreatorSlice';
+import { store } from '../../../../store';
+import { Species } from '../../../../types';
+import { toCamelCase } from '../../../../utils/string';
 
 interface SpeciesBoxProps {
   species: Species;

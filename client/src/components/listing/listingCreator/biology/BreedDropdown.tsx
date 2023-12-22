@@ -6,11 +6,11 @@ import {
   removeBreed,
   selectListingCreatorBreeds,
   selectListingCreatorSpecies
-} from '../../../features/listingCreatorSlice';
-import { store } from '../../../store';
-import { Breed } from '../../../types';
-import { selectListingOptionsBreeds } from '../../../features/listingOptionsSlice';
-import { useDropdown } from '../hooks';
+} from '../../../../features/listingCreatorSlice';
+import { store } from '../../../../store';
+import { Breed } from '../../../../types';
+import { selectListingOptionsBreeds } from '../../../../features/listingOptionsSlice';
+import { useDropdown } from '../../hooks';
 
 const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);

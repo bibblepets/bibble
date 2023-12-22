@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorPrice,
   setPrice
-} from '../../../features/listingCreatorSlice';
-import { store } from '../../../store';
+} from '../../../../features/listingCreatorSlice';
+import { store } from '../../../../store';
 
 const MAX_PRICE = 9999;
 

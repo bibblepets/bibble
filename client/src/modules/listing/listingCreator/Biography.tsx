@@ -1,11 +1,11 @@
-import BirthdateSelect from '../../components/listing/biography/BirthdateSelect';
-import DescriptionInput from '../../components/listing/biography/DescriptionInput';
-import GenderOptions from '../../components/listing/biography/GenderOptions';
-import NameInput from '../../components/listing/biography/NameInput';
-import OriginDropdown from '../../components/listing/biography/OriginDropdown';
-import ListingSection from '../../components/listing/listing/ListingSection';
-import ListingStage from '../../components/listing/listing/ListingStage';
-import ListingLayout from '../../layouts/ListingLayout';
+import BirthdateSelect from '../../../components/listing/listingCreator/biography/BirthdateSelect';
+import DescriptionInput from '../../../components/listing/listingCreator/biography/DescriptionInput';
+import GenderOptions from '../../../components/listing/listingCreator/biography/GenderOptions';
+import NameInput from '../../../components/listing/listingCreator/biography/NameInput';
+import OriginDropdown from '../../../components/listing/listingCreator/biography/OriginDropdown';
+import ListingSection from '../../../components/listing/listing/ListingSection';
+import ListingStage from '../../../components/listing/listing/ListingStage';
+import ListingLayout from '../../../layouts/ListingLayout';
 
 const Biography = () => {
   return (

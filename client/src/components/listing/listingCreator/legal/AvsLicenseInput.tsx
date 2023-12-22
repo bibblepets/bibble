@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { store } from '../../../store';
+import { store } from '../../../../store';
 import {
   selectListingCreatorAvsLicenseNumber,
   setAvsLicenseNumber
-} from '../../../features/listingCreatorSlice';
+} from '../../../../features/listingCreatorSlice';
 
 const AvsLicenseInput = ({ readOnly }: { readOnly?: boolean }) => {
   const avsLicenseNumber =
