@@ -20,15 +20,15 @@ const AppointmentBox: React.FC<AppointmentBoxProps> = ({ listing }) => {
       <div className="flex flex-col gap-4 h-full mt-2 font-light text-sm">
         <div className="flex items-center">
           <MapPinIcon className="inline-block w-4 h-4 mr-2" />
-          <p>TODO: Location Data</p>
+          <p className='w-full overflow-auto whitespace-pre-line'>{listing.lister.businessProfile?.businessAddress.replaceAll(';', ',')}</p>
         </div>
         <div className="flex items-center">
           <EnvelopeIcon className="inline-block w-4 h-4 mr-2" />
-          <p>{listing.lister.businessProfile?.businessEmail}</p>
+          <p className='w-full overflow-auto break-words'>{listing.lister.businessProfile?.businessEmail}</p>
         </div>
         <div className="flex items-center">
           <PhoneIcon className="inline-block w-4 h-4 mr-2" />
-          <p>{listing.lister.businessProfile?.businessContact}</p>
+          <p className='w-full overflow-auto break-words'>{listing.lister.businessProfile?.businessContact}</p>
         </div>
         <div className="flex justify-between font-semibold">
           <p>Listed at </p>
