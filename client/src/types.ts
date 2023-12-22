@@ -24,8 +24,12 @@ export type LoginModalType = ModalType & {
   title: string;
 };
 
-export type ConfirmDeleteModaltype = ModalType & {
+export type ConfirmDeleteModalType = ModalType & {
   navigate?: NavigateFunction;
+};
+
+export type ViewMoreModalType = ModalType & {
+  content: string;
 };
 
 // MODEL TYPES
