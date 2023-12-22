@@ -3,8 +3,7 @@ import { verify, sign } from 'jsonwebtoken';
 import { BibbleError } from '../errors/errors.class';
 import { handleError } from '../utils/util';
 import {
-  ICreateUserRequest,
-  IUpdateUserRequest,
+  IRegisterUserRequest,
   ICheckAuthStatusRequest,
   ILoginUserRequest,
   UserModel
@@ -70,7 +69,7 @@ export const checkAuthStatus = async (
   }
 };
 
-export const registerUser = async (req: ICreateUserRequest, res: Response) => {
+export const registerUser = async (req: IRegisterUserRequest, res: Response) => {
   const { buyerProfile, businessProfile, email, password } = req.body;
   let createdBuyerProfile;
   let createdBusinessProfile;
@@ -189,84 +188,4 @@ export const logoutUser = (_req: Request, res: Response) => {
   res.json({
     message: 'User logged out successfully.'
   });
-};
-
-export const updateUser = async (req: IUpdateUserRequest, res: Response) => {
-  const { user, buyerProfile, businessProfile, email, password } = req.body;
-
-  try {
-    const buyerProfileId = user.buyerProfile._id;
-    const businessProfileId = user.businessProfile._id;
-
-    // Validate request body
-    if (buyerProfile) {
-      console.log('Validating Buyer Profile request body...');
-      await BuyerProfile.validate(buyerProfile, Object.keys(buyerProfile));
-    }
-    if (businessProfile) {
-      // If user has a business profile, validate request body for update
-      console.log('Validating Business Profile (Update) request body...');
-      if (businessProfileId) {
-        await BusinessProfile.validate(
-          businessProfile,
-          Object.keys(businessProfile)
-        );
-      }
-    }
-    if (email || password) {
-      console.log('Validating User request body...');
-      const userPathsToUpdate = ['email', 'password'].filter(
-        (key: string) => req.body[key as keyof typeof req.body]
-      );
-      await User.validate({ email, password }, userPathsToUpdate);
-    }
-
-    // Update Buyer Profile
-    console.log('Updating buyer profile...');
-    const updatedBuyerProfile = await BuyerProfile.findByIdAndUpdate(
-      buyerProfileId,
-      buyerProfile,
-      { new: true }
-    );
-
-    if (!updatedBuyerProfile) {
-      return res.status(404).json({ message: 'Buyer profile not found.' });
-    }
-
-    // Update Business Profile
-    console.log('Updating business profile...');
-    const updatedBusinessProfile = await BusinessProfile.findByIdAndUpdate(
-      businessProfileId,
-      businessProfile,
-      { new: true }
-    );
-
-    if (!updatedBusinessProfile) {
-      return res.status(404).json({ message: 'Business profile not found.' });
-    }
-
-    // Update User
-    console.log('Updating user...');
-    const updatedUser = await User.findByIdAndUpdate(
-      user._id,
-      {
-        buyerProfile: updatedBuyerProfile._id,
-        businessProfile: updatedBusinessProfile._id,
-        email,
-        password
-      },
-      { new: true }
-    );
-
-    const populatedUser = await updatedUser?.populate(
-      'buyerProfile businessProfile'
-    );
-
-    return res.json({
-      user: populatedUser,
-      message: 'User updated successfully.'
-    });
-  } catch (error: any) {
-    return handleError(res, error);
-  }
 };

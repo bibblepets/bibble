@@ -13,7 +13,7 @@ const COOKIE_OPTIONS = {
   maxAge: 1000 * 60 * 60 * 24 * 7
 };
 
-export const getUserFromAuthToken = async (
+export const checkAuth = async (
   req: Request,
   res: Response,
   next: NextFunction

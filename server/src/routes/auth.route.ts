@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import * as AuthController from '../controllers/auth.controller';
-import * as AuthMiddleware from '../middleware/auth.middleware';
 
 const router = Router();
 
@@ -31,12 +30,5 @@ router.post('/login', AuthController.loginUser);
  * @access Private
  */
 router.post('/logout', AuthController.logoutUser);
-
-/**
- * @route PUT /api/auth/update/:id
- * @desc Update an existing user
- * @access Private
- */
-router.put('/update/:id', AuthMiddleware.getUserFromAuthToken, AuthController.updateUser);
 
 module.exports = router;

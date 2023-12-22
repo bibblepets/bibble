@@ -8,7 +8,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 router.use(
-  AuthMiddleware.getUserFromAuthToken,
+  AuthMiddleware.checkAuth,
   AuthMiddleware.validateBibbleTier
 );
 

@@ -40,7 +40,7 @@ export interface IUserRequest extends Request {
   };
 }
 
-export interface ICreateUserRequest extends Request {
+export interface IRegisterUserRequest extends Request {
   body: Omit<
     IUser,
     '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile' | 'businessProfile'
@@ -52,7 +52,7 @@ export interface ICreateUserRequest extends Request {
 
 export interface IUpdateUserRequest extends IUserRequest {
   body: Partial<
-    Omit<ICreateUserRequest['body'], 'buyerProfile' | 'businessProfile'> & {
+    Omit<IRegisterUserRequest['body'], 'buyerProfile' | 'businessProfile'> & {
       buyerProfile: IUpdateBuyerProfileRequest['body'];
       businessProfile: IUpdateBusinessProfileRequest['body'];
     }
