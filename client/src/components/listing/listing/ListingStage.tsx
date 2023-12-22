@@ -24,8 +24,8 @@ const ListingStage: React.FC<ListingStageProps> = ({
   const isLoading = useSelector(selectListingCreatorIsLoading);
 
   return (
-    <FadeComponent show={!isLoading}>
-      <div className="flex flex-col justify-center items-center w-full h-full overflow-auto my-12">
+    <div className="flex flex-col justify-center items-center w-full h-full overflow-auto my-12">
+      <FadeComponent show={!isLoading}>
         <div className="flex flex-col w-full sm:w-[640px] px-8 max-h-full gap-10">
           <div className="flex flex-col gap-2">
             {/* HEADER */}
@@ -48,8 +48,8 @@ const ListingStage: React.FC<ListingStageProps> = ({
           {/* BODY */}
           {children}
         </div>
-      </div>
-    </FadeComponent>
+      </FadeComponent>
+    </div>
   );
 };
 
