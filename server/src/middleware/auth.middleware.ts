@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { verify, sign } from 'jsonwebtoken';
 import { IPopulatedUser, UserModel } from '../models/user/user.model';
 import { BibbleError } from '../errors/errors.class';
+import { handleError } from '../utils/util';
 
 const User: UserModel = require('../models/user/user.model');
 
@@ -57,7 +58,7 @@ export const checkAuth = async (
     };
     next();
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return handleError(res, error);
   }
 };
 
@@ -77,6 +78,6 @@ export const validateBibbleTier = async (
 
     next();
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return handleError(res, error);
   }
 };

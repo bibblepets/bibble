@@ -1,15 +1,26 @@
 import { Response } from 'express';
 import { BusinessProfileModel } from '../models/user/business-profile.model';
 import { BuyerProfileModel } from '../models/user/buyer-profile.model';
-import { IUpdateUserRequest, UserModel } from '../models/user/user.model';
+import {
+  IGetUserRequest,
+  IUpdateUserRequest,
+  UserModel
+} from '../models/user/user.model';
 import { handleError } from '../utils/util';
 
 const User: UserModel = require('../models/user/user.model');
 const BuyerProfile: BuyerProfileModel = require('../models/user/buyer-profile.model');
 const BusinessProfile: BusinessProfileModel = require('../models/user/business-profile.model');
 
+export const getUser = async (req: IGetUserRequest, res: Response) => {
+  const { user } = req.body;
+
+  return res.json({ currentUser: user, message: 'User found.' });
+};
+
 export const updateUser = async (req: IUpdateUserRequest, res: Response) => {
   const { user, buyerProfile, businessProfile, email, password } = req.body;
+  console.log("Buyer Profile:", buyerProfile);
 
   try {
     const buyerProfileId = user.buyerProfile._id;

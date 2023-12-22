@@ -23,52 +23,6 @@ const COOKIE_OPTIONS = {
   maxAge: 1000 * 60 * 60 * 24 * 7
 };
 
-export const checkAuthStatus = async (
-  req: ICheckAuthStatusRequest,
-  res: Response
-) => {
-  const { authToken } = req.cookies;
-
-  if (!authToken) {
-    return res.status(401).json({ message: 'Unauthorized.' });
-  }
-
-  try {
-    if (!SECRET_JWT_CODE) {
-      throw new BibbleError('Secret JWT code not found.');
-    }
-
-    const decoded = verify(authToken, SECRET_JWT_CODE);
-
-    if (typeof decoded === 'string') {
-      throw new BibbleError('Decoded JWT is a string.');
-    }
-
-    const authUser = await User.findById(decoded.id);
-
-    if (!authUser) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
-
-    const token = sign(
-      { id: authUser._id, email: authUser.email },
-      SECRET_JWT_CODE
-    );
-
-    const populatedUser = await authUser.populate(
-      'buyerProfile businessProfile'
-    );
-
-    return res.cookie('authToken', token, COOKIE_OPTIONS).json({
-      token: token,
-      currentUser: populatedUser,
-      message: 'User is authenticated.'
-    });
-  } catch (error: any) {
-    return handleError(res, error);
-  }
-};
-
 export const registerUser = async (req: IRegisterUserRequest, res: Response) => {
   const { buyerProfile, businessProfile, email, password } = req.body;
   let createdBuyerProfile;
@@ -126,7 +80,6 @@ export const registerUser = async (req: IRegisterUserRequest, res: Response) => 
     );
 
     return res.cookie('authToken', token, COOKIE_OPTIONS).json({
-      token: token,
       currentUser: populatedUser,
       message: 'User registered successfully.'
     });
@@ -173,7 +126,6 @@ export const loginUser = async (req: ILoginUserRequest, res: Response) => {
     const populatedUser = await user.populate('buyerProfile businessProfile');
 
     return res.cookie('authToken', token, COOKIE_OPTIONS).json({
-      token: token,
       currentUser: populatedUser,
       message: 'User logged in successfully.'
     });

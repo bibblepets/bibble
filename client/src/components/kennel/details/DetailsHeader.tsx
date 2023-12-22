@@ -1,8 +1,7 @@
 import { HeartIcon, ShareIcon } from '@heroicons/react/24/solid';
 import { Listing } from '../../../types';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../features/userSlice';
-import { current } from 'immer';
+import { addFavouriteListing, removeFavouriteListing, selectCurrentUser, updateUser } from '../../../features/userSlice';
 import { store } from '../../../store';
 
 interface DetailsHeaderProps {
@@ -13,7 +12,8 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
   const currentUser = useSelector(selectCurrentUser);
 
   const isListingFavourited = () => {
-    const favourites = currentUser?.buyerProfile?.favouriteListings;
+    if (!currentUser) return false;
+    const favourites = currentUser.buyerProfile.favouriteListings;
 
     if (favourites && favourites.length > 0) {
       return favourites.some((favourite) => favourite._id === listing._id);
@@ -22,11 +22,16 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
     return false;
   };
 
-  const handleFavourite = () => {
+  const handleFavourite = async (listing: Listing) => {
+    if (!currentUser) return;
     if (isListingFavourited()) {
       // Remove from favourites
+      store.dispatch(addFavouriteListing(listing));
+      await store.dispatch(updateUser(currentUser));
     } else {
       // Add to favourites
+      store.dispatch(removeFavouriteListing(listing));
+      await store.dispatch(updateUser(currentUser));
     }
   };
 
@@ -49,7 +54,7 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
           )}
         </div>
         <div className="flex items-center place-self-end gap-4">
-          <button className="flex items-center gap-2 text-neutral-700" onClick={handleFavourite}>
+          <button className="flex items-center gap-2 text-neutral-700" onClick={() => handleFavourite(listing)}>
             {isListingFavourited() ? (
               <HeartIcon className="w-5 h-5 fill-rose-500" />
             ) : (

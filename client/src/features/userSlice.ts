@@ -1,10 +1,9 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState } from '../store';
-import { BusinessProfile, BuyerProfile, StatusType, User } from '../types';
+import { RootState, store } from '../store';
+import { BusinessProfile, BuyerProfile, Listing, StatusType, User } from '../types';
 
 interface UserState {
-  token?: string;
   currentUser?: User;
   status: StatusType;
   error?: string;
@@ -12,7 +11,6 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  token: undefined,
   currentUser: undefined,
   status: 'DEFAULT',
   error: undefined,
@@ -21,24 +19,16 @@ const initialState: UserState = {
 
 axios.defaults.withCredentials = true;
 
-export const checkAuthStatus = createAsyncThunk(
-  '/userSlice/checkAuthStatus',
-  async () => {
-    return await axios
-      .get('/api/auth/status')
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          return {
-            message: error.response.data.message
-          };
-        }
-        throw new Error(error.response.data.message);
-      });
-  }
-);
+export const getUser = createAsyncThunk('/userSlice/getUser', async () => {
+  return await axios
+    .get('/api/user')
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      throw new Error(error.response.data.message);
+    });
+});
 
 export const registerUser = createAsyncThunk(
   '/userSlice/register',
@@ -98,6 +88,20 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  '/userSlice/updateUser',
+  async (user: Partial<User>) => {
+    return await axios
+      .put('/api/user', user)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
 export const userSlice = createSlice({
   name: 'authentication',
   initialState,
@@ -106,21 +110,28 @@ export const userSlice = createSlice({
       state.status = 'DEFAULT';
       state.error = undefined;
       state.message = undefined;
+    },
+    addFavouriteListing: (state, action: PayloadAction<Listing>) => {
+      state.currentUser!.buyerProfile.favouriteListings!.push(action.payload);
+    },
+    removeFavouriteListing: (state, action: PayloadAction<Listing>) => {
+      state.currentUser!.buyerProfile.favouriteListings = state.currentUser!.buyerProfile.favouriteListings!.filter(
+        (favourite) => favourite._id !== action.payload._id
+      );
     }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(checkAuthStatus.pending, (state) => {
+      .addCase(getUser.pending, (state) => {
         state.status = 'LOADING';
         state.error = undefined;
       })
-      .addCase(checkAuthStatus.fulfilled, (state, action) => {
-        state.status = 'DEFAULT';
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
         state.currentUser = action.payload.currentUser;
-        state.token = action.payload.token;
         state.message = action.payload.message;
       })
-      .addCase(checkAuthStatus.rejected, (state, action) => {
+      .addCase(getUser.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       })
@@ -131,7 +142,6 @@ export const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
         state.currentUser = action.payload.currentUser;
-        state.token = action.payload.token;
         state.message = action.payload.message;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -145,7 +155,6 @@ export const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
         state.currentUser = action.payload.currentUser;
-        state.token = action.payload.token;
         state.message = action.payload.message;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -159,23 +168,33 @@ export const userSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state, action) => {
         state.status = 'DEFAULT';
         state.currentUser = undefined;
-        state.token = undefined;
         state.message = action.payload.message;
       })
       .addCase(logoutUser.rejected, (state, action) => {
+        state.status = 'ERROR';
+        state.error = action.error.message;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.status = 'LOADING';
+        state.error = undefined;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        state.currentUser = action.payload.currentUser;
+        state.message = action.payload.message;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       });
   }
 });
 
-export const { resetStatus } = userSlice.actions;
+export const { resetStatus, addFavouriteListing, removeFavouriteListing } = userSlice.actions;
 
-export const selectCurrentUser = (state: RootState) =>
-  state.user.currentUser;
+export const selectCurrentUser = (state: RootState) => state.user.currentUser;
 export const selectIsAuthenticated = (state: RootState) =>
   !!state.user.currentUser;
-export const selectAuthStatus = (state: RootState) =>
-  state.user.status;
+export const selectAuthStatus = (state: RootState) => state.user.status;
 
 export default userSlice.reducer;

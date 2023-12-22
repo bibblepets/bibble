@@ -4,13 +4,6 @@ import * as AuthController from '../controllers/auth.controller';
 const router = Router();
 
 /**
- * @route GET /api/auth/status
- * @desc Check if user is logged in
- * @access Public
- */
-router.get('/status', AuthController.checkAuthStatus);
-
-/**
  * @route POST /api/auth/register
  * @desc Register a new user
  * @access Public

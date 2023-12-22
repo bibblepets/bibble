@@ -40,6 +40,8 @@ export interface IUserRequest extends Request {
   };
 }
 
+export interface IGetUserRequest extends IUserRequest {}
+
 export interface IRegisterUserRequest extends Request {
   body: Omit<
     IUser,
