@@ -1,4 +1,4 @@
-import { checkAuthStatus } from '../features/authSlice';
+import { checkAuthStatus } from '../features/userSlice';
 import { fetchListings } from '../features/kennelSlice';
 import {
   generateLoginModalTitle,

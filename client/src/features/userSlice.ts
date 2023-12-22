@@ -3,7 +3,7 @@ import axios from 'axios';
 import { RootState } from '../store';
 import { BusinessProfile, BuyerProfile, StatusType, User } from '../types';
 
-interface AuthState {
+interface UserState {
   token?: string;
   currentUser?: User;
   status: StatusType;
@@ -11,7 +11,7 @@ interface AuthState {
   message?: string;
 }
 
-const initialState: AuthState = {
+const initialState: UserState = {
   token: undefined,
   currentUser: undefined,
   status: 'DEFAULT',
@@ -22,7 +22,7 @@ const initialState: AuthState = {
 axios.defaults.withCredentials = true;
 
 export const checkAuthStatus = createAsyncThunk(
-  '/authSlice/checkAuthStatus',
+  '/userSlice/checkAuthStatus',
   async () => {
     return await axios
       .get('/api/auth/status')
@@ -41,7 +41,7 @@ export const checkAuthStatus = createAsyncThunk(
 );
 
 export const registerUser = createAsyncThunk(
-  '/authSlice/register',
+  '/userSlice/register',
   async (
     credentials: Omit<
       User,
@@ -66,7 +66,7 @@ export const registerUser = createAsyncThunk(
 );
 
 export const loginUser = createAsyncThunk(
-  '/authSlice/loginUser',
+  '/userSlice/loginUser',
   async (
     credentials: Omit<
       User,
@@ -85,7 +85,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk(
-  '/authSlice/logoutUser',
+  '/userSlice/logoutUser',
   async () => {
     return await axios
       .post('/api/auth/logout')
@@ -98,12 +98,14 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-export const authSlice = createSlice({
+export const userSlice = createSlice({
   name: 'authentication',
   initialState,
   reducers: {
     resetStatus: (state) => {
       state.status = 'DEFAULT';
+      state.error = undefined;
+      state.message = undefined;
     }
   },
   extraReducers: (builder) => {
@@ -167,13 +169,13 @@ export const authSlice = createSlice({
   }
 });
 
-export const { resetStatus } = authSlice.actions;
+export const { resetStatus } = userSlice.actions;
 
 export const selectCurrentUser = (state: RootState) =>
-  state.authentication.currentUser;
+  state.user.currentUser;
 export const selectIsAuthenticated = (state: RootState) =>
-  !!state.authentication.currentUser;
+  !!state.user.currentUser;
 export const selectAuthStatus = (state: RootState) =>
-  state.authentication.status;
+  state.user.status;
 
-export default authSlice.reducer;
+export default userSlice.reducer;

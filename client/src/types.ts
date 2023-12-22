@@ -49,7 +49,7 @@ export type BuyerProfile = {
   _id?: string;
   firstName: string;
   lastName: string;
-  favouriteListings?: string[];
+  favouriteListings?: Listing[];
   profilePic?: string;
   contactNumber?: string;
   bio?: string;

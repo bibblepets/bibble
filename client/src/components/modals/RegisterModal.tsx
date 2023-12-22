@@ -6,7 +6,7 @@ import {
   registerUser,
   selectAuthStatus,
   resetStatus
-} from '../../features/authSlice';
+} from '../../features/userSlice';
 import {
   closeRegisterModal,
   openLoginModal,
@@ -196,7 +196,7 @@ const RegisterModal = () => {
           <div className="flex flex-row gap-4 w-full justify-center items-center border border-red-500 rounded-lg p-2 text-sm">
             <InformationCircleIcon className="w-6 h-6 text-red-500" />
             <a className="text-sm text-red-500 whitespace-pre-line">
-              {store.getState().authentication.error}
+              {store.getState().user.error}
             </a>
           </div>
         )}

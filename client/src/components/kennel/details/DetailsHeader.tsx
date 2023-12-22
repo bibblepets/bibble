@@ -1,11 +1,35 @@
 import { HeartIcon, ShareIcon } from '@heroicons/react/24/solid';
 import { Listing } from '../../../types';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../../features/userSlice';
+import { current } from 'immer';
+import { store } from '../../../store';
 
 interface DetailsHeaderProps {
   listing: Listing;
 }
 
 const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
+  const currentUser = useSelector(selectCurrentUser);
+
+  const isListingFavourited = () => {
+    const favourites = currentUser?.buyerProfile?.favouriteListings;
+
+    if (favourites && favourites.length > 0) {
+      return favourites.some((favourite) => favourite._id === listing._id);
+    }
+
+    return false;
+  };
+
+  const handleFavourite = () => {
+    if (isListingFavourited()) {
+      // Remove from favourites
+    } else {
+      // Add to favourites
+    }
+  };
+
   return (
     <>
       {/* Head Banner */}
@@ -25,15 +49,11 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
           )}
         </div>
         <div className="flex items-center place-self-end gap-4">
-          <button className="flex items-center gap-2 text-neutral-700">
-            {true ? (
-              <>
-                <HeartIcon className="w-5 h-5 fill-rose-500" />
-              </>
+          <button className="flex items-center gap-2 text-neutral-700" onClick={handleFavourite}>
+            {isListingFavourited() ? (
+              <HeartIcon className="w-5 h-5 fill-rose-500" />
             ) : (
-              <>
-                <HeartIcon className="w-5 h-5 fill-neutral-700" />
-              </>
+              <HeartIcon className="w-5 h-5 fill-neutral-700" />
             )}
           </button>
 
