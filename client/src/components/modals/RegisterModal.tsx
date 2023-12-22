@@ -1,7 +1,7 @@
 import { ChangeEvent, useCallback, useEffect } from 'react';
 import { BiLogoGoogle, BiLogoLinkedin } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
-import logo from '../../assets/logo-icon.png';
+import logo from '/images/logo-icon.png';
 import {
   registerUser,
   selectAuthStatus,

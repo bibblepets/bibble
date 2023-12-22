@@ -1,6 +1,6 @@
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { CheckBadgeIcon } from '@heroicons/react/24/solid';
-import paw from '../../../assets/paw.jpeg';
+import paw from 'images/paw.jpeg';
 import { Listing } from '../../../types';
 import MapCard from './MapCard';
 

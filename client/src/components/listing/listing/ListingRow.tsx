@@ -1,5 +1,5 @@
 import { PaperClipIcon, PhotoIcon } from '@heroicons/react/24/outline';
-import placeholderPup from '../../../assets/placeholder-pup.png';
+import placeholderPup from '/images/placeholder-pup.png';
 import { Listing } from '../../../types';
 import { toCountdown } from '../../../utils/date';
 

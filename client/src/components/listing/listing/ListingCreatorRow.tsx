@@ -1,6 +1,6 @@
 import { PaperClipIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import { Listing, ListingCreator } from '../../../types';
-import placeholderPup from '../../../assets/placeholder-pup.png';
+import placeholderPup from '/images/placeholder-pup.png';
 import { useNavigate } from 'react-router-dom';
 import { useResume } from './hooks';
 
