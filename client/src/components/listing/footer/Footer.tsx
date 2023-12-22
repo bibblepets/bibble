@@ -2,11 +2,50 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ListingStage } from '../../../types';
 import { useProgress } from './hooks';
 import ProgressBar from './ProgressBar';
+import { useSelector } from 'react-redux';
+import {
+  selectListingCreatorBiographyIsCompleted,
+  selectListingCreatorBiologyIsCompleted,
+  selectListingCreatorIsLoading,
+  selectListingCreatorLegalIsCompleted,
+  selectListingCreatorMediaIsCompleted,
+  selectListingCreatorMedicalIsCompleted,
+  selectListingCreatorPriceIsCompleted
+} from '../../../features/listingCreatorSlice';
+import './styles.css';
 
 const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [, , listingId, stage] = location.pathname.split('/');
+  const isLoading = useSelector(selectListingCreatorIsLoading);
+
+  let isCompleted;
+  switch (stage) {
+    case 'Biology':
+      isCompleted = useSelector(selectListingCreatorBiologyIsCompleted);
+      break;
+    case 'Biography':
+      isCompleted = useSelector(selectListingCreatorBiographyIsCompleted);
+      break;
+    case 'Medical':
+      isCompleted = useSelector(selectListingCreatorMedicalIsCompleted);
+      break;
+    case 'Legal':
+      isCompleted = useSelector(selectListingCreatorLegalIsCompleted);
+      break;
+    case 'Media':
+      isCompleted = useSelector(selectListingCreatorMediaIsCompleted);
+      break;
+    case 'Price':
+      isCompleted = useSelector(selectListingCreatorPriceIsCompleted);
+      break;
+    case 'Summary':
+      isCompleted = true;
+      break;
+    default:
+      isCompleted = false;
+  }
 
   const stages: ListingStage[] = [
     '',
@@ -36,14 +75,33 @@ const Footer = () => {
         totalStages={stages.length}
       />
       <div className="flex justify-between bg-white">
-        <button onClick={onBack} className="px-8 py-3 m-4 underline">
+        <button
+          onClick={onBack}
+          className="px-4 py-3 mx-8 my-4 underline rounded-lg hover:bg-gray-200"
+        >
           {'Back'}
         </button>
         <button
           onClick={onNext}
-          className="px-8 py-3 my-4 mx-8 rounded-lg bg-gray-800 transition hover:bg-gray-900 text-white font-semibold"
+          disabled={isLoading}
+          className={`flex justify-center px-8 py-3 my-4 mx-8 rounded-lg transition text-white font-semibold ${
+            isLoading || !isCompleted
+              ? 'bg-gray-300'
+              : 'bg-gray-800 hover:bg-gray-900'
+          }`}
+          style={{ width: '100px' }}
         >
-          {stage !== stages[stages.length - 1] ? 'Next' : 'Finish'}
+          {isLoading ? (
+            <div className="loader flex flex-row justify-center gap-1">
+              <span>.</span>
+              <span>.</span>
+              <span>.</span>
+            </div>
+          ) : stage !== stages[stages.length - 1] ? (
+            'Next'
+          ) : (
+            'Finish'
+          )}
         </button>
       </div>
     </footer>

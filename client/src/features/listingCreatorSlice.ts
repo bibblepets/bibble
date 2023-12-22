@@ -614,8 +614,31 @@ export const selectListingCreatorMedia = (state: RootState) =>
   state.listingCreator.media;
 export const selectListingCreatorPrice = (state: RootState) =>
   state.listingCreator.price;
+export const selectListingCreatorBiologyIsCompleted = (state: RootState) =>
+  state.listingCreator.biology?.species !== undefined &&
+  state.listingCreator.biology?.breeds !== undefined &&
+  state.listingCreator.biology?.breeds.length > 0;
+export const selectListingCreatorBiographyIsCompleted = (state: RootState) =>
+  state.listingCreator.biography?.origin !== undefined &&
+  state.listingCreator.biography?.gender !== undefined &&
+  state.listingCreator.biography?.description !== undefined;
+export const selectListingCreatorMedicalIsCompleted = (state: RootState) =>
+  state.listingCreator.medical?.size !== undefined &&
+  state.listingCreator.medical?.weight !== undefined &&
+  state.listingCreator.medical?.hairCoat !== undefined &&
+  state.listingCreator.medical?.vaccines !== undefined &&
+  state.listingCreator.medical?.vaccines.length > 0;
+export const selectListingCreatorLegalIsCompleted = (state: RootState) =>
+  state.listingCreator.legal?.avsLicenseNumber !== undefined;
+export const selectListingCreatorMediaIsCompleted = (state: RootState) =>
+  state.listingCreator.media !== undefined &&
+  state.listingCreator.media.length > 0;
+export const selectListingCreatorPriceIsCompleted = (state: RootState) =>
+  state.listingCreator.price !== undefined;
 export const selectListingCreatorStatus = (state: RootState) =>
   state.listingCreator.status;
+export const selectListingCreatorIsLoading = (state: RootState) =>
+  state.listingCreator.status === 'LOADING';
 export const selectListingCreatorError = (state: RootState) =>
   state.listingCreator.error;
 

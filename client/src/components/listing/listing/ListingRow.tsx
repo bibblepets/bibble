@@ -14,7 +14,7 @@ const ListingRow: React.FC<ListingRowProps> = ({ listing }) => {
         {listing.media ? (
           <img
             className="rounded-lg w-[52px] h-[52px] object-cover"
-            src={listing.media[0]? listing.media[0].url : placeholderPup}
+            src={listing.media[0] ? listing.media[0].url : placeholderPup}
           />
         ) : (
           <div className="p-4 bg-gray-300 rounded-lg">

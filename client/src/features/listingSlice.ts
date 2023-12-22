@@ -4,17 +4,29 @@ import axios from 'axios';
 import { RootState } from '../store';
 
 interface ListingState {
-  myListings: Listing[];
-  myListingCreators: ListingCreator[];
-  status: StatusType;
-  error?: string;
+  myListings: {
+    data: Listing[];
+    status: StatusType;
+    error?: string;
+  };
+  myListingCreators: {
+    data: ListingCreator[];
+    status: StatusType;
+    error?: string;
+  };
 }
 
 const initialState: ListingState = {
-  myListings: [],
-  myListingCreators: [],
-  status: 'DEFAULT',
-  error: undefined
+  myListings: {
+    data: [],
+    status: 'DEFAULT',
+    error: undefined
+  },
+  myListingCreators: {
+    data: [],
+    status: 'DEFAULT',
+    error: undefined
+  }
 };
 
 export const fetchMyListings = createAsyncThunk(
@@ -51,34 +63,45 @@ const listingSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchMyListings.pending, (state) => {
-      state.status = 'LOADING';
+      state.myListings.status = 'LOADING';
     });
     builder.addCase(fetchMyListings.fulfilled, (state, action) => {
-      state.status = 'SUCCESS';
-      state.myListings = action.payload;
+      state.myListings.status = 'SUCCESS';
+      state.myListings.data = action.payload;
     });
     builder.addCase(fetchMyListings.rejected, (state, action) => {
-      state.status = 'ERROR';
-      state.error = action.error.message;
+      state.myListings.status = 'ERROR';
+      state.myListings.error = action.error.message;
     });
     builder.addCase(fetchMyListingCreators.pending, (state) => {
-      state.status = 'LOADING';
+      state.myListingCreators.status = 'LOADING';
     });
     builder.addCase(fetchMyListingCreators.fulfilled, (state, action) => {
-      state.status = 'SUCCESS';
-      state.myListingCreators = action.payload;
+      state.myListingCreators.status = 'SUCCESS';
+      state.myListingCreators.data = action.payload;
     });
     builder.addCase(fetchMyListingCreators.rejected, (state, action) => {
-      state.status = 'ERROR';
-      state.error = action.error.message;
+      state.myListingCreators.status = 'ERROR';
+      state.myListingCreators.error = action.error.message;
     });
   }
 });
 
-export const selectMyListings = (state: RootState) => state.listing.myListings;
+export const selectMyListings = (state: RootState) =>
+  state.listing.myListings.data;
+export const selectMyListingsStatus = (state: RootState) =>
+  state.listing.myListings.status;
+export const selectMyListingsIsLoading = (state: RootState) =>
+  state.listing.myListings.status === 'LOADING';
+export const selectMyListingsError = (state: RootState) =>
+  state.listing.myListings.error;
 export const selectMyListingCreators = (state: RootState) =>
-  state.listing.myListingCreators;
-export const selectListingStatus = (state: RootState) => state.listing.status;
-export const selectListingError = (state: RootState) => state.listing.error;
+  state.listing.myListingCreators.data;
+export const selectMyListingCreatorsStatus = (state: RootState) =>
+  state.listing.myListingCreators.status;
+export const selectMyListingCreatorsIsLoading = (state: RootState) =>
+  state.listing.myListingCreators.status === 'LOADING';
+export const selectMyListingCreatorsError = (state: RootState) =>
+  state.listing.myListingCreators.error;
 
 export default listingSlice.reducer;
