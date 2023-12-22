@@ -13,9 +13,11 @@ import Price from '../modules/listing/listingCreator/Price';
 import Summary from '../modules/listing/listingCreator/Summary';
 import {
   kennelLoader,
-  listingIdLoader as listingLoaderById,
-  listingLoader
+  listingCreatorLoader,
+  listingLoader,
+  listingEditorLoader
 } from './loaders';
+import ListingEditor from '../modules/listing/listingEditor/ListingEditor';
 
 export const router = createBrowserRouter([
   {
@@ -48,7 +50,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'create/:id/*',
-            loader: listingLoaderById,
+            loader: listingCreatorLoader,
             children: [
               {
                 path: 'biology',
@@ -79,6 +81,11 @@ export const router = createBrowserRouter([
                 element: <Summary />
               }
             ]
+          },
+          {
+            path: 'edit/:id',
+            loader: listingEditorLoader,
+            element: <ListingEditor />
           }
         ]
       }

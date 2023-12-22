@@ -1,4 +1,8 @@
-import { Bars3Icon, BellIcon } from '@heroicons/react/24/outline';
+import {
+  Bars3Icon,
+  BellIcon,
+  BuildingStorefrontIcon
+} from '@heroicons/react/24/outline';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import paw from '/images/paw.jpeg';
@@ -99,7 +103,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
           href="/listing"
           className="hidden lg:block border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm px-4 py-2 text-neutral-500"
         >
-          Make a listing
+          <div className="flex flex-row gap-2">
+            <BuildingStorefrontIcon className="h-5 w-5" />
+            <p>Listing</p>
+          </div>
         </a>
         <a
           href="/messages"
@@ -138,7 +145,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
                 {tab.name}
               </a>
             ))}
-            <hr className="mx-4" />
+            {tabs && tabs.length > 0 && <hr className="mx-4" />}
             <a
               href={'listing'}
               className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"

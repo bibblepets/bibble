@@ -14,6 +14,7 @@ import {
 import { store } from '../store';
 import { fetchListingCreatorById } from '../features/listingCreatorSlice';
 import { LoaderFunction } from 'react-router-dom';
+import { fetchListingById } from '../features/listingEditorSlice';
 
 export const kennelLoader: LoaderFunction = async () => {
   await store.dispatch(checkAuthStatus());
@@ -32,8 +33,14 @@ export const listingLoader: LoaderFunction = async () => {
   return null;
 };
 
-export const listingIdLoader: LoaderFunction = async ({ params }) => {
+export const listingCreatorLoader: LoaderFunction = async ({ params }) => {
   const listingId = params.id || '';
   await store.dispatch(fetchListingCreatorById(listingId));
+  return null;
+};
+
+export const listingEditorLoader: LoaderFunction = async ({ params }) => {
+  const listingId = params.id || '';
+  await store.dispatch(fetchListingById(listingId));
   return null;
 };

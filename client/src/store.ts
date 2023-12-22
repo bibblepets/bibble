@@ -5,6 +5,7 @@ import kennelReducer from './features/kennelSlice';
 import listingReducer from './features/listingSlice';
 import listingOptionsReducer from './features/listingOptionsSlice';
 import listingCreatorReducer from './features/listingCreatorSlice';
+import listingEditorReducer from './features/listingEditorSlice';
 import modalsReducer from './features/modalsSlice';
 
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
     listing: listingReducer,
     listingOptions: listingOptionsReducer,
     listingCreator: listingCreatorReducer,
+    listingEditor: listingEditorReducer,
     modals: modalsReducer
   }
 });

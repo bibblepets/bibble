@@ -1,4 +1,3 @@
-import React from 'react';
 import Logo from '../../../global/Logo';
 import UserMenu from '../../../global/UserMenu';
 

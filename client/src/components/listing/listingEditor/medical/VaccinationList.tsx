@@ -1,21 +1,21 @@
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  addVaccination,
-  removeVaccination,
-  selectListingCreatorSpecies,
-  selectListingCreatorVaccines
-} from '../../../../features/listingCreatorSlice';
 import { store } from '../../../../store';
 import { Vaccine } from '../../../../types';
 import { selectListingOptionsVaccines } from '../../../../features/listingOptionsSlice';
+import {
+  addVaccination,
+  removeVaccination,
+  selectListingEditorSpecies,
+  selectListingEditorVaccines
+} from '../../../../features/listingEditorSlice';
 
-const VaccinationList = ({ readOnly }: { readOnly?: boolean }) => {
-  const species = useSelector(selectListingCreatorSpecies);
+const VaccinationList = () => {
+  const species = useSelector(selectListingEditorSpecies);
   const allVaccines = useSelector(selectListingOptionsVaccines);
   const vaccines = allVaccines.filter((vaccine) => vaccine.species === species);
-  const selectedVaccines = useSelector(selectListingCreatorVaccines);
+  const selectedVaccines = useSelector(selectListingEditorVaccines);
 
   const handleClick = useCallback(
     (vaccine: Vaccine) => {
@@ -34,7 +34,6 @@ const VaccinationList = ({ readOnly }: { readOnly?: boolean }) => {
         <div key={index} className="flex flex-row gap-4 items-center">
           <button
             onClick={() => handleClick(vaccine)}
-            disabled={readOnly}
             className="p-2 rounded-lg border transition hover:shadow-inner"
           >
             {selectedVaccines?.map((e) => e.name)?.includes(vaccine.name) ? (

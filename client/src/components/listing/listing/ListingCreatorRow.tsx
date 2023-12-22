@@ -1,7 +1,6 @@
 import { PaperClipIcon, PhotoIcon } from '@heroicons/react/24/outline';
-import { Listing, ListingCreator } from '../../../types';
+import { ListingCreator } from '../../../types';
 import placeholderPup from '/images/placeholder-pup.png';
-import { useNavigate } from 'react-router-dom';
 import { useResume } from './hooks';
 
 interface ListingCreatorRowProps {
@@ -11,7 +10,6 @@ interface ListingCreatorRowProps {
 const ListingCreatorRow: React.FC<ListingCreatorRowProps> = ({
   listingCreator
 }) => {
-  const navigate = useNavigate();
   const resume = useResume(listingCreator);
 
   return (
@@ -20,7 +18,11 @@ const ListingCreatorRow: React.FC<ListingCreatorRowProps> = ({
         {listingCreator.media ? (
           <img
             className="rounded-lg w-[52px] h-[52px] object-cover"
-            src={listingCreator.media[0] ? listingCreator.media[0].url : placeholderPup}
+            src={
+              listingCreator.media[0]
+                ? listingCreator.media[0].url
+                : placeholderPup
+            }
           />
         ) : (
           <div className="p-4 bg-gray-300 rounded-lg">

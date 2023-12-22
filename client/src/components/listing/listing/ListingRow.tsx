@@ -2,14 +2,22 @@ import { PaperClipIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import placeholderPup from '/images/placeholder-pup.png';
 import { Listing } from '../../../types';
 import { toCountdown } from '../../../utils/date';
+import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
 
 interface ListingRowProps {
   listing: Listing;
 }
 
 const ListingRow: React.FC<ListingRowProps> = ({ listing }) => {
+  const navigate = useNavigate();
+
+  const handleNavigate = useCallback(() => {
+    navigate(`/listing/edit/${listing._id}`);
+  }, [navigate]);
+
   return (
-    <button onClick={() => alert('implement')} className="flex flex-row gap-4">
+    <button onClick={handleNavigate} className="flex flex-row gap-4">
       <div className="rounded-lg">
         {listing.media ? (
           <img
