@@ -41,6 +41,8 @@ const Footer = () => {
       isCompleted = useSelector(selectListingCreatorPriceIsCompleted);
       break;
     case 'Summary':
+      isCompleted = true;
+      break;
     default:
       isCompleted = false;
   }
@@ -82,14 +84,13 @@ const Footer = () => {
         <button
           onClick={onNext}
           disabled={isLoading}
-          className={`px-8 py-3 my-4 mx-8 rounded-lg transition text-white font-semibold ${
+          className={`flex justify-center px-8 py-3 my-4 mx-8 rounded-lg transition text-white font-semibold ${
             isLoading || !isCompleted
               ? 'bg-gray-300'
               : 'bg-gray-800 hover:bg-gray-900'
           }`}
           style={{ width: '100px' }}
         >
-          {/* {stage !== stages[stages.length - 1] ? 'Next' : 'Finish'} */}
           {isLoading ? (
             <div className="loader flex flex-row justify-center gap-1">
               <span>.</span>

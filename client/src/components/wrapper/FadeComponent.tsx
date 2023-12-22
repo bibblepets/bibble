@@ -13,7 +13,11 @@ const FadeComponent: React.FC<FadeComponentProps> = ({ show, children }) => {
   });
 
   return transitions((style, item) =>
-    item ? <animated.div style={style}>{children}</animated.div> : null
+    item ? (
+      <animated.div className="max-h-full" style={style}>
+        {children}
+      </animated.div>
+    ) : null
   );
 };
 

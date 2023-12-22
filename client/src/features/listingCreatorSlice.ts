@@ -621,7 +621,6 @@ export const selectListingCreatorBiologyIsCompleted = (state: RootState) =>
 export const selectListingCreatorBiographyIsCompleted = (state: RootState) =>
   state.listingCreator.biography?.origin !== undefined &&
   state.listingCreator.biography?.gender !== undefined &&
-  state.listingCreator.biography?.birthdate !== undefined &&
   state.listingCreator.biography?.description !== undefined;
 export const selectListingCreatorMedicalIsCompleted = (state: RootState) =>
   state.listingCreator.medical?.size !== undefined &&
