@@ -4,6 +4,11 @@ import { store } from '../../../../store';
 import { updateListingCreatorById } from '../../../../features/listingCreatorSlice';
 import { openConfirmDeleteModal } from '../../../../features/modalsSlice';
 import Logo from '../../../global/Logo';
+import {
+  BookmarkSquareIcon,
+  QuestionMarkCircleIcon,
+  XMarkIcon
+} from '@heroicons/react/24/outline';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -25,23 +30,44 @@ const Navbar = () => {
   const buttons =
     stage && stage !== '' ? (
       <>
+        {/* DELETE */}
         <button
           onClick={handleDelete}
-          className="border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm px-4 py-2 text-white bg-rose-800 bg-opacity-60 hover:bg-opacity-100"
+          className="hidden md:block border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm px-4 py-2 text-white bg-rose-800 bg-opacity-60 hover:bg-opacity-100"
         >
           Delete Listing
         </button>
         <button
+          onClick={handleDelete}
+          className="md:hidden border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm p-2 text-white bg-rose-800 bg-opacity-60 hover:bg-opacity-100"
+        >
+          <XMarkIcon className="h-5 w-5" />
+        </button>
+        {/* HELP */}
+        <button
           onClick={() => alert('Help button clicked!')}
-          className="border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm px-4 py-2 text-neutral-500"
+          className="hidden md:block border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm px-4 py-2 text-neutral-500"
         >
           Help?
         </button>
         <button
+          onClick={() => alert('Help button clicked!')}
+          className="md:hidden border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm p-2 text-neutral-500"
+        >
+          <QuestionMarkCircleIcon className="h-5 w-5" />
+        </button>
+        {/* SAVE & EXIT */}
+        <button
           onClick={handleSaveAndExit}
-          className="border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm px-4 py-2 text-neutral-500"
+          className="hidden md:block border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm px-4 py-2 text-neutral-500"
         >
           Save & Exit
+        </button>
+        <button
+          onClick={handleSaveAndExit}
+          className="md:hidden border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm p-2 text-neutral-500"
+        >
+          <BookmarkSquareIcon className="h-5 w-5" />
         </button>
       </>
     ) : (
