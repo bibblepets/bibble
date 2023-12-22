@@ -1,15 +1,15 @@
 import ListingStage from '../../../components/listing/listing/ListingStage';
 import MediaUpload from '../../../components/listing/listingCreator/media/MediaUpload';
-import ListingLayout from '../../../layouts/ListingLayout';
+import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 
 const Media = () => {
   return (
-    <ListingLayout>
+    <ListingCreatorLayout>
       {/* MEDIA */}
       <ListingStage title="Media" subtitle="Say cheese!">
         <MediaUpload />
       </ListingStage>
-    </ListingLayout>
+    </ListingCreatorLayout>
   );
 };
 

@@ -1,6 +1,6 @@
 import ListingSection from '../../../components/listing/listing/ListingSection';
 import ListingStage from '../../../components/listing/listing/ListingStage';
-import ListingLayout from '../../../layouts/ListingLayout';
+import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 import BirthdateSelect from '../../../components/listing/listingCreator/biography/BirthdateSelect';
 import DescriptionInput from '../../../components/listing/listingCreator/biography/DescriptionInput';
 import GenderOptions from '../../../components/listing/listingCreator/biography/GenderOptions';
@@ -19,7 +19,7 @@ import PriceInput from '../../../components/listing/listingCreator/price/PriceIn
 
 const Summary = () => {
   return (
-    <ListingLayout>
+    <ListingCreatorLayout>
       <ListingStage
         title="Summary"
         subtitle="Double check all their details..."
@@ -84,7 +84,7 @@ const Summary = () => {
           <PriceInput readOnly />
         </ListingSection>
       </ListingStage>
-    </ListingLayout>
+    </ListingCreatorLayout>
   );
 };
 

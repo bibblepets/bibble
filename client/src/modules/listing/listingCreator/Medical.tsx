@@ -4,11 +4,11 @@ import HairCoatSelect from '../../../components/listing/listingCreator/medical/H
 import SizeOptions from '../../../components/listing/listingCreator/medical/SizeOptions';
 import VaccinationList from '../../../components/listing/listingCreator/medical/VaccinationList';
 import WeightInput from '../../../components/listing/listingCreator/medical/WeightInput';
-import ListingLayout from '../../../layouts/ListingLayout';
+import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 
 const Medical = () => {
   return (
-    <ListingLayout>
+    <ListingCreatorLayout>
       <ListingStage title="Medical" subtitle="Don't worry, no needles here.">
         {/* SIZE */}
         <ListingSection title="Size" field="size">
@@ -30,7 +30,7 @@ const Medical = () => {
           <VaccinationList />
         </ListingSection>
       </ListingStage>
-    </ListingLayout>
+    </ListingCreatorLayout>
   );
 };
 

@@ -5,11 +5,11 @@ import NameInput from '../../../components/listing/listingCreator/biography/Name
 import OriginDropdown from '../../../components/listing/listingCreator/biography/OriginDropdown';
 import ListingSection from '../../../components/listing/listing/ListingSection';
 import ListingStage from '../../../components/listing/listing/ListingStage';
-import ListingLayout from '../../../layouts/ListingLayout';
+import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 
 const Biography = () => {
   return (
-    <ListingLayout>
+    <ListingCreatorLayout>
       <ListingStage
         title="Biography"
         subtitle="Everyone's got a story to tell."
@@ -39,7 +39,7 @@ const Biography = () => {
           <DescriptionInput />
         </ListingSection>
       </ListingStage>
-    </ListingLayout>
+    </ListingCreatorLayout>
   );
 };
 

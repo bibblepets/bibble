@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ListingStage } from '../../../types';
+import { ListingStage } from '../../../../types';
 import { useProgress } from './hooks';
 import ProgressBar from './ProgressBar';
 import { useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ import {
   selectListingCreatorMediaIsCompleted,
   selectListingCreatorMedicalIsCompleted,
   selectListingCreatorPriceIsCompleted
-} from '../../../features/listingCreatorSlice';
+} from '../../../../features/listingCreatorSlice';
 import './styles.css';
 
 const Footer = () => {

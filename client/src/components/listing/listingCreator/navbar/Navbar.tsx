@@ -1,15 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import Logo from './Logo';
 import { useCallback } from 'react';
-import { store } from '../../../store';
-import {
-  deleteListingCreatorById,
-  updateListingCreatorById
-} from '../../../features/listingCreatorSlice';
-import {
-  openConfirmDeleteModal,
-  selectConfirmDeleteModalIsOpen
-} from '../../../features/modalsSlice';
+import { store } from '../../../../store';
+import { updateListingCreatorById } from '../../../../features/listingCreatorSlice';
+import { openConfirmDeleteModal } from '../../../../features/modalsSlice';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -26,11 +20,6 @@ const Navbar = () => {
 
   const handleDelete = useCallback(async () => {
     store.dispatch(openConfirmDeleteModal(navigate));
-    // const action = await store.dispatch(deleteListingCreatorById());
-
-    // if (deleteListingCreatorById.fulfilled.match(action)) {
-    //   navigate('/listing');
-    // }
   }, [store, navigate]);
 
   const buttons =

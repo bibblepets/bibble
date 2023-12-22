@@ -2,11 +2,11 @@ import BreedDropdown from '../../../components/listing/listingCreator/biology/Br
 import SpeciesOptions from '../../../components/listing/listingCreator/biology/SpeciesOptions';
 import ListingSection from '../../../components/listing/listing/ListingSection';
 import ListingStage from '../../../components/listing/listing/ListingStage';
-import ListingLayout from '../../../layouts/ListingLayout';
+import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 
 const Biology = () => {
   return (
-    <ListingLayout>
+    <ListingCreatorLayout>
       <ListingStage title="Biology" subtitle="Now, who do we have here?">
         {/* SPECIES */}
         <ListingSection title="Species" field="species">
@@ -18,7 +18,7 @@ const Biology = () => {
           <BreedDropdown />
         </ListingSection>
       </ListingStage>
-    </ListingLayout>
+    </ListingCreatorLayout>
   );
 };
 

@@ -1,12 +1,12 @@
 import React from 'react';
-import Footer from '../components/listing/footer/Footer';
-import Navbar from '../components/listing/navbar/Navbar';
+import Footer from '../components/listing/listingCreator/footer/Footer';
+import Navbar from '../components/listing/listingCreator/navbar/Navbar';
 
 interface ListingLayoutProps {
   children: React.ReactNode;
 }
 
-const ListingLayout: React.FC<ListingLayoutProps> = ({ children }) => {
+const ListingCreatorLayout: React.FC<ListingLayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col w-full h-screen justify-center items-center">
       <Navbar />
@@ -18,4 +18,4 @@ const ListingLayout: React.FC<ListingLayoutProps> = ({ children }) => {
   );
 };
 
-export default ListingLayout;
+export default ListingCreatorLayout;

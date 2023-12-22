@@ -2,11 +2,11 @@ import AvsLicenseInput from '../../../components/listing/listingCreator/legal/Av
 import LegalTagList from '../../../components/listing/listingCreator/legal/LegalTagList';
 import ListingSection from '../../../components/listing/listing/ListingSection';
 import ListingStage from '../../../components/listing/listing/ListingStage';
-import ListingLayout from '../../../layouts/ListingLayout';
+import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 
 const Legal = () => {
   return (
-    <ListingLayout>
+    <ListingCreatorLayout>
       <ListingStage title="Legal" subtitle="Papers please!">
         {/* AVS */}
         <ListingSection title="AVS License Number" field="avsLicenseNumber">
@@ -18,7 +18,7 @@ const Legal = () => {
           <LegalTagList />
         </ListingSection>
       </ListingStage>
-    </ListingLayout>
+    </ListingCreatorLayout>
   );
 };
 

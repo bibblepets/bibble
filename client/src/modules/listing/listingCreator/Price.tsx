@@ -1,15 +1,15 @@
 import ListingStage from '../../../components/listing/listing/ListingStage';
 import PriceInput from '../../../components/listing/listingCreator/price/PriceInput';
-import ListingLayout from '../../../layouts/ListingLayout';
+import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 
 const Price = () => {
   return (
-    <ListingLayout>
+    <ListingCreatorLayout>
       <ListingStage title="Price" subtitle="An impossible question, we know.">
         {/* PRICE */}
         <PriceInput />
       </ListingStage>
-    </ListingLayout>
+    </ListingCreatorLayout>
   );
 };
 

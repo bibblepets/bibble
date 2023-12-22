@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import ListingOptions from '../../components/listing/listing/ListingOptions';
 import ListingRow from '../../components/listing/listing/ListingRow';
-import ListingLayout from '../../layouts/ListingLayout';
+import ListingCreatorLayout from '../../layouts/ListingCreatorLayout';
 import { useEffect } from 'react';
 import { store } from '../../store';
 import {
@@ -31,7 +31,7 @@ const Listing = () => {
   }, [store]);
 
   return (
-    <ListingLayout>
+    <ListingCreatorLayout>
       <div className="flex flex-col w-full md:w-[756px] justify-center h-[75vh] px-4 overflow-hidden">
         <div className="flex flex-col flex-grow gap-8 overflow-hidden">
           <h1 className="text-3xl font-medium">
@@ -83,7 +83,7 @@ const Listing = () => {
           <ListingOptions />
         </div>
       </div>
-    </ListingLayout>
+    </ListingCreatorLayout>
   );
 };
 
