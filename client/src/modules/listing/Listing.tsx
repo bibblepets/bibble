@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
-import ListingOptions from '../../../components/listing/listing/ListingOptions';
-import ListingRow from '../../../components/listing/listing/ListingRow';
-import ListingLayout from '../../../layouts/ListingLayout';
+import ListingOptions from '../../components/listing/listing/ListingOptions';
+import ListingRow from '../../components/listing/listing/ListingRow';
+import ListingLayout from '../../layouts/ListingLayout';
 import { useEffect } from 'react';
-import { store } from '../../../store';
+import { store } from '../../store';
 import {
   fetchMyListingCreators,
   fetchMyListings,
@@ -11,10 +11,10 @@ import {
   selectMyListingCreatorsIsLoading,
   selectMyListings,
   selectMyListingsIsLoading
-} from '../../../features/listingSlice';
-import ListingCreatorRow from '../../../components/listing/listing/ListingCreatorRow';
-import SkeletonLoader from '../../../components/loaders/SkeletonLoader';
-import { selectCurrentUser } from '../../../features/authSlice';
+} from '../../features/listingSlice';
+import ListingCreatorRow from '../../components/listing/listing/ListingCreatorRow';
+import SkeletonLoader from '../../components/loaders/SkeletonLoader';
+import { selectCurrentUser } from '../../features/authSlice';
 
 const Listing = () => {
   const currentUser = useSelector(selectCurrentUser);

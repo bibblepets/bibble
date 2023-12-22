@@ -22,7 +22,7 @@ const ListingOptions = () => {
         createListingCreator({ currentUser, saleType })
       );
       const { _id } = response.payload;
-      navigate(`/listing/${_id}/Biology`);
+      navigate(`/listing/create/${_id}/Biology`);
     },
     [store, navigate]
   );

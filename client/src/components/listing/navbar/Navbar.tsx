@@ -14,7 +14,7 @@ import {
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [, , , stage] = location.pathname.split('/');
+  const [, , , , stage] = location.pathname.split('/');
 
   const handleSaveAndExit = useCallback(async () => {
     const action = await store.dispatch(updateListingCreatorById());

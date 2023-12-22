@@ -16,7 +16,7 @@ export const useResume = (listingCreator: ListingCreator) => {
 
   const resume = () => {
     navigate(
-      `/listing/${listingCreator._id}/${stageMap[listingCreator.stage]}`
+      `/listing/create/${listingCreator._id}/${stageMap[listingCreator.stage]}`
     );
   };
 

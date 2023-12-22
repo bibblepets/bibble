@@ -65,7 +65,7 @@ export const useProgress = (
     if (back === '') {
       navigate('/listing');
     } else {
-      navigate(`/listing/${listingId}/${back}`);
+      navigate(`/listing/create/${listingId}/${back}`);
     }
   }, [navigate]);
 
@@ -77,7 +77,7 @@ export const useProgress = (
         if (next === '') {
           navigate('/listing');
         } else {
-          navigate(`/listing/${listingId}/${next}`);
+          navigate(`/listing/create/${listingId}/${next}`);
         }
       } else if (update.rejected.match(action)) {
         // Don't navigate

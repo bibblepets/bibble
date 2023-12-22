@@ -6,7 +6,7 @@ import Rescue from '../modules/kennel/Rescue';
 import Biography from '../modules/listing/listingCreator/Biography';
 import Biology from '../modules/listing/listingCreator/Biology';
 import Legal from '../modules/listing/listingCreator/Legal';
-import Listing from '../modules/listing/listingCreator/Listing';
+import Listing from '../modules/listing/Listing';
 import Media from '../modules/listing/listingCreator/Media';
 import Medical from '../modules/listing/listingCreator/Medical';
 import Price from '../modules/listing/listingCreator/Price';
@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
             element: <Listing />
           },
           {
-            path: ':id/*',
+            path: 'create/:id/*',
             loader: listingLoaderById,
             children: [
               {

@@ -17,7 +17,7 @@ import './styles.css';
 const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [, , listingId, stage] = location.pathname.split('/');
+  const [, , , listingId, stage] = location.pathname.split('/');
   const isLoading = useSelector(selectListingCreatorIsLoading);
 
   let isCompleted;
@@ -46,6 +46,7 @@ const Footer = () => {
     default:
       isCompleted = false;
   }
+  console.log(isCompleted);
 
   const stages: ListingStage[] = [
     '',
