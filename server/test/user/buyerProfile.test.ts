@@ -421,7 +421,7 @@ describe('Buyer Profile model (DELETE)', () => {
       existingBuyerProfileId
     );
 
-    expect(deletedBuyerProfile?._id.toString()).to.equal(
+    expect(deletedBuyerProfile?.value?._id.toString()).to.equal(
       existingBuyerProfileId.toString()
     );
   });

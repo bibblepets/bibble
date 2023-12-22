@@ -610,7 +610,7 @@ describe('Business Profile model (DELETE)', () => {
       _id: existingBusinessProfileId
     });
 
-    expect(deletedBusinessProfile?._id.toString()).to.equal(
+    expect(deletedBusinessProfile?.value?._id.toString()).to.equal(
       existingBusinessProfileId.toString()
     );
   });

@@ -463,7 +463,7 @@ describe('User model (DELETE)', () => {
 
     expect(deletedUser).to.exist;
 
-    expect(deletedUser?._id.toString()).to.be.equal(existingUserId.toString());
+    expect(deletedUser?.value?._id.toString()).to.be.equal(existingUserId.toString());
   });
 
   it('+ Delete User (by `email`)', async function () {
@@ -473,7 +473,7 @@ describe('User model (DELETE)', () => {
 
     expect(deletedUser).to.exist;
 
-    expect(deletedUser?._id.toString()).to.be.equal(existingUserId.toString());
+    expect(deletedUser?.value?._id.toString()).to.be.equal(existingUserId.toString());
   });
 
   it('- Delete User (invalid `id`)', async function () {

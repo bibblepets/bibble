@@ -327,7 +327,7 @@ export const deleteListingById = async (
       species,
       animalId.toString()
     );
-    console.log('Animal in pet listing deleted.', deletedAnimal?._id);
+    console.log('Animal in pet listing deleted.', deletedAnimal?.value?._id);
 
     // Delete pet listing
     console.log('Deleting pet listing...');
