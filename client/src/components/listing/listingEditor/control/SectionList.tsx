@@ -18,6 +18,10 @@ const sections: Section[] = [
   {
     title: 'Description',
     preview: <div>This is the preview</div>
+  },
+  {
+    title: 'Gender',
+    preview: <div>This is the preview</div>
   }
 ];
 

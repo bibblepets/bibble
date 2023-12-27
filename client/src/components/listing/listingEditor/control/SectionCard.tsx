@@ -19,7 +19,7 @@ const SectionCard: React.FC<SectionCardProps> = ({ title, preview }) => {
       onClick={onNavigate}
       className={`flex flex-col gap-4 border rounded-lg py-4 px-6 cursor-pointer transition ${
         title.toLowerCase() === stage.toLowerCase() &&
-        'text-gray-500 shadow-inner'
+        'border-[2px] border-gray-500 text-gray-500 shadow'
       }`}
     >
       <h4>{title}</h4>

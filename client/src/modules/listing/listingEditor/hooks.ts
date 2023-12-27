@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import Name from './stages/Name';
 import Media from './stages/Media';
 import Description from './stages/Description';
+import Gender from './stages/Gender';
 
 export const useRender = () => {
   const { stage } = useParams();
@@ -17,6 +18,9 @@ export const useRender = () => {
         break;
       case 'description':
         render = Description;
+        break;
+      case 'gender':
+        render = Gender;
         break;
       default:
     }

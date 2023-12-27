@@ -19,26 +19,29 @@ const GenderOptions = () => {
   );
 
   return (
-    <div className="flex flex-row gap-8 justify-between">
-      <button
-        onClick={() => handleClick('Male')}
-        className={`flex flex-row justify-center p-4 rounded-lg items-center gap-4 w-full transition ${
-          selectedGender === 'Male' ? 'bg-sky-500' : 'bg-gray-500'
-        }`}
-      >
-        <BiMaleSign className="w-5 h-5 text-white" />
-        <a className="text-sm font-light text-white">Male</a>
-      </button>
+    <div className="flex flex-col items-center gap-12 -translate-y-[50px]">
+      <p className="text-sm text-gray-500">Boy or girl?</p>
+      <div className="flex flex-row gap-16 justify-between items-center w-[580px]">
+        <button
+          onClick={() => handleClick('Male')}
+          className={`flex flex-row justify-center p-6 rounded-full items-center gap-4 transition ${
+            selectedGender === 'Male' ? 'bg-sky-500' : 'bg-gray-500'
+          }`}
+        >
+          <BiMaleSign className="w-5 h-5 text-white" />
+        </button>
 
-      <button
-        onClick={() => handleClick('Female')}
-        className={`flex flex-row justify-center  p-4 rounded-lg items-center gap-4 w-full transition ${
-          selectedGender === 'Female' ? 'bg-rose-500' : 'bg-gray-500'
-        }`}
-      >
-        <BiFemaleSign className="w-5 h-5 text-white" />
-        <a className="text-sm font-light text-white">Female</a>
-      </button>
+        <label className="text-gray-800 text-8xl">{selectedGender}</label>
+
+        <button
+          onClick={() => handleClick('Female')}
+          className={`flex flex-row justify-center p-6 rounded-full items-center gap-4 transition ${
+            selectedGender === 'Female' ? 'bg-rose-500' : 'bg-gray-500'
+          }`}
+        >
+          <BiFemaleSign className="w-5 h-5 text-white" />
+        </button>
+      </div>
     </div>
   );
 };
