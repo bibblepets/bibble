@@ -58,7 +58,6 @@ const dogSchema = new Schema(
     breeds: [
       {
         type: Schema.Types.ObjectId,
-        immutable: true,
         ref: 'Breed',
         required: [true, 'Please specify at least one breed for this dog.'],
         cast: 'Dog Breed ID of `{VALUE}` is invalid.'
@@ -73,7 +72,6 @@ const dogSchema = new Schema(
     ],
     origin: {
       type: Schema.Types.ObjectId,
-      immutable: true,
       ref: 'Country',
       required: [true, 'Please specify the country of origin of this dog.'],
       cast: 'Country ID of `{VALUE}` is invalid.'

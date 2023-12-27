@@ -4,14 +4,14 @@ import {
   selectListingCreatorStatus
 } from '../../../features/listingCreatorSlice';
 
-interface ListingSectionProps {
+interface ListingCreatorSectionProps {
   title: string;
   field: string;
   optional?: boolean;
   children: React.ReactNode;
 }
 
-const ListingSection: React.FC<ListingSectionProps> = ({
+const ListingCreatorSection: React.FC<ListingCreatorSectionProps> = ({
   title,
   field,
   optional,
@@ -35,4 +35,4 @@ const ListingSection: React.FC<ListingSectionProps> = ({
   );
 };
 
-export default ListingSection;
+export default ListingCreatorSection;

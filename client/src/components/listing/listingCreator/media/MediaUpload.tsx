@@ -78,7 +78,7 @@ const MediaUpload = ({ readOnly }: { readOnly?: boolean }) => {
                 </button>
               )}
               <img
-                className="object-cover object-center h-full w-full rounded-lg border"
+                className="object-cover object-center h-full w-full rounded-lg"
                 src={medium.url}
                 onClick={() => window.open(medium.url, '_blank')}
               />

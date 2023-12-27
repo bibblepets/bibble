@@ -80,7 +80,7 @@ const Navbar = () => {
     );
 
   return (
-    <nav className="fixed w-full top-0 z-40">
+    <nav className="fixed w-full top-0 z-40 border-b">
       <div className="flex flex-row px-8 justify-between items-center p-6 bg-white">
         <Logo small />
         <div className="flex gap-4">{buttons}</div>

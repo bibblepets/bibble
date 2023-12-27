@@ -1,23 +1,23 @@
 import BreedDropdown from '../../../components/listing/listingCreator/biology/BreedDropdown';
 import SpeciesOptions from '../../../components/listing/listingCreator/biology/SpeciesOptions';
-import ListingSection from '../../../components/listing/listing/ListingSection';
-import ListingStage from '../../../components/listing/listing/ListingStage';
+import ListingCreatorSection from '../../../components/listing/listingCreator/ListingCreatorSection';
+import ListingCreatorStage from '../../../components/listing/listingCreator/ListingCreatorStage';
 import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 
 const Biology = () => {
   return (
     <ListingCreatorLayout>
-      <ListingStage title="Biology" subtitle="Now, who do we have here?">
+      <ListingCreatorStage title="Biology" subtitle="Now, who do we have here?">
         {/* SPECIES */}
-        <ListingSection title="Species" field="species">
+        <ListingCreatorSection title="Species" field="species">
           <SpeciesOptions />
-        </ListingSection>
+        </ListingCreatorSection>
 
         {/* BREED */}
-        <ListingSection title="Breed" field="breed">
+        <ListingCreatorSection title="Breed" field="breed">
           <BreedDropdown />
-        </ListingSection>
-      </ListingStage>
+        </ListingCreatorSection>
+      </ListingCreatorStage>
     </ListingCreatorLayout>
   );
 };

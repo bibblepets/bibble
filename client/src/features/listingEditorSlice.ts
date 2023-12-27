@@ -36,6 +36,50 @@ export const fetchListingById = createAsyncThunk(
   }
 );
 
+export const updateListingById = createAsyncThunk(
+  'listingEditor/updateListingById',
+  async (_, { getState }) => {
+    const state = getState() as RootState;
+    const { listing } = state.listingEditor;
+
+    return await axios
+      .put(`/api/listings/update/${listing?._id}`, listing)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
+export const updateListingMediaById = createAsyncThunk(
+  'listingEditor/updateListingMediaById',
+  async (_, { getState }) => {
+    const state = getState() as RootState;
+    const { listing } = state.listingEditor;
+
+    const formData = new FormData();
+    listing?.media.forEach((media) => {
+      media.name && formData.append('mediaNames[]', media.name);
+    });
+    listing?.media.forEach((media) => {
+      media.file && formData.append('data', media.file);
+    });
+
+    return await axios
+      .put(`/api/listings/update-media/${listing?._id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
 const listingEditorSlice = createSlice({
   name: 'listingEditor',
   initialState,
@@ -102,10 +146,13 @@ const listingEditorSlice = createSlice({
         state.listing.media.push(...action.payload);
       }
     },
-    removeMedia: (state, action: PayloadAction<Media>) => {
+    removeMedia: (state, action: PayloadAction<Media[]>) => {
       if (state.listing) {
         state.listing.media = state.listing.media.filter(
-          (media) => media.url !== action.payload.url
+          (media) =>
+            !action.payload.some(
+              (payloadMedia) => payloadMedia.url === media.url
+            )
         );
       }
     },
@@ -125,6 +172,28 @@ const listingEditorSlice = createSlice({
         state.listing = action.payload;
       })
       .addCase(fetchListingById.rejected, (state, action) => {
+        state.status = 'ERROR';
+        state.error = action.error.message;
+      })
+      .addCase(updateListingById.pending, (state) => {
+        state.status = 'LOADING';
+      })
+      .addCase(updateListingById.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        state.listing = action.payload.listing;
+      })
+      .addCase(updateListingById.rejected, (state, action) => {
+        state.status = 'ERROR';
+        state.error = action.error.message;
+      })
+      .addCase(updateListingMediaById.pending, (state) => {
+        state.status = 'LOADING';
+      })
+      .addCase(updateListingMediaById.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        state.listing = action.payload.listing;
+      })
+      .addCase(updateListingMediaById.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       });

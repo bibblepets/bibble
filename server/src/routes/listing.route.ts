@@ -1,8 +1,11 @@
 import { Router } from 'express';
+import multer from 'multer';
 import * as ListingController from '../controllers/listing.controller';
 import * as AuthMiddleware from '../middleware/auth.middleware';
 
 const router = Router();
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 /**
  * @route POST /api/listings
@@ -58,6 +61,19 @@ router.put(
   AuthMiddleware.getUserFromAuthToken,
   AuthMiddleware.validateBibbleTier,
   ListingController.updateListingById
+);
+
+/**
+ * @route PUT /api/listings/update-media/:id
+ * @desc Update a listing's media by ID
+ * @access Private
+ */
+router.put(
+  '/update-media/:id',
+  upload.array('data'),
+  AuthMiddleware.getUserFromAuthToken,
+  AuthMiddleware.validateBibbleTier,
+  ListingController.updateListingMediaById
 );
 
 /**

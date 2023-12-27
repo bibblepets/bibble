@@ -83,7 +83,7 @@ export const router = createBrowserRouter([
             ]
           },
           {
-            path: 'edit/:id',
+            path: 'edit/:id/:stage',
             loader: listingEditorLoader,
             element: <ListingEditor />
           }

@@ -1,23 +1,26 @@
 import AvsLicenseInput from '../../../components/listing/listingCreator/legal/AvsLicenseInput';
 import LegalTagList from '../../../components/listing/listingCreator/legal/LegalTagList';
-import ListingSection from '../../../components/listing/listing/ListingSection';
-import ListingStage from '../../../components/listing/listing/ListingStage';
+import ListingCreatorSection from '../../../components/listing/listingCreator/ListingCreatorSection';
+import ListingCreatorStage from '../../../components/listing/listingCreator/ListingCreatorStage';
 import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 
 const Legal = () => {
   return (
     <ListingCreatorLayout>
-      <ListingStage title="Legal" subtitle="Papers please!">
+      <ListingCreatorStage title="Legal" subtitle="Papers please!">
         {/* AVS */}
-        <ListingSection title="AVS License Number" field="avsLicenseNumber">
+        <ListingCreatorSection
+          title="AVS License Number"
+          field="avsLicenseNumber"
+        >
           <AvsLicenseInput />
-        </ListingSection>
+        </ListingCreatorSection>
 
         {/* LICENSES */}
-        <ListingSection title="Legal Tags" field="legalTags">
+        <ListingCreatorSection title="Legal Tags" field="legalTags">
           <LegalTagList />
-        </ListingSection>
-      </ListingStage>
+        </ListingCreatorSection>
+      </ListingCreatorStage>
     </ListingCreatorLayout>
   );
 };

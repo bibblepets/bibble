@@ -1,5 +1,5 @@
-import ListingSection from '../../../components/listing/listing/ListingSection';
-import ListingStage from '../../../components/listing/listing/ListingStage';
+import ListingCreatorSection from '../../../components/listing/listingCreator/ListingCreatorSection';
+import ListingCreatorStage from '../../../components/listing/listingCreator/ListingCreatorStage';
 import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 import BirthdateSelect from '../../../components/listing/listingCreator/biography/BirthdateSelect';
 import DescriptionInput from '../../../components/listing/listingCreator/biography/DescriptionInput';
@@ -20,70 +20,73 @@ import PriceInput from '../../../components/listing/listingCreator/price/PriceIn
 const Summary = () => {
   return (
     <ListingCreatorLayout>
-      <ListingStage
+      <ListingCreatorStage
         title="Summary"
         subtitle="Double check all their details..."
       >
-        <ListingSection title="Species" field="species">
+        <ListingCreatorSection title="Species" field="species">
           <SpeciesOptions readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Breed" field="breed">
+        <ListingCreatorSection title="Breed" field="breed">
           <BreedDropdown readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Origin" field="origin">
+        <ListingCreatorSection title="Origin" field="origin">
           <OriginDropdown readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Gender" field="gender">
+        <ListingCreatorSection title="Gender" field="gender">
           <GenderOptions readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Name" field="name">
+        <ListingCreatorSection title="Name" field="name">
           <NameInput readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Birthdate" field="birthdate">
+        <ListingCreatorSection title="Birthdate" field="birthdate">
           <BirthdateSelect readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Description" field="description">
+        <ListingCreatorSection title="Description" field="description">
           <DescriptionInput readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Size" field="size">
+        <ListingCreatorSection title="Size" field="size">
           <SizeOptions readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Weight" field="weight">
+        <ListingCreatorSection title="Weight" field="weight">
           <WeightInput readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Hair Coat" field="hairCoat">
+        <ListingCreatorSection title="Hair Coat" field="hairCoat">
           <HairCoatSelect readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Vaccinations" field="vaccines">
+        <ListingCreatorSection title="Vaccinations" field="vaccines">
           <VaccinationList readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="AVS License Number" field="avsLicenseNumber">
+        <ListingCreatorSection
+          title="AVS License Number"
+          field="avsLicenseNumber"
+        >
           <AvsLicenseInput readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Legal Tags" field="legalTags">
+        <ListingCreatorSection title="Legal Tags" field="legalTags">
           <LegalTagList readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Media" field="media">
+        <ListingCreatorSection title="Media" field="media">
           <MediaUpload readOnly />
-        </ListingSection>
+        </ListingCreatorSection>
 
-        <ListingSection title="Price" field="price">
+        <ListingCreatorSection title="Price" field="price">
           <PriceInput readOnly />
-        </ListingSection>
-      </ListingStage>
+        </ListingCreatorSection>
+      </ListingCreatorStage>
     </ListingCreatorLayout>
   );
 };

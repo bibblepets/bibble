@@ -6,13 +6,13 @@ import {
 } from '../../../features/listingCreatorSlice';
 import FadeComponent from '../../wrapper/FadeComponent';
 
-interface ListingStageProps {
+interface ListingCreatorStageProps {
   title: string;
   subtitle?: string;
   children: React.ReactNode;
 }
 
-const ListingStage: React.FC<ListingStageProps> = ({
+const ListingCreatorStage: React.FC<ListingCreatorStageProps> = ({
   title,
   subtitle,
   children
@@ -53,4 +53,4 @@ const ListingStage: React.FC<ListingStageProps> = ({
   );
 };
 
-export default ListingStage;
+export default ListingCreatorStage;

@@ -1,5 +1,11 @@
-import { PhotoIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useCallback } from 'react';
+import {
+  CheckIcon,
+  PhotoIcon,
+  PlusIcon,
+  TrashIcon,
+  XMarkIcon
+} from '@heroicons/react/24/outline';
+import { useCallback, useState } from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
 import { useSelector } from 'react-redux';
 import { store } from '../../../../store';
@@ -13,6 +19,12 @@ import {
 
 const MediaUpload = () => {
   const media = useSelector(selectListingEditorMedia) || [];
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState<Media[]>([]);
+  console.log(selectedMedia);
+
+  const isSelected = (medium: Media) =>
+    selectedMedia.map((m) => m.url).includes(medium?.url);
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -41,11 +53,27 @@ const MediaUpload = () => {
     }
   });
 
-  const onRemove = useCallback(
-    (media: Media) => {
-      store.dispatch(removeMedia(media));
+  const onRemove = useCallback(() => {
+    store.dispatch(removeMedia(selectedMedia));
+  }, [store, selectedMedia]);
+
+  const onManage = useCallback(() => {
+    if (isSelecting) {
+      setSelectedMedia([]);
+    }
+
+    setIsSelecting(!isSelecting);
+  }, [isSelecting]);
+
+  const onSelect = useCallback(
+    (medium: Media) => {
+      if (isSelected(medium)) {
+        setSelectedMedia(selectedMedia.filter((m) => m.url !== medium.url));
+      } else {
+        setSelectedMedia([...selectedMedia, medium]);
+      }
     },
-    [store]
+    [selectedMedia]
   );
 
   return (
@@ -61,37 +89,66 @@ const MediaUpload = () => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
           {media?.map((medium, index) => (
             <div
               key={index}
-              className="relative aspect-square cursor-pointer transition hover:scale-105"
+              onClick={() => onSelect(medium)}
+              className={`relative aspect-square cursor-pointer transition hover:scale-105 rounded-lg transition ${
+                isSelecting && 'border border-gray-200'
+              } ${
+                isSelecting &&
+                isSelected(medium) &&
+                'scale:105 border-[2px] border-gray-600'
+              }`}
             >
-              <button
-                className="absolute z-10 -top-2 -right-2 bg-rose-500 bg-opacity-80 transition hover:bg-opacity-100 rounded-full p-1"
-                onClick={() => onRemove(medium)}
-              >
-                <XMarkIcon className="h-4 w-4 text-white" />
-              </button>
+              {isSelecting && isSelected(medium) && (
+                <div className="absolute top-2 right-2 bg-white rounded-full p-2">
+                  <CheckIcon className="w-3 h-3 text-gray-800" />
+                </div>
+              )}
               <img
-                className="object-cover object-center h-full w-full rounded-lg border"
+                className="object-cover object-center h-full w-full rounded-md"
                 src={medium.url}
-                onClick={() => window.open(medium.url, '_blank')}
+                onClick={() =>
+                  !isSelecting && window.open(medium.url, '_blank')
+                }
               />
             </div>
           ))}
         </div>
       )}
-      {/* UPLOAD BUTTON */}
-      <div
-        {...getRootProps({
-          className:
-            'flex flex-row gap-2 items-center rounded-lg bg-sky-500 px-3 py-2 text-white transition hover:scale-95 hover:opacity-80 cursor-pointer'
-        })}
-      >
-        <input {...getInputProps()} />
-        <PlusIcon className="w-4 h-4" strokeWidth={3} />
-        <a className="font-medium text-sm">New Upload</a>
+      <div className="flex flex-row gap-4">
+        {/* MANAGE BUTTON */}
+        <button
+          onClick={onManage}
+          className={`flex justify-center items-center px-4 bg-gray-200 rounded-full transition hover:scale-95 hover:opacity-80 ${
+            isSelecting && 'scale-95 opacity-80 text-gray-500'
+          }`}
+        >
+          <label className="text-sm cursor-pointer">Manage photos</label>
+        </button>
+
+        {/* REMOVE BUTTON */}
+        {isSelecting && (
+          <button
+            onClick={onRemove}
+            className="rounded-full text-gray-800 bg-gray-200 transition hover:bg-rose-500 hover:text-white hover:scale-95 hover:opacity-80 p-3"
+          >
+            <TrashIcon className="w-4 h-4" />
+          </button>
+        )}
+
+        {/* UPLOAD BUTTON */}
+        <div
+          {...getRootProps({
+            className:
+              'flex flex-row gap-2 items-center rounded-full bg-sky-500 p-3 text-white transition hover:scale-95 hover:opacity-80 cursor-pointer'
+          })}
+        >
+          <input {...getInputProps()} />
+          <PlusIcon className="w-4 h-4" strokeWidth={3} />
+        </div>
       </div>
     </div>
   );

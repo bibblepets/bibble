@@ -1,5 +1,5 @@
-import ListingSection from '../../../components/listing/listing/ListingSection';
-import ListingStage from '../../../components/listing/listing/ListingStage';
+import ListingCreatorSection from '../../../components/listing/listingCreator/ListingCreatorSection';
+import ListingCreatorStage from '../../../components/listing/listingCreator/ListingCreatorStage';
 import HairCoatSelect from '../../../components/listing/listingCreator/medical/HairCoatSelect';
 import SizeOptions from '../../../components/listing/listingCreator/medical/SizeOptions';
 import VaccinationList from '../../../components/listing/listingCreator/medical/VaccinationList';
@@ -9,27 +9,30 @@ import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 const Medical = () => {
   return (
     <ListingCreatorLayout>
-      <ListingStage title="Medical" subtitle="Don't worry, no needles here.">
+      <ListingCreatorStage
+        title="Medical"
+        subtitle="Don't worry, no needles here."
+      >
         {/* SIZE */}
-        <ListingSection title="Size" field="size">
+        <ListingCreatorSection title="Size" field="size">
           <SizeOptions />
-        </ListingSection>
+        </ListingCreatorSection>
 
         {/* WEIGHT */}
-        <ListingSection title="Weight" field="weight">
+        <ListingCreatorSection title="Weight" field="weight">
           <WeightInput />
-        </ListingSection>
+        </ListingCreatorSection>
 
         {/* HAIR COAT */}
-        <ListingSection title="Hair Coat" field="hairCoat">
+        <ListingCreatorSection title="Hair Coat" field="hairCoat">
           <HairCoatSelect />
-        </ListingSection>
+        </ListingCreatorSection>
 
         {/* VACCINATIONS */}
-        <ListingSection title="Vaccinations" field="vaccines">
+        <ListingCreatorSection title="Vaccinations" field="vaccines">
           <VaccinationList />
-        </ListingSection>
-      </ListingStage>
+        </ListingCreatorSection>
+      </ListingCreatorStage>
     </ListingCreatorLayout>
   );
 };

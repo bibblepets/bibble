@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { BibbleError } from '../errors/errors.class';
+import { BibbleError, FieldAssertionError } from '../errors/errors.class';
 import { handleError } from '../utils/util';
 import {
   ListingModel,
@@ -9,9 +9,12 @@ import {
   IGetAllListingsBySpeciesRequest,
   IGetListingByIdRequest,
   IDeleteListingByIdRequest,
-  IGetMyListingsRequest
+  IGetMyListingsRequest,
+  IUpdateListingMediaRequest
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
+import { IMedia } from '../models/listing/media.model';
+import { putMedia } from '../services/s3.service';
 
 require('../models/country.model');
 const {
@@ -223,7 +226,7 @@ export const updateListingById = async (
 
     // Validate request
     console.log('Validating request body...');
-    if (listerId != user._id) {
+    if (listerId.toString() !== user._id.toString()) {
       throw new BibbleError('Unauthorized.');
     }
     console.log('Validating Animal request body...');
@@ -250,11 +253,7 @@ export const updateListingById = async (
 
     // Update pet listing
     console.log('Updating pet listing...');
-    await listing.updateOne({
-      price: price,
-      description: description,
-      media: media
-    });
+    await listing.updateOne(req.body, { new: true });
     console.log('Pet listing updated.', listing._id);
 
     // Populate pet listing
@@ -266,6 +265,46 @@ export const updateListingById = async (
     return res.status(200).json({
       listing: updatedListing,
       message: 'Pet listing updated successfully.'
+    });
+  } catch (error: any) {
+    return handleError(res, error);
+  }
+};
+
+export const updateListingMediaById = async (
+  req: IUpdateListingMediaRequest,
+  res: Response
+) => {
+  try {
+    const { id } = req.params;
+    const { mediaNames, user } = req.body;
+    const files = req.files as Express.Multer.File[];
+
+    // Validate request
+    if ((!mediaNames || mediaNames.length === 0) && files.length === 0) {
+      throw new BibbleError('Please provide at least one photo.');
+    }
+
+    let media: Omit<IMedia, '_id'>[] | undefined;
+
+    if (Array.isArray(mediaNames) && mediaNames.length > 0) {
+      media = mediaNames.map((name) => ({ name, url: undefined }));
+    }
+
+    const uploadedMedia = await putMedia(id, files, media);
+
+    // Update pet listing
+    const updatedListing = await Listing.findByIdAndUpdate(
+      id,
+      {
+        media: uploadedMedia
+      },
+      { new: true }
+    ).then(async (listing) => await listing?.populateAll());
+
+    return res.status(200).json({
+      listing: updatedListing,
+      message: 'Pet listing media updated successfully.'
     });
   } catch (error: any) {
     return handleError(res, error);

@@ -32,7 +32,7 @@ const s3Client = new S3Client({
 });
 
 export const putMedia = async (
-  listingId: Schema.Types.ObjectId,
+  listingId: Schema.Types.ObjectId | string,
   files: Express.Multer.File[],
   media?: Omit<IMedia, '_id'>[]
 ) => {

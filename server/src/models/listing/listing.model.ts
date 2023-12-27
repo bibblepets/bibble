@@ -83,6 +83,16 @@ export interface IUpdateListingRequest extends IUserRequest {
   };
 }
 
+export interface IUpdateListingMediaRequest extends IUserRequest {
+  params: {
+    id: string;
+  };
+  body: {
+    user: IPopulatedUser;
+    mediaNames: string[];
+  };
+}
+
 export interface IGetAllListingsRequest extends Request {}
 
 export interface IGetAllListingsBySpeciesRequest extends Request {

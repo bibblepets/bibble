@@ -3,42 +3,42 @@ import DescriptionInput from '../../../components/listing/listingCreator/biograp
 import GenderOptions from '../../../components/listing/listingCreator/biography/GenderOptions';
 import NameInput from '../../../components/listing/listingCreator/biography/NameInput';
 import OriginDropdown from '../../../components/listing/listingCreator/biography/OriginDropdown';
-import ListingSection from '../../../components/listing/listing/ListingSection';
-import ListingStage from '../../../components/listing/listing/ListingStage';
+import ListingCreatorSection from '../../../components/listing/listingCreator/ListingCreatorSection';
+import ListingCreatorStage from '../../../components/listing/listingCreator/ListingCreatorStage';
 import ListingCreatorLayout from '../../../layouts/ListingCreatorLayout';
 
 const Biography = () => {
   return (
     <ListingCreatorLayout>
-      <ListingStage
+      <ListingCreatorStage
         title="Biography"
         subtitle="Everyone's got a story to tell."
       >
         {/* NAME */}
-        <ListingSection title="Name" field="name" optional>
+        <ListingCreatorSection title="Name" field="name" optional>
           <NameInput />
-        </ListingSection>
+        </ListingCreatorSection>
 
         {/* ORIGIN */}
-        <ListingSection title="Origin" field="origin">
+        <ListingCreatorSection title="Origin" field="origin">
           <OriginDropdown />
-        </ListingSection>
+        </ListingCreatorSection>
 
         {/* GENDER */}
-        <ListingSection title="Gender" field="gender">
+        <ListingCreatorSection title="Gender" field="gender">
           <GenderOptions />
-        </ListingSection>
+        </ListingCreatorSection>
 
         {/* BIRTHDATE */}
-        <ListingSection title="Birthdate" field="birthdate">
+        <ListingCreatorSection title="Birthdate" field="birthdate">
           <BirthdateSelect />
-        </ListingSection>
+        </ListingCreatorSection>
 
         {/* DESCRIPTION */}
-        <ListingSection title="Description" field="description">
+        <ListingCreatorSection title="Description" field="description">
           <DescriptionInput />
-        </ListingSection>
-      </ListingStage>
+        </ListingCreatorSection>
+      </ListingCreatorStage>
     </ListingCreatorLayout>
   );
 };

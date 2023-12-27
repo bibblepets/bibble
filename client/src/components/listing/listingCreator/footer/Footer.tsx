@@ -46,7 +46,6 @@ const Footer = () => {
     default:
       isCompleted = false;
   }
-  console.log(isCompleted);
 
   const stages: ListingStage[] = [
     '',
