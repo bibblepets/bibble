@@ -87,32 +87,32 @@ const BirthdateSelect = () => {
   useDropdown(yearDropdownRef, isYearOpen, setYearIsOpen);
 
   return (
-    <div className="flex flex-row justify-center gap-8">
+    <div className="flex flex-row justify-center gap-16">
       {/* DATE */}
       <div className="flex flex-col gap-2 w-full">
-        <a className="text-sm font-light text-gray-500">Date</a>
+        <a className="font-light text-gray-500">Date</a>
         <div className="relative" ref={dateDropdownRef}>
           <button
             onClick={toggleDate}
-            className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
+            className="flex flex-row justify-between items-center gap-8 border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-sm font-medium text-gray-500">{date}</a>
+            <a className="text-6xl font-medium text-gray-500">{date}</a>
             {isDateOpen ? (
-              <ChevronUpIcon className="hidden sm:block w-4 h-4" />
+              <ChevronUpIcon className="hidden sm:block w-6 h-6" />
             ) : (
-              <ChevronDownIcon className="hidden sm:block w-4 h-4" />
+              <ChevronDownIcon className="hidden sm:block w-6 h-6" />
             )}
           </button>
 
           {isDateOpen && (
             <div className="absolute pb-4 w-full z-10">
-              <div className="bg-white shadow-lg rounded-b-lg max-h-[180px] overflow-auto">
+              <div className="bg-white shadow-lg rounded-b-lg max-h-[360px] overflow-auto">
                 <ul className="py-1">
                   {[...Array(31)].map((_, index) => (
                     <li key={index}>
                       <button
                         onClick={() => handleDateSelected(index + 1)}
-                        className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       >
                         {index + 1}
                       </button>
@@ -127,30 +127,32 @@ const BirthdateSelect = () => {
 
       {/* MONTH */}
       <div className="flex flex-col gap-2 w-full">
-        <a className="text-sm font-light text-gray-500">Month</a>
+        <a className="font-light text-gray-500">Month</a>
         <div className="relative" ref={monthDropdownRef}>
           <button
             onClick={toggleMonth}
-            className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
+            className="flex flex-row justify-between items-center gap-8 border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-sm font-medium text-gray-500">{months[month]}</a>
+            <a className="text-6xl font-medium text-gray-500">
+              {months[month]}
+            </a>
             {isMonthOpen ? (
-              <ChevronUpIcon className="hidden sm:block w-4 h-4" />
+              <ChevronUpIcon className="hidden sm:block w-6 h-6" />
             ) : (
-              <ChevronDownIcon className="hidden sm:block w-4 h-4" />
+              <ChevronDownIcon className="hidden sm:block w-6 h-6" />
             )}
           </button>
 
           {isMonthOpen && (
             <div className="absolute pb-4 w-full z-10">
-              <div className="bg-white shadow-lg rounded-b-lg max-h-[180px] overflow-auto">
+              <div className="bg-white shadow-lg rounded-b-lg max-h-[360px] overflow-auto">
                 <ul className="py-1">
                   {Array.from({ length: 12 }, (_, index) => index + 1).map(
                     (month) => (
                       <li key={month}>
                         <button
                           onClick={() => handleMonthSelected(month - 1)}
-                          className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                          className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         >
                           {new Date(2000, month - 1, 1).toLocaleString(
                             'default',
@@ -169,23 +171,23 @@ const BirthdateSelect = () => {
 
       {/* YEAR */}
       <div className="flex flex-col gap-2 w-full">
-        <a className="text-sm font-light text-gray-500">Year</a>
+        <a className="font-light text-gray-500">Year</a>
         <div className="relative" ref={yearDropdownRef}>
           <button
             onClick={toggleYear}
-            className="flex flex-row justify-between items-center gap-4 border border-gray-300 px-4 p-2 rounded-md w-full"
+            className="flex flex-row justify-between items-center gap-8 border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-sm font-medium text-gray-500">{year}</a>
+            <a className="text-6xl font-medium text-gray-500">{year}</a>
             {isYearOpen ? (
-              <ChevronUpIcon className="hidden sm:block w-4 h-4" />
+              <ChevronUpIcon className="hidden sm:block w-6 h-6" />
             ) : (
-              <ChevronDownIcon className="hidden sm:block w-4 h-4" />
+              <ChevronDownIcon className="hidden sm:block w-6 h-6" />
             )}
           </button>
 
           {isYearOpen && (
             <div className="absolute pb-4 w-full z-10">
-              <div className="bg-white shadow-lg rounded-b-lg max-h-[180px] overflow-auto">
+              <div className="bg-white shadow-lg rounded-b-lg max-h-[360px] overflow-auto">
                 <ul className="py-1">
                   {Array.from(
                     { length: 24 },
@@ -194,7 +196,7 @@ const BirthdateSelect = () => {
                     <li key={year}>
                       <button
                         onClick={() => handleYearSelected(year)}
-                        className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       >
                         {year}
                       </button>

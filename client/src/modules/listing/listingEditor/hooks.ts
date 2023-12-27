@@ -3,6 +3,7 @@ import Name from './stages/Name';
 import Media from './stages/Media';
 import Description from './stages/Description';
 import Gender from './stages/Gender';
+import Birthdate from './stages/Birthdate';
 
 export const useRender = () => {
   const { stage } = useParams();
@@ -21,6 +22,9 @@ export const useRender = () => {
         break;
       case 'gender':
         render = Gender;
+        break;
+      case 'birthdate':
+        render = Birthdate;
         break;
       default:
     }

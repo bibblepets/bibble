@@ -22,6 +22,10 @@ const sections: Section[] = [
   {
     title: 'Gender',
     preview: <div>This is the preview</div>
+  },
+  {
+    title: 'Birthdate',
+    preview: <div>This is the preview</div>
   }
 ];
 

@@ -19,7 +19,7 @@ const GenderOptions = () => {
   );
 
   return (
-    <div className="flex flex-col items-center gap-12 -translate-y-[50px]">
+    <div className="flex flex-col items-center gap-12">
       <p className="text-sm text-gray-500">Boy or girl?</p>
       <div className="flex flex-row gap-16 justify-between items-center w-[580px]">
         <button

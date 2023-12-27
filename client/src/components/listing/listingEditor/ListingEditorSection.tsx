@@ -45,7 +45,9 @@ const ListingEditorSection: React.FC<ListingEditorSectionProps> = ({
           </h2>
           {isError && <p className="text-sm text-rose-500">{'Required *'}</p>}
         </div>
-        <p className="font-light text-gray-600 mb-4">{description}</p>
+        {description && (
+          <p className="font-light text-gray-600 mb-4">{description}</p>
+        )}
         <FadeComponent show={!isLoading}>{children}</FadeComponent>
       </div>
 
