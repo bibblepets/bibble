@@ -5,7 +5,7 @@ import { store } from '../../../store';
 import { SaleType } from '../../../types';
 import { createListingCreator } from '../../../features/listingCreatorSlice';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../features/authSlice';
+import { selectCurrentUser } from '../../../features/userSlice';
 
 const ListingOptions = () => {
   const currentUser = useSelector(selectCurrentUser);

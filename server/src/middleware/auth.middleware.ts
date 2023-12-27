@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { verify, sign } from 'jsonwebtoken';
 import { IPopulatedUser, UserModel } from '../models/user/user.model';
 import { BibbleError } from '../errors/errors.class';
+import { handleError } from '../utils/util';
 
 const User: UserModel = require('../models/user/user.model');
 
@@ -13,7 +14,7 @@ const COOKIE_OPTIONS = {
   maxAge: 1000 * 60 * 60 * 24 * 7
 };
 
-export const getUserFromAuthToken = async (
+export const checkAuth = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -46,9 +47,7 @@ export const getUserFromAuthToken = async (
       SECRET_JWT_CODE
     );
 
-    const populatedUser = await authUser.populate(
-      'buyerProfile businessProfile'
-    );
+    const populatedUser = await authUser.populateAll();
 
     res.cookie('authToken', token, COOKIE_OPTIONS);
     req.body = {
@@ -57,7 +56,7 @@ export const getUserFromAuthToken = async (
     };
     next();
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return handleError(res, error);
   }
 };
 
@@ -77,6 +76,6 @@ export const validateBibbleTier = async (
 
     next();
   } catch (error: any) {
-    return res.status(500).json({ message: error.message });
+    return handleError(res, error);
   }
 };

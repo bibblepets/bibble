@@ -14,6 +14,10 @@ export interface IBuyerProfile {
   updatedAt: Date;
 }
 
+export interface IPopulatedBuyerProfile extends Omit<IBuyerProfile, 'favouriteListings'> {
+  favouriteListings: IListing[];
+}
+
 // export type HydratedDocumentBuyerProfile = mongoose.HydratedDocument<IBuyerProfile>;
 export interface BuyerProfileModel extends Model<IBuyerProfile> {}
 

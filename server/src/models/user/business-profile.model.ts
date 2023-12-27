@@ -18,6 +18,8 @@ export interface IBusinessProfile {
   updatedAt: Date;
 }
 
+export interface IPopulatedBusinessProfile extends IBusinessProfile {}
+
 // export type HydratedDocumentBusinessProfile = mongoose.HydratedDocument<IBusinessProfile>;
 export interface BusinessProfileModel extends Model<IBusinessProfile> {}
 

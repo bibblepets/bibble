@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { Schema } from 'mongoose';
 import {
   UserModel,
-  ICreateUserRequest,
+  IRegisterUserRequest,
   IUpdateUserRequest,
   IPopulatedUser
 } from '../../src/models/user/user.model';
@@ -48,7 +48,7 @@ describe('User model (CREATE)', () => {
 
     expect(savedBusinessProfile.bibbleTier).to.equal('Basic');
 
-    const userData: ICreateUserRequest['body'] = {
+    const userData: IRegisterUserRequest['body'] = {
       email: 'test@example.com',
       password: 'password',
       buyerProfile: savedBuyerProfile,
@@ -92,7 +92,7 @@ describe('User model (CREATE)', () => {
       businessProfileData.bibbleTier
     );
 
-    const userData: ICreateUserRequest['body'] = {
+    const userData: IRegisterUserRequest['body'] = {
       email: 'test@example.com',
       password: 'password',
       buyerProfile: savedBuyerProfile,
@@ -112,7 +112,7 @@ describe('User model (CREATE)', () => {
 
   it('- Create User (missing `buyerProfile`)', async function () {
     try {
-      const userData: Omit<ICreateUserRequest['body'], 'buyerProfile'> = {
+      const userData: Omit<IRegisterUserRequest['body'], 'buyerProfile'> = {
         email: 'test@exmaple.com',
         password: 'password'
       };
@@ -139,7 +139,7 @@ describe('User model (CREATE)', () => {
 
       expect(savedBuyerProfile.lastName).to.equal(buyerProfileData.lastName);
 
-      const userData: Omit<ICreateUserRequest['body'], 'email'> = {
+      const userData: Omit<IRegisterUserRequest['body'], 'email'> = {
         password: 'password',
         buyerProfile: savedBuyerProfile
       };
@@ -167,7 +167,7 @@ describe('User model (CREATE)', () => {
 
       expect(savedBuyerProfile.lastName).to.equal(buyerProfileData.lastName);
 
-      const userData: Omit<ICreateUserRequest['body'], 'password'> = {
+      const userData: Omit<IRegisterUserRequest['body'], 'password'> = {
         email: 'test@exmaple.com',
         buyerProfile: savedBuyerProfile
       };
@@ -195,7 +195,7 @@ describe('User model (CREATE)', () => {
 
       expect(savedBuyerProfile.lastName).to.equal(buyerProfileData.lastName);
 
-      const userData: ICreateUserRequest['body'] = {
+      const userData: IRegisterUserRequest['body'] = {
         email: 'invalid-email',
         password: 'password',
         buyerProfile: savedBuyerProfile
@@ -223,7 +223,7 @@ describe('User model (CREATE)', () => {
 
       expect(savedBuyerProfile.lastName).to.equal(buyerProfileData.lastName);
 
-      const userData: ICreateUserRequest['body'] = {
+      const userData: IRegisterUserRequest['body'] = {
         email: 'test@exmaple.com',
         password: 'pass',
         buyerProfile: savedBuyerProfile
@@ -242,7 +242,7 @@ describe('User model (READ)', () => {
     lastName: 'Doe'
   };
 
-  const existingUserData: Omit<ICreateUserRequest['body'], 'buyerProfile'> = {
+  const existingUserData: Omit<IRegisterUserRequest['body'], 'buyerProfile'> = {
     email: 'test@example.com',
     password: 'password'
   };
@@ -309,7 +309,7 @@ describe('User model (UPDATE)', () => {
     lastName: 'Doe'
   };
 
-  const existingUserData: Omit<ICreateUserRequest['body'], 'buyerProfile'> = {
+  const existingUserData: Omit<IRegisterUserRequest['body'], 'buyerProfile'> = {
     email: 'test@example.com',
     password: 'password'
   };
@@ -434,7 +434,7 @@ describe('User model (DELETE)', () => {
     lastName: 'Doe'
   };
 
-  const existingUserData: Omit<ICreateUserRequest['body'], 'buyerProfile'> = {
+  const existingUserData: Omit<IRegisterUserRequest['body'], 'buyerProfile'> = {
     email: 'test@example.com',
     password: 'password'
   };

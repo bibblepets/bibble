@@ -11,7 +11,7 @@ const router = Router();
  */
 router.post(
   '/',
-  AuthMiddleware.getUserFromAuthToken,
+  AuthMiddleware.checkAuth,
   AuthMiddleware.validateBibbleTier,
   ListingController.createListing
 );
@@ -23,7 +23,7 @@ router.post(
  */
 router.get(
   '/self',
-  AuthMiddleware.getUserFromAuthToken,
+  AuthMiddleware.checkAuth,
   ListingController.getMyListings
 );
 
@@ -55,7 +55,7 @@ router.get('/', ListingController.getAllListings);
  */
 router.put(
   '/update/:id',
-  AuthMiddleware.getUserFromAuthToken,
+  AuthMiddleware.checkAuth,
   AuthMiddleware.validateBibbleTier,
   ListingController.updateListingById
 );
@@ -67,7 +67,7 @@ router.put(
  */
 router.delete(
   '/:id',
-  AuthMiddleware.getUserFromAuthToken,
+  AuthMiddleware.checkAuth,
   AuthMiddleware.validateBibbleTier,
   ListingController.deleteListingById
 );

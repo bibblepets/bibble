@@ -3,8 +3,7 @@ import { verify, sign } from 'jsonwebtoken';
 import { BibbleError } from '../errors/errors.class';
 import { handleError } from '../utils/util';
 import {
-  ICreateUserRequest,
-  IUpdateUserRequest,
+  IRegisterUserRequest,
   ICheckAuthStatusRequest,
   ILoginUserRequest,
   UserModel
@@ -24,53 +23,7 @@ const COOKIE_OPTIONS = {
   maxAge: 1000 * 60 * 60 * 24 * 7
 };
 
-export const checkAuthStatus = async (
-  req: ICheckAuthStatusRequest,
-  res: Response
-) => {
-  const { authToken } = req.cookies;
-
-  if (!authToken) {
-    return res.status(401).json({ message: 'Unauthorized.' });
-  }
-
-  try {
-    if (!SECRET_JWT_CODE) {
-      throw new BibbleError('Secret JWT code not found.');
-    }
-
-    const decoded = verify(authToken, SECRET_JWT_CODE);
-
-    if (typeof decoded === 'string') {
-      throw new BibbleError('Decoded JWT is a string.');
-    }
-
-    const authUser = await User.findById(decoded.id);
-
-    if (!authUser) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
-
-    const token = sign(
-      { id: authUser._id, email: authUser.email },
-      SECRET_JWT_CODE
-    );
-
-    const populatedUser = await authUser.populate(
-      'buyerProfile businessProfile'
-    );
-
-    return res.cookie('authToken', token, COOKIE_OPTIONS).json({
-      token: token,
-      currentUser: populatedUser,
-      message: 'User is authenticated.'
-    });
-  } catch (error: any) {
-    return handleError(res, error);
-  }
-};
-
-export const registerUser = async (req: ICreateUserRequest, res: Response) => {
+export const registerUser = async (req: IRegisterUserRequest, res: Response) => {
   const { buyerProfile, businessProfile, email, password } = req.body;
   let createdBuyerProfile;
   let createdBusinessProfile;
@@ -122,13 +75,10 @@ export const registerUser = async (req: ICreateUserRequest, res: Response) => {
     );
     console.log('JWT created.');
 
-    const populatedUser = await createdUser.populate(
-      'buyerProfile businessProfile'
-    );
+    const populatedUser = await createdUser.populateAll();
 
     return res.cookie('authToken', token, COOKIE_OPTIONS).json({
-      token: token,
-      currentUser: populatedUser,
+      user: populatedUser,
       message: 'User registered successfully.'
     });
   } catch (error: any) {
@@ -171,11 +121,10 @@ export const loginUser = async (req: ILoginUserRequest, res: Response) => {
 
     const token = sign({ id: user._id, email: user.email }, SECRET_JWT_CODE);
 
-    const populatedUser = await user.populate('buyerProfile businessProfile');
+    const populatedUser = await user.populateAll();
 
     return res.cookie('authToken', token, COOKIE_OPTIONS).json({
-      token: token,
-      currentUser: populatedUser,
+      user: populatedUser,
       message: 'User logged in successfully.'
     });
   } catch (error: any) {
@@ -189,84 +138,4 @@ export const logoutUser = (_req: Request, res: Response) => {
   res.json({
     message: 'User logged out successfully.'
   });
-};
-
-export const updateUser = async (req: IUpdateUserRequest, res: Response) => {
-  const { user, buyerProfile, businessProfile, email, password } = req.body;
-
-  try {
-    const buyerProfileId = user.buyerProfile._id;
-    const businessProfileId = user.businessProfile._id;
-
-    // Validate request body
-    if (buyerProfile) {
-      console.log('Validating Buyer Profile request body...');
-      await BuyerProfile.validate(buyerProfile, Object.keys(buyerProfile));
-    }
-    if (businessProfile) {
-      // If user has a business profile, validate request body for update
-      console.log('Validating Business Profile (Update) request body...');
-      if (businessProfileId) {
-        await BusinessProfile.validate(
-          businessProfile,
-          Object.keys(businessProfile)
-        );
-      }
-    }
-    if (email || password) {
-      console.log('Validating User request body...');
-      const userPathsToUpdate = ['email', 'password'].filter(
-        (key: string) => req.body[key as keyof typeof req.body]
-      );
-      await User.validate({ email, password }, userPathsToUpdate);
-    }
-
-    // Update Buyer Profile
-    console.log('Updating buyer profile...');
-    const updatedBuyerProfile = await BuyerProfile.findByIdAndUpdate(
-      buyerProfileId,
-      buyerProfile,
-      { new: true }
-    );
-
-    if (!updatedBuyerProfile) {
-      return res.status(404).json({ message: 'Buyer profile not found.' });
-    }
-
-    // Update Business Profile
-    console.log('Updating business profile...');
-    const updatedBusinessProfile = await BusinessProfile.findByIdAndUpdate(
-      businessProfileId,
-      businessProfile,
-      { new: true }
-    );
-
-    if (!updatedBusinessProfile) {
-      return res.status(404).json({ message: 'Business profile not found.' });
-    }
-
-    // Update User
-    console.log('Updating user...');
-    const updatedUser = await User.findByIdAndUpdate(
-      user._id,
-      {
-        buyerProfile: updatedBuyerProfile._id,
-        businessProfile: updatedBusinessProfile._id,
-        email,
-        password
-      },
-      { new: true }
-    );
-
-    const populatedUser = await updatedUser?.populate(
-      'buyerProfile businessProfile'
-    );
-
-    return res.json({
-      user: populatedUser,
-      message: 'User updated successfully.'
-    });
-  } catch (error: any) {
-    return handleError(res, error);
-  }
 };

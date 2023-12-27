@@ -1,18 +1,16 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState } from '../store';
-import { BusinessProfile, BuyerProfile, StatusType, User } from '../types';
+import { RootState, store } from '../store';
+import { BusinessProfile, BuyerProfile, Listing, StatusType, User } from '../types';
 
-interface AuthState {
-  token?: string;
+interface UserState {
   currentUser?: User;
   status: StatusType;
   error?: string;
   message?: string;
 }
 
-const initialState: AuthState = {
-  token: undefined,
+const initialState: UserState = {
   currentUser: undefined,
   status: 'DEFAULT',
   error: undefined,
@@ -21,27 +19,19 @@ const initialState: AuthState = {
 
 axios.defaults.withCredentials = true;
 
-export const checkAuthStatus = createAsyncThunk(
-  '/authSlice/checkAuthStatus',
-  async () => {
-    return await axios
-      .get('/api/auth/status')
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          return {
-            message: error.response.data.message
-          };
-        }
-        throw new Error(error.response.data.message);
-      });
-  }
-);
+export const getUser = createAsyncThunk('/userSlice/getUser', async () => {
+  return await axios
+    .get('/api/user')
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      throw new Error(error.response.data.message);
+    });
+});
 
 export const registerUser = createAsyncThunk(
-  '/authSlice/register',
+  '/userSlice/register',
   async (
     credentials: Omit<
       User,
@@ -66,7 +56,7 @@ export const registerUser = createAsyncThunk(
 );
 
 export const loginUser = createAsyncThunk(
-  '/authSlice/loginUser',
+  '/userSlice/loginUser',
   async (
     credentials: Omit<
       User,
@@ -85,7 +75,7 @@ export const loginUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk(
-  '/authSlice/logoutUser',
+  '/userSlice/logoutUser',
   async () => {
     return await axios
       .post('/api/auth/logout')
@@ -98,27 +88,42 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-export const authSlice = createSlice({
+export const updateUser = createAsyncThunk(
+  '/userSlice/updateUser',
+  async (user: Partial<User>) => {
+    return await axios
+      .put('/api/user', user)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
+export const userSlice = createSlice({
   name: 'authentication',
   initialState,
   reducers: {
     resetStatus: (state) => {
       state.status = 'DEFAULT';
+      state.error = undefined;
+      state.message = undefined;
     }
   },
   extraReducers: (builder) => {
     builder
-      .addCase(checkAuthStatus.pending, (state) => {
+      .addCase(getUser.pending, (state) => {
         state.status = 'LOADING';
         state.error = undefined;
       })
-      .addCase(checkAuthStatus.fulfilled, (state, action) => {
-        state.status = 'DEFAULT';
-        state.currentUser = action.payload.currentUser;
-        state.token = action.payload.token;
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        state.currentUser = action.payload.user;
         state.message = action.payload.message;
       })
-      .addCase(checkAuthStatus.rejected, (state, action) => {
+      .addCase(getUser.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       })
@@ -128,8 +133,7 @@ export const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.currentUser = action.payload.currentUser;
-        state.token = action.payload.token;
+        state.currentUser = action.payload.user;
         state.message = action.payload.message;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -142,8 +146,7 @@ export const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.currentUser = action.payload.currentUser;
-        state.token = action.payload.token;
+        state.currentUser = action.payload.user;
         state.message = action.payload.message;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -157,23 +160,33 @@ export const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state, action) => {
         state.status = 'DEFAULT';
         state.currentUser = undefined;
-        state.token = undefined;
         state.message = action.payload.message;
       })
       .addCase(logoutUser.rejected, (state, action) => {
+        state.status = 'ERROR';
+        state.error = action.error.message;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.status = 'LOADING';
+        state.error = undefined;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        state.currentUser = action.payload.user;
+        state.message = action.payload.message;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       });
   }
 });
 
-export const { resetStatus } = authSlice.actions;
+export const { resetStatus } = userSlice.actions;
 
-export const selectCurrentUser = (state: RootState) =>
-  state.authentication.currentUser;
+export const selectCurrentUser = (state: RootState) => state.user.currentUser;
 export const selectIsAuthenticated = (state: RootState) =>
-  !!state.authentication.currentUser;
-export const selectAuthStatus = (state: RootState) =>
-  state.authentication.status;
+  !!state.user.currentUser;
+export const selectAuthStatus = (state: RootState) => state.user.status;
 
-export default authSlice.reducer;
+export default userSlice.reducer;
