@@ -8,6 +8,7 @@ import Weight from './stages/Weight';
 import HairCoat from './stages/HairCoat';
 import DefaultPreview from './previews/DefaultPreview';
 import Vaccinations from './stages/Vaccinations';
+import Licenses from './stages/Licenses';
 
 type Section = {
   title: string;
@@ -55,6 +56,11 @@ export const sections: Section[] = [
     title: 'Vaccinations',
     field: 'vaccines',
     preview: DefaultPreview
+  },
+  {
+    title: 'Licenses',
+    field: 'licenses',
+    preview: DefaultPreview
   }
 ];
 
@@ -87,6 +93,9 @@ export const useRender = () => {
         break;
       case 'vaccines':
         render = Vaccinations;
+        break;
+      case 'licenses':
+        render = Licenses;
         break;
       default:
     }

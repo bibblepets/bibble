@@ -40,7 +40,7 @@ const VaccinationList = () => {
   return (
     <div className="flex flex-col gap-4 w-full h-full">
       {vaccines.map((vaccine, index) => (
-        <>
+        <div key={index} className="flex flex-col gap-4">
           <div className="flex flex-row justify-between">
             <div className="flex flex-col gap-2">
               <label>{vaccine.name}</label>
@@ -81,7 +81,7 @@ const VaccinationList = () => {
           </div>
 
           {index !== vaccines.length - 1 && <hr />}
-        </>
+        </div>
       ))}
     </div>
   );

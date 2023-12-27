@@ -3,6 +3,7 @@ import {
   Country,
   Gender,
   HairCoat,
+  LegalTag,
   Listing,
   Media,
   Size,
@@ -156,6 +157,48 @@ const listingEditorSlice = createSlice({
         );
       }
     },
+    // TODO: Find a more elegant solution to this
+    addLegalTag: (state, action: PayloadAction<LegalTag>) => {
+      if (state.listing && state.listing.animal) {
+        switch (action.payload) {
+          case 'isHypoallergenic':
+            state.listing.animal.isHypoallergenic = true;
+            break;
+          case 'isMicrochipped':
+            state.listing.animal.isMicrochipped = true;
+            break;
+          case 'isNeutered':
+            state.listing.animal.isNeutered = true;
+            break;
+          case 'isHdbApproved':
+            state.listing.animal.isHdbApproved = true;
+            break;
+          default:
+            break;
+        }
+      }
+    },
+    // TODO: Find a more elegant solution to this
+    removeLegalTag: (state, action: PayloadAction<LegalTag>) => {
+      if (state.listing && state.listing.animal) {
+        switch (action.payload) {
+          case 'isHypoallergenic':
+            state.listing.animal.isHypoallergenic = false;
+            break;
+          case 'isMicrochipped':
+            state.listing.animal.isMicrochipped = false;
+            break;
+          case 'isNeutered':
+            state.listing.animal.isNeutered = false;
+            break;
+          case 'isHdbApproved':
+            state.listing.animal.isHdbApproved = false;
+            break;
+          default:
+            break;
+        }
+      }
+    },
     setPrice: (state, action: PayloadAction<number>) => {
       if (state.listing) {
         state.listing.price = action.payload;
@@ -213,6 +256,9 @@ export const {
   removeVaccination,
   addMedia,
   removeMedia,
+  setAvsLicenseNumber,
+  addLegalTag,
+  removeLegalTag,
   setPrice
 } = listingEditorSlice.actions;
 
@@ -250,6 +296,25 @@ export const selectListingEditorHairCoat = (state: RootState) =>
   state.listingEditor.listing?.animal?.hairCoat;
 export const selectListingEditorAvsLicenseNumber = (state: RootState) =>
   state.listingEditor.listing?.animal?.avsLicenseNumber;
+export const selectListingEditorLegalTags = (state: RootState): string[] => {
+  const animal = state.listingEditor.listing?.animal;
+  const legalTags: string[] = [];
+
+  if (animal?.isHypoallergenic) {
+    legalTags.push('isHypoallergenic');
+  }
+  if (animal?.isMicrochipped) {
+    legalTags.push('isMicrochipped');
+  }
+  if (animal?.isNeutered) {
+    legalTags.push('isNeutered');
+  }
+  if (animal?.isHdbApproved) {
+    legalTags.push('isHdbApproved');
+  }
+
+  return legalTags;
+};
 export const selectListingEditorStatus = (state: RootState) =>
   state.listingEditor.status;
 export const selectListingEditorIsLoading = (state: RootState) =>
