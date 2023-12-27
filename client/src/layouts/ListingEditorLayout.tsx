@@ -7,11 +7,9 @@ interface ListingLayoutProps {
 
 const ListingEditorLayout: React.FC<ListingLayoutProps> = ({ children }) => {
   return (
-    <div className="flex flex-col w-full h-screen justify-center items-center">
+    <div className="flex flex-col h-screen">
       <Navbar />
-      <main className="flex flex-row w-full h-full justify-center items-center">
-        {children}
-      </main>
+      <main className="flex flex-row pt-[86px] h-full">{children}</main>
     </div>
   );
 };

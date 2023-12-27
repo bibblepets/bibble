@@ -2,7 +2,7 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 const ControlHeader = () => {
   return (
-    <div className="flex gap-6 items-center">
+    <div className="flex gap-6 pl-24 items-center">
       <button
         onClick={() => alert('TO IMPLEMENT')}
         className="bg-gray-100 p-3 rounded-full transition hover:bg-gray-200"

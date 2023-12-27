@@ -9,6 +9,7 @@ import HairCoat from './stages/HairCoat';
 import DefaultPreview from './previews/DefaultPreview';
 import Vaccinations from './stages/Vaccinations';
 import Licenses from './stages/Licenses';
+import Price from './stages/Price';
 
 type Section = {
   title: string;
@@ -20,6 +21,11 @@ export const sections: Section[] = [
   {
     title: 'Photo reel',
     field: 'media',
+    preview: DefaultPreview
+  },
+  {
+    title: 'Price',
+    field: 'price',
     preview: DefaultPreview
   },
   {
@@ -72,6 +78,9 @@ export const useRender = () => {
     switch (stage) {
       case 'photos':
         render = Media;
+        break;
+      case 'price':
+        render = Price;
         break;
       case 'name':
         render = Name;
