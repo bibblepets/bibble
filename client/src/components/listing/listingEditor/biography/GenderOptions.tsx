@@ -21,21 +21,23 @@ const GenderOptions = () => {
   return (
     <div className="flex flex-col items-center gap-12">
       <p className="text-sm text-gray-500">Boy or girl?</p>
-      <div className="flex flex-row gap-16 justify-between items-center w-[580px]">
+      <div className="flex flex-row gap-16 justify-between items-center w-full max-w-[580px]">
         <button
           onClick={() => handleClick('Male')}
-          className={`flex flex-row justify-center p-6 rounded-full items-center gap-4 transition ${
+          className={`flex flex-row justify-center p-4 lg:p-6 rounded-full items-center gap-4 transition ${
             selectedGender === 'Male' ? 'bg-sky-500' : 'bg-gray-500'
           }`}
         >
           <BiMaleSign className="w-5 h-5 text-white" />
         </button>
 
-        <label className="text-gray-800 text-8xl">{selectedGender}</label>
+        <label className="text-gray-800 text-6xl lg:text-8xl">
+          {selectedGender}
+        </label>
 
         <button
           onClick={() => handleClick('Female')}
-          className={`flex flex-row justify-center p-6 rounded-full items-center gap-4 transition ${
+          className={`flex flex-row justify-center p-4 lg:p-6 rounded-full items-center gap-4 transition ${
             selectedGender === 'Female' ? 'bg-rose-500' : 'bg-gray-500'
           }`}
         >

@@ -6,7 +6,7 @@ const ListingEditor = () => {
   return (
     <ListingEditorLayout>
       <ListingEditorControl />
-      <a className="border-l h-full mx-2" />
+      <a className="hidden lg:block border-l h-full mx-2" />
       <ListingEditorPanel />
     </ListingEditorLayout>
   );

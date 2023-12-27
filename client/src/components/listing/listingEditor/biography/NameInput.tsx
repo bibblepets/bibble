@@ -17,13 +17,13 @@ const NameInput = () => {
   );
 
   return (
-    <div className="flex flex-col gap-4 items-center">
+    <div className="flex flex-col gap-4 items-center w-full">
       <p className="text-xs text-gray-500">
         <span className="font-semibold">{50 - (name?.length || 0)}</span>{' '}
         characters available
       </p>
       <input
-        className={`text-8xl p-2 text-gray-800 focus:outline-none text-center`}
+        className={`text-6xl xs:text-8xl p-2 text-gray-800 focus:outline-none text-center w-full`}
         type="text"
         value={name}
         placeholder="..."

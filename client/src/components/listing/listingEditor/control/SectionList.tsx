@@ -1,33 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import { sections } from '../../../../modules/listing/listingEditor/hooks';
 import SectionCard from './SectionCard';
-
-type Section = {
-  title: string;
-  preview: React.ReactNode;
-};
-
-const sections: Section[] = [
-  {
-    title: 'Photos',
-    preview: <div>This is the preview</div>
-  },
-  {
-    title: 'Name',
-    preview: <div>This is the preview</div>
-  },
-  {
-    title: 'Description',
-    preview: <div>This is the preview</div>
-  },
-  {
-    title: 'Gender',
-    preview: <div>This is the preview</div>
-  },
-  {
-    title: 'Birthdate',
-    preview: <div>This is the preview</div>
-  }
-];
 
 const SectionList = () => {
   return (
@@ -35,6 +7,7 @@ const SectionList = () => {
       {sections.map((section, index) => (
         <SectionCard
           key={index}
+          field={section.field}
           title={section.title}
           preview={section.preview}
         />

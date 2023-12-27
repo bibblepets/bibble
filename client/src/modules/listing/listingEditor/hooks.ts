@@ -4,6 +4,53 @@ import Media from './stages/Media';
 import Description from './stages/Description';
 import Gender from './stages/Gender';
 import Birthdate from './stages/Birthdate';
+import Weight from './stages/Weight';
+import HairCoat from './stages/HairCoat';
+import DefaultPreview from './previews/DefaultPreview';
+
+type Section = {
+  title: string;
+  field: string;
+  preview?: () => JSX.Element;
+};
+
+export const sections: Section[] = [
+  {
+    title: 'Photo reel',
+    field: 'media',
+    preview: DefaultPreview
+  },
+  {
+    title: 'Name',
+    field: 'name',
+    preview: DefaultPreview
+  },
+  {
+    title: 'Description',
+    field: 'description',
+    preview: DefaultPreview
+  },
+  {
+    title: 'Gender',
+    field: 'gender',
+    preview: DefaultPreview
+  },
+  {
+    title: 'Birthday',
+    field: 'birthdate',
+    preview: DefaultPreview
+  },
+  {
+    title: 'Size & Weight',
+    field: 'weight',
+    preview: DefaultPreview
+  },
+  {
+    title: 'Hair Coat',
+    field: 'hairCoat',
+    preview: DefaultPreview
+  }
+];
 
 export const useRender = () => {
   const { stage } = useParams();
@@ -26,6 +73,11 @@ export const useRender = () => {
       case 'birthdate':
         render = Birthdate;
         break;
+      case 'weight':
+        render = Weight;
+        break;
+      case 'hairCoat':
+        render = HairCoat;
       default:
     }
   }

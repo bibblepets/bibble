@@ -4,7 +4,11 @@ import BirthdateSelect from '../../../../components/listing/listingEditor/biogra
 
 const Birthdate = () => {
   return (
-    <ListingEditorSection title="Birthdate" field="birthdate">
+    <ListingEditorSection
+      title="Birthday"
+      field="birthdate"
+      description="When were they born? Set an estimated birthdate if you are unsure"
+    >
       <BirthdateSelect />
     </ListingEditorSection>
   );

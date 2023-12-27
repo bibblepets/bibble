@@ -37,8 +37,8 @@ const ListingEditorSection: React.FC<ListingEditorSectionProps> = ({
   }, [store]);
 
   return (
-    <div className="flex flex-col justify-between w-full">
-      <div className="flex flex-col gap-6 p-12 h-full">
+    <div className="flex flex-col justify-between w-full h-auto">
+      <div className="flex flex-col gap-6 p-12 h-auto lg:h-full">
         <div className="flex justify-between items-center">
           <h2 className={`font-medium text-4xl ${isError && 'text-rose-500'}`}>
             {title}
@@ -48,7 +48,13 @@ const ListingEditorSection: React.FC<ListingEditorSectionProps> = ({
         {description && (
           <p className="font-light text-gray-600 mb-4">{description}</p>
         )}
-        <FadeComponent show={!isLoading}>{children}</FadeComponent>
+        <div
+          className={`h-full pt-12 lg:pt-0 ${
+            description && '-translate-y-[24px]'
+          }`}
+        >
+          <FadeComponent show={!isLoading}>{children}</FadeComponent>
+        </div>
       </div>
 
       {/* FOOTER */}

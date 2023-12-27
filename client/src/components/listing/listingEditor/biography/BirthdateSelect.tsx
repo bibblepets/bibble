@@ -87,7 +87,7 @@ const BirthdateSelect = () => {
   useDropdown(yearDropdownRef, isYearOpen, setYearIsOpen);
 
   return (
-    <div className="flex flex-row justify-center gap-16">
+    <div className="flex flex-col lg:flex-row justify-center gap-16 w-full lg:w-auto">
       {/* DATE */}
       <div className="flex flex-col gap-2 w-full">
         <a className="font-light text-gray-500">Date</a>
@@ -96,11 +96,13 @@ const BirthdateSelect = () => {
             onClick={toggleDate}
             className="flex flex-row justify-between items-center gap-8 border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-6xl font-medium text-gray-500">{date}</a>
+            <a className="text-4xl 2xl:text-6xl font-medium text-gray-500">
+              {date}
+            </a>
             {isDateOpen ? (
-              <ChevronUpIcon className="hidden sm:block w-6 h-6" />
+              <ChevronUpIcon className="w-6 h-6" />
             ) : (
-              <ChevronDownIcon className="hidden sm:block w-6 h-6" />
+              <ChevronDownIcon className="w-6 h-6" />
             )}
           </button>
 
@@ -133,13 +135,13 @@ const BirthdateSelect = () => {
             onClick={toggleMonth}
             className="flex flex-row justify-between items-center gap-8 border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-6xl font-medium text-gray-500">
+            <a className="text-4xl 2xl:text-6xl font-medium text-gray-500">
               {months[month]}
             </a>
             {isMonthOpen ? (
-              <ChevronUpIcon className="hidden sm:block w-6 h-6" />
+              <ChevronUpIcon className="w-6 h-6" />
             ) : (
-              <ChevronDownIcon className="hidden sm:block w-6 h-6" />
+              <ChevronDownIcon className="w-6 h-6" />
             )}
           </button>
 
@@ -177,11 +179,13 @@ const BirthdateSelect = () => {
             onClick={toggleYear}
             className="flex flex-row justify-between items-center gap-8 border-gray-300 px-4 p-2 rounded-md w-full"
           >
-            <a className="text-6xl font-medium text-gray-500">{year}</a>
+            <a className="text-4xl 2xl:text-6xl font-medium text-gray-500">
+              {year}
+            </a>
             {isYearOpen ? (
-              <ChevronUpIcon className="hidden sm:block w-6 h-6" />
+              <ChevronUpIcon className="w-6 h-6" />
             ) : (
-              <ChevronDownIcon className="hidden sm:block w-6 h-6" />
+              <ChevronDownIcon className="w-6 h-6" />
             )}
           </button>
 

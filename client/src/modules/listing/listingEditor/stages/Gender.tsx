@@ -4,7 +4,7 @@ import GenderOptions from '../../../../components/listing/listingEditor/biograph
 
 const Gender = () => {
   return (
-    <ListingEditorSection title="Gender" field="gender">
+    <ListingEditorSection field="gender">
       <GenderOptions />
     </ListingEditorSection>
   );

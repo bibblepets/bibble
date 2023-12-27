@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Size } from '../../../../types';
 import { store } from '../../../../store';
 import {
+  selectListingEditorGender,
   selectListingEditorSize,
   setSize
 } from '../../../../features/listingEditorSlice';
@@ -11,6 +12,7 @@ const sizes: Size[] = ['Small', 'Medium', 'Large'];
 
 const SizeOptions = () => {
   const selectedSize = useSelector(selectListingEditorSize);
+  const selectedGender = useSelector(selectListingEditorGender);
 
   const handleClick = useCallback(
     (size: Size) => {
@@ -20,18 +22,23 @@ const SizeOptions = () => {
   );
 
   return (
-    <div className="flex flex-row gap-8 justify-between">
-      {sizes.map((size, index) => (
-        <button
-          key={index}
-          onClick={() => handleClick(size)}
-          className={`flex flex-row justify-center p-4 rounded-lg items-center gap-4 w-full transition ${
-            selectedSize === size ? 'bg-sky-500' : 'bg-gray-500'
-          }`}
-        >
-          <a className="text-sm font-light text-white">{size}</a>
-        </button>
-      ))}
+    <div className="flex flex-col gap-8 items-center">
+      <p className="text-sm text-gray-500">
+        How big is {selectedGender === 'Male' ? 'he' : 'she'}?
+      </p>
+      <div className="flex flex-row gap-8 justify-center">
+        {sizes.map((size, index) => (
+          <button
+            key={index}
+            onClick={() => handleClick(size)}
+            className={`flex flex-row justify-center p-4 rounded-lg w-32 items-center gap-4 transition ${
+              selectedSize === size ? 'bg-sky-500' : 'bg-gray-500'
+            }`}
+          >
+            <a className="text-xl font-light text-white">{size}</a>
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
