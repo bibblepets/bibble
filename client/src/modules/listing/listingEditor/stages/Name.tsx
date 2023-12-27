@@ -1,9 +1,10 @@
 import ListingEditorSection from '../../../../components/listing/listingEditor/ListingEditorSection';
+import NameInput from '../../../../components/listing/listingEditor/biography/NameInput';
 
 const Name = () => {
   return (
-    <ListingEditorSection title="Name" field="name">
-      <div>Name</div>
+    <ListingEditorSection field="name">
+      <NameInput />
     </ListingEditorSection>
   );
 };

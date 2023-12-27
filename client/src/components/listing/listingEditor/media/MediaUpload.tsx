@@ -21,7 +21,6 @@ const MediaUpload = () => {
   const media = useSelector(selectListingEditorMedia) || [];
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<Media[]>([]);
-  console.log(selectedMedia);
 
   const isSelected = (medium: Media) =>
     selectedMedia.map((m) => m.url).includes(medium?.url);

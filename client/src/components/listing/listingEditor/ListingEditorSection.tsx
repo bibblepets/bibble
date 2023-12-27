@@ -3,6 +3,7 @@ import {
   selectListingEditorError,
   selectListingEditorIsLoading,
   selectListingEditorStatus,
+  updateListingById,
   updateListingMediaById
 } from '../../../features/listingEditorSlice';
 import { useCallback } from 'react';
@@ -10,7 +11,7 @@ import { store } from '../../../store';
 import FadeComponent from '../../wrapper/FadeComponent';
 
 interface ListingEditorSectionProps {
-  title: string;
+  title?: string;
   description?: string;
   field: string;
   children: React.ReactNode;
@@ -28,12 +29,16 @@ const ListingEditorSection: React.FC<ListingEditorSectionProps> = ({
   const isError = status === 'ERROR' && error?.includes(field);
 
   const onSave = useCallback(() => {
-    store.dispatch(updateListingMediaById());
+    if (field === 'media') {
+      store.dispatch(updateListingMediaById());
+    } else {
+      store.dispatch(updateListingById());
+    }
   }, [store]);
 
   return (
     <div className="flex flex-col justify-between w-full">
-      <div className="flex flex-col gap-6 p-12">
+      <div className="flex flex-col gap-6 p-12 h-full">
         <div className="flex justify-between items-center">
           <h2 className={`font-medium text-4xl ${isError && 'text-rose-500'}`}>
             {title}

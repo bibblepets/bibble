@@ -17,16 +17,19 @@ const NameInput = () => {
   );
 
   return (
-    <div>
-      <div>
-        <input
-          className={`text-sm w-full p-2 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline`}
-          type="text"
-          placeholder="Do we have a name yet?"
-          value={name}
-          onChange={handleNameChange}
-        />
-      </div>
+    <div className="flex flex-col gap-4 items-center">
+      <p className="text-xs text-gray-500">
+        <span className="font-semibold">{50 - (name?.length || 0)}</span>{' '}
+        characters available
+      </p>
+      <input
+        className={`text-5xl p-2 text-gray-800 focus:outline-none text-center`}
+        type="text"
+        value={name}
+        placeholder="..."
+        onChange={handleNameChange}
+        maxLength={50}
+      />
     </div>
   );
 };

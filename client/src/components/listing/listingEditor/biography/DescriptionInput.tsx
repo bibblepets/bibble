@@ -18,15 +18,21 @@ const DescriptionInput = () => {
   );
 
   return (
-    <textarea
-      className="w-full px-4 py-2 text-gray-700 text-sm border whitespace-pre-line rounded-lg focus:outline-none focus:shadow-outline resize-none"
-      placeholder="Introduce them!"
-      value={displayDescription}
-      onChange={handleDescriptionChange}
-      style={{
-        height: `${Math.max(80, description.split('\n').length * 20)}px`
-      }}
-    />
+    <div className="flex flex-col gap-4 w-full h-full">
+      <p className="text-xs text-gray-500">
+        <span className="font-semibold">
+          {1000 - (description.length || 0)}
+        </span>{' '}
+        characters available
+      </p>
+      <textarea
+        className="w-full h-full text-gray-700 whitespace-pre-line rounded-lg focus:outline-none focus:shadow-outline resize-none"
+        placeholder="Introduce them!"
+        value={displayDescription}
+        onChange={handleDescriptionChange}
+        maxLength={1000}
+      />
+    </div>
   );
 };
 

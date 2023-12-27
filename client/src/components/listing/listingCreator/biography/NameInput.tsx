@@ -17,20 +17,22 @@ const NameInput = ({ readOnly }: { readOnly?: boolean }) => {
   );
 
   if (readOnly) {
-    return <a className="text-sm font-medium text-gray-700">{name || 'N/A'}</a>;
+    return (
+      <a className="text-sm font-medium text-gray-700">
+        {name || 'No name yet'}
+      </a>
+    );
   }
 
   return (
     <div>
-      <div>
-        <input
-          className={`text-sm w-full p-2 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline`}
-          type="text"
-          placeholder="Do we have a name yet?"
-          value={name}
-          onChange={handleNameChange}
-        />
-      </div>
+      <input
+        className={`text-sm w-full p-2 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline`}
+        type="text"
+        placeholder="Do we have a name yet?"
+        value={name}
+        onChange={handleNameChange}
+      />
     </div>
   );
 };

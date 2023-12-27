@@ -8,7 +8,7 @@ const Media = () => {
   return (
     <ListingEditorSection
       title="Photo reel"
-      field="name"
+      field="media"
       description={description}
     >
       <MediaUpload />
