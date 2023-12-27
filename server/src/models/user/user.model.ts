@@ -4,11 +4,13 @@ import { compareSync, hashSync } from 'bcrypt';
 import {
   IBuyerProfile,
   ICreateBuyerProfileRequest,
+  IPopulatedBuyerProfile,
   IUpdateBuyerProfileRequest
 } from './buyer-profile.model';
 import {
   IBusinessProfile,
   ICreateBusinessProfileRequest,
+  IPopulatedBusinessProfile,
   IUpdateBusinessProfileRequest
 } from './business-profile.model';
 
@@ -24,12 +26,13 @@ export interface IUser {
 
 export interface IPopulatedUser
   extends Omit<IUser, 'buyerProfile' | 'businessProfile'> {
-  buyerProfile: IBuyerProfile;
-  businessProfile: IBusinessProfile;
+  buyerProfile: IPopulatedBuyerProfile;
+  businessProfile: IPopulatedBusinessProfile;
 }
 
 interface IUserMethods {
   isCorrectPassword(password: string): boolean;
+  populateAll(): Promise<IPopulatedUser>;
 }
 
 export interface UserModel extends Model<IUser, {}, IUserMethods> {}
@@ -132,6 +135,13 @@ UserSchema.pre('findOneAndUpdate', function (next) {
 
 UserSchema.method('isCorrectPassword', function (password: string) {
   return compareSync(password, this.password);
+});
+
+UserSchema.method('populateAll', async function () {
+  return await this.populate([
+    { path: 'buyerProfile', populate: { path: 'favouriteListings' } },
+    { path: 'businessProfile' }
+  ]);
 });
 
 const User = mongoose.model<IUser, UserModel>('User', UserSchema);

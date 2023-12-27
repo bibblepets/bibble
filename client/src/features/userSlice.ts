@@ -110,14 +110,6 @@ export const userSlice = createSlice({
       state.status = 'DEFAULT';
       state.error = undefined;
       state.message = undefined;
-    },
-    addFavouriteListing: (state, action: PayloadAction<Listing>) => {
-      state.currentUser!.buyerProfile.favouriteListings!.push(action.payload);
-    },
-    removeFavouriteListing: (state, action: PayloadAction<Listing>) => {
-      state.currentUser!.buyerProfile.favouriteListings = state.currentUser!.buyerProfile.favouriteListings!.filter(
-        (favourite) => favourite._id !== action.payload._id
-      );
     }
   },
   extraReducers: (builder) => {
@@ -128,7 +120,7 @@ export const userSlice = createSlice({
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.currentUser = action.payload.currentUser;
+        state.currentUser = action.payload.user;
         state.message = action.payload.message;
       })
       .addCase(getUser.rejected, (state, action) => {
@@ -141,7 +133,7 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.currentUser = action.payload.currentUser;
+        state.currentUser = action.payload.user;
         state.message = action.payload.message;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -154,7 +146,7 @@ export const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.currentUser = action.payload.currentUser;
+        state.currentUser = action.payload.user;
         state.message = action.payload.message;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -180,7 +172,7 @@ export const userSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.currentUser = action.payload.currentUser;
+        state.currentUser = action.payload.user;
         state.message = action.payload.message;
       })
       .addCase(updateUser.rejected, (state, action) => {
@@ -190,7 +182,7 @@ export const userSlice = createSlice({
   }
 });
 
-export const { resetStatus, addFavouriteListing, removeFavouriteListing } = userSlice.actions;
+export const { resetStatus } = userSlice.actions;
 
 export const selectCurrentUser = (state: RootState) => state.user.currentUser;
 export const selectIsAuthenticated = (state: RootState) =>

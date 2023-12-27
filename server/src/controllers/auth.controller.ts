@@ -75,12 +75,10 @@ export const registerUser = async (req: IRegisterUserRequest, res: Response) => 
     );
     console.log('JWT created.');
 
-    const populatedUser = await createdUser.populate(
-      'buyerProfile businessProfile'
-    );
+    const populatedUser = await createdUser.populateAll();
 
     return res.cookie('authToken', token, COOKIE_OPTIONS).json({
-      currentUser: populatedUser,
+      user: populatedUser,
       message: 'User registered successfully.'
     });
   } catch (error: any) {
@@ -123,10 +121,10 @@ export const loginUser = async (req: ILoginUserRequest, res: Response) => {
 
     const token = sign({ id: user._id, email: user.email }, SECRET_JWT_CODE);
 
-    const populatedUser = await user.populate('buyerProfile businessProfile');
+    const populatedUser = await user.populateAll();
 
     return res.cookie('authToken', token, COOKIE_OPTIONS).json({
-      currentUser: populatedUser,
+      user: populatedUser,
       message: 'User logged in successfully.'
     });
   } catch (error: any) {

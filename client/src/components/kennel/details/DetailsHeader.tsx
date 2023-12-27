@@ -1,7 +1,10 @@
 import { HeartIcon, ShareIcon } from '@heroicons/react/24/solid';
 import { Listing } from '../../../types';
 import { useSelector } from 'react-redux';
-import { addFavouriteListing, removeFavouriteListing, selectCurrentUser, updateUser } from '../../../features/userSlice';
+import {
+  selectCurrentUser,
+  updateUser
+} from '../../../features/userSlice';
 import { store } from '../../../store';
 
 interface DetailsHeaderProps {
@@ -16,7 +19,10 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
     const favourites = currentUser.buyerProfile.favouriteListings;
 
     if (favourites && favourites.length > 0) {
-      return favourites.some((favourite) => favourite._id === listing._id);
+      return favourites.filter((favourite) => {
+        console.log(favourite._id, listing._id);
+        return favourite._id === listing._id
+      }).length > 0;
     }
 
     return false;
@@ -24,14 +30,34 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
 
   const handleFavourite = async (listing: Listing) => {
     if (!currentUser) return;
+
+    const favouriteListings = currentUser.buyerProfile.favouriteListings;
+    if (!favouriteListings) return;
+
     if (isListingFavourited()) {
       // Remove from favourites
-      store.dispatch(addFavouriteListing(listing));
-      await store.dispatch(updateUser(currentUser));
+      await store.dispatch(
+        updateUser({
+          ...currentUser,
+          buyerProfile: {
+            ...currentUser.buyerProfile,
+            favouriteListings: favouriteListings.filter(
+              (favourite) => favourite._id !== listing._id
+            )
+          }
+        })
+      );
     } else {
       // Add to favourites
-      store.dispatch(removeFavouriteListing(listing));
-      await store.dispatch(updateUser(currentUser));
+      await store.dispatch(
+        updateUser({
+          ...currentUser,
+          buyerProfile: {
+            ...currentUser.buyerProfile,
+            favouriteListings: [...favouriteListings, listing]
+          }
+        })
+      );
     }
   };
 
@@ -54,7 +80,10 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
           )}
         </div>
         <div className="flex items-center place-self-end gap-4">
-          <button className="flex items-center gap-2 text-neutral-700" onClick={() => handleFavourite(listing)}>
+          <button
+            className="flex items-center gap-2 text-neutral-700"
+            onClick={() => handleFavourite(listing)}
+          >
             {isListingFavourited() ? (
               <HeartIcon className="w-5 h-5 fill-rose-500" />
             ) : (

@@ -15,12 +15,11 @@ const BusinessProfile: BusinessProfileModel = require('../models/user/business-p
 export const getUser = async (req: IGetUserRequest, res: Response) => {
   const { user } = req.body;
 
-  return res.json({ currentUser: user, message: 'User found.' });
+  return res.json({ user: user, message: 'User found.' });
 };
 
 export const updateUser = async (req: IUpdateUserRequest, res: Response) => {
   const { user, buyerProfile, businessProfile, email, password } = req.body;
-  console.log("Buyer Profile:", buyerProfile);
 
   try {
     const buyerProfileId = user.buyerProfile._id;
@@ -86,9 +85,7 @@ export const updateUser = async (req: IUpdateUserRequest, res: Response) => {
       { new: true }
     );
 
-    const populatedUser = await updatedUser?.populate(
-      'buyerProfile businessProfile'
-    );
+    const populatedUser = await updatedUser?.populateAll();
 
     return res.json({
       user: populatedUser,

@@ -47,9 +47,7 @@ export const checkAuth = async (
       SECRET_JWT_CODE
     );
 
-    const populatedUser = await authUser.populate(
-      'buyerProfile businessProfile'
-    );
+    const populatedUser = await authUser.populateAll();
 
     res.cookie('authToken', token, COOKIE_OPTIONS);
     req.body = {

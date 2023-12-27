@@ -4,7 +4,6 @@ import * as AuthMiddleware from '../middleware/auth.middleware';
 
 const router = Router();
 
-
 /**
  * @route GET /api/user
  * @desc Get user profile
