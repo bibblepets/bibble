@@ -69,7 +69,7 @@ const MapCard: React.FC<MapCardProps> = ({ location }) => {
           center={center}
           zoom={16}
         >
-          <MarkerF position={data.coordinates} animation={google.maps.Animation.DROP} opacity={1} title="I'm over here!"/>
+          <MarkerF position={data.coordinates} animation={google.maps.Animation.DROP} opacity={1} title="We're over here!"/>
         </GoogleMap>
       </div>
     </div>
