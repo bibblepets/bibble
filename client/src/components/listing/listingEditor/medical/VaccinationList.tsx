@@ -1,4 +1,4 @@
-import { CheckIcon } from '@heroicons/react/24/outline';
+import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { store } from '../../../../store';
@@ -17,35 +17,71 @@ const VaccinationList = () => {
   const vaccines = allVaccines.filter((vaccine) => vaccine.species === species);
   const selectedVaccines = useSelector(selectListingEditorVaccines);
 
-  const handleClick = useCallback(
+  const isSelected = (vaccine: Vaccine) =>
+    selectedVaccines?.map((v) => v._id)?.includes(vaccine._id);
+
+  const onAdd = useCallback(
     (vaccine: Vaccine) => {
-      if (selectedVaccines?.map((v) => v._id)?.includes(vaccine._id)) {
-        store.dispatch(removeVaccination(vaccine));
-      } else {
-        store.dispatch(addVaccination(vaccine));
+      if (isSelected(vaccine)) {
+        return;
       }
+      store.dispatch(addVaccination(vaccine));
+    },
+    [store, selectedVaccines]
+  );
+
+  const onRemove = useCallback(
+    (vaccine: Vaccine) => {
+      store.dispatch(removeVaccination(vaccine));
     },
     [store, selectedVaccines]
   );
 
   return (
-    <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    <div className="flex flex-col gap-4 w-full h-full">
       {vaccines.map((vaccine, index) => (
-        <div key={index} className="flex flex-row gap-4 items-center">
-          <button
-            onClick={() => handleClick(vaccine)}
-            className="p-2 rounded-lg border transition hover:shadow-inner"
-          >
-            {selectedVaccines?.map((e) => e.name)?.includes(vaccine.name) ? (
-              <CheckIcon className="w-4 h-4" />
-            ) : (
-              <div className="w-4 h-4" />
-            )}
-          </button>
-          <a key={index} className="text-sm font-light text-gray-500">
-            {vaccine.name}
-          </a>
-        </div>
+        <>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col gap-2">
+              <label>{vaccine.name}</label>
+              {vaccine.isCore && (
+                <p className="text-sm font-light text-gray-500">
+                  Core vaccination
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-row gap-4">
+              <button
+                onClick={() => onRemove(vaccine)}
+                className={`border rounded-full p-2 h-[34px] w-[34px] transition ${
+                  !isSelected(vaccine) && 'bg-gray-800'
+                }`}
+              >
+                <XMarkIcon
+                  className={`w-4 h-4 text-gray-500 transition ${
+                    !isSelected(vaccine) && 'text-white'
+                  }`}
+                />
+              </button>
+
+              <button
+                onClick={() => onAdd(vaccine)}
+                className={`border rounded-full p-2 h-[34px] w-[34px] transition ${
+                  isSelected(vaccine) && 'bg-gray-800'
+                }`}
+              >
+                <CheckIcon
+                  className={`w-4 h-4 text-gray-500 transition ${
+                    isSelected(vaccine) && 'text-white'
+                  }`}
+                />
+              </button>
+            </div>
+          </div>
+
+          {index !== vaccines.length - 1 && <hr />}
+        </>
       ))}
     </div>
   );

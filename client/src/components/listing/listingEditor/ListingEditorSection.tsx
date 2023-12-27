@@ -48,11 +48,7 @@ const ListingEditorSection: React.FC<ListingEditorSectionProps> = ({
         {description && (
           <p className="font-light text-gray-600 mb-4">{description}</p>
         )}
-        <div
-          className={`h-full pt-12 lg:pt-0 ${
-            description && '-translate-y-[24px]'
-          }`}
-        >
+        <div className={`h-full pt-8 ${description && '-translate-y-[24px]'}`}>
           <FadeComponent show={!isLoading}>{children}</FadeComponent>
         </div>
       </div>
