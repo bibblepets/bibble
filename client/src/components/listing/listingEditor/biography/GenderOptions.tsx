@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 import { BiFemaleSign, BiMaleSign } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
-import { store } from '../../../../store';
-import { Gender } from '../../../../types';
 import {
   selectListingEditorGender,
   setGender
 } from '../../../../features/listingEditorSlice';
+import { store } from '../../../../store';
+import { Gender } from '../../../../types';
 
 const GenderOptions = () => {
   const selectedGender = useSelector(selectListingEditorGender);
@@ -31,7 +31,7 @@ const GenderOptions = () => {
           <BiMaleSign className="w-5 h-5 text-white" />
         </button>
 
-        <label className="text-gray-800 text-6xl lg:text-8xl">
+        <label className="text-center text-gray-800 text-6xl lg:text-8xl w-[160px] lg:w-[480px]">
           {selectedGender}
         </label>
 

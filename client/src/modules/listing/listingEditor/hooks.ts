@@ -1,15 +1,24 @@
 import { useParams } from 'react-router-dom';
-import Name from './stages/Name';
-import Media from './stages/Media';
+import BirthdatePreview from './previews/BirthdatePreview';
+import DescriptionPreview from './previews/DescriptionPreview';
+import GenderPreview from './previews/GenderPreview';
+import HairCoatPreview from './previews/HairCoatPreview';
+import LicensesPreview from './previews/LicensesPreview';
+import MediaPreview from './previews/MediaPreview';
+import NamePreview from './previews/NamePreview';
+import PricePreview from './previews/PricePreview';
+import VaccinationsPreview from './previews/VaccinationsPreview';
+import WeightPreview from './previews/WeightPreview';
+import Birthdate from './stages/Birthdate';
 import Description from './stages/Description';
 import Gender from './stages/Gender';
-import Birthdate from './stages/Birthdate';
-import Weight from './stages/Weight';
 import HairCoat from './stages/HairCoat';
-import DefaultPreview from './previews/DefaultPreview';
-import Vaccinations from './stages/Vaccinations';
 import Licenses from './stages/Licenses';
+import Media from './stages/Media';
+import Name from './stages/Name';
 import Price from './stages/Price';
+import Vaccinations from './stages/Vaccinations';
+import Weight from './stages/Weight';
 
 type Section = {
   title: string;
@@ -21,52 +30,52 @@ export const sections: Section[] = [
   {
     title: 'Photo reel',
     field: 'media',
-    preview: DefaultPreview
-  },
-  {
-    title: 'Price',
-    field: 'price',
-    preview: DefaultPreview
+    preview: MediaPreview
   },
   {
     title: 'Name',
     field: 'name',
-    preview: DefaultPreview
+    preview: NamePreview
+  },
+  {
+    title: 'Price',
+    field: 'price',
+    preview: PricePreview
   },
   {
     title: 'Description',
     field: 'description',
-    preview: DefaultPreview
+    preview: DescriptionPreview
   },
   {
     title: 'Gender',
     field: 'gender',
-    preview: DefaultPreview
+    preview: GenderPreview
   },
   {
     title: 'Birthday',
     field: 'birthdate',
-    preview: DefaultPreview
+    preview: BirthdatePreview
   },
   {
     title: 'Size & Weight',
     field: 'weight',
-    preview: DefaultPreview
+    preview: WeightPreview
   },
   {
     title: 'Hair Coat',
     field: 'hairCoat',
-    preview: DefaultPreview
+    preview: HairCoatPreview
   },
   {
     title: 'Vaccinations',
     field: 'vaccines',
-    preview: DefaultPreview
+    preview: VaccinationsPreview
   },
   {
     title: 'Licenses',
     field: 'licenses',
-    preview: DefaultPreview
+    preview: LicensesPreview
   }
 ];
 
@@ -79,11 +88,11 @@ export const useRender = () => {
       case 'photos':
         render = Media;
         break;
-      case 'price':
-        render = Price;
-        break;
       case 'name':
         render = Name;
+        break;
+      case 'price':
+        render = Price;
         break;
       case 'description':
         render = Description;

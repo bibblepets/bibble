@@ -22,7 +22,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
   return (
     <div
       onClick={onNavigate}
-      className={`flex flex-col gap-4 border rounded-lg py-4 px-6 cursor-pointer transition ${
+      className={`flex flex-col gap-2 border rounded-lg py-4 px-6 cursor-pointer transition ${
         field === stage && 'border-[2px] border-gray-500 shadow'
       }`}
     >

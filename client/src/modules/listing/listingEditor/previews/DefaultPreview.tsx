@@ -1,11 +1,16 @@
 import React from 'react';
 
-const DefaultPreview = () => {
+interface DefaultPreviewProps {
+  text?: string;
+  subtext?: string;
+}
+
+const DefaultPreview: React.FC<DefaultPreviewProps> = ({ text, subtext }) => {
   return (
-    <div>
-      <p>This is a preview</p>
+    <div className="flex flex-col items-start gap-2">
+      <p className="font-light text-gray-500 line-clamp-3">{text}</p>
+      {subtext && <p className="text-xs text-gray-800">{subtext}</p>}
     </div>
   );
 };
-
 export default DefaultPreview;
