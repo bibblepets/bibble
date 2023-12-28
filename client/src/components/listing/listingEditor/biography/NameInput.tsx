@@ -23,7 +23,7 @@ const NameInput = () => {
         characters available
       </p>
       <input
-        className={`text-6xl xs:text-8xl p-2 text-gray-800 focus:outline-none text-center w-full`}
+        className={`text-8xl p-2 text-gray-800 focus:outline-none text-center w-full`}
         type="text"
         value={name}
         placeholder="..."

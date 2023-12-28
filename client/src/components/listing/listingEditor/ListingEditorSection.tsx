@@ -9,6 +9,7 @@ import {
 import { useCallback } from 'react';
 import { store } from '../../../store';
 import FadeComponent from '../../wrapper/FadeComponent';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 
 interface ListingEditorSectionProps {
   title?: string;
@@ -40,9 +41,19 @@ const ListingEditorSection: React.FC<ListingEditorSectionProps> = ({
     <div className="flex flex-col justify-between w-full h-auto">
       <div className="flex flex-col gap-6 p-12 h-auto lg:h-full">
         <div className="flex justify-between items-center">
-          <h2 className={`font-medium text-4xl ${isError && 'text-rose-500'}`}>
-            {title}
-          </h2>
+          <div className="flex flex-row gap-4">
+            <button
+              onClick={() => alert('Open listing control menu')}
+              className="lg:hidden border rounded-full p-2 transition hover:bg-gray-200"
+            >
+              <Bars3Icon className="h-5 w-5" />
+            </button>
+            <h2
+              className={`font-medium text-4xl ${isError && 'text-rose-500'}`}
+            >
+              {title}
+            </h2>
+          </div>
           {isError && <p className="text-sm text-rose-500">{'Required *'}</p>}
         </div>
         {description && (

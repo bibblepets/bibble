@@ -30,11 +30,11 @@ const PriceInput = () => {
     <div className="flex flex-col gap-4 items-center w-full">
       <p className="text-xs text-gray-500">An impossible question, we know.</p>
       <div className="flex items-center">
-        <span className="text-end text-6xl xs:text-8xl font-light p-2 text-gray-500 w-24">
+        <span className="text-end text-6xl xs:text-8xl font-light p-2 text-gray-500 w-20">
           $
         </span>
         <input
-          className={`text-start text-6xl xs:text-8xl p-2 text-gray-800 focus:outline-none text-center w-48`}
+          className={`text-start text-8xl p-2 text-gray-800 focus:outline-none text-center w-64`}
           type="text"
           value={price}
           placeholder="..."
