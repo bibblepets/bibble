@@ -18,6 +18,7 @@ import {
   listingEditorLoader
 } from './loaders';
 import ListingEditor from '../modules/listing/listingEditor/ListingEditor';
+import Profile from '../modules/profile/Profile';
 
 export const router = createBrowserRouter([
   {
@@ -88,6 +89,10 @@ export const router = createBrowserRouter([
             element: <ListingEditor />
           }
         ]
+      },
+      {
+        path: 'profile',
+        element: <Profile />
       }
     ]
   }
