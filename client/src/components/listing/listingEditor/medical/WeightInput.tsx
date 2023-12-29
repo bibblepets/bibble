@@ -38,7 +38,7 @@ const WeightInput = () => {
           min={0}
           step="0.1"
           placeholder="Enter weight"
-          value={weight}
+          value={weight || ''}
           onChange={handleWeightChange}
         />
         <p className="text-6xl text-gray-500 w-24">kg</p>

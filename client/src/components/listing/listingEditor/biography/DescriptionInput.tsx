@@ -21,7 +21,7 @@ const DescriptionInput = () => {
     <div className="flex flex-col gap-4 w-full h-full">
       <p className="text-xs text-gray-500">
         <span className="font-semibold">
-          {1000 - (description.length || 0)}
+          {5000 - (description.length || 0)}
         </span>{' '}
         characters available
       </p>
@@ -30,7 +30,7 @@ const DescriptionInput = () => {
         placeholder="Introduce them!"
         value={displayDescription}
         onChange={handleDescriptionChange}
-        maxLength={1000}
+        maxLength={5000}
       />
     </div>
   );

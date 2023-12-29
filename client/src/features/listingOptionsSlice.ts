@@ -164,6 +164,8 @@ export const selectListingOptionsHairCoats = (state: RootState) =>
   state.listingOptions.hairCoats;
 export const selectListingOptionsVaccines = (state: RootState) =>
   state.listingOptions.vaccines;
+export const selectListingOptionsCoreVaccines = (state: RootState) =>
+  state.listingOptions.vaccines.filter((vaccine) => vaccine.isCore);
 export const selectListingOptionsLegalTags = (state: RootState) =>
   state.listingOptions.legalTags;
 export const selectListingOptionsStatus = (state: RootState) =>

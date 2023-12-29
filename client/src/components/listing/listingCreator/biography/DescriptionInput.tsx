@@ -26,15 +26,21 @@ const DescriptionInput = ({ readOnly }: { readOnly?: boolean }) => {
   }
 
   return (
-    <textarea
-      className="w-full px-4 py-2 text-gray-700 text-sm border whitespace-pre-line rounded-lg focus:outline-none focus:shadow-outline resize-none"
-      placeholder="Introduce them!"
-      value={displayDescription}
-      onChange={handleDescriptionChange}
-      style={{
-        height: `${Math.max(80, description.split('\n').length * 20)}px`
-      }}
-    />
+    <div className="relative">
+      <textarea
+        className="w-full px-4 py-2 text-gray-700 text-sm border whitespace-pre-line rounded-lg focus:outline-none focus:shadow-outline resize-none"
+        placeholder="Introduce them!"
+        value={displayDescription}
+        onChange={handleDescriptionChange}
+        maxLength={5000}
+        style={{
+          height: `${Math.max(80, description.split('\n').length * 20)}px`
+        }}
+      />
+      <p className="absolute bottom-4 right-6 text-xs text-gray-500">
+        {5000 - displayDescription.length} characters left
+      </p>
+    </div>
   );
 };
 

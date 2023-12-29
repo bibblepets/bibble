@@ -1,10 +1,13 @@
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
 
 const ControlHeader = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex gap-6 pl-24 items-center">
       <button
-        onClick={() => alert('TO IMPLEMENT')}
+        onClick={() => navigate(`/listing`)}
         className="bg-gray-100 p-3 rounded-full transition hover:bg-gray-200"
       >
         <ArrowLeftIcon className="h-4 w-4" />
