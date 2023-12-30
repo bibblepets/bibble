@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ProfilePanel = () => {
-  return <div className="w-full bg-rose-500">Profile Panel</div>;
+  return <section className="flex-grow bg-rose-500">Profile Panel</section>;
 };
 
 export default ProfilePanel;

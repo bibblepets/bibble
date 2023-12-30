@@ -8,6 +8,9 @@ module.exports = {
       height: {
         'screen-188': 'calc(100vh - 188px)'
       },
+      fontSize: {
+        xxs: '0.625rem'
+      },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans]
       }
