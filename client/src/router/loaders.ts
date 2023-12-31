@@ -1,4 +1,4 @@
-import { checkAuthStatus } from '../features/authSlice';
+import { getUser } from '../features/userSlice';
 import { fetchListings } from '../features/kennelSlice';
 import {
   generateLoginModalTitle,
@@ -17,7 +17,7 @@ import { LoaderFunction } from 'react-router-dom';
 import { fetchListingById } from '../features/listingEditorSlice';
 
 export const kennelLoader: LoaderFunction = async () => {
-  await store.dispatch(checkAuthStatus());
+  await store.dispatch(getUser());
   await store.dispatch(fetchListings());
   store.dispatch(generateRegisterModalTitle());
   store.dispatch(generateLoginModalTitle());

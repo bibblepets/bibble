@@ -14,7 +14,7 @@ import {
 } from '../../features/listingSlice';
 import ListingCreatorRow from '../../components/listing/listing/ListingCreatorRow';
 import SkeletonLoader from '../../components/loaders/SkeletonLoader';
-import { selectCurrentUser } from '../../features/authSlice';
+import { selectCurrentUser } from '../../features/userSlice';
 
 const Listing = () => {
   const currentUser = useSelector(selectCurrentUser);

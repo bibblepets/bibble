@@ -24,8 +24,12 @@ export type LoginModalType = ModalType & {
   title: string;
 };
 
-export type ConfirmDeleteModaltype = ModalType & {
+export type ConfirmDeleteModalType = ModalType & {
   navigate?: NavigateFunction;
+};
+
+export type ViewMoreModalType = ModalType & {
+  content: string;
 };
 
 // MODEL TYPES
@@ -35,17 +39,17 @@ export type User = {
   _id?: string;
   email: string;
   password?: string;
-  buyerProfile?: BuyerProfile;
-  businessProfile?: BusinessProfile;
-  createdAt?: Date;
-  updatedAt?: Date;
+  buyerProfile: BuyerProfile;
+  businessProfile: BusinessProfile;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type BuyerProfile = {
   _id?: string;
   firstName: string;
   lastName: string;
-  favouriteListings?: string[];
+  favouriteListings?: Listing[];
   profilePic?: string;
   contactNumber?: string;
   bio?: string;
@@ -54,12 +58,13 @@ export type BuyerProfile = {
 export type BusinessProfile = {
   _id?: string;
   bibbleTier: string;
-  businessName: string;
+  businessName?: string;
   businessPic?: string;
   businessBio?: string;
-  businessAddress: string;
-  businessContact: string;
-  businessEmail: string;
+  businessAddress?: string;
+  businessContact?: string;
+  businessEmail?: string;
+  petShopLicenseNumber?: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -105,9 +110,9 @@ export type Listing = {
   media: Media[];
   animal: Animal;
   species: Species;
-  createdAt?: Date;
-  updatedAt?: Date;
-  expiryDate?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  expiryDate: Date;
 };
 
 export type Animal = {

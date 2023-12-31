@@ -1,16 +1,18 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import {
-  ConfirmDeleteModaltype,
+  ConfirmDeleteModalType,
   LoginModalType,
-  RegisterModalType
+  RegisterModalType,
+  ViewMoreModalType
 } from '../types';
 import { NavigateFunction } from 'react-router-dom';
 
 interface ModalsState {
   registerModal: RegisterModalType;
   loginModal: LoginModalType;
-  confirmDeleteModal: ConfirmDeleteModaltype;
+  confirmDeleteModal: ConfirmDeleteModalType;
+  viewMoreModal: ViewMoreModalType
 }
 
 const initialState: ModalsState = {
@@ -33,6 +35,11 @@ const initialState: ModalsState = {
   confirmDeleteModal: {
     isOpen: false,
     status: 'DEFAULT'
+  },
+  viewMoreModal: {
+    isOpen: false,
+    status: 'DEFAULT',
+    content: ''
   }
 };
 
@@ -108,6 +115,14 @@ export const modalsSlice = createSlice({
     },
     closeConfirmDeleteModal: (state) => {
       state.confirmDeleteModal.isOpen = false;
+    },
+    openViewMoreModal: (state, action: PayloadAction<string>) => {
+      state.viewMoreModal.isOpen = true;
+      state.viewMoreModal.content = action.payload;
+    },
+    closeViewMoreModal: (state) => {
+      state.viewMoreModal.isOpen = false;
+      state.viewMoreModal.content = '';
     }
   }
 });
@@ -128,7 +143,9 @@ export const {
   resetLoginModal,
   generateLoginModalTitle,
   openConfirmDeleteModal,
-  closeConfirmDeleteModal
+  closeConfirmDeleteModal,
+  openViewMoreModal,
+  closeViewMoreModal
 } = modalsSlice.actions;
 
 export const selectIsRegisterModalOpen = (state: RootState) =>
@@ -159,5 +176,9 @@ export const selectConfirmDeleteModalIsOpen = (state: RootState) =>
   state.modals.confirmDeleteModal.isOpen;
 export const selectConfirmDeleteModalNavigate = (state: RootState) =>
   state.modals.confirmDeleteModal.navigate;
+export const selectViewMoreModalIsOpen = (state: RootState) =>
+  state.modals.viewMoreModal.isOpen;
+export const selectViewMoreModalContent = (state: RootState) =>
+  state.modals.viewMoreModal.content;
 
 export default modalsSlice.reducer;

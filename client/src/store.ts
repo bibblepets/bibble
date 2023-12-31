@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import authReducer from './features/authSlice';
+import userReducer from './features/userSlice';
 import kennelReducer from './features/kennelSlice';
 import listingReducer from './features/listingSlice';
 import listingOptionsReducer from './features/listingOptionsSlice';
@@ -10,7 +10,7 @@ import modalsReducer from './features/modalsSlice';
 
 export const store = configureStore({
   reducer: {
-    authentication: authReducer,
+    user: userReducer,
     kennel: kennelReducer,
     listing: listingReducer,
     listingOptions: listingOptionsReducer,

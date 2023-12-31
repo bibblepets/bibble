@@ -66,7 +66,7 @@ const ListerInfo: React.FC<ListerInfoProps> = ({ listing }) => {
         </div>
 
         {/* Right Column */}
-        <MapCard location={'10 Heng Mui Keng Terrace'} />
+        <MapCard location={listing.lister.businessProfile?.businessAddress} />
       </div>
     </>
   );

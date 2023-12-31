@@ -168,8 +168,6 @@ export const updateBiography = async (
       { new: true }
     ).then(async (listingCreator) => await listingCreator?.populateAll());
 
-    console.log(listingCreator);
-
     return res.status(200).json(listingCreator);
   } catch (error: any) {
     return handleError(res, error);
