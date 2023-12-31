@@ -21,6 +21,8 @@ import Vaccinations from './stages/Vaccinations';
 import Weight from './stages/Weight';
 import Breeds from './stages/Breeds';
 import BreedsPreview from './previews/BreedsPreview';
+import OriginPreview from './previews/OriginPreview';
+import Origin from './stages/Origin';
 
 type Section = {
   title: string;
@@ -48,6 +50,11 @@ export const sections: Section[] = [
     title: 'Breeds',
     field: 'breeds',
     preview: BreedsPreview
+  },
+  {
+    title: 'Origin',
+    field: 'origin',
+    preview: OriginPreview
   },
   {
     title: 'Description',
@@ -103,6 +110,9 @@ export const useRender = () => {
         break;
       case 'breeds':
         render = Breeds;
+        break;
+      case 'origin':
+        render = Origin;
         break;
       case 'description':
         render = Description;
