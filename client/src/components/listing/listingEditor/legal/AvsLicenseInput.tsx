@@ -19,10 +19,16 @@ const AvsLicenseInput = () => {
 
   return (
     <div className="flex flex-col gap-2 pb-2">
-      <label className="text-xs font-semibold text-gray-500">
-        AVS license number
-      </label>
+      <div className="flex flex-row items-center gap-2">
+        <label className="text-xs font-semibold text-gray-500">
+          AVS license number
+        </label>
+        <span className="text-xs font-light text-rose-400">
+          *Immutable. Contact Bibble support for help
+        </span>
+      </div>
       <input
+        disabled
         className={`font-light w-full p-4 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline`}
         type="text"
         placeholder="Input AVS license number"
@@ -30,8 +36,8 @@ const AvsLicenseInput = () => {
         onChange={handleAvsLicenseNumberChange}
       />
       <p className="text-xs font-light text-gray-500">
-        AVS license number will be checked against the Animal & Veterinary
-        Service records.
+        AVS license number is verified against the Animal & Veterinary Service
+        records.{' '}
       </p>
     </div>
   );

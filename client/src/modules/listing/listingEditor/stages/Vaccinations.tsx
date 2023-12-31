@@ -7,7 +7,7 @@ const Vaccinations = () => {
     <ListingEditorSection
       title="Vaccinations"
       field="vaccines"
-      description="Check off the vaccinations your pet has received. Core vaccinations are compulsory"
+      description="Check off the vaccinations your pet has received"
     >
       <VaccinationList />
     </ListingEditorSection>
