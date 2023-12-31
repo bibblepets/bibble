@@ -96,7 +96,7 @@ const BreedDropdown = () => {
           <div key={index}>
             <label
               onClick={() => onRemove(breed)}
-              className="text-6xl font-semibold p-8 text-gray-800 cursor-pointer transition hover:text-rose-500 overflow-hidden whitespace-nowrap"
+              className="text-6xl font-medium p-8 text-gray-800 cursor-pointer transition hover:text-rose-500 overflow-hidden whitespace-nowrap"
             >
               {breed.name}
             </label>
