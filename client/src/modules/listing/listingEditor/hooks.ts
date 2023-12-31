@@ -45,8 +45,8 @@ export const sections: Section[] = [
     preview: PricePreview
   },
   {
-    title: 'Breed',
-    field: 'breed',
+    title: 'Breeds',
+    field: 'breeds',
     preview: BreedsPreview
   },
   {
@@ -101,7 +101,7 @@ export const useRender = () => {
       case 'price':
         render = Price;
         break;
-      case 'breed':
+      case 'breeds':
         render = Breeds;
         break;
       case 'description':
