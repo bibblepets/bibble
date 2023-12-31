@@ -1,16 +1,68 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../features/authSlice';
 import paw from '../../../../public/images/paw.jpeg';
-import { CheckIcon } from '@heroicons/react/24/outline';
+import { CameraIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { selectMyListings } from '../../../features/listingSlice';
 import { toTimeAgo } from '../../../utils/date';
 import { CheckBadgeIcon } from '@heroicons/react/24/solid';
+import { useSearchParams } from 'react-router-dom';
+import { useCallback } from 'react';
+import { FileRejection, useDropzone } from 'react-dropzone';
+import toast from 'react-hot-toast';
 
 const UserPanel = () => {
   const currentUser = useSelector(selectCurrentUser);
   const myListings = useSelector(selectMyListings);
   const { time, unit } = toTimeAgo(currentUser?.createdAt);
+  const [searchParams] = useSearchParams();
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      if (acceptedFiles?.length === 1) {
+        alert('Success!');
+      } else if (acceptedFiles?.length > 1) {
+        toast.error('You can only upload one image at a time.');
+      }
+
+      if (fileRejections?.length) {
+        toast.error(fileRejections[0]?.errors[0]?.message.replace(/\/\*$/, ''));
+      }
+    },
+    []
+  );
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': []
+    }
+  });
+
+  if (searchParams.get('edit')) {
+    return (
+      <section className="w-full lg:w-[440px] p-12">
+        <div className="relative flex justify-center">
+          <img
+            className="rounded-full w-56 h-56 border"
+            src={currentUser?.buyerProfile?.profilePic || paw}
+            alt="profile-pic"
+          />
+          <div
+            {...getRootProps({
+              className:
+                'absolute -bottom-3 flex flex-row gap-2 py-2 px-4 bg-white shadow-lg rounded-full transition hover:shadow-sm'
+            })}
+          >
+            <input {...getInputProps()} />
+            <CameraIcon className="w-5 h-5 cursor-pointer text-gray-800 transition hover:text-gray-500" />
+            <label className="text-sm font-medium cursor-pointer text-gray-800 transition hover:text-gray-500">
+              Edit
+            </label>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="w-full lg:w-[440px] p-12">
