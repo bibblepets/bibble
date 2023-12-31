@@ -5,6 +5,7 @@ import paw from '../../../../public/images/paw.jpeg';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { selectMyListings } from '../../../features/listingSlice';
 import { toTimeAgo } from '../../../utils/date';
+import { CheckBadgeIcon } from '@heroicons/react/24/solid';
 
 const UserPanel = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -16,11 +17,17 @@ const UserPanel = () => {
       <div className="flex flex-col items-center gap-8">
         <div className="flex flex-row w-[412px] lg:w-full shadow-xl rounded-xl p-4">
           <div className="flex flex-col items-center w-[200px] my-4">
-            <img
-              className="rounded-full w-28 h-28 border"
-              src={currentUser?.buyerProfile?.profilePic || paw}
-              alt="profile-pic"
-            />
+            <div className="relative">
+              <img
+                className="rounded-full w-28 h-28 border"
+                src={currentUser?.buyerProfile?.profilePic || paw}
+                alt="profile-pic"
+              />
+              {currentUser?.businessProfile &&
+                currentUser?.businessProfile.bibbleTier !== 'Basic' && (
+                  <CheckBadgeIcon className="absolute bottom-0 right-0 w-8 h-8 text-sky-500" />
+                )}
+            </div>
             <div className="h-[8px]" />
             <label className="text-2xl font-bold text-gray-800">
               {currentUser?.buyerProfile?.firstName}
@@ -80,6 +87,12 @@ const UserPanel = () => {
               <label className="text-gray-800">Business email</label>
             </div>
           )}
+          <p
+            onClick={() => alert('TODO: learn more modal')}
+            className="text-sm font-semibold underline text-gray-800 pt-2 cursor-pointer"
+          >
+            Learn about identity verification
+          </p>
         </div>
       </div>
     </section>

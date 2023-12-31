@@ -147,6 +147,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
             ))}
             {tabs && tabs.length > 0 && <hr className="mx-4" />}
             <a
+              href={'/profile'}
+              className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+            >
+              Profile
+            </a>
+            <a
               href={'listing'}
               className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
@@ -159,13 +166,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
               role="menuitem"
             >
               Messages
-            </a>
-            <a
-              href={'/profile'}
-              className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              role="menuitem"
-            >
-              Profile
             </a>
             <hr className="mx-4" />
             <button
