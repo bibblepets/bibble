@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../features/authSlice';
+import { selectCurrentUser } from '../../../features/userSlice';
 import { useSearchParams } from 'react-router-dom';
 
 const ProfileAbout = () => {

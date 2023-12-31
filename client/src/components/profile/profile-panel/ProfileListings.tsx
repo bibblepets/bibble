@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../features/authSlice';
+import { selectCurrentUser } from '../../../features/userSlice';
 import { selectMyListings } from '../../../features/listingSlice';
 import ProfileListingCard from './ProfileListingCard';
 

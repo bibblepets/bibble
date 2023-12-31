@@ -24,11 +24,7 @@ router.post(
  * @desc Get all listings
  * @access Public
  */
-router.get(
-  '/self',
-  AuthMiddleware.checkAuth,
-  ListingController.getMyListings
-);
+router.get('/self', AuthMiddleware.checkAuth, ListingController.getMyListings);
 
 /**
  * @route GET /api/listings/species/:species
@@ -71,7 +67,7 @@ router.put(
 router.put(
   '/update-media/:id',
   upload.array('data'),
-  AuthMiddleware.getUserFromAuthToken,
+  AuthMiddleware.checkAuth,
   AuthMiddleware.validateBibbleTier,
   ListingController.updateListingMediaById
 );

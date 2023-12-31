@@ -46,6 +46,6 @@ export const listingEditorLoader: LoaderFunction = async ({ params }) => {
 };
 
 export const profileLoader: LoaderFunction = async () => {
-  await store.dispatch(checkAuthStatus());
+  await store.dispatch(getUser());
   return null;
 };

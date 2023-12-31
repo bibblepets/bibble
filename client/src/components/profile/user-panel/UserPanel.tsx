@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../features/authSlice';
+import { selectCurrentUser } from '../../../features/userSlice';
 import paw from '../../../../public/images/paw.jpeg';
 import { CameraIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { selectMyListings } from '../../../features/listingSlice';

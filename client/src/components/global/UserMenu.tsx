@@ -6,7 +6,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import paw from '/images/paw.jpeg';
-import { logoutUser, selectCurrentUser } from '../../features/authSlice';
+import { logoutUser, selectCurrentUser } from '../../features/userSlice';
 import { openLoginModal, openRegisterModal } from '../../features/modalsSlice';
 import { store } from '../../store';
 
