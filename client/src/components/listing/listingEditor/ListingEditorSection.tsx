@@ -9,7 +9,8 @@ import {
 import { useCallback } from 'react';
 import { store } from '../../../store';
 import FadeComponent from '../../wrapper/FadeComponent';
-import { Bars3Icon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, Bars3Icon } from '@heroicons/react/24/outline';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface ListingEditorSectionProps {
   title?: string;
@@ -24,6 +25,8 @@ const ListingEditorSection: React.FC<ListingEditorSectionProps> = ({
   field,
   children
 }) => {
+  const navigate = useNavigate();
+  const { id } = useParams();
   const status = useSelector(selectListingEditorStatus);
   const error = useSelector(selectListingEditorError);
   const isLoading = useSelector(selectListingEditorIsLoading);
@@ -43,10 +46,10 @@ const ListingEditorSection: React.FC<ListingEditorSectionProps> = ({
         <div className="flex justify-between items-center">
           <div className="flex flex-row gap-4">
             <button
-              onClick={() => alert('Open listing control menu')}
+              onClick={() => navigate(`/listing/edit/${id}`)}
               className="lg:hidden border rounded-full p-2 transition hover:bg-gray-200"
             >
-              <Bars3Icon className="h-5 w-5" />
+              <ArrowLeftIcon className="h-5 w-5" />
             </button>
             <h2
               className={`font-medium text-4xl ${isError && 'text-rose-500'}`}
