@@ -23,7 +23,7 @@ const AvsLicenseInput = () => {
         <label className="text-xs font-semibold text-gray-500">
           AVS license number
         </label>
-        <span className="text-xs font-light text-rose-400">
+        <span className="text-xxs font-light text-rose-400">
           *Immutable. Contact Bibble support for help
         </span>
       </div>
