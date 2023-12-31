@@ -1,5 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
+  Breed,
   Country,
   Gender,
   HairCoat,
@@ -88,6 +89,18 @@ const listingEditorSlice = createSlice({
     setOrigin: (state, action: PayloadAction<Country>) => {
       if (state.listing && state.listing.animal) {
         state.listing.animal.origin = action.payload;
+      }
+    },
+    addBreed: (state, action: PayloadAction<Breed>) => {
+      if (state.listing && state.listing.animal) {
+        state.listing.animal.breeds.push(action.payload);
+      }
+    },
+    removeBreed: (state, action: PayloadAction<Breed>) => {
+      if (state.listing && state.listing.animal) {
+        state.listing.animal.breeds = state.listing.animal.breeds.filter(
+          (breed) => breed._id !== action.payload._id
+        );
       }
     },
     setGender: (state, action: PayloadAction<Gender>) => {
@@ -245,6 +258,8 @@ const listingEditorSlice = createSlice({
 
 export const {
   setOrigin,
+  addBreed,
+  removeBreed,
   setGender,
   setName,
   setBirthdate,

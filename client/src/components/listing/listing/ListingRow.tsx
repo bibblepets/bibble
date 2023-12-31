@@ -13,7 +13,7 @@ const ListingRow: React.FC<ListingRowProps> = ({ listing }) => {
   const navigate = useNavigate();
 
   const handleNavigate = useCallback(() => {
-    navigate(`/listing/edit/${listing._id}/Biology`);
+    navigate(`/listing/edit/${listing._id}/media`);
   }, [navigate]);
 
   return (
