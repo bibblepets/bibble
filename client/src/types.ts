@@ -52,6 +52,8 @@ export type BuyerProfile = {
   favouriteListings?: Listing[];
   profilePic?: string;
   contactNumber?: string;
+  hasGovernmentId?: boolean;
+  address?: string;
   bio?: string;
 };
 

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import logo from '/images/logo-icon.png';
 import {
   registerUser,
-  selectAuthStatus,
+  selectUserStatus,
   resetStatus
 } from '../../features/userSlice';
 import {
@@ -36,7 +36,7 @@ const RegisterModal = () => {
   const lastName = useSelector(selectRegisterModalLastName);
   const email = useSelector(selectRegisterModalEmail);
   const password = useSelector(selectRegisterModalPassword);
-  const status = useSelector(selectAuthStatus);
+  const status = useSelector(selectUserStatus);
   const title = useSelector(selectRegisterModalTitle);
 
   useEffect(() => {

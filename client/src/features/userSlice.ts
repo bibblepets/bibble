@@ -1,7 +1,13 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState, store } from '../store';
-import { BusinessProfile, BuyerProfile, Listing, StatusType, User } from '../types';
+import {
+  BusinessProfile,
+  BuyerProfile,
+  Listing,
+  StatusType,
+  User
+} from '../types';
 
 interface UserState {
   currentUser?: User;
@@ -187,6 +193,20 @@ export const { resetStatus } = userSlice.actions;
 export const selectCurrentUser = (state: RootState) => state.user.currentUser;
 export const selectIsAuthenticated = (state: RootState) =>
   !!state.user.currentUser;
-export const selectAuthStatus = (state: RootState) => state.user.status;
+export const selectUserStatus = (state: RootState) => state.user.status;
+export const selectUserIsLoading = (state: RootState) =>
+  state.user.status === 'LOADING';
+export const selectUserPersonalName = (state: RootState) =>
+  state.user.currentUser?.buyerProfile?.firstName ||
+  '' + state.user.currentUser?.buyerProfile?.lastName ||
+  '';
+export const selectUserPersonalEmail = (state: RootState) =>
+  state.user.currentUser?.email;
+export const selectUserPersonalContact = (state: RootState) =>
+  state.user.currentUser?.buyerProfile?.contactNumber;
+export const selectUserPersonalGovernmentId = (state: RootState) =>
+  state.user.currentUser?.buyerProfile?.hasGovernmentId;
+export const selectUserPersonalAddress = (state: RootState) =>
+  state.user.currentUser?.buyerProfile?.address;
 
 export default userSlice.reducer;
