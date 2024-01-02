@@ -69,7 +69,7 @@ const OriginDropdown = () => {
       <div className="h-[54px]" />
 
       <div className="flex flex-wrap flex-col lg:flex-row justify-center items-center w-full h-full gap-x-8 p-24">
-        <label className="text-6xl font-medium p-8 text-gray-800">
+        <label className="text-2xl lg:text-6xl font-medium p-y-8 lg:p-8 text-gray-800 overflow-hidden">
           {selectedOrigin?.name || '...'}
         </label>
       </div>

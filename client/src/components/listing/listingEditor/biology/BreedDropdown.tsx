@@ -91,12 +91,12 @@ const BreedDropdown = () => {
 
       <div className="h-[54px]" />
 
-      <div className="flex flex-wrap flex-col lg:flex-row justify-center items-center w-full h-full gap-x-8 p-24">
+      <div className="flex flex-wrap flex-col gap-8 lg:flex-row justify-center items-center w-full h-full gap-x-8 lg:p-24">
         {selectedBreeds?.map((breed, index) => (
           <div key={index}>
             <label
               onClick={() => onRemove(breed)}
-              className="text-6xl font-medium p-8 text-gray-800 cursor-pointer transition hover:text-rose-500 overflow-hidden whitespace-nowrap"
+              className="text-2xl lg:text-6xl font-medium p-8 text-gray-800 cursor-pointer transition hover:text-rose-500 overflow-hidden lg:whitespace-nowrap"
             >
               {breed.name}
             </label>
