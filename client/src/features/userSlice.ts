@@ -197,9 +197,9 @@ export const selectUserStatus = (state: RootState) => state.user.status;
 export const selectUserIsLoading = (state: RootState) =>
   state.user.status === 'LOADING';
 export const selectUserPersonalName = (state: RootState) =>
-  state.user.currentUser?.buyerProfile?.firstName ||
-  '' + state.user.currentUser?.buyerProfile?.lastName ||
-  '';
+  (state.user.currentUser?.buyerProfile?.firstName || '') +
+  ' ' +
+  (state.user.currentUser?.buyerProfile?.lastName || '');
 export const selectUserPersonalEmail = (state: RootState) =>
   state.user.currentUser?.email;
 export const selectUserPersonalContact = (state: RootState) =>
