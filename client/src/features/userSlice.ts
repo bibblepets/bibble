@@ -204,8 +204,6 @@ export const selectUserPersonalEmail = (state: RootState) =>
   state.user.currentUser?.email;
 export const selectUserPersonalContact = (state: RootState) =>
   state.user.currentUser?.buyerProfile?.contactNumber;
-export const selectUserPersonalGovernmentId = (state: RootState) =>
-  state.user.currentUser?.buyerProfile?.hasGovernmentId;
 export const selectUserPersonalAddress = (state: RootState) =>
   state.user.currentUser?.buyerProfile?.address;
 
