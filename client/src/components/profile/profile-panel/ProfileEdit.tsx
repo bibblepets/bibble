@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import ProfileEditSection from './ProfileEditSection';
 import { useProfileEdit } from './hooks';
 
 const ProfileEdit = () => {
   const profile = useProfileEdit();
+  const [editValue, setEditValue] = useState('');
 
   return (
     <div className="flex flex-col gap-8">
@@ -13,6 +15,8 @@ const ProfileEdit = () => {
           key={key}
           label={value.label}
           value={value.value}
+          editValue={editValue}
+          setEditValue={setEditValue}
           editDescription={value.editDescription}
           editComponent={value.editComponent}
         />

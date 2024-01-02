@@ -3,6 +3,8 @@ import React, { useCallback, useState } from 'react';
 interface ProfileEditSectionProps {
   label: string;
   value?: string | boolean;
+  editValue: string;
+  setEditValue: (value: string) => void;
   editDescription: string;
   editComponent: React.FC;
 }
@@ -10,22 +12,35 @@ interface ProfileEditSectionProps {
 const ProfileEditSection: React.FC<ProfileEditSectionProps> = ({
   label,
   value,
+  editValue,
+  setEditValue,
   editDescription,
   editComponent: EditComponent
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const isEditingThis = editValue === label;
+  const isEditingOther = editValue !== '' && !isEditingThis;
 
   const onEdit = useCallback(() => {
-    setIsEditing(!isEditing);
-  }, [isEditing]);
+    if (isEditingThis) {
+      setEditValue('');
+    } else {
+      setEditValue(label);
+    }
+  }, [isEditingThis]);
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-row items-start justify-between">
         <div className="flex flex-col gap-1">
-          <label className="text-gray-800">{label}</label>
-          <p className="text-sm font-light text-gray-500">
-            {isEditing
+          <label className={isEditingOther ? 'text-gray-200' : 'text-gray-800'}>
+            {label}
+          </label>
+          <p
+            className={`text-sm font-light ${
+              isEditingOther ? 'text-gray-200' : 'text-gray-500'
+            }`}
+          >
+            {isEditingThis
               ? editDescription
               : value === true
                 ? 'Provided'
@@ -34,13 +49,16 @@ const ProfileEditSection: React.FC<ProfileEditSectionProps> = ({
         </div>
         <button
           onClick={onEdit}
-          className="text-sm font-medium underline text-gray-800"
+          disabled={isEditingOther}
+          className={`text-sm font-medium underline ${
+            isEditingOther ? 'text-gray-200' : 'text-gray-800'
+          }`}
         >
-          {isEditing ? 'Cancel' : 'Edit'}
+          {isEditingThis ? 'Cancel' : 'Edit'}
         </button>
       </div>
 
-      {isEditing && <EditComponent />}
+      {isEditingThis && <EditComponent />}
       <hr />
     </div>
   );

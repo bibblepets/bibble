@@ -28,7 +28,7 @@ const NameEdit = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6 mt-4 w-full">
+    <div className="flex flex-col gap-6 w-full">
       <div className="flex flex-row gap-4">
         <input
           className={`text-sm w-full p-2 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline`}
