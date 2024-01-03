@@ -206,5 +206,7 @@ export const selectUserPersonalContact = (state: RootState) =>
   state.user.currentUser?.buyerProfile?.contactNumber;
 export const selectUserPersonalAddress = (state: RootState) =>
   state.user.currentUser?.buyerProfile?.address;
+export const selectUserBio = (state: RootState) =>
+  state.user.currentUser?.buyerProfile?.bio;
 
 export default userSlice.reducer;

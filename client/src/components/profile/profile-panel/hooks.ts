@@ -9,7 +9,7 @@ import NameEdit from './edit/NameEdit';
 import EmailEdit from './edit/EmailEdit';
 import PhoneEdit from './edit/PhoneEdit';
 import AddressEdit from './edit/AddressEdit';
-import { toMaskedEmail } from '../../../utils/string';
+import { toAddressString, toMaskedEmail } from '../../../utils/string';
 
 export const useProfileEdit = () => {
   const name = useSelector(selectUserPersonalName);
@@ -40,7 +40,7 @@ export const useProfileEdit = () => {
     },
     address: {
       label: 'Address',
-      value: address,
+      value: toAddressString(address),
       editDescription:
         'Use a permanent address where you can receive snail mail.',
       editComponent: AddressEdit

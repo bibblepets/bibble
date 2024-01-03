@@ -9,12 +9,14 @@ export interface IBuyerProfile {
   favouriteListings?: IListing['_id'][];
   profilePic?: string;
   contactNumber?: string;
+  address?: IAddress;
   bio?: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface IPopulatedBuyerProfile extends Omit<IBuyerProfile, 'favouriteListings'> {
+export interface IPopulatedBuyerProfile
+  extends Omit<IBuyerProfile, 'favouriteListings'> {
   favouriteListings: IListing[];
 }
 
@@ -27,6 +29,14 @@ export interface ICreateBuyerProfileRequest extends Request {
 
 export interface IUpdateBuyerProfileRequest extends Request {
   body: Partial<ICreateBuyerProfileRequest['body']>;
+}
+
+export interface IAddress {
+  country: string;
+  streetAddress: string;
+  unit: string;
+  city: string;
+  postcode: string;
 }
 
 const buyerProfileSchema = new Schema(
@@ -56,9 +66,16 @@ const buyerProfileSchema = new Schema(
       required: false,
       validate: [validateContactNumber, 'Please enter a valid contact number.']
     },
+    address: {
+      country: { type: String, required: false },
+      streetAddress: { type: String, required: false },
+      unit: { type: String, required: false },
+      city: { type: String, required: false },
+      postcode: { type: String, required: false }
+    },
     bio: {
       type: String,
-      equired: false
+      required: false
     }
   },
   { collection: 'buyerProfiles', timestamps: true, versionKey: false }
@@ -72,5 +89,6 @@ const BuyerProfile = mongoose.model<IBuyerProfile, Model<IBuyerProfile>>(
 module.exports = BuyerProfile;
 
 function validateContactNumber(contactNumber: string): boolean {
-  return RegExp(/^\+\d{1,3}\s?\d{8,}$/).test(contactNumber);
+  console.log(contactNumber);
+  return RegExp(/^[0-9\b]+$/).test(contactNumber);
 }

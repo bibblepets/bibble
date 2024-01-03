@@ -1,10 +1,17 @@
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectUserIsLoading } from '../../../../features/userSlice';
+import {
+  selectCurrentUser,
+  selectUserIsLoading,
+  updateUser
+} from '../../../../features/userSlice';
 import SaveButton from './SaveButton';
+import { EditComponentProps } from '../ProfileEditSection';
+import { store } from '../../../../store';
 
-const EmailEdit = () => {
+const EmailEdit: React.FC<EditComponentProps> = ({ setEditValue }) => {
   const isLoading = useSelector(selectUserIsLoading);
+  const currentUser = useSelector(selectCurrentUser);
   const [email, setEmail] = useState('');
 
   const onChangeEmail = useCallback(
@@ -14,10 +21,20 @@ const EmailEdit = () => {
     []
   );
 
-  const onSave = useCallback(() => {
-    // TODO
-    alert('TODO');
-  }, []);
+  const onSave = useCallback(async () => {
+    if (!currentUser) return;
+
+    await store
+      .dispatch(
+        updateUser({
+          ...currentUser,
+          email
+        })
+      )
+      .then(() => {
+        setEditValue('');
+      });
+  }, [store, currentUser, email]);
 
   return (
     <div className="flex flex-col gap-6 w-full">

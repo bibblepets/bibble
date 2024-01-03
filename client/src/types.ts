@@ -45,6 +45,14 @@ export type User = {
   updatedAt: Date;
 };
 
+export type Address = {
+  country: string;
+  streetAddress: string;
+  unit: string;
+  city: string;
+  postcode: string;
+};
+
 export type BuyerProfile = {
   _id?: string;
   firstName: string;
@@ -52,7 +60,7 @@ export type BuyerProfile = {
   favouriteListings?: Listing[];
   profilePic?: string;
   contactNumber?: string;
-  address?: string;
+  address?: Address;
   bio?: string;
 };
 

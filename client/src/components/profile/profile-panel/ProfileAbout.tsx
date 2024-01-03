@@ -19,18 +19,21 @@ const ProfileAbout = () => {
   }, [searchParams]);
 
   return (
-    <div className="flex flex-col gap-6">
-      <h1 className="text-3xl font-bold text-gray-800">
-        About {currentUser?.buyerProfile?.firstName}
-      </h1>
-      <div>
-        <button
-          onClick={onEdit}
-          className="border border-gray-600 transition hover:bg-gray-200 rounded-full py-2 px-4 text-sm"
-        >
-          Edit profile
-        </button>
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-6">
+        <h1 className="text-3xl font-bold text-gray-800">
+          About {currentUser?.buyerProfile?.firstName}
+        </h1>
+        <div>
+          <button
+            onClick={onEdit}
+            className="border border-gray-600 transition hover:bg-gray-200 rounded-full py-2 px-4 text-sm"
+          >
+            Edit profile
+          </button>
+        </div>
       </div>
+      <p className="text-gray-800">{currentUser?.buyerProfile?.bio}</p>
     </div>
   );
 };

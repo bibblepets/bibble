@@ -1,12 +1,16 @@
 import React, { useCallback, useState } from 'react';
 
+export interface EditComponentProps {
+  setEditValue: (value: string) => void;
+}
+
 interface ProfileEditSectionProps {
   label: string;
   value?: string | boolean;
   editValue: string;
   setEditValue: (value: string) => void;
   editDescription: string;
-  editComponent: React.FC;
+  editComponent: React.FC<EditComponentProps>;
 }
 
 const ProfileEditSection: React.FC<ProfileEditSectionProps> = ({
@@ -58,7 +62,7 @@ const ProfileEditSection: React.FC<ProfileEditSectionProps> = ({
         </button>
       </div>
 
-      {isEditingThis && <EditComponent />}
+      {isEditingThis && <EditComponent setEditValue={setEditValue} />}
       <hr />
     </div>
   );

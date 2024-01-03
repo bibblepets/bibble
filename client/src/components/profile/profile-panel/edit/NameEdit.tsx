@@ -1,10 +1,17 @@
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectUserIsLoading } from '../../../../features/userSlice';
+import {
+  selectCurrentUser,
+  selectUserIsLoading,
+  updateUser
+} from '../../../../features/userSlice';
 import SaveButton from './SaveButton';
+import { store } from '../../../../store';
+import { EditComponentProps } from '../ProfileEditSection';
 
-const NameEdit = () => {
+const NameEdit: React.FC<EditComponentProps> = ({ setEditValue }) => {
   const isLoading = useSelector(selectUserIsLoading);
+  const currentUser = useSelector(selectCurrentUser);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
@@ -22,10 +29,24 @@ const NameEdit = () => {
     []
   );
 
-  const onSave = useCallback(() => {
-    // TODO
-    alert('TODO');
-  }, []);
+  const onSave = useCallback(async () => {
+    if (!currentUser) return;
+
+    await store
+      .dispatch(
+        updateUser({
+          ...currentUser,
+          buyerProfile: {
+            ...currentUser.buyerProfile,
+            firstName,
+            lastName
+          }
+        })
+      )
+      .then(() => {
+        setEditValue('');
+      });
+  }, [store, currentUser, firstName, lastName]);
 
   return (
     <div className="flex flex-col gap-6 w-full">
@@ -46,7 +67,11 @@ const NameEdit = () => {
         />
       </div>
 
-      <SaveButton onSave={onSave} isLoading={isLoading} />
+      <SaveButton
+        onSave={onSave}
+        isLoading={isLoading}
+        disabled={!firstName || !lastName}
+      />
     </div>
   );
 };
