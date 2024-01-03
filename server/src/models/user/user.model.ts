@@ -13,6 +13,7 @@ import {
   IPopulatedBusinessProfile,
   IUpdateBusinessProfileRequest
 } from './business-profile.model';
+import { getMediaUrl, userBucketName } from '../../services/s3.service';
 
 export interface IUser {
   _id: Schema.Types.ObjectId;
@@ -32,6 +33,7 @@ export interface IPopulatedUser
 
 interface IUserMethods {
   isCorrectPassword(password: string): boolean;
+  populateProfilePic(): Promise<IBuyerProfile>;
   populateAll(): Promise<IPopulatedUser>;
 }
 
@@ -63,6 +65,13 @@ export interface IUpdateUserRequest extends IUserRequest {
     }
   > & {
     user: IPopulatedUser;
+  };
+}
+
+export interface IUpdateProfilePictureRequest extends IUserRequest {
+  body: {
+    user: IPopulatedUser;
+    profilePic: string;
   };
 }
 
@@ -137,11 +146,24 @@ UserSchema.method('isCorrectPassword', function (password: string) {
   return compareSync(password, this.password);
 });
 
+UserSchema.method('populateProfilePic', async function () {
+  const docCopy: IPopulatedUser = this.toObject();
+
+  if (docCopy.buyerProfile && docCopy.buyerProfile.profilePic) {
+    docCopy.buyerProfile.profilePic.url = await getMediaUrl(
+      docCopy.buyerProfile.profilePic.name,
+      userBucketName
+    );
+  }
+
+  return docCopy;
+});
+
 UserSchema.method('populateAll', async function () {
   return await this.populate([
     { path: 'buyerProfile', populate: { path: 'favouriteListings' } },
     { path: 'businessProfile' }
-  ]);
+  ]).then(async (user) => await user.populateProfilePic());
 });
 
 const User = mongoose.model<IUser, UserModel>('User', UserSchema);

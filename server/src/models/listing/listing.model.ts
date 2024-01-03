@@ -7,7 +7,7 @@ import {
   IPopulatedAnimal,
   IUpdateAnimalRequest
 } from './animal/animal.model';
-import { getMediaUrl } from '../../services/s3.service';
+import { getMediaUrl, listingBucketName } from '../../services/s3.service';
 import { IMedia, IPopulatedMedia } from './media.model';
 
 const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.
@@ -205,7 +205,7 @@ listingSchema.method('populateMedia', async function () {
 
   docCopy.media = await Promise.all(
     docCopy.media.map(async (media) => {
-      media.url = await getMediaUrl(media.name);
+      media.url = await getMediaUrl(media.name, listingBucketName);
       return media;
     })
   );

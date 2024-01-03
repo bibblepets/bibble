@@ -14,7 +14,7 @@ import {
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
 import { IMedia } from '../models/listing/media.model';
-import { putMedia } from '../services/s3.service';
+import { listingBucketName, putMedia } from '../services/s3.service';
 
 require('../models/country.model');
 const {
@@ -291,7 +291,7 @@ export const updateListingMediaById = async (
       media = mediaNames.map((name) => ({ name, url: undefined }));
     }
 
-    const uploadedMedia = await putMedia(id, files, media);
+    const uploadedMedia = await putMedia(id, files, media, listingBucketName);
 
     // Update pet listing
     const updatedListing = await Listing.findByIdAndUpdate(

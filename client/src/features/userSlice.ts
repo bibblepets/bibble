@@ -4,7 +4,7 @@ import { RootState, store } from '../store';
 import {
   BusinessProfile,
   BuyerProfile,
-  Listing,
+  Media,
   StatusType,
   User
 } from '../types';
@@ -108,6 +108,26 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const updateProfilePicture = createAsyncThunk(
+  '/userSlice/updateProfilePicture',
+  async (profilePic: Media) => {
+    const formData = new FormData();
+    profilePic.name && formData.append('profilePic', profilePic.name);
+    profilePic.file && formData.append('data', profilePic.file);
+
+    return await axios
+      .put('/api/user/profile-picture', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
 export const userSlice = createSlice({
   name: 'authentication',
   initialState,
@@ -182,6 +202,19 @@ export const userSlice = createSlice({
         state.message = action.payload.message;
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.status = 'ERROR';
+        state.error = action.error.message;
+      })
+      .addCase(updateProfilePicture.pending, (state) => {
+        state.status = 'LOADING';
+        state.error = undefined;
+      })
+      .addCase(updateProfilePicture.fulfilled, (state, action) => {
+        state.status = 'SUCCESS';
+        state.currentUser = action.payload.user;
+        state.message = action.payload.message;
+      })
+      .addCase(updateProfilePicture.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       });

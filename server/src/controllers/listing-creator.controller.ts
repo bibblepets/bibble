@@ -20,7 +20,7 @@ import {
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
 import { BibbleError, FieldAssertionError } from '../errors/errors.class';
-import { putMedia } from '../services/s3.service';
+import { listingBucketName, putMedia } from '../services/s3.service';
 import { IMedia } from '../models/listing/media.model';
 
 const {
@@ -247,7 +247,7 @@ export const updateMedia = async (req: IUpdateMediaRequest, res: Response) => {
       media = mediaNames.map((name) => ({ name, url: undefined }));
     }
 
-    const uploadedMedia = await putMedia(_id, files, media);
+    const uploadedMedia = await putMedia(_id, files, media, listingBucketName);
 
     const listingCreator = await ListingCreator.findByIdAndUpdate(
       _id,

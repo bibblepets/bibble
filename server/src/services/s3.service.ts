@@ -14,10 +14,12 @@ import { IMedia } from '../models/listing/media.model';
 
 dotenv.config();
 
-const awsBucketName = process.env.AWS_BUCKET_NAME;
 const awsBucketRegion = process.env.AWS_BUCKET_REGION;
 const awsAccessKey = process.env.AWS_ACCESS_KEY;
 const awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+
+export const listingBucketName = process.env.LISTING_BUCKET_NAME;
+export const userBucketName = process.env.USER_BUCKET_NAME;
 
 if (!awsAccessKey || !awsSecretAccessKey || !awsBucketRegion) {
   throw new Error('AWS credentials or region are not defined');
@@ -32,10 +34,19 @@ const s3Client = new S3Client({
 });
 
 export const putMedia = async (
-  listingId: Schema.Types.ObjectId | string,
-  files: Express.Multer.File[],
-  media?: Omit<IMedia, '_id'>[]
+  id: Schema.Types.ObjectId | string,
+  files: Express.Multer.File | Express.Multer.File[],
+  media?: Omit<IMedia, '_id'> | Omit<IMedia, '_id'>[],
+  bucketName?: string
 ) => {
+  if (!(files instanceof Array)) {
+    files = [files];
+  }
+
+  if (media && !(media instanceof Array)) {
+    media = [media];
+  }
+
   let clientMediaNames: Array<string | undefined> | undefined;
   let s3MediaNames: Array<string | undefined> | undefined;
   const listingMedia: Omit<IMedia, '_id'>[] = [];
@@ -44,8 +55,8 @@ export const putMedia = async (
     clientMediaNames = media.map((media) => media.name);
 
     const listCommand = new ListObjectsV2Command({
-      Bucket: awsBucketName,
-      Prefix: listingId.toString() + '/',
+      Bucket: bucketName,
+      Prefix: id.toString() + '/',
       MaxKeys: 20
     });
 
@@ -60,7 +71,7 @@ export const putMedia = async (
     if (Array.isArray(deleteMediaNames) && deleteMediaNames.length > 0) {
       for (const deleteMediaName of deleteMediaNames) {
         const deleteCommand = new DeleteObjectCommand({
-          Bucket: awsBucketName,
+          Bucket: bucketName,
           Key: deleteMediaName
         });
 
@@ -69,15 +80,16 @@ export const putMedia = async (
     }
 
     clientMediaNames.forEach((clientMediaName) => {
-      listingMedia.push({ name: clientMediaName!, url: undefined });
+      clientMediaName &&
+        listingMedia.push({ name: clientMediaName, url: undefined });
     });
   }
 
   for (const file of files) {
-    const name = `${listingId.toString()}/${generateName()}`;
+    const name = `${id.toString()}/${generateName()}`;
 
     const putCommand = new PutObjectCommand({
-      Bucket: awsBucketName,
+      Bucket: bucketName,
       Key: name,
       Body: file.buffer
     });
@@ -90,9 +102,9 @@ export const putMedia = async (
   return listingMedia;
 };
 
-export const getMediaUrl = async (mediaName: string) => {
+export const getMediaUrl = async (mediaName: string, bucketName?: string) => {
   const getCommand = new GetObjectCommand({
-    Bucket: awsBucketName,
+    Bucket: bucketName,
     Key: mediaName
   });
 

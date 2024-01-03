@@ -1,10 +1,7 @@
 import { HeartIcon, ShareIcon } from '@heroicons/react/24/solid';
 import { Listing } from '../../../types';
 import { useSelector } from 'react-redux';
-import {
-  selectCurrentUser,
-  updateUser
-} from '../../../features/userSlice';
+import { selectCurrentUser, updateUser } from '../../../features/userSlice';
 import { store } from '../../../store';
 
 interface DetailsHeaderProps {
@@ -19,10 +16,11 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
     const favourites = currentUser.buyerProfile.favouriteListings;
 
     if (favourites && favourites.length > 0) {
-      return favourites.filter((favourite) => {
-        console.log(favourite._id, listing._id);
-        return favourite._id === listing._id
-      }).length > 0;
+      return (
+        favourites.filter((favourite) => {
+          return favourite._id === listing._id;
+        }).length > 0
+      );
     }
 
     return false;

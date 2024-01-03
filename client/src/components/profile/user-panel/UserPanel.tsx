@@ -1,5 +1,8 @@
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../features/userSlice';
+import {
+  selectCurrentUser,
+  updateProfilePicture
+} from '../../../features/userSlice';
 import paw from '../../../../public/images/paw.jpeg';
 import { CameraIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { selectMyListings } from '../../../features/listingSlice';
@@ -9,6 +12,8 @@ import { useSearchParams } from 'react-router-dom';
 import { useCallback } from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
 import toast from 'react-hot-toast';
+import { store } from '../../../store';
+import { Media } from '../../../types';
 
 const UserPanel = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -19,7 +24,14 @@ const UserPanel = () => {
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       if (acceptedFiles?.length === 1) {
-        alert('Success!');
+        const file = acceptedFiles[0];
+
+        store.dispatch(
+          updateProfilePicture({
+            file,
+            url: URL.createObjectURL(file)
+          } as Media)
+        );
       } else if (acceptedFiles?.length > 1) {
         toast.error('You can only upload one image at a time.');
       }
@@ -43,8 +55,8 @@ const UserPanel = () => {
       <section className="w-full lg:w-[440px] p-12">
         <div className="relative flex justify-center">
           <img
-            className="rounded-full w-56 h-56 border"
-            src={currentUser?.buyerProfile?.profilePic || paw}
+            className="object-cover rounded-full w-56 h-56 border"
+            src={currentUser?.buyerProfile?.profilePic?.url || paw}
             alt="profile-pic"
           />
           <div
@@ -71,8 +83,8 @@ const UserPanel = () => {
           <div className="flex flex-col items-center w-[200px] my-4">
             <div className="relative">
               <img
-                className="rounded-full w-28 h-28 border"
-                src={currentUser?.buyerProfile?.profilePic || paw}
+                className="object-cover rounded-full w-28 h-28 border"
+                src={currentUser?.buyerProfile?.profilePic?.url || paw}
                 alt="profile-pic"
               />
               {currentUser?.businessProfile &&

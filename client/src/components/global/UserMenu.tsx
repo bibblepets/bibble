@@ -119,8 +119,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
           className="border rounded-2xl shadow-md hover:scale-95 active:scale-95 transition duration-300"
         >
           <img
-            className="h-8 w-8 rounded-full"
-            src={currentUser?.buyerProfile?.profilePic || paw}
+            className="object-cover h-8 w-8 rounded-full"
+            src={currentUser?.buyerProfile?.profilePic?.url || paw}
           />
         </button>
       </div>

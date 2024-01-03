@@ -58,7 +58,7 @@ export type BuyerProfile = {
   firstName: string;
   lastName: string;
   favouriteListings?: Listing[];
-  profilePic?: string;
+  profilePic?: Media;
   contactNumber?: string;
   address?: Address;
   bio?: string;

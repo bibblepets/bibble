@@ -1,13 +1,14 @@
 import { Request } from 'express';
 import mongoose, { Model, Schema } from 'mongoose';
 import { IListing } from '../listing/listing.model';
+import { IMedia, IPopulatedMedia } from '../listing/media.model';
 
 export interface IBuyerProfile {
   _id: Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
   favouriteListings?: IListing['_id'][];
-  profilePic?: string;
+  profilePic?: IMedia['_id'];
   contactNumber?: string;
   address?: IAddress;
   bio?: string;
@@ -16,8 +17,9 @@ export interface IBuyerProfile {
 }
 
 export interface IPopulatedBuyerProfile
-  extends Omit<IBuyerProfile, 'favouriteListings'> {
+  extends Omit<IBuyerProfile, 'favouriteListings' | 'profilePic'> {
   favouriteListings: IListing[];
+  profilePic?: IPopulatedMedia;
 }
 
 // export type HydratedDocumentBuyerProfile = mongoose.HydratedDocument<IBuyerProfile>;
@@ -58,8 +60,10 @@ const buyerProfileSchema = new Schema(
       }
     ],
     profilePic: {
-      type: String,
-      required: false
+      name: {
+        type: String,
+        required: [true, 'Please specify the name of this media asset.']
+      }
     },
     contactNumber: {
       type: String,
