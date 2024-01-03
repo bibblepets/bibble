@@ -100,18 +100,21 @@ const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
       <div className="grid grid-cols-2 gap-2">
         {/* Cover Image */}
         <div className="w-full aspect-square overflow-hidden rounded-2xl relative">
-          <img src={listing.media[0]?.url} className="object-cover w-full" />
+          <img
+            src={listing.media[0]?.url}
+            className="object-cover w-full h-full"
+          />
         </div>
 
         {/* Grid of 4 Images */}
         <div className="grid grid-cols-2 gap-2">
-          {listing.media.slice(0, 4).map((img, i) => {
+          {listing.media.slice(1, 5).map((img, i) => {
             return (
               <div
                 key={i}
                 className="w-full aspect-square overflow-hidden rounded-2xl relative"
               >
-                <img src={img.url} className="object-cover w-full" />
+                <img src={img.url} className="object-cover w-full h-full" />
               </div>
             );
           })}
