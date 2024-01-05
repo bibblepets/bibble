@@ -12,10 +12,6 @@ const SERVER_PORT = process.env.SERVER_PORT;
 app.use(express.json());
 app.use(cookieParser());
 
-app.get('/', (req, res) => {
-  res.send('Hello world!');
-});
-
 app.listen(SERVER_PORT, () => {
   console.log(
     `⚡️[server]: Bibble User API is alive at http://localhost:${SERVER_PORT}`

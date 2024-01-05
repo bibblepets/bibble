@@ -17,11 +17,11 @@ const SERVER_PORT = process.env.SERVER_PORT;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use('/kennel/auth', authRouter);
-app.use('/kennel/user', userRouter);
-app.use('/kennel/listings', listingRouter);
-app.use('/kennel/listing-creator', listingCreatorRouter);
-app.use('/kennel/developer', developerRouter);
+app.use('/auth', authRouter);
+app.use('/user', userRouter);
+app.use('/listings', listingRouter);
+app.use('/listing-creator', listingCreatorRouter);
+app.use('/developer', developerRouter);
 
 app.listen(SERVER_PORT, () => {
   console.log(
