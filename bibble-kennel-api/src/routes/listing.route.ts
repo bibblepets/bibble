@@ -8,7 +8,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 /**
- * @route POST /api/listings
+ * @route POST /kennel/listings
  * @desc Create a new listing
  * @access Private
  */
@@ -20,35 +20,35 @@ router.post(
 );
 
 /**
- * @route GET /api/listings
+ * @route GET /kennel/listings
  * @desc Get all listings
  * @access Public
  */
 router.get('/self', AuthMiddleware.checkAuth, ListingController.getMyListings);
 
 /**
- * @route GET /api/listings/species/:species
+ * @route GET /kennel/listings/species/:species
  * @desc Get all listings for a specific species
  * @access Public
  */
 router.get('/species/:species', ListingController.getAllListingsBySpecies);
 
 /**
- * @route GET /api/listings/:id
+ * @route GET /kennel/listings/:id
  * @desc Get a listing by ID
  * @access Public
  */
 router.get('/:id', ListingController.getListingById);
 
 /**
- * @route GET /api/listings
+ * @route GET /kennel/listings
  * @desc Get all listings
  * @access Public
  */
 router.get('/', ListingController.getAllListings);
 
 /**
- * @route PUT /api/listings/update/:id
+ * @route PUT /kennel/listings/update/:id
  * @desc Update a listing by ID
  * @access Private
  */
@@ -60,7 +60,7 @@ router.put(
 );
 
 /**
- * @route PUT /api/listings/update-media/:id
+ * @route PUT /kennel/listings/update-media/:id
  * @desc Update a listing's media by ID
  * @access Private
  */
@@ -73,7 +73,7 @@ router.put(
 );
 
 /**
- * @route DELETE /api/listings/:id
+ * @route DELETE /kennel/listings/:id
  * @desc Delete a listing by ID
  * @access Private
  */

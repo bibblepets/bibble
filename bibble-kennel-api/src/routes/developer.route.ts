@@ -4,35 +4,35 @@ import * as DeveloperController from '../controllers/developer.controller';
 const router = Router();
 
 /**
- * @route GET /api/developer/breeds/:species
+ * @route GET /kennel/developer/breeds/:species
  * @desc Get all breeds of a given species
  * @access Public
  */
 router.get('/breeds/:species', DeveloperController.getBreedsBySpecies);
 
 /**
- * @route GET /api/developer/vaccines/:species
+ * @route GET /kennel/developer/vaccines/:species
  * @desc Get all vaccines of a given species
  * @access Public
  */
 router.get('/vaccines/:species', DeveloperController.getVaccinesBySpecies);
 
 /**
- * @route GET /api/developer/countries
+ * @route GET /kennel/developer/countries
  * @desc Get all countries of origin
  * @access Public
  */
 router.get('/countries', DeveloperController.getAllCountriesOfOrigin);
 
 /**
- * @route GET /api/developer/hair-coats/:species
+ * @route GET /kennel/developer/hair-coats/:species
  * @desc Get all hair coats of a given species
  * @access Public
  */
 router.get('/hair-coats/:species', DeveloperController.getHairCoatsBySpecies);
 
 /**
- * @route GET /api/developer/legal-tags/:species
+ * @route GET /kennel/developer/legal-tags/:species
  * @desc Get all legal tags of a given species
  * @access Public
  */

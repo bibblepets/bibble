@@ -8,21 +8,21 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 /**
- * @route GET /api/user
+ * @route GET /kennel/user
  * @desc Get user profile
  * @access Private
  */
 router.get('/', AuthMiddleware.checkAuth, UserController.getUser);
 
 /**
- * @route PUT /api/user
+ * @route PUT /kennel/user
  * @desc Update user profile
  * @access Private
  */
 router.put('/', AuthMiddleware.checkAuth, UserController.updateUser);
 
 /**
- * @route PUT /api/user/profile-picture
+ * @route PUT /kennel/user/profile-picture
  * @desc Update user profile picture
  * @access Private
  */

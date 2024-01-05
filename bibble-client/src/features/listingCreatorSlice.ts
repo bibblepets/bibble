@@ -32,7 +32,7 @@ export const fetchListingCreatorById = createAsyncThunk(
   '/listingCreator/fetchListingCreatorById',
   async (listingId: string) => {
     return await axios
-      .get(`/api/listing-creator/${listingId}`)
+      .get(`/kennel/listing-creator/${listingId}`)
       .then((response) => {
         return response.data;
       })
@@ -50,7 +50,7 @@ export const updateListingCreatorById = createAsyncThunk(
       state.listingCreator;
 
     return await axios
-      .put(`/api/listing-creator/${_id}`, {
+      .put(`/kennel/listing-creator/${_id}`, {
         stage,
         biology,
         biography,
@@ -75,7 +75,7 @@ export const deleteListingCreatorById = createAsyncThunk(
     const { _id } = state.listingCreator;
 
     return await axios
-      .delete(`/api/listing-creator/${_id}`)
+      .delete(`/kennel/listing-creator/${_id}`)
       .then((response) => {
         return response.data;
       })
@@ -89,7 +89,7 @@ export const createListingCreator = createAsyncThunk(
   '/listingCreator/createListingCreator',
   async (payload: { currentUser: User; saleType: SaleType }) => {
     return await axios
-      .post('/api/listing-creator', {
+      .post('/kennel/listing-creator', {
         saleType: payload.saleType,
         lister: payload.currentUser._id
       })
@@ -109,7 +109,7 @@ export const updateBiology = createAsyncThunk(
     const { species, breeds } = state.listingCreator.biology || {};
 
     return await axios
-      .post('/api/listing-creator/biology', {
+      .post('/kennel/listing-creator/biology', {
         _id: state.listingCreator._id,
         stage: 1,
         species,
@@ -132,7 +132,7 @@ export const updateBiography = createAsyncThunk(
       state.listingCreator.biography || {};
 
     return await axios
-      .post('/api/listing-creator/biography', {
+      .post('/kennel/listing-creator/biography', {
         _id: state.listingCreator._id,
         stage: 2,
         name,
@@ -158,7 +158,7 @@ export const updateMedical = createAsyncThunk(
       state.listingCreator.medical || {};
 
     return await axios
-      .post('/api/listing-creator/medical', {
+      .post('/kennel/listing-creator/medical', {
         _id: state.listingCreator._id,
         stage: 3,
         size,
@@ -182,7 +182,7 @@ export const updateLegal = createAsyncThunk(
     const { avsLicenseNumber, legalTags } = state.listingCreator.legal || {};
 
     return await axios
-      .post('/api/listing-creator/legal', {
+      .post('/kennel/listing-creator/legal', {
         _id: state.listingCreator._id,
         stage: 4,
         avsLicenseNumber,
@@ -214,7 +214,7 @@ export const updateMedia = createAsyncThunk(
     });
 
     return await axios
-      .post('/api/listing-creator/media', formData, {
+      .post('/kennel/listing-creator/media', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then((response) => {
@@ -233,7 +233,7 @@ export const updatePrice = createAsyncThunk(
     const price = state.listingCreator.price || 0;
 
     return await axios
-      .post('/api/listing-creator/price', {
+      .post('/kennel/listing-creator/price', {
         _id: state.listingCreator._id,
         stage: 6,
         price
@@ -253,7 +253,7 @@ export const createListing = createAsyncThunk(
     const state = getState() as RootState;
 
     return await axios
-      .post('/api/listing-creator/submit', {
+      .post('/kennel/listing-creator/submit', {
         listingCreatorId: state.listingCreator._id
       })
       .then((response) => {

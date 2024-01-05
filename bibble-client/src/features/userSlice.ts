@@ -27,7 +27,7 @@ axios.defaults.withCredentials = true;
 
 export const getUser = createAsyncThunk('/userSlice/getUser', async () => {
   return await axios
-    .get('/api/user')
+    .get('/kennel/user')
     .then((response) => {
       return response.data;
     })
@@ -70,7 +70,7 @@ export const loginUser = createAsyncThunk(
     >
   ) => {
     return await axios
-      .post('api/auth/login', credentials)
+      .post('/kennel/auth/login', credentials)
       .then((response) => {
         return response.data;
       })
@@ -84,7 +84,7 @@ export const logoutUser = createAsyncThunk(
   '/userSlice/logoutUser',
   async () => {
     return await axios
-      .post('/api/auth/logout')
+      .post('/kennel/auth/logout')
       .then((response) => {
         return response.data;
       })
@@ -98,7 +98,7 @@ export const updateUser = createAsyncThunk(
   '/userSlice/updateUser',
   async (user: Partial<User>) => {
     return await axios
-      .put('/api/user', user)
+      .put('/kennel/user', user)
       .then((response) => {
         return response.data;
       })
@@ -116,7 +116,7 @@ export const updateProfilePicture = createAsyncThunk(
     profilePic.file && formData.append('data', profilePic.file);
 
     return await axios
-      .put('/api/user/profile-picture', formData, {
+      .put('/kennel/user/profile-picture', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then((response) => {

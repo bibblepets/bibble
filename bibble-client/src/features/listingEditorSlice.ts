@@ -28,7 +28,7 @@ export const fetchListingById = createAsyncThunk(
   'listingEditor/fetchListingById',
   async (id: string) => {
     return await axios
-      .get(`/api/listings/${id}`)
+      .get(`/kennel/listings/${id}`)
       .then((response) => {
         return response.data;
       })
@@ -45,7 +45,7 @@ export const updateListingById = createAsyncThunk(
     const { listing } = state.listingEditor;
 
     return await axios
-      .put(`/api/listings/update/${listing?._id}`, listing)
+      .put(`/kennel/listings/update/${listing?._id}`, listing)
       .then((response) => {
         return response.data;
       })
@@ -70,7 +70,7 @@ export const updateListingMediaById = createAsyncThunk(
     });
 
     return await axios
-      .put(`/api/listings/update-media/${listing?._id}`, formData, {
+      .put(`/kennel/listings/update-media/${listing?._id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then((response) => {
