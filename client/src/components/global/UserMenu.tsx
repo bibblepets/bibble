@@ -42,7 +42,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
 
   if (!currentUser) {
     return (
-      <>
+      <div className="relative">
         <div className="flex justify-end w-64">
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -55,7 +55,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
         {isOpen && (
           <div
             ref={dropdownRef}
-            className="absolute top-full right-10 mt-2 w-48 rounded-md shadow-lg bg-white transition duration-300"
+            className="absolute top-10 right-0 mt-2 w-48 rounded-md shadow-lg bg-white transition duration-300"
           >
             <div
               role="menu"
@@ -92,12 +92,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
             </div>
           </div>
         )}
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="relative">
       <div className="flex flex-row justify-end items-center gap-4 w-64">
         <a
           href="/listing"
@@ -128,7 +128,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="absolute top-full right-10 mt-2 w-48 rounded-md shadow-lg bg-white transition duration-300"
+          className="absolute top-10 right-0 mt-2 w-48 rounded-md shadow-lg bg-white transition duration-300"
         >
           <div
             role="menu"
@@ -178,7 +178,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
