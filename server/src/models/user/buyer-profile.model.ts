@@ -1,21 +1,25 @@
 import { Request } from 'express';
 import mongoose, { Model, Schema } from 'mongoose';
 import { IListing } from '../listing/listing.model';
+import { IMedia, IPopulatedMedia } from '../listing/media.model';
 
 export interface IBuyerProfile {
   _id: Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
   favouriteListings?: IListing['_id'][];
-  profilePic?: string;
+  profilePic?: IMedia['_id'];
   contactNumber?: string;
+  address?: IAddress;
   bio?: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface IPopulatedBuyerProfile extends Omit<IBuyerProfile, 'favouriteListings'> {
+export interface IPopulatedBuyerProfile
+  extends Omit<IBuyerProfile, 'favouriteListings' | 'profilePic'> {
   favouriteListings: IListing[];
+  profilePic?: IPopulatedMedia;
 }
 
 // export type HydratedDocumentBuyerProfile = mongoose.HydratedDocument<IBuyerProfile>;
@@ -27,6 +31,14 @@ export interface ICreateBuyerProfileRequest extends Request {
 
 export interface IUpdateBuyerProfileRequest extends Request {
   body: Partial<ICreateBuyerProfileRequest['body']>;
+}
+
+export interface IAddress {
+  country: string;
+  streetAddress: string;
+  unit: string;
+  city: string;
+  postcode: string;
 }
 
 const buyerProfileSchema = new Schema(
@@ -48,17 +60,26 @@ const buyerProfileSchema = new Schema(
       }
     ],
     profilePic: {
-      type: String,
-      required: false
+      name: {
+        type: String,
+        required: [true, 'Please specify the name of this media asset.']
+      }
     },
     contactNumber: {
       type: String,
       required: false,
       validate: [validateContactNumber, 'Please enter a valid contact number.']
     },
+    address: {
+      country: { type: String, required: false },
+      streetAddress: { type: String, required: false },
+      unit: { type: String, required: false },
+      city: { type: String, required: false },
+      postcode: { type: String, required: false }
+    },
     bio: {
       type: String,
-      equired: false
+      required: false
     }
   },
   { collection: 'buyerProfiles', timestamps: true, versionKey: false }
@@ -72,5 +93,6 @@ const BuyerProfile = mongoose.model<IBuyerProfile, Model<IBuyerProfile>>(
 module.exports = BuyerProfile;
 
 function validateContactNumber(contactNumber: string): boolean {
-  return RegExp(/^\+\d{1,3}\s?\d{8,}$/).test(contactNumber);
+  console.log(contactNumber);
+  return RegExp(/^[0-9\b]+$/).test(contactNumber);
 }

@@ -4,7 +4,7 @@ import { IBreed } from './animal/breed.model';
 import { IVaccine } from './animal/vaccine.model';
 import { ICountry } from '../country.model';
 import { validateAVSLicenseNumber } from './animal/animal.model';
-import { getMediaUrl } from '../../services/s3.service';
+import { getMediaUrl, listingBucketName } from '../../services/s3.service';
 import { IMedia } from './media.model';
 
 const { saleTypes }: { saleTypes: string[] } = require('./listing.model');
@@ -69,7 +69,7 @@ export interface IPopulatedListingCreator
   medical?: Omit<IMedical, 'vaccines'> & {
     vaccines?: IVaccine[];
   };
-  media?: Omit<IMedia, '_id'>[]
+  media?: Omit<IMedia, '_id'>[];
 }
 
 interface IListingCreatorMethods {
@@ -305,10 +305,10 @@ listingCreatorSchema.method('populateMedia', async function () {
   if (Array.isArray(docCopy.media)) {
     docCopy.media = await Promise.all(
       docCopy.media.map(async (media) => {
-        media.url = await getMediaUrl(media.name);
+        media.url = await getMediaUrl(media.name, listingBucketName);
         return media;
       })
-    )
+    );
 
     return docCopy;
   }

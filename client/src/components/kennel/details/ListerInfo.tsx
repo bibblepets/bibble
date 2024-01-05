@@ -29,7 +29,7 @@ const ListerInfo: React.FC<ListerInfoProps> = ({ listing }) => {
               <img
                 src={
                   listing.lister.businessProfile?.businessPic ||
-                  listing.lister.buyerProfile?.profilePic ||
+                  listing.lister.buyerProfile?.profilePic?.url ||
                   paw
                 }
                 className="object-cover w-20 h-20 rounded-full"

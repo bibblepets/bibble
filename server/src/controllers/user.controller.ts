@@ -3,10 +3,12 @@ import { BusinessProfileModel } from '../models/user/business-profile.model';
 import { BuyerProfileModel } from '../models/user/buyer-profile.model';
 import {
   IGetUserRequest,
+  IUpdateProfilePictureRequest,
   IUpdateUserRequest,
   UserModel
 } from '../models/user/user.model';
 import { handleError } from '../utils/util';
+import { putMedia, userBucketName } from '../services/s3.service';
 
 const User: UserModel = require('../models/user/user.model');
 const BuyerProfile: BuyerProfileModel = require('../models/user/buyer-profile.model');
@@ -90,6 +92,55 @@ export const updateUser = async (req: IUpdateUserRequest, res: Response) => {
     return res.json({
       user: populatedUser,
       message: 'User updated successfully.'
+    });
+  } catch (error: any) {
+    return handleError(res, error);
+  }
+};
+
+export const updateProfilePicture = async (
+  req: IUpdateProfilePictureRequest,
+  res: Response
+) => {
+  try {
+    const { user, profilePic } = req.body;
+    const file = req.file as Express.Multer.File;
+
+    const media = { name: profilePic, url: undefined };
+
+    const uploadedMedia = await putMedia(
+      user.buyerProfile._id,
+      file,
+      media,
+      userBucketName
+    );
+    console.log(uploadedMedia);
+
+    console.log('Updating buyer profile...');
+    const updatedBuyerProfile = await BuyerProfile.findByIdAndUpdate(
+      user.buyerProfile._id,
+      { profilePic: uploadedMedia[0] },
+      { new: true }
+    );
+
+    if (!updatedBuyerProfile) {
+      return res.status(404).json({ message: 'Buyer profile not found.' });
+    }
+
+    console.log('Updating user...');
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      {
+        buyerProfile: updatedBuyerProfile._id
+      },
+      { new: true }
+    );
+
+    const populatedUser = await updatedUser?.populateAll();
+
+    return res.status(200).json({
+      user: populatedUser,
+      message: 'Profile picture updated successfully.'
     });
   } catch (error: any) {
     return handleError(res, error);

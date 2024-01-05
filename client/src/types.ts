@@ -45,13 +45,22 @@ export type User = {
   updatedAt: Date;
 };
 
+export type Address = {
+  country: string;
+  streetAddress: string;
+  unit: string;
+  city: string;
+  postcode: string;
+};
+
 export type BuyerProfile = {
   _id?: string;
   firstName: string;
   lastName: string;
   favouriteListings?: Listing[];
-  profilePic?: string;
+  profilePic?: Media;
   contactNumber?: string;
+  address?: Address;
   bio?: string;
 };
 

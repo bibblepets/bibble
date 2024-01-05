@@ -91,11 +91,11 @@ describe('Business Profile model (CREATE)', () => {
     expect(savedBusinessProfile.bibbleTier).to.equal(
       businessProfileData.bibbleTier
     );
-    
+
     expect(savedBusinessProfile.businessName).to.equal(
       businessProfileData.businessName
     );
-    
+
     expect(savedBusinessProfile.businessAddress).to.equal(
       businessProfileData.businessAddress
     );

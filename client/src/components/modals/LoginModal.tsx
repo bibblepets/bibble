@@ -5,7 +5,7 @@ import logo from '/images/logo-icon.png';
 import {
   loginUser,
   resetStatus,
-  selectAuthStatus
+  selectUserStatus
 } from '../../features/userSlice';
 import {
   closeLoginModal,
@@ -30,7 +30,7 @@ const LoginModal = () => {
   const isOpen = useSelector(selectIsLoginModalOpen);
   const email = useSelector(selectLoginModalEmail);
   const password = useSelector(selectLoginModalPassword);
-  const status = useSelector(selectAuthStatus);
+  const status = useSelector(selectUserStatus);
   const title = useSelector(selectLoginModalTitle);
 
   useEffect(() => {

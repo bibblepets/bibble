@@ -39,7 +39,7 @@ const businessProfileSchema = new Schema(
         values: bibbleTiers,
         message: 'Bibble Tier of `{VALUE}` is invalid.'
       },
-      default: 'Basic',
+      default: 'Basic'
     },
     businessName: {
       type: String,

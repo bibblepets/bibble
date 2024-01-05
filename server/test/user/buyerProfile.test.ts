@@ -34,7 +34,7 @@ describe('Buyer Profile model (CREATE)', () => {
       firstName: 'John',
       lastName: 'Doe',
       bio: 'I am a buyer',
-      profilePic: 'https://www.google.com',
+      profilePic: new Schema.Types.ObjectId('https://www.google.com'),
       contactNumber: '+0012345678',
       favouriteListings: []
     };
@@ -253,7 +253,7 @@ describe('Buyer Profile model (UPDATE)', () => {
 
   it('+ Update Buyer Profile (only `profilePic`)', async function () {
     const buyerProfileData: IUpdateBuyerProfileRequest['body'] = {
-      profilePic: 'https://www.google.com'
+      profilePic: new Schema.Types.ObjectId('https://www.google.com')
     };
 
     const updatedBuyerProfile = await BuyerProfile.findByIdAndUpdate(
@@ -316,7 +316,7 @@ describe('Buyer Profile model (UPDATE)', () => {
       firstName: 'Jane',
       lastName: 'Smith',
       bio: 'I am a buyer',
-      profilePic: 'https://www.google.com',
+      profilePic: new Schema.Types.ObjectId('https://www.google.com'),
       contactNumber: '+0012345678',
       favouriteListings: []
     };
