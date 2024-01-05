@@ -2,64 +2,62 @@ version: '3'
 
 services:
   bibble-client:
-    image: client:bibble
-    container_name: client
+    image: bibble-client
+    container_name: bibble-client
     build:
-      context: ./client
+      context: ./bibble-client
     ports:
       - '3000:3000'
     volumes:
-      - ./client:/usr/src/app # Mount the client source code directory as a volume
-      - /usr/src/app/node_modules # Mount the node_modules ONLY IN CONTAINER
+      - ./bibble-client:/usr/src/app
+      - /usr/src/app/node_modules
     networks:
       - bibble-network
-    depends_on:
-      - bibble-server
 
-  bibble-server:
-    image: server:bibble
-    container_name: server
+  bibble-kennel-api:
+    image: bibble-kennel-api
+    container_name: bibble-kennel-api
     build:
-      context: ./server
+      context: ./bibble-kennel-api
     ports:
       - '8000:8000'
     logging:
       driver: json-file
     volumes:
-      - ./server:/usr/src/app # Mount the server source code directory as a volume
-      - /usr/src/app/node_modules # Mount the node_modules ONLY IN CONTAINER
+      - ./bibble-kennel-api:/usr/src/app
+      - /usr/src/app/node_modules
     networks:
       - bibble-network
     depends_on:
-      - mongo
+      - bibble-kennel-mongo
 
-  mongo:
+  bibble-kennel-mongo:
     image: mongo:latest
-    container_name: mongo
+    container_name: bibble-kennel-mongo
     ports:
       - '27017:27017'
     volumes:
-      - mongo-data:/data/db
+      - bibble-kennel-mongo-data:/data/db
     networks:
       - bibble-network
 
-  nginx:
+  bibble-nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: bibble-nginx
     ports:
-      - '80:80' # Expose Nginx on port 80
+      - '443:443' # Expose Nginx on port 443
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf # Mount the Nginx configuration file
     networks:
       - bibble-network
     depends_on:
       - bibble-client # Wait until Client app container is up
-      - bibble-server # Wait until Server app container is up
+      - bibble-kennel-api # Wait until Server app container is up
 
 networks:
   bibble-network:
     driver: bridge
 
 volumes:
-  mongo-data:
+  bibble-kennel-mongo-data:
     driver: local
