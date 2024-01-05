@@ -25,6 +25,6 @@ app.use('/api/developer', developerRouter);
 
 app.listen(SERVER_PORT, () => {
   console.log(
-    `⚡️[server]: Server is alive at http://localhost:${SERVER_PORT}`
+    `⚡️[server]: Bibble Kennel API is alive at http://localhost:${SERVER_PORT}`
   );
 });

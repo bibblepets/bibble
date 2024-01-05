@@ -1,11 +1,11 @@
 {
-  "name": "bibble-kennel-api",
+  "name": "bibble-user-api",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
     "start": "ts-node ./src/index.ts",
-    "test": "NODE_ENV=testing mocha --require ts-node/register --extension ts --recursive --exit --timeout 10000"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",

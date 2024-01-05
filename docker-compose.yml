@@ -41,18 +41,46 @@ services:
     networks:
       - bibble-network
 
+  bibble-user-api:
+    image: bibble-user-api
+    container_name: bibble-user-api
+    build:
+      context: ./bibble-user-api
+    ports:
+      - '8001:8001'
+    logging:
+      driver: json-file
+    volumes:
+      - ./bibble-user-api:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - bibble-network
+    depends_on:
+      - bibble-user-mongo
+
+  bibble-user-mongo:
+    image: mongo:latest
+    container_name: bibble-user-mongo
+    ports:
+      - '27018:27018'
+    volumes:
+      - bibble-user-mongo-data:/data/db
+    networks:
+      - bibble-network
+
   bibble-nginx:
     image: nginx:latest
     container_name: bibble-nginx
     ports:
-      - '443:443' # Expose Nginx on port 443
+      - '443:443'
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf # Mount the Nginx configuration file
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       - bibble-network
     depends_on:
-      - bibble-client # Wait until Client app container is up
-      - bibble-kennel-api # Wait until Server app container is up
+      - bibble-client
+      - bibble-kennel-api
+      - bibble-user-api
 
 networks:
   bibble-network:
@@ -60,4 +88,6 @@ networks:
 
 volumes:
   bibble-kennel-mongo-data:
+    driver: local
+  bibble-user-mongo-data:
     driver: local
