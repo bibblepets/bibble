@@ -1,7 +1,11 @@
 import { Router } from 'express';
+import multer from 'multer';
+import * as AuthMiddleware from '../middleware/auth.middleware';
 import * as UserController from '../controllers/user.controller';
 
 const router = Router();
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 /**
  * @route GET /user/{id|email}
@@ -9,5 +13,24 @@ const router = Router();
  * @access Public
  */
 router.get('/', UserController.getUser);
+
+/**
+ * @route PUT /user
+ * @desc Update user profile
+ * @access Private
+ */
+router.put('/', AuthMiddleware.authenticate, UserController.updateUser);
+
+/**
+ * @route PUT /user/profile-picture
+ * @desc Update user profile picture
+ * @access Private
+ */
+router.put(
+  '/profile-picture',
+  upload.single('data'),
+  AuthMiddleware.authenticate,
+  UserController.updateProfilePicture
+);
 
 module.exports = router;

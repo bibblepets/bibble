@@ -33,4 +33,13 @@ export class Logger {
       `${this.getTimestamp()} ${err.errorType}: ${err.toString()}`
     );
   }
+
+  public static debug(...args: any[]) {
+    const message = args.map((arg) => JSON.stringify(arg)).join(' ');
+
+    console.log(
+      `\x1b[93m%s\x1b[0m`,
+      `${this.getTimestamp()} DEBUG: ${message}`
+    );
+  }
 }

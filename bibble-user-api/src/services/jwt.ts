@@ -5,7 +5,6 @@ import {
   IUserResponse
 } from '../interfaces/user.interface';
 import { Schema } from 'mongoose';
-import { Logger } from '../loggers/logger';
 import { ServerError } from '../errors/server.error';
 import { TypedRequest } from '../interfaces/request.interface';
 import { TypedResponse } from '../interfaces/response.interface';
@@ -29,10 +28,9 @@ export function signAuthToken(
 
   const { email } = req.body;
   const token = jwt.sign({ id, email }, SECRET_JWT_CODE);
-  Logger.success('Auth token created.', token);
 
+  req.params.userId = id.toString();
   res.cookie('authToken', token, COOKIE_OPTIONS);
-  Logger.success('Auth token set.', token);
 }
 
 export function verifyAuthToken(authToken: string) {
@@ -51,5 +49,4 @@ export function verifyAuthToken(authToken: string) {
 
 export function deleteAuthToken(res: ILogoutUserResponse) {
   res.clearCookie('authToken', COOKIE_OPTIONS);
-  Logger.success('Auth token deleted.');
 }

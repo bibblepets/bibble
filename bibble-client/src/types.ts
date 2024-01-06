@@ -39,10 +39,14 @@ export type User = {
   _id?: string;
   email: string;
   password?: string;
-  buyerProfile: BuyerProfile;
-  businessProfile: BusinessProfile;
-  createdAt: Date;
-  updatedAt: Date;
+  firstName?: string;
+  lastName?: string;
+  contactNumber?: string;
+  address?: Address;
+  profilePic?: Media;
+  bio?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export type Address = {

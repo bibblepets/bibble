@@ -11,6 +11,8 @@ import {
   validateContactNumber
 } from '../validators/contactNumber';
 import { compareSync, hashSync } from 'bcrypt';
+import { nameError, validateName } from '../validators/name';
+import * as s3 from '../services/s3';
 
 export interface IUserModel extends Model<IUser, {}, IUserMethods> {}
 
@@ -32,12 +34,14 @@ const UserSchema = new Schema<IUser, IUserModel, IUserMethods>(
     firstName: {
       type: String,
       trim: true,
-      required: [true, 'First name is required']
+      required: [true, 'First name is required'],
+      validate: [validateName, nameError]
     },
     lastName: {
       type: String,
       trim: true,
-      required: [true, 'Last name is required']
+      required: [true, 'Last name is required'],
+      validate: [validateName, nameError]
     },
     contactNumber: {
       type: String,
@@ -106,9 +110,16 @@ UserSchema.method('isCorrectPassword', function (password: string) {
   return compareSync(password, this.password);
 });
 
-UserSchema.method('toJSON', function () {
+UserSchema.method('formatResponse', async function () {
   const docCopy: IUserResponse = this.toObject();
   delete docCopy.password;
+
+  if (docCopy.profilePic) {
+    docCopy.profilePic.url = await s3.getMediaUrl(
+      docCopy.profilePic.name,
+      s3.userBucketName
+    );
+  }
 
   return docCopy;
 });

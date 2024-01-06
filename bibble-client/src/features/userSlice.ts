@@ -1,13 +1,11 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState, store } from '../store';
-import {
-  BusinessProfile,
-  BuyerProfile,
-  Media,
-  StatusType,
-  User
-} from '../types';
+import { RootState } from '../store';
+import { Media, StatusType, User } from '../types';
+
+const USER_API_URL = import.meta.env.VITE_USER_API_URL;
+
+axios.defaults.withCredentials = true;
 
 interface UserState {
   currentUser?: User;
@@ -23,13 +21,11 @@ const initialState: UserState = {
   message: undefined
 };
 
-axios.defaults.withCredentials = true;
-
 export const authenticate = createAsyncThunk(
   '/userSlice/authenticate',
   async () => {
     return await axios
-      .get('/user/auth')
+      .get(`${USER_API_URL}/auth`)
       .then((response) => {
         return response.data;
       })
@@ -41,20 +37,9 @@ export const authenticate = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   '/userSlice/register',
-  async (
-    credentials: Omit<
-      User,
-      '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile' | 'businessProfile'
-    > & {
-      buyerProfile: Omit<BuyerProfile, '_id' | 'createdAt' | 'updatedAt'>;
-      businessProfile?: Omit<
-        BusinessProfile,
-        '_id' | 'createdAt' | 'updatedAt'
-      >;
-    }
-  ) => {
+  async (credentials: User) => {
     return await axios
-      .post('/user/auth/register', credentials)
+      .post(`${USER_API_URL}/auth/register`, credentials)
       .then((response) => {
         return response.data;
       })
@@ -66,14 +51,9 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   '/userSlice/loginUser',
-  async (
-    credentials: Omit<
-      User,
-      '_id' | 'createdAt' | 'updatedAt' | 'buyerProfile' | 'businessProfile'
-    >
-  ) => {
+  async (credentials: User) => {
     return await axios
-      .post('/kennel/auth/login', credentials)
+      .post(`${USER_API_URL}/auth/login`, credentials)
       .then((response) => {
         return response.data;
       })
@@ -87,7 +67,7 @@ export const logoutUser = createAsyncThunk(
   '/userSlice/logoutUser',
   async () => {
     return await axios
-      .post('/kennel/auth/logout')
+      .post(`${USER_API_URL}/auth/logout`)
       .then((response) => {
         return response.data;
       })
@@ -99,9 +79,9 @@ export const logoutUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   '/userSlice/updateUser',
-  async (user: Partial<User>) => {
+  async (updates: Partial<User>) => {
     return await axios
-      .put('/kennel/user', user)
+      .put(`${USER_API_URL}/user`, updates)
       .then((response) => {
         return response.data;
       })
@@ -119,7 +99,7 @@ export const updateProfilePicture = createAsyncThunk(
     profilePic.file && formData.append('data', profilePic.file);
 
     return await axios
-      .put('/kennel/user/profile-picture', formData, {
+      .put(`${USER_API_URL}/user/profile-picture`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then((response) => {
@@ -149,8 +129,7 @@ export const userSlice = createSlice({
       })
       .addCase(authenticate.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.currentUser = action.payload.user;
-        state.message = action.payload.message;
+        state.currentUser = action.payload;
       })
       .addCase(authenticate.rejected, (state, action) => {
         state.status = 'ERROR';
@@ -162,8 +141,7 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.currentUser = action.payload.user;
-        state.message = action.payload.message;
+        state.currentUser = action.payload;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.status = 'ERROR';
@@ -175,8 +153,7 @@ export const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.currentUser = action.payload.user;
-        state.message = action.payload.message;
+        state.currentUser = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = 'ERROR';
@@ -189,7 +166,6 @@ export const userSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state, action) => {
         state.status = 'DEFAULT';
         state.currentUser = undefined;
-        state.message = action.payload.message;
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.status = 'ERROR';
@@ -201,8 +177,7 @@ export const userSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.currentUser = action.payload.user;
-        state.message = action.payload.message;
+        state.currentUser = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.status = 'ERROR';
@@ -214,8 +189,7 @@ export const userSlice = createSlice({
       })
       .addCase(updateProfilePicture.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.currentUser = action.payload.user;
-        state.message = action.payload.message;
+        state.currentUser = action.payload;
       })
       .addCase(updateProfilePicture.rejected, (state, action) => {
         state.status = 'ERROR';
@@ -233,16 +207,15 @@ export const selectUserStatus = (state: RootState) => state.user.status;
 export const selectUserIsLoading = (state: RootState) =>
   state.user.status === 'LOADING';
 export const selectUserPersonalName = (state: RootState) =>
-  (state.user.currentUser?.buyerProfile?.firstName || '') +
+  (state.user.currentUser?.firstName || '') +
   ' ' +
-  (state.user.currentUser?.buyerProfile?.lastName || '');
+  (state.user.currentUser?.lastName || '');
 export const selectUserPersonalEmail = (state: RootState) =>
   state.user.currentUser?.email;
 export const selectUserPersonalContact = (state: RootState) =>
-  state.user.currentUser?.buyerProfile?.contactNumber;
+  state.user.currentUser?.contactNumber;
 export const selectUserPersonalAddress = (state: RootState) =>
-  state.user.currentUser?.buyerProfile?.address;
-export const selectUserBio = (state: RootState) =>
-  state.user.currentUser?.buyerProfile?.bio;
+  state.user.currentUser?.address;
+export const selectUserBio = (state: RootState) => state.user.currentUser?.bio;
 
 export default userSlice.reducer;

@@ -62,16 +62,12 @@ const AddressEdit: React.FC<EditComponentProps> = ({ setEditValue }) => {
     await store
       .dispatch(
         updateUser({
-          ...currentUser,
-          buyerProfile: {
-            ...currentUser.buyerProfile,
-            address: {
-              country,
-              streetAddress,
-              unit,
-              city,
-              postcode
-            }
+          address: {
+            country,
+            streetAddress,
+            unit,
+            city,
+            postcode
           }
         })
       )

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../features/userSlice';
 import { useSearchParams } from 'react-router-dom';
@@ -22,7 +22,7 @@ const ProfileAbout = () => {
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-6">
         <h1 className="text-3xl font-bold text-gray-800">
-          About {currentUser?.buyerProfile?.firstName}
+          About {currentUser?.firstName}
         </h1>
         <div>
           <button
@@ -33,7 +33,7 @@ const ProfileAbout = () => {
           </button>
         </div>
       </div>
-      <p className="text-gray-800">{currentUser?.buyerProfile?.bio}</p>
+      <p className="text-gray-800">{currentUser?.bio}</p>
     </div>
   );
 };

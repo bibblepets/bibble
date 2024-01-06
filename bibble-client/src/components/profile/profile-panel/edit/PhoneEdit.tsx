@@ -30,11 +30,7 @@ const PhoneEdit: React.FC<EditComponentProps> = ({ setEditValue }) => {
     await store
       .dispatch(
         updateUser({
-          ...currentUser,
-          buyerProfile: {
-            ...currentUser.buyerProfile,
-            contactNumber: contactNumber.trim()
-          }
+          contactNumber
         })
       )
       .then(() => {

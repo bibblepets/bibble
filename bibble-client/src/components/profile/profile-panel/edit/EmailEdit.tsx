@@ -27,7 +27,6 @@ const EmailEdit: React.FC<EditComponentProps> = ({ setEditValue }) => {
     await store
       .dispatch(
         updateUser({
-          ...currentUser,
           email
         })
       )

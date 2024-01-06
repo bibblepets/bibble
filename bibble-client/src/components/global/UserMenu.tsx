@@ -120,7 +120,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
         >
           <img
             className="object-cover h-8 w-8 rounded-full"
-            src={currentUser?.buyerProfile?.profilePic?.url || paw}
+            src={currentUser.profilePic?.url || paw}
           />
         </button>
       </div>

@@ -9,15 +9,13 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
-import { IMedia } from '../models/listing/media.model';
+import { IMedia } from '../interfaces/media.interface';
 
 dotenv.config();
 
 const awsBucketRegion = process.env.AWS_BUCKET_REGION;
 const awsAccessKey = process.env.AWS_ACCESS_KEY;
 const awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-
-export const listingBucketName = process.env.LISTING_BUCKET_NAME;
 export const userBucketName = process.env.USER_BUCKET_NAME;
 
 if (!awsAccessKey || !awsSecretAccessKey || !awsBucketRegion) {

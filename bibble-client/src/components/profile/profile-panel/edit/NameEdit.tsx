@@ -35,12 +35,8 @@ const NameEdit: React.FC<EditComponentProps> = ({ setEditValue }) => {
     await store
       .dispatch(
         updateUser({
-          ...currentUser,
-          buyerProfile: {
-            ...currentUser.buyerProfile,
-            firstName,
-            lastName
-          }
+          firstName,
+          lastName
         })
       )
       .then(() => {

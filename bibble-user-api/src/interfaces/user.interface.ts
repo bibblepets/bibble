@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose';
-import { IMedia } from './media.interface';
+import { ParamsDictionary } from 'express-serve-static-core';
+import { IMedia, IMediaResponse } from './media.interface';
 import { IAddress } from './address.interface';
 import { TypedRequest } from './request.interface';
 import { TypedResponse } from './response.interface';
@@ -20,12 +21,15 @@ export interface IUser {
 
 export interface IUserMethods {
   isCorrectPassword(password: string): boolean;
-  populateProfilePic(): Promise<IUser>;
-  populateAll(): Promise<IUser>;
+  formatResponse(): Promise<IUserResponse>;
 }
+
+export interface IUserRequest<T, P = ParamsDictionary>
+  extends TypedRequest<T, P & { userId: string }> {}
 
 export interface IUserResponse extends Omit<IUser, 'password'> {
   password?: string;
+  profilePic?: IMediaResponse;
 }
 export interface IRegisterUserRequest extends TypedRequest<IUser> {}
 
@@ -43,3 +47,15 @@ export interface IGetUserRequest
   extends TypedRequest<{}, {}, { id?: string; email?: string }> {}
 
 export interface IGetUserResponse extends TypedResponse<IUserResponse> {}
+
+export interface IUpdateUserRequest extends IUserRequest<Partial<IUser>> {}
+
+export interface IUpdateUserResponse extends TypedResponse<IUserResponse> {}
+
+export interface IUpdateUserProfilePictureRequest
+  extends IUserRequest<{ profilePic: string }> {
+  file?: Express.Multer.File;
+}
+
+export interface IUpdateUserProfilePictureResponse
+  extends TypedResponse<IUserResponse> {}

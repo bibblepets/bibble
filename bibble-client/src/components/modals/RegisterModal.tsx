@@ -78,11 +78,7 @@ const RegisterModal = () => {
   }, [store]);
 
   const onSubmit = useCallback(() => {
-    const buyerProfile = {
-      firstName,
-      lastName
-    };
-    store.dispatch(registerUser({ email, password, buyerProfile }));
+    store.dispatch(registerUser({ firstName, lastName, email, password }));
   }, [store, email, password, firstName, lastName]);
 
   const onSuccess = useCallback(() => {

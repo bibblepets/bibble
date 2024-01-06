@@ -7,7 +7,6 @@ import paw from '../../../../public/images/paw.jpeg';
 import { CameraIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { selectMyListings } from '../../../features/listingSlice';
 import { toTimeAgo } from '../../../utils/date';
-import { CheckBadgeIcon } from '@heroicons/react/24/solid';
 import { useSearchParams } from 'react-router-dom';
 import { useCallback } from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
@@ -56,7 +55,7 @@ const UserPanel = () => {
         <div className="relative flex justify-center">
           <img
             className="object-cover rounded-full w-56 h-56 border"
-            src={currentUser?.buyerProfile?.profilePic?.url || paw}
+            src={currentUser?.profilePic?.url || paw}
             alt="profile-pic"
           />
           <div
@@ -81,23 +80,14 @@ const UserPanel = () => {
       <div className="flex flex-col items-center gap-8">
         <div className="flex flex-row w-[412px] lg:w-full shadow-xl rounded-xl p-4">
           <div className="flex flex-col items-center w-[200px] my-4">
-            <div className="relative">
-              <img
-                className="object-cover rounded-full w-28 h-28 border"
-                src={currentUser?.buyerProfile?.profilePic?.url || paw}
-                alt="profile-pic"
-              />
-              {currentUser?.businessProfile &&
-                currentUser?.businessProfile.bibbleTier !== 'Basic' && (
-                  <CheckBadgeIcon className="absolute bottom-0 right-0 w-8 h-8 text-sky-500" />
-                )}
-            </div>
-            <div className="h-[8px]" />
+            <img
+              className="object-cover rounded-full w-28 h-28 border"
+              src={currentUser?.profilePic?.url || paw}
+              alt="profile-pic"
+            />
+            <div className="h-[12px]" />
             <label className="text-2xl font-bold text-gray-800">
-              {currentUser?.buyerProfile?.firstName}
-            </label>
-            <label className="text-sm text-gray-800">
-              {currentUser?.businessProfile?.bibbleTier}
+              {currentUser?.firstName}
             </label>
           </div>
           <div className="flex flex-col justify-center flex-grow">
@@ -119,7 +109,7 @@ const UserPanel = () => {
 
         <div className="flex flex-col gap-2 w-[412px] lg:w-full border rounded-xl p-6">
           <label className="text-xl font-semibold text-gray-800 pb-2">
-            {currentUser?.buyerProfile?.firstName}'s confirmed information
+            {currentUser?.firstName}'s confirmed information
           </label>
           {true && (
             <div className="flex flex-row gap-3">

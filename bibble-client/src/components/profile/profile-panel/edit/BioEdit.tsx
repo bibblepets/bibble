@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   selectCurrentUser,
@@ -19,7 +19,7 @@ const BioEdit: React.FC<BioEditProps> = ({ editValue, setEditValue }) => {
   const isLoading = useSelector(selectUserIsLoading);
   const currentUser = useSelector(selectCurrentUser);
   const bio = useSelector(selectUserBio);
-  const [editBio, setEditBio] = useState(bio);
+  const [editBio, setEditBio] = useState('');
   const isEditingThis = editValue === label;
   const isEditingOther = editValue !== '' && !isEditingThis;
 
@@ -33,6 +33,7 @@ const BioEdit: React.FC<BioEditProps> = ({ editValue, setEditValue }) => {
 
   const onChangeBio = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      console.log(editBio);
       setEditBio(event.target.value);
     },
     []
@@ -44,11 +45,7 @@ const BioEdit: React.FC<BioEditProps> = ({ editValue, setEditValue }) => {
     await store
       .dispatch(
         updateUser({
-          ...currentUser,
-          buyerProfile: {
-            ...currentUser.buyerProfile,
-            bio: editBio
-          }
+          bio: editBio
         })
       )
       .then(() => {

@@ -17,7 +17,6 @@ import {
 import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
 import { AuthTokenError, PasswordError } from '../errors/auth.error';
 import { IAuthRequest, IAuthResponse } from '../interfaces/auth.interface';
-import { ValidationError } from '../errors/validation.error';
 
 const User: IUserModel = require('../models/user.model');
 
@@ -29,6 +28,8 @@ export const authenticate = async (
   const authToken = req.cookies.authToken;
 
   try {
+    Logger.update('Authenticating user');
+
     if (!authToken) {
       throw new AuthTokenError("Auth token doesn't exist");
     }
@@ -43,7 +44,11 @@ export const authenticate = async (
 
     signAuthToken(req, res, user._id);
 
-    return res.status(200).json(user);
+    Logger.success('User authenticated', user._id);
+
+    const response = await user.formatResponse();
+
+    return res.status(200).json(response);
   } catch (error: any) {
     next(error);
   }
@@ -67,6 +72,8 @@ export const registerUser = async (
     }
 
     createdUser = await User.create({
+      firstName,
+      lastName,
       email,
       password
     });
@@ -75,7 +82,9 @@ export const registerUser = async (
 
     signAuthToken(req, res, createdUser._id);
 
-    return res.status(201).json(createdUser);
+    const response = await createdUser.formatResponse();
+
+    return res.status(201).json(response);
   } catch (error: any) {
     if (createdUser) {
       await createdUser.deleteOne();
@@ -94,6 +103,8 @@ export const loginUser = async (
   const { email, password } = req.body;
 
   try {
+    Logger.update('Logging in user');
+
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -106,7 +117,11 @@ export const loginUser = async (
 
     signAuthToken(req, res, user._id);
 
-    return res.status(200).json(user);
+    Logger.success('User logged in', user._id);
+
+    const response = await user.formatResponse();
+
+    return res.status(200).json(response);
   } catch (error: any) {
     next(error);
   }
@@ -116,7 +131,11 @@ export const logoutUser = (
   _req: ILogoutUserRequest,
   res: ILogoutUserResponse
 ) => {
+  Logger.update('Logging out user');
+
   deleteAuthToken(res);
+
+  Logger.success('User logged out');
 
   return res.status(200).json('User logged out successfully');
 };

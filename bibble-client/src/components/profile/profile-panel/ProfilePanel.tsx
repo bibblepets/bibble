@@ -1,4 +1,3 @@
-import React from 'react';
 import ProfileAbout from './ProfileAbout';
 import ProfileListings from './ProfileListings';
 import { useSearchParams } from 'react-router-dom';
