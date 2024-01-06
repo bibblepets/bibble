@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { TypedResponse } from './response.interface';
-import { IUser, IUserResponse } from './user.interface';
+import { IUserResponse } from './user.interface';
 
 export interface IAuthRequest extends Request {
   cookies: {

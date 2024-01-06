@@ -38,3 +38,8 @@ export interface ILoginUserResponse extends TypedResponse<IUserResponse> {}
 export interface ILogoutUserRequest extends TypedRequest<{}> {}
 
 export interface ILogoutUserResponse extends TypedResponse<string> {}
+
+export interface IGetUserRequest
+  extends TypedRequest<{}, {}, { id?: string; email?: string }> {}
+
+export interface IGetUserResponse extends TypedResponse<IUserResponse> {}
