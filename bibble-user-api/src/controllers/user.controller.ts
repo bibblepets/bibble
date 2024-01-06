@@ -21,7 +21,11 @@ export const getUser = async (
   try {
     if (id) {
       if (!Types.ObjectId.isValid(id)) {
-        throw new ValidationError('Invalid query parameter', 'id', id);
+        throw new ValidationError({
+          message: 'Invalid id',
+          property: 'id',
+          item: id
+        });
       }
 
       user = await User.findById(id);

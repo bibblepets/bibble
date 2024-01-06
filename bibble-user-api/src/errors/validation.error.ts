@@ -1,22 +1,35 @@
 import BaseError from './base.error';
 
+type ValidationErrorItem = {
+  message: string;
+  property: string;
+  item: string;
+};
+
 export class ValidationError extends BaseError {
   errorCode = 400;
   errorType = 'VALIDATION_ERROR';
+  errors: ValidationErrorItem[];
 
-  constructor(message: string, private property: string, private item: string) {
-    super(message);
+  constructor(error: ValidationErrorItem | ValidationErrorItem[]) {
+    super('Validation error');
+
+    this.errors = Array.isArray(error) ? error : [error];
 
     Object.setPrototypeOf(this, ValidationError.prototype);
   }
 
   serializeErrors() {
-    return [
-      { message: this.message, property: this.property, item: this.item }
-    ];
+    return this.errors.map(({ message, property, item }) => ({
+      message,
+      property,
+      item
+    }));
   }
 
   toString() {
-    return `${this.message}, ${this.property}, ${this.item}`;
+    return this.errors
+      .map(({ message, property, item }) => `${message}, ${property}, ${item}`)
+      .join('; ');
   }
 }

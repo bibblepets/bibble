@@ -25,16 +25,19 @@ const initialState: UserState = {
 
 axios.defaults.withCredentials = true;
 
-export const getUser = createAsyncThunk('/userSlice/getUser', async () => {
-  return await axios
-    .get('/kennel/user')
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      throw new Error(error.response.data.message);
-    });
-});
+export const authenticate = createAsyncThunk(
+  '/userSlice/authenticate',
+  async () => {
+    return await axios
+      .get('/user/auth')
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
 
 export const registerUser = createAsyncThunk(
   '/userSlice/register',
@@ -51,7 +54,7 @@ export const registerUser = createAsyncThunk(
     }
   ) => {
     return await axios
-      .post('api/auth/register', credentials)
+      .post('/user/auth/register', credentials)
       .then((response) => {
         return response.data;
       })
@@ -140,16 +143,16 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getUser.pending, (state) => {
+      .addCase(authenticate.pending, (state) => {
         state.status = 'LOADING';
         state.error = undefined;
       })
-      .addCase(getUser.fulfilled, (state, action) => {
+      .addCase(authenticate.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
         state.currentUser = action.payload.user;
         state.message = action.payload.message;
       })
-      .addCase(getUser.rejected, (state, action) => {
+      .addCase(authenticate.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       })

@@ -1,4 +1,4 @@
-import { getUser } from '../features/userSlice';
+import { authenticate } from '../features/userSlice';
 import { fetchListings } from '../features/kennelSlice';
 import {
   generateLoginModalTitle,
@@ -17,7 +17,7 @@ import { LoaderFunction } from 'react-router-dom';
 import { fetchListingById } from '../features/listingEditorSlice';
 
 export const kennelLoader: LoaderFunction = async () => {
-  await store.dispatch(getUser());
+  await store.dispatch(authenticate());
   await store.dispatch(fetchListings());
   store.dispatch(generateRegisterModalTitle());
   store.dispatch(generateLoginModalTitle());
@@ -46,6 +46,6 @@ export const listingEditorLoader: LoaderFunction = async ({ params }) => {
 };
 
 export const profileLoader: LoaderFunction = async () => {
-  await store.dispatch(getUser());
+  await store.dispatch(authenticate());
   return null;
 };

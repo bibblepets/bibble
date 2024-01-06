@@ -18,7 +18,7 @@ const UserSchema = new Schema<IUser, IUserModel, IUserMethods>(
   {
     email: {
       type: String,
-      required: [true, 'Email is required.'],
+      required: [true, 'Email is required'],
       unique: true,
       trim: true,
       lowercase: true,
@@ -26,16 +26,18 @@ const UserSchema = new Schema<IUser, IUserModel, IUserMethods>(
     },
     password: {
       type: String,
-      required: [true, 'Password is required.'],
+      required: [true, 'Password is required'],
       validate: [validatePassword, passwordError]
     },
     firstName: {
       type: String,
-      trim: true
+      trim: true,
+      required: [true, 'First name is required']
     },
     lastName: {
       type: String,
-      trim: true
+      trim: true,
+      required: [true, 'Last name is required']
     },
     contactNumber: {
       type: String,

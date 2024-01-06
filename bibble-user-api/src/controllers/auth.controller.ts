@@ -17,6 +17,7 @@ import {
 import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
 import { AuthTokenError, PasswordError } from '../errors/auth.error';
 import { IAuthRequest, IAuthResponse } from '../interfaces/auth.interface';
+import { ValidationError } from '../errors/validation.error';
 
 const User: IUserModel = require('../models/user.model');
 
@@ -53,11 +54,11 @@ export const registerUser = async (
   res: IRegisterUserResponse,
   next: NextFunction
 ) => {
-  const { email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
   let createdUser;
 
   try {
-    Logger.update('Creating user.');
+    Logger.update('Creating user');
 
     const existingUser = await User.findOne({ email });
 
@@ -70,7 +71,7 @@ export const registerUser = async (
       password
     });
 
-    Logger.success('User created.', createdUser._id);
+    Logger.success('User created', createdUser._id);
 
     signAuthToken(req, res, createdUser._id);
 
