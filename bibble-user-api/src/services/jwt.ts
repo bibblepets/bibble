@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken';
 import {
+  ILogoutUserResponse,
   IRegisterUserRequest,
   IRegisterUserResponse
 } from '../interfaces/user.interface';
 import { Schema } from 'mongoose';
 import { Logger } from '../loggers/logger';
-import { JWTError } from '../errors/jwt.error';
+import { ServerError } from '../errors/server.error';
 
 const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
 
@@ -21,7 +22,7 @@ export function signAuthToken(
   id: Schema.Types.ObjectId
 ) {
   if (!SECRET_JWT_CODE) {
-    throw new JWTError('SECRET_JWT_CODE not found.');
+    throw new ServerError('SECRET_JWT_CODE not found.');
   }
 
   const { email } = req.body;
@@ -30,4 +31,9 @@ export function signAuthToken(
 
   res.cookie('authToken', token, COOKIE_OPTIONS);
   Logger.success('Auth token set.', token);
+}
+
+export function deleteAuthToken(res: ILogoutUserResponse) {
+  res.clearCookie('authToken', COOKIE_OPTIONS);
+  Logger.success('Auth token deleted.');
 }

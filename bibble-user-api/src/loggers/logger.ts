@@ -1,3 +1,5 @@
+import BaseError from '../errors/base.error';
+
 export class Logger {
   private static getTimestamp() {
     const timestamp = new Date();
@@ -23,13 +25,12 @@ export class Logger {
     );
   }
 
-  public static error(err: Error, ...args: any[]) {
+  public static error(err: BaseError, ...args: any[]) {
     const message = args.map((arg) => JSON.stringify(arg)).join(' ');
-    const errorType = err.name.toUpperCase();
 
     console.error(
       `\x1b[31m%s\x1b[0m`,
-      `${this.getTimestamp()} ${errorType}: ${err.message} ${message}`
+      `${this.getTimestamp()} ${err.errorType}: ${err.toString()}`
     );
   }
 }

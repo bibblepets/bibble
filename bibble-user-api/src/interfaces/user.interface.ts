@@ -25,6 +25,17 @@ export interface IUserMethods {
   populateAll(): Promise<IUser>;
 }
 
+export interface IUserResponse extends Omit<IUser, 'password'> {
+  password?: string;
+}
 export interface IRegisterUserRequest extends TypedRequest<IUser> {}
 
-export interface IRegisterUserResponse extends TypedResponse<IUser> {}
+export interface IRegisterUserResponse extends TypedResponse<IUserResponse> {}
+
+export interface ILoginUserRequest extends TypedRequest<IUser> {}
+
+export interface ILoginUserResponse extends TypedResponse<IUserResponse> {}
+
+export interface ILogoutUserRequest extends TypedRequest<{}> {}
+
+export interface ILogoutUserResponse extends TypedResponse<string> {}

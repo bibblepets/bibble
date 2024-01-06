@@ -1,5 +1,9 @@
 import mongoose, { Model, Schema, mongo } from 'mongoose';
-import { IUser, IUserMethods } from '../interfaces/user.interface';
+import {
+  IUser,
+  IUserMethods,
+  IUserResponse
+} from '../interfaces/user.interface';
 import { emailError, validateEmail } from '../validators/email';
 import { passwordError, validatePassword } from '../validators/password';
 import {
@@ -98,6 +102,13 @@ UserSchema.pre('findOneAndUpdate', function (next) {
 
 UserSchema.method('isCorrectPassword', function (password: string) {
   return compareSync(password, this.password);
+});
+
+UserSchema.method('toJSON', function () {
+  const docCopy: IUserResponse = this.toObject();
+  delete docCopy.password;
+
+  return docCopy;
 });
 
 const User = mongoose.model<IUser, IUserModel>('User', UserSchema);

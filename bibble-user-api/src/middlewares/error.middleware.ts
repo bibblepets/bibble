@@ -1,22 +1,17 @@
 import { NextFunction, Request, Response } from 'express';
 import { Logger } from '../loggers/logger';
-import { UniqueKeyError } from '../errors/database.error';
-import { JWTError } from '../errors/jwt.error';
+import BaseError from '../errors/base.error';
 
 export const errorHandler = (
   err: Error,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
-  if (err instanceof UniqueKeyError) {
-    Logger.error(err, err.key);
-    res.status(409).send(`${err.name} : ${err.message} ${err.key}`);
-  } else if (err instanceof JWTError) {
+  if (err instanceof BaseError) {
     Logger.error(err);
-    res.status(500).send(`${err.name} : ${err.message}`);
-  } else {
-    Logger.error(err);
-    res.status(500).send(`UNKNOWN_SERVER_ERROR : ${err.message}`);
+    return res.send({ errors: err.serializeErrors() });
   }
+
+  res.send({ errors: [{ message: 'Something went wrong.' }] });
 };

@@ -15,13 +15,13 @@ router.post('/register', AuthController.registerUser);
  * @desc Login an existing user
  * @access Public
  */
-// router.post('/login', AuthController.loginUser);
+router.post('/login', AuthController.loginUser);
 
 /**
  * @route POST /auth/logout
  * @desc Logout an existing user
  * @access Private
  */
-// router.post('/logout', AuthController.logoutUser);
+router.post('/logout', AuthController.logoutUser);
 
 module.exports = router;
