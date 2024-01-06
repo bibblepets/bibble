@@ -4,6 +4,13 @@ import * as AuthController from '../controllers/auth.controller';
 const router = Router();
 
 /**
+ * @route GET /auth
+ * @desc Authenticate a user
+ * @access Public
+ */
+router.get('/', AuthController.authenticate);
+
+/**
  * @route POST /auth/register
  * @desc Register a new user
  * @access Public

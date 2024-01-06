@@ -9,11 +9,44 @@ import {
 } from '../interfaces/user.interface';
 import { Logger } from '../loggers/logger';
 import { IUserModel } from '../models/user.model';
-import { deleteAuthToken, signAuthToken } from '../services/jwt';
+import {
+  deleteAuthToken,
+  signAuthToken,
+  verifyAuthToken
+} from '../services/jwt';
 import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
-import { PasswordError } from '../errors/auth.error';
+import { AuthTokenError, PasswordError } from '../errors/auth.error';
+import { IAuthRequest, IAuthResponse } from '../interfaces/auth.interface';
 
 const User: IUserModel = require('../models/user.model');
+
+export const authenticate = async (
+  req: IAuthRequest,
+  res: IAuthResponse,
+  next: NextFunction
+) => {
+  const authToken = req.cookies.authToken;
+
+  try {
+    if (!authToken) {
+      throw new AuthTokenError("Auth token doesn't exist");
+    }
+
+    const decodedToken = verifyAuthToken(authToken);
+
+    const user = await User.findById(decodedToken.id);
+
+    if (!user) {
+      throw new AuthTokenError('Invalid auth token');
+    }
+
+    signAuthToken(req, res, user._id);
+
+    return res.status(200).json(user);
+  } catch (error: any) {
+    next(error);
+  }
+};
 
 export const registerUser = async (
   req: IRegisterUserRequest,

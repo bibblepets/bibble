@@ -1,4 +1,3 @@
-import { Request, Response } from 'express';
 import { Schema } from 'mongoose';
 import { IMedia } from './media.interface';
 import { IAddress } from './address.interface';

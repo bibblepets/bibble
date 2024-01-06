@@ -1,12 +1,14 @@
 import jwt from 'jsonwebtoken';
 import {
   ILogoutUserResponse,
-  IRegisterUserRequest,
-  IRegisterUserResponse
+  IUser,
+  IUserResponse
 } from '../interfaces/user.interface';
 import { Schema } from 'mongoose';
 import { Logger } from '../loggers/logger';
 import { ServerError } from '../errors/server.error';
+import { TypedRequest } from '../interfaces/request.interface';
+import { TypedResponse } from '../interfaces/response.interface';
 
 const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
 
@@ -17,12 +19,12 @@ const COOKIE_OPTIONS = {
 };
 
 export function signAuthToken(
-  req: IRegisterUserRequest,
-  res: IRegisterUserResponse,
+  req: TypedRequest<IUser>,
+  res: TypedResponse<IUserResponse>,
   id: Schema.Types.ObjectId
 ) {
   if (!SECRET_JWT_CODE) {
-    throw new ServerError('SECRET_JWT_CODE not found.');
+    throw new ServerError('SECRET_JWT_CODE not found');
   }
 
   const { email } = req.body;
@@ -31,6 +33,20 @@ export function signAuthToken(
 
   res.cookie('authToken', token, COOKIE_OPTIONS);
   Logger.success('Auth token set.', token);
+}
+
+export function verifyAuthToken(authToken: string) {
+  if (!SECRET_JWT_CODE) {
+    throw new ServerError('SECRET_JWT_CODE not found');
+  }
+
+  const decodedToken = jwt.verify(authToken, SECRET_JWT_CODE);
+
+  if (typeof decodedToken === 'string') {
+    throw new ServerError('Decoded JWT became a string');
+  }
+
+  return decodedToken;
 }
 
 export function deleteAuthToken(res: ILogoutUserResponse) {
