@@ -10,7 +10,7 @@ import {
 import { IUserModel } from '../models/user.model';
 import { KeyNotFoundError } from '../errors/key.error';
 import { validateObjectId } from '../validators/objectId';
-import { Logger } from '../loggers/logger';
+import { Logger } from '../services/logger';
 import * as s3 from '../services/s3';
 
 const User: IUserModel = require('../models/user.model');

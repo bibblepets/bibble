@@ -7,7 +7,7 @@ import {
   IRegisterUserRequest,
   IRegisterUserResponse
 } from '../interfaces/user.interface';
-import { Logger } from '../loggers/logger';
+import { Logger } from '../services/logger';
 import { IUserModel } from '../models/user.model';
 import {
   deleteAuthToken,

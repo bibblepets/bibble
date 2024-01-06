@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { Logger } from '../loggers/logger';
+import { Logger } from '../services/logger';
 import BaseError from '../errors/base.error';
 import mongoose from 'mongoose';
 import { ValidationError } from '../errors/validation.error';

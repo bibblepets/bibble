@@ -14,7 +14,7 @@ import {
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
 import { IMedia } from '../models/listing/media.model';
-import { listingBucketName, putMedia } from '../services/s3.service';
+import { listingBucketName, putMedia } from '../services/s3';
 
 require('../models/country.model');
 const {

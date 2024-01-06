@@ -1,7 +1,7 @@
 // Global dependencies
 import { Express } from 'express';
 import { errorHandler } from './middleware/error.middleware';
-import { Logger } from './loggers/logger';
+import { Logger } from './services/logger';
 
 require('dotenv').config();
 require('./mongodb/connection');

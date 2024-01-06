@@ -4,7 +4,7 @@ import { IBreed } from './animal/breed.model';
 import { IVaccine } from './animal/vaccine.model';
 import { ICountry } from '../country.model';
 import { validateAVSLicenseNumber } from './animal/animal.model';
-import { getMediaUrl, listingBucketName } from '../../services/s3.service';
+import { getMediaUrl, listingBucketName } from '../../services/s3';
 import { IMedia } from './media.model';
 
 const { saleTypes }: { saleTypes: string[] } = require('./listing.model');

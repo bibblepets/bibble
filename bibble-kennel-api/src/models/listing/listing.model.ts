@@ -11,7 +11,7 @@ import {
   getMediaUrl,
   listingBucketName,
   userBucketName
-} from '../../services/s3.service';
+} from '../../services/s3';
 import { IMedia, IPopulatedMedia } from './media.model';
 
 const saleTypes = ['Adoption', 'Sale']; // Add more types here: 'Subscriptions', 'Rentals', etc.

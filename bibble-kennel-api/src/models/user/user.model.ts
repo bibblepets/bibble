@@ -13,7 +13,7 @@ import {
   IPopulatedBusinessProfile,
   IUpdateBusinessProfileRequest
 } from './business-profile.model';
-import { getMediaUrl, userBucketName } from '../../services/s3.service';
+import { getMediaUrl, userBucketName } from '../../services/s3';
 
 export interface IUser {
   _id: Schema.Types.ObjectId;

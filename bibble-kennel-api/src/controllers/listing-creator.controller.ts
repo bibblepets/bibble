@@ -20,7 +20,7 @@ import {
 } from '../models/listing/listing.model';
 import { DogModel } from '../models/listing/animal/dog/dog.model';
 import { BibbleError, FieldAssertionError } from '../errors/errors.class';
-import { listingBucketName, putMedia } from '../services/s3.service';
+import { listingBucketName, putMedia } from '../services/s3';
 import { IMedia } from '../models/listing/media.model';
 
 const {
