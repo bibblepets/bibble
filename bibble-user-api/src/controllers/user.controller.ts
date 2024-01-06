@@ -36,7 +36,6 @@ export const getUser = async (
         throw new KeyNotFoundError('User not found', 'email', email);
       }
     }
-    console.log('HIHI');
 
     return res.status(200).json(user);
   } catch (error: any) {
