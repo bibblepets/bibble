@@ -33,10 +33,9 @@ const BioEdit: React.FC<BioEditProps> = ({ editValue, setEditValue }) => {
 
   const onChangeBio = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      console.log(editBio);
       setEditBio(event.target.value);
     },
-    []
+    [editBio, setEditBio]
   );
 
   const onSave = useCallback(async () => {
@@ -51,14 +50,14 @@ const BioEdit: React.FC<BioEditProps> = ({ editValue, setEditValue }) => {
       .then(() => {
         setEditValue('');
       });
-  }, [store, currentUser, bio]);
+  }, [store, currentUser, bio, editBio]);
 
   return (
     <div className="flex flex-col gap-8">
       {isEditingThis ? (
         <div className="flex flex-col gap-8">
           <textarea
-            className={`text-sm w-full p-2 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline`}
+            className={`text-sm w-full p-2 text-gray-700 border whitespace-pre rounded-lg focus:outline-none focus:shadow-outline`}
             placeholder="Tell us about yourself."
             value={editBio}
             onChange={onChangeBio}
@@ -98,7 +97,7 @@ const BioEdit: React.FC<BioEditProps> = ({ editValue, setEditValue }) => {
         </div>
       ) : (
         <>
-          <p className="text-gray-800">{bio}</p>
+          <p className="text-gray-800 whitespace-pre">{bio}</p>
           <div>
             <button
               onClick={onEdit}

@@ -33,7 +33,7 @@ const ProfileAbout = () => {
           </button>
         </div>
       </div>
-      <p className="text-gray-800">{currentUser?.bio}</p>
+      <p className="text-gray-800 whitespace-pre">{currentUser?.bio}</p>
     </div>
   );
 };
