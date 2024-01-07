@@ -1,7 +1,4 @@
-// Global dependencies
 import { Express } from 'express';
-import { errorHandler } from './middleware/error.middleware';
-import { Logger } from './services/logger';
 
 require('dotenv').config();
 require('./mongodb/connection');
@@ -9,23 +6,21 @@ require('./mongodb/connection');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 
-// Project dependencies
+const listingRouter = require('./routes/listing.route');
 const listingCreatorRouter = require('./routes/listing-creator.route');
+const developerRouter = require('./routes/developer.route');
 
-// Express initialization
 const app: Express = express();
 const SERVER_PORT = process.env.SERVER_PORT;
 
-// Middlewares
 app.use(express.json());
 app.use(cookieParser());
-
-// Routes
-app.use('/listing-creator', listingCreatorRouter);
-
-// Error handling
-app.use(errorHandler);
+// app.use('/listings', listingRouter);
+// app.use('/listing-creator', listingCreatorRouter);
+// app.use('/developer', developerRouter);
 
 app.listen(SERVER_PORT, () => {
-  Logger.success(`Bibble User API is alive at http://localhost:${SERVER_PORT}`);
+  console.log(
+    `⚡️[server]: Bibble Kennel API is alive at http://localhost:${SERVER_PORT}`
+  );
 });

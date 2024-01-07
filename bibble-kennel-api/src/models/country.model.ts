@@ -1,25 +1,18 @@
-import { Request } from 'express';
-import mongoose, { Schema, Model } from 'mongoose';
+import mongoose, { Model, Schema } from 'mongoose';
+import { ICountry } from '../interfaces/country.interface';
 
-export interface ICountry {
-  _id: Schema.Types.ObjectId;
-  name: string;
-}
+export interface ICountryModel extends Model<ICountry> {}
 
-export interface IGetAllCountriesOfOriginRequest extends Request {}
-
-export interface CountryModel extends Model<ICountry> {}
-
-const countrySchema = new Schema(
+const CountrySchema = new Schema(
   {
-    name: { type: String, required: [true, 'Please provide the name of this country.'] },
+    name: { type: String, required: true, unique: true }
   },
-  { collection: "countries" }
+  { collection: 'countries' }
 );
 
-const Country = mongoose.model<ICountry, CountryModel>(
-  "Country",
-  countrySchema
+const Country = mongoose.model<ICountry, ICountryModel>(
+  'Country',
+  CountrySchema
 );
 
 module.exports = Country;

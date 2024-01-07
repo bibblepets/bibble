@@ -1,81 +1,46 @@
+import axios from 'axios';
 import { Request, Response, NextFunction } from 'express';
-import { verify, sign } from 'jsonwebtoken';
-import { IPopulatedUser, UserModel } from '../models/user/user.model';
-import { BibbleError } from '../errors/errors.class';
-import { handleError } from '../utils/util';
+import * as cookie from 'cookie';
+import { Logger } from '../services/logger';
+import { AuthTokenError } from '../errors/auth.error';
+import dotenv from 'dotenv';
 
-const User: UserModel = require('../models/user/user.model');
+dotenv.config();
 
-const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
+const bibbleUserApiUrl = process.env.BIBBLE_USER_API_URL;
 
-const COOKIE_OPTIONS = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  maxAge: 1000 * 60 * 60 * 24 * 7
-};
-
-export const checkAuth = async (
+export const authHandler = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ) => {
-  const { authToken }: { authToken: string } = req.cookies;
-
-  if (!authToken) {
-    return res.status(401).json({ message: 'Unauthorized.' });
-  }
+  const cookies = cookie.parse(req.headers.cookie || '');
+  const authToken = cookies.authToken;
 
   try {
-    if (!SECRET_JWT_CODE) {
-      throw new BibbleError('Secret JWT code not found.');
-    }
+    Logger.update('Authenticating user');
 
-    const decoded = verify(authToken, SECRET_JWT_CODE);
-
-    if (typeof decoded === 'string') {
-      throw new BibbleError('Decoded JWT is a string.');
-    }
-
-    const authUser = await User.findById(decoded.id);
-
-    if (!authUser) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
-
-    const token = sign(
-      { id: authUser._id, email: authUser.email },
-      SECRET_JWT_CODE
-    );
-
-    const populatedUser = await authUser.populateAll();
-
-    res.cookie('authToken', token, COOKIE_OPTIONS);
-    req.body = {
-      ...req.body,
-      user: populatedUser
-    };
-    next();
-  } catch (error: any) {
-    return handleError(res, error);
-  }
-};
-
-export const validateBibbleTier = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const user: IPopulatedUser = req.body.user;
-
-    if (user.businessProfile.bibbleTier === 'Basic') {
-      return res.status(401).json({
-        message: 'You do not have the required minimum Bibble Tier privilleges.'
+    const user = await axios
+      .get(`${bibbleUserApiUrl}/auth`, {
+        headers: {
+          Cookie: `authToken=${authToken}`
+        }
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        throw new Error(error);
       });
+
+    if (!user) {
+      throw new AuthTokenError('Invalid auth token');
     }
+
+    Logger.success('User authenticated', user._id);
+
+    req.body.userId = user._id;
 
     next();
   } catch (error: any) {
-    return handleError(res, error);
+    next(error);
   }
 };

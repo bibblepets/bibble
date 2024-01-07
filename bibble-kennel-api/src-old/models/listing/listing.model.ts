@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import mongoose, { Schema, Model, Document } from 'mongoose';
-import { IPopulatedUser, IUser, IUserRequest } from '../user/user.model';
+// import { any, IUser, Request } from '../user/user.model';
 import {
   IAnimal,
   ICreateAnimalRequest,
@@ -21,7 +21,7 @@ const saleStatuses = ['Available', 'Sold', 'Expired'];
 
 export interface IListing {
   _id: Schema.Types.ObjectId;
-  lister: IUser['_id'];
+  lister: any;
   price: number;
   description: string;
   saleType: string;
@@ -36,7 +36,7 @@ export interface IListing {
 
 export interface IPopulatedListing {
   _id: Schema.Types.ObjectId;
-  lister: IPopulatedUser;
+  lister: any;
   price: number;
   description: string;
   saleType: string;
@@ -57,7 +57,7 @@ interface IListingMethods {
 
 export interface ListingModel extends Model<IListing, {}, IListingMethods> {}
 
-export interface ICreateListingRequest extends IUserRequest {
+export interface ICreateListingRequest extends Request {
   body: Omit<
     IListing,
     | '_id'
@@ -69,12 +69,12 @@ export interface ICreateListingRequest extends IUserRequest {
     | 'saleStatus'
   > & {
     listingCreatorId: Schema.Types.ObjectId;
-    user: IPopulatedUser;
+    user: any;
     animal: ICreateAnimalRequest['body'];
   };
 }
 
-export interface IUpdateListingRequest extends IUserRequest {
+export interface IUpdateListingRequest extends Request {
   params: {
     id: string;
   };
@@ -83,16 +83,16 @@ export interface IUpdateListingRequest extends IUserRequest {
       animal: IUpdateAnimalRequest['body'];
     }
   > & {
-    user: IPopulatedUser;
+    user: any;
   };
 }
 
-export interface IUpdateListingMediaRequest extends IUserRequest {
+export interface IUpdateListingMediaRequest extends Request {
   params: {
     id: string;
   };
   body: {
-    user: IPopulatedUser;
+    user: any;
     mediaNames: string[];
   };
 }
@@ -111,9 +111,9 @@ export interface IGetListingByIdRequest extends Request {
   };
 }
 
-export interface IGetMyListingsRequest extends IUserRequest {}
+export interface IGetMyListingsRequest extends Request {}
 
-export interface IDeleteListingByIdRequest extends IUserRequest {
+export interface IDeleteListingByIdRequest extends Request {
   params: {
     id: string;
   };

@@ -1,11 +1,11 @@
 import mongoose, { Model, Schema } from 'mongoose';
-import { IPopulatedUser, IUser, IUserRequest } from '../user/user.model';
 import { IBreed } from './animal/breed.model';
 import { IVaccine } from './animal/vaccine.model';
 import { ICountry } from '../country.model';
 import { validateAVSLicenseNumber } from './animal/animal.model';
 import { getMediaUrl, listingBucketName } from '../../services/s3';
 import { IMedia } from './media.model';
+import { Request } from 'express';
 
 const { saleTypes }: { saleTypes: string[] } = require('./listing.model');
 const {
@@ -20,7 +20,7 @@ export interface IListingCreator {
   _id: Schema.Types.ObjectId;
   stage: number;
   saleType: string;
-  lister: IUser['_id'];
+  lister: any;
   biology?: IBiology;
   biography?: IBiography;
   medical?: IMedical;
@@ -59,7 +59,7 @@ export interface IPopulatedListingCreator
     IListingCreator,
     'lister' | 'biology' | 'biography' | 'medical' | 'media'
   > {
-  lister: IPopulatedUser;
+  lister: any;
   biology?: Omit<IBiology, 'breeds'> & {
     breeds?: IBreed[];
   };
@@ -80,36 +80,36 @@ interface IListingCreatorMethods {
 export interface ListingCreatorModel
   extends Model<IListingCreator, {}, IListingCreatorMethods> {}
 
-export interface ICreateListingCreatorRequest extends IUserRequest {
+export interface ICreateListingCreatorRequest extends Request {
   body: Pick<IListingCreator, 'saleType'> & {
-    user: IPopulatedUser;
+    user: any;
     [key: string]: any;
   };
 }
 
-export interface IGetMyListingCreatorsRequest extends IUserRequest {}
+export interface IGetMyListingCreatorsRequest extends Request {}
 
-export interface IUpdateListingCreatorRequest extends IUserRequest {
+export interface IUpdateListingCreatorRequest extends Request {
   params: {
     id: string;
   };
   body: Partial<IListingCreator> & {
-    user: IPopulatedUser;
+    user: any;
   };
 }
 
-export interface IUpdateBiologyRequest extends IUserRequest {
+export interface IUpdateBiologyRequest extends Request {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
-    user: IPopulatedUser;
+    user: any;
     species?: string;
     breeds?: IBreed['_id'][];
     [key: string]: any;
   };
 }
 
-export interface IUpdateBiographyRequest extends IUserRequest {
+export interface IUpdateBiographyRequest extends Request {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
-    user: IPopulatedUser;
+    user: any;
     origin?: ICountry['_id'];
     gender?: string;
     name?: string;
@@ -119,9 +119,9 @@ export interface IUpdateBiographyRequest extends IUserRequest {
   };
 }
 
-export interface IUpdateMedicalRequest extends IUserRequest {
+export interface IUpdateMedicalRequest extends Request {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
-    user: IPopulatedUser;
+    user: any;
     size?: string;
     weight?: number;
     hairCoat?: string;
@@ -130,9 +130,9 @@ export interface IUpdateMedicalRequest extends IUserRequest {
   };
 }
 
-export interface IUpdateLegalRequest extends IUserRequest {
+export interface IUpdateLegalRequest extends Request {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
-    user: IPopulatedUser;
+    user: any;
     avsLicenseNumber?: string;
     isHypoallergenic?: boolean;
     isMicrochipped?: boolean;
@@ -142,30 +142,30 @@ export interface IUpdateLegalRequest extends IUserRequest {
   };
 }
 
-export interface IUpdateMediaRequest extends IUserRequest {
+export interface IUpdateMediaRequest extends Request {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
-    user: IPopulatedUser;
+    user: any;
     mediaNames?: string[];
     [key: string]: any;
   };
 }
 
-export interface IUpdatePriceRequest extends IUserRequest {
+export interface IUpdatePriceRequest extends Request {
   body: Pick<IListingCreator, '_id' | 'stage'> & {
-    user: IPopulatedUser;
+    user: any;
     price?: number;
     [key: string]: any;
   };
 }
 
-export interface ISubmitListingRequest extends IUserRequest {
+export interface ISubmitListingRequest extends Request {
   body: Pick<IListingCreator, '_id'> & {
-    user: IPopulatedUser;
+    user: any;
     [key: string]: any;
   };
 }
 
-export interface IDeleteListingCreatorRequest extends IUserRequest {
+export interface IDeleteListingCreatorRequest extends Request {
   params: {
     id: string;
   };
