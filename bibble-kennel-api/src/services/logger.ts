@@ -30,7 +30,7 @@ export class Logger {
 
     console.error(
       `\x1b[31m%s\x1b[0m`,
-      `${this.getTimestamp()} ${err.errorType}: ${err.toString()}`
+      `${this.getTimestamp()} ${err.errorType}: ${err.toString()} ${message}`
     );
   }
 
@@ -40,6 +40,13 @@ export class Logger {
     console.log(
       `\x1b[93m%s\x1b[0m`,
       `${this.getTimestamp()} DEBUG: ${message}`
+    );
+  }
+
+  public static fail(err: Error) {
+    console.error(
+      `\x1b[31m%s\x1b[0m`,
+      `${this.getTimestamp()} ERROR: ${err.message}`
     );
   }
 }

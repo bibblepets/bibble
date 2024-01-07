@@ -19,7 +19,7 @@ router.get('/', UserController.getUser);
  * @desc Update user profile
  * @access Private
  */
-router.put('/', AuthMiddleware.authenticate, UserController.updateUser);
+router.put('/', AuthMiddleware.authHandler, UserController.updateUser);
 
 /**
  * @route PUT /user/profile-picture
@@ -29,7 +29,7 @@ router.put('/', AuthMiddleware.authenticate, UserController.updateUser);
 router.put(
   '/profile-picture',
   upload.single('data'),
-  AuthMiddleware.authenticate,
+  AuthMiddleware.authHandler,
   UserController.updateProfilePicture
 );
 

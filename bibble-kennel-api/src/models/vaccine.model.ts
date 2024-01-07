@@ -6,7 +6,8 @@ export interface IVaccineModel extends Model<IVaccine> {}
 const VaccineSchema = new Schema(
   {
     speciesId: { type: Schema.Types.ObjectId, required: true },
-    name: { type: String, required: true, unique: true }
+    name: { type: String, required: true },
+    isCore: { type: Boolean, required: true }
   },
   { collection: 'vaccines' }
 );

@@ -6,7 +6,7 @@ export interface IHairCoatModel extends Model<IHairCoat> {}
 const HairCoatSchema = new Schema(
   {
     speciesId: { type: Schema.Types.ObjectId, required: true },
-    name: { type: String, required: true, unique: true }
+    name: { type: String, required: true }
   },
   { collection: 'hair-coats' }
 );

@@ -20,7 +20,6 @@ export const errorHandler = (
       property: k,
       item: v.value
     }));
-    console.log(errors);
 
     const validationError = new ValidationError(errors);
     Logger.error(validationError);

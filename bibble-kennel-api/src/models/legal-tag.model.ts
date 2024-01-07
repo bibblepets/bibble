@@ -6,7 +6,7 @@ export interface ILegalTagModel extends Model<ILegalTag> {}
 const LegalTagSchema = new Schema(
   {
     speciesId: { type: Schema.Types.ObjectId, required: true },
-    name: { type: String, required: true, unique: true }
+    name: { type: String, required: true }
   },
   { collection: 'legal-tags' }
 );

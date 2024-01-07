@@ -6,7 +6,7 @@ import { IUserModel } from '../models/user.model';
 
 const User: IUserModel = require('../models/user.model');
 
-export const authenticate = async (
+export const authHandler = async (
   req: IAuthRequest,
   res: IAuthResponse,
   next: NextFunction

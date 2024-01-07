@@ -108,7 +108,7 @@
 //   { name: 'Boston Terrier', species: 'Dog' },
 //   { name: 'Pug', species: 'Dog' },
 //   { name: 'Havanese', species: 'Dog' },
-//   { name: 'Mongrel', species: 'Dog'}
+//   { name: 'Mongrel', species: 'Dog' }
 // ];
 
 // const dogVaccines: Omit<IVaccine, '_id'>[] = [

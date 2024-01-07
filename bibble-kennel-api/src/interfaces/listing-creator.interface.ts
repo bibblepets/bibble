@@ -76,3 +76,15 @@ export interface ICreateListingCreatorRequest
 
 export interface ICreateListingCreatorResponse
   extends TypedResponse<IListingCreatorResponse> {}
+
+export interface IUpdateBiologyRequest
+  extends IAuthorizedRequest<IBiologyCreator> {}
+
+export interface IUpdateBiographyRequest
+  extends IAuthorizedRequest<IBiographyCreator> {}
+
+export interface IUpdateMedicalRequest
+  extends IAuthorizedRequest<IMedicalCreator> {}
+
+export interface IUpdateLegalRequest
+  extends IAuthorizedRequest<ILegalCreator> {}
