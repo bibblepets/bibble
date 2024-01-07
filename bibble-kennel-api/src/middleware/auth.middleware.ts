@@ -26,14 +26,12 @@ export const authHandler = async (
           Cookie: `authToken=${authToken}`
         }
       })
-      .then((response) => response.data)
-      .catch((error) => {
-        throw new Error(error);
+      .then((response) => {
+        return response.data;
+      })
+      .catch((_error) => {
+        throw new AuthTokenError('Unauthorized');
       });
-
-    if (!user) {
-      throw new AuthTokenError('Invalid auth token');
-    }
 
     Logger.success('User authenticated', user._id);
 
