@@ -3,6 +3,7 @@ import {
   ICreateListingCreatorRequest,
   ICreateListingCreatorResponse,
   IGetListingCreatorByIdRequest,
+  IUpdateBiographyCreatorRequest,
   IUpdateBiologyCreatorRequest,
   IUpdateListingCreatorResponse
 } from '../interfaces/listing-creator.interface';
@@ -83,6 +84,102 @@ export const updateBiologyCreator = async (
     }
 
     Logger.success('Biology creator updated', _id);
+
+    const response = await updatedListingCreator.formatResponse();
+
+    return res.status(200).json(response);
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const updateBiographyCreator = async (
+  req: IUpdateBiographyCreatorRequest,
+  res: IUpdateListingCreatorResponse,
+  next: NextFunction
+) => {
+  const { _id, ...updates } = req.body;
+
+  try {
+    Logger.update('Updating biography creator');
+
+    const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
+      _id,
+      updates,
+      {
+        new: true
+      }
+    );
+
+    if (!updatedListingCreator) {
+      throw new KeyNotFoundError('Listing creator not found', '_id', _id);
+    }
+
+    Logger.success('Biography creator updated', _id);
+
+    const response = await updatedListingCreator.formatResponse();
+
+    return res.status(200).json(response);
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const updateMedicalCreator = async (
+  req: IUpdateBiographyCreatorRequest,
+  res: IUpdateListingCreatorResponse,
+  next: NextFunction
+) => {
+  const { _id, ...updates } = req.body;
+
+  try {
+    Logger.update('Updating medical creator');
+
+    const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
+      _id,
+      updates,
+      {
+        new: true
+      }
+    );
+
+    if (!updatedListingCreator) {
+      throw new KeyNotFoundError('Listing creator not found', '_id', _id);
+    }
+
+    Logger.success('Medical creator updated', _id);
+
+    const response = await updatedListingCreator.formatResponse();
+
+    return res.status(200).json(response);
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const updateLegalCreator = async (
+  req: IUpdateBiographyCreatorRequest,
+  res: IUpdateListingCreatorResponse,
+  next: NextFunction
+) => {
+  const { _id, ...updates } = req.body;
+
+  try {
+    Logger.update('Updating legal creator');
+
+    const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
+      _id,
+      updates,
+      {
+        new: true
+      }
+    );
+
+    if (!updatedListingCreator) {
+      throw new KeyNotFoundError('Listing creator not found', '_id', _id);
+    }
+
+    Logger.success('Legal creator updated', _id);
 
     const response = await updatedListingCreator.formatResponse();
 

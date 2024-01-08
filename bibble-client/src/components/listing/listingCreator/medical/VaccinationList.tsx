@@ -8,13 +8,15 @@ import {
   selectListingCreatorVaccines
 } from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
-import { Vaccine } from '../../../../types';
 import { selectListingOptionsVaccines } from '../../../../features/listing/listingOptionsSlice';
+import { Vaccine } from '../../../../features/listing/types';
 
 const VaccinationList = ({ readOnly }: { readOnly?: boolean }) => {
   const species = useSelector(selectListingCreatorSpecies);
   const allVaccines = useSelector(selectListingOptionsVaccines);
-  const vaccines = allVaccines.filter((vaccine) => vaccine.species === species);
+  const vaccines = allVaccines.filter(
+    (vaccine) => vaccine.speciesId === species?._id
+  );
   const selectedVaccines = useSelector(selectListingCreatorVaccines);
 
   const handleClick = useCallback(

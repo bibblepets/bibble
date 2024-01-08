@@ -8,6 +8,8 @@ import { store } from '../../../../store';
 import { selectListingOptionsHairCoats } from '../../../../features/listing/listingOptionsSlice';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { useDropdown } from '../../hooks';
+import { HairCoat } from '../../../../features/listing/types';
+import { toCamelCase } from '../../../../utils/string';
 
 const HairCoatSelect = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +21,7 @@ const HairCoatSelect = ({ readOnly }: { readOnly?: boolean }) => {
     setIsOpen(!isOpen);
   };
 
-  const handleHairCoatSelected = (hairCoat: string) => {
+  const handleHairCoatSelected = (hairCoat: HairCoat) => {
     store.dispatch(setHairCoat(hairCoat));
     setIsOpen(false);
   };
@@ -29,7 +31,7 @@ const HairCoatSelect = ({ readOnly }: { readOnly?: boolean }) => {
   if (readOnly) {
     return (
       <a className="text-sm font-medium text-gray-700">{`${
-        selectedHairCoat || 'No hair coat selected'
+        selectedHairCoat?.name || 'No hair coat selected'
       }`}</a>
     );
   }
@@ -40,7 +42,7 @@ const HairCoatSelect = ({ readOnly }: { readOnly?: boolean }) => {
         onClick={toggleDropdown}
         className="flex items-center justify-between w-full px-4 p-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none"
       >
-        <span>{`${selectedHairCoat || 'Select a Hair Coat'}`}</span>
+        <span>{`${selectedHairCoat?.name || 'Select a Hair Coat'}`}</span>
         {isOpen ? (
           <ChevronUpIcon className="w-4 h-4" />
         ) : (
@@ -58,7 +60,7 @@ const HairCoatSelect = ({ readOnly }: { readOnly?: boolean }) => {
                     onClick={() => handleHairCoatSelected(hairCoat)}
                     className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                   >
-                    {hairCoat}
+                    {toCamelCase(hairCoat.name)}
                   </button>
                 </li>
               ))}

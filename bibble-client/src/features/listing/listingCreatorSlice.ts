@@ -122,70 +122,60 @@ export const updateBiology = createAsyncThunk(
 export const updateBiography = createAsyncThunk(
   '/listingCreator/updateBiography',
   async (_, { getState }) => {
-    // const state = getState() as RootState;
-    // const { name, origin, gender, birthdate, description } =
-    //   state.listingCreator.biography || {};
-    // return await axios
-    //   .post('/kennel/listing-creator/biography', {
-    //     _id: state.listingCreator._id,
-    //     stage: 2,
-    //     name,
-    //     origin,
-    //     gender,
-    //     birthdate: birthdate || new Date(Date.now()),
-    //     description
-    //   })
-    //   .then((response) => {
-    //     return response.data;
-    //   })
-    //   .catch((error) => {
-    //     throw new Error(error.response.data.message);
-    //   });
+    const state = getState() as RootState;
+    const { _id, biography } = state.listingCreator;
+    return await axios
+      .post('/kennel/listing-creator/biography', {
+        _id,
+        stage: 2,
+        biography
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
 
 export const updateMedical = createAsyncThunk(
   '/listingCreator/updateMedical',
   async (_, { getState }) => {
-    // const state = getState() as RootState;
-    // const { size, weight, hairCoat, vaccines } =
-    //   state.listingCreator.medical || {};
-    // return await axios
-    //   .post('/kennel/listing-creator/medical', {
-    //     _id: state.listingCreator._id,
-    //     stage: 3,
-    //     size,
-    //     weight,
-    //     hairCoat,
-    //     vaccines
-    //   })
-    //   .then((response) => {
-    //     return response.data;
-    //   })
-    //   .catch((error) => {
-    //     throw new Error(error.response.data.message);
-    //   });
+    const state = getState() as RootState;
+    const { _id, medical } = state.listingCreator;
+    return await axios
+      .post('/kennel/listing-creator/medical', {
+        _id,
+        stage: 3,
+        medical
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
 
 export const updateLegal = createAsyncThunk(
   '/listingCreator/updateLegal',
   async (_, { getState }) => {
-    // const state = getState() as RootState;
-    // const { avsLicenseNumber, legalTags } = state.listingCreator.legal || {};
-    // return await axios
-    //   .post('/kennel/listing-creator/legal', {
-    //     _id: state.listingCreator._id,
-    //     stage: 4,
-    //     avsLicenseNumber,
-    //     legalTags
-    //   })
-    //   .then((response) => {
-    //     return response.data;
-    //   })
-    //   .catch((error) => {
-    //     throw new Error(error.response.data.message);
-    //   });
+    const state = getState() as RootState;
+    const { _id, legal } = state.listingCreator;
+    return await axios
+      .post('/kennel/listing-creator/legal', {
+        _id,
+        stage: 4,
+        legal
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
 
@@ -307,6 +297,7 @@ const listingCreatorSlice = createSlice({
         state.biography = {};
       }
       state.biography.originId = action.payload._id;
+      state.biography.origin = action.payload;
     },
     setGender: (state, action: PayloadAction<Gender>) => {
       if (!state.biography) {
@@ -344,6 +335,7 @@ const listingCreatorSlice = createSlice({
         state.medical = {};
       }
       state.medical.hairCoatId = action.payload._id;
+      state.medical.hairCoat = action.payload;
     },
     addVaccination: (state, action: PayloadAction<Vaccine>) => {
       if (!state.medical) {
@@ -352,7 +344,11 @@ const listingCreatorSlice = createSlice({
       if (!state.medical.vaccineIds) {
         state.medical.vaccineIds = [];
       }
+      if (!state.medical.vaccines) {
+        state.medical.vaccines = [];
+      }
       state.medical.vaccineIds.push(action.payload._id!);
+      state.medical.vaccines.push(action.payload);
     },
     removeVaccination: (state, action: PayloadAction<Vaccine>) => {
       if (!state.medical) {
@@ -361,8 +357,14 @@ const listingCreatorSlice = createSlice({
       if (!state.medical.vaccineIds) {
         state.medical.vaccineIds = [];
       }
+      if (!state.medical.vaccines) {
+        state.medical.vaccines = [];
+      }
       state.medical.vaccineIds = state.medical.vaccineIds.filter(
         (vaccineId) => vaccineId !== action.payload._id
+      );
+      state.medical.vaccines = state.medical.vaccines.filter(
+        (vaccine) => vaccine._id !== action.payload._id
       );
     },
     setAvsLicenseNumber: (state, action: PayloadAction<string>) => {
@@ -378,7 +380,11 @@ const listingCreatorSlice = createSlice({
       if (!state.legal.legalTagIds) {
         state.legal.legalTagIds = [];
       }
+      if (!state.legal.legalTags) {
+        state.legal.legalTags = [];
+      }
       state.legal.legalTagIds.push(action.payload._id!);
+      state.legal.legalTags.push(action.payload);
     },
     removeLegalTag: (state, action: PayloadAction<LegalTag>) => {
       if (!state.legal) {
@@ -387,8 +393,14 @@ const listingCreatorSlice = createSlice({
       if (!state.legal.legalTagIds) {
         state.legal.legalTagIds = [];
       }
+      if (!state.legal.legalTags) {
+        state.legal.legalTags = [];
+      }
       state.legal.legalTagIds = state.legal.legalTagIds.filter(
         (legalTagId) => legalTagId !== action.payload._id
+      );
+      state.legal.legalTags = state.legal.legalTags.filter(
+        (legalTag) => legalTag._id !== action.payload._id
       );
     },
     addMedia: (state, action: PayloadAction<Media[]>) => {

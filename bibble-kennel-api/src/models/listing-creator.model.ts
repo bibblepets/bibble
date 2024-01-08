@@ -8,9 +8,17 @@ import { genders, saleTypes, sizes } from '../types/constants';
 import * as s3 from '../services/s3';
 import { ISpeciesModel } from './species.model';
 import { IBreedModel } from './breed.model';
+import { ICountryModel } from './country.model';
+import { IHairCoatModel } from './hair-coat.model';
+import { IVaccineModel } from './vaccine.model';
+import { ILegalTagModel } from './legal-tag.model';
 
 const Species: ISpeciesModel = require('../models/species.model');
 const Breed: IBreedModel = require('../models/breed.model');
+const Country: ICountryModel = require('../models/country.model');
+const HairCoat: IHairCoatModel = require('../models/hair-coat.model');
+const Vaccine: IVaccineModel = require('../models/vaccine.model');
+const LegalTag: ILegalTagModel = require('../models/legal-tag.model');
 
 export interface IListingCreatorModel
   extends Model<IListingCreator, {}, IListingCreatorMethods> {}
@@ -111,6 +119,37 @@ ListingCreatorSchema.method('formatResponse', async function () {
     if (Array.isArray(docCopy.biology.breedIds)) {
       docCopy.biology.breeds = await Breed.find({
         _id: { $in: docCopy.biology.breedIds }
+      });
+    }
+  }
+
+  if (docCopy.biography) {
+    if (docCopy.biography.originId) {
+      const origin = await Country.findById(docCopy.biography.originId);
+      if (origin) {
+        docCopy.biography.origin = origin;
+      }
+    }
+  }
+
+  if (docCopy.medical) {
+    if (docCopy.medical.hairCoatId) {
+      const hairCoat = await HairCoat.findById(docCopy.medical.hairCoatId);
+      if (hairCoat) {
+        docCopy.medical.hairCoat = hairCoat;
+      }
+    }
+    if (Array.isArray(docCopy.medical.vaccineIds)) {
+      docCopy.medical.vaccines = await Vaccine.find({
+        _id: { $in: docCopy.medical.vaccineIds }
+      });
+    }
+  }
+
+  if (docCopy.legal) {
+    if (Array.isArray(docCopy.legal.legalTagIds)) {
+      docCopy.legal.legalTags = await LegalTag.find({
+        _id: { $in: docCopy.legal.legalTagIds }
       });
     }
   }

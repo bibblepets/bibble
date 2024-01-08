@@ -80,8 +80,8 @@ export type Breed = {
 
 export type Vaccine = {
   _id?: string;
+  speciesId: string;
   name: string;
-  species: string;
   isCore: boolean;
 };
 

@@ -1,16 +1,16 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
-import { Breed, Country, Species, Vaccine } from './types';
+import { Breed, Country, HairCoat, LegalTag, Species, Vaccine } from './types';
 import { StatusType } from '../types';
 
 interface ListingOptionsSlice {
   species: Species[];
   breeds: Breed[];
   countries: Country[];
-  hairCoats: string[];
+  hairCoats: HairCoat[];
   vaccines: Vaccine[];
-  legalTags: string[];
+  legalTags: LegalTag[];
   status: StatusType;
   error?: string;
 }

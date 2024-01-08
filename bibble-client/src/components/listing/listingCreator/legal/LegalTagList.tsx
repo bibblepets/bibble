@@ -7,8 +7,8 @@ import {
   selectListingCreatorLegalTags
 } from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
-import { LegalTag } from '../../../../types';
 import { selectListingOptionsLegalTags } from '../../../../features/listing/listingOptionsSlice';
+import { LegalTag } from '../../../../features/listing/types';
 
 const LegalTagList = ({ readOnly }: { readOnly?: boolean }) => {
   const selectedLegalTags = useSelector(selectListingCreatorLegalTags);
@@ -26,7 +26,7 @@ const LegalTagList = ({ readOnly }: { readOnly?: boolean }) => {
   );
 
   const formatTag = (tag: LegalTag) => {
-    let formattedTag = tag
+    let formattedTag = tag.name
       .replace(/^is/, '')
       .replace(/([A-Z])/g, ' $1')
       .trim();

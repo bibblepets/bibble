@@ -1,14 +1,14 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   selectListingCreatorOrigin,
   setOrigin
 } from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
-import { Country } from '../../../../types';
 import { selectListingOptionsCountries } from '../../../../features/listing/listingOptionsSlice';
 import { useDropdown } from '../../hooks';
+import { Country } from '../../../../features/listing/types';
 
 const OriginDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
