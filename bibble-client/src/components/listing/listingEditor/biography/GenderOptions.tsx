@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import {
   selectListingEditorGender,
   setGender
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 import { store } from '../../../../store';
 import { Gender } from '../../../../types';
 

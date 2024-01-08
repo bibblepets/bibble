@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorHairCoat,
   setHairCoat
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
-import { selectListingOptionsHairCoats } from '../../../../features/listingOptionsSlice';
+import { selectListingOptionsHairCoats } from '../../../../features/listing/listingOptionsSlice';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { useDropdown } from '../../hooks';
 

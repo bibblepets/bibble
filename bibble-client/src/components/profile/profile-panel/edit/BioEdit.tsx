@@ -5,7 +5,7 @@ import {
   selectUserBio,
   selectUserIsLoading,
   updateUser
-} from '../../../../features/userSlice';
+} from '../../../../features/user/userSlice';
 import SaveButton from './SaveButton';
 import { store } from '../../../../store';
 

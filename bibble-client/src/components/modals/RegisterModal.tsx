@@ -6,7 +6,7 @@ import {
   registerUser,
   selectUserStatus,
   resetStatus
-} from '../../features/userSlice';
+} from '../../features/user/userSlice';
 import {
   closeRegisterModal,
   openLoginModal,

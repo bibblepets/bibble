@@ -1,7 +1,10 @@
 import { HeartIcon, ShareIcon } from '@heroicons/react/24/solid';
 import { Listing } from '../../../types';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser, updateUser } from '../../../features/userSlice';
+import {
+  selectCurrentUser,
+  updateUser
+} from '../../../features/user/userSlice';
 import { store } from '../../../store';
 
 interface DetailsHeaderProps {

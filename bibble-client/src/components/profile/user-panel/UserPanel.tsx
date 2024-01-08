@@ -2,10 +2,10 @@ import { useSelector } from 'react-redux';
 import {
   selectCurrentUser,
   updateProfilePicture
-} from '../../../features/userSlice';
+} from '../../../features/user/userSlice';
 import paw from '../../../../public/images/paw.jpeg';
 import { CameraIcon, CheckIcon } from '@heroicons/react/24/outline';
-import { selectMyListings } from '../../../features/listingSlice';
+import { selectMyListings } from '../../../features/listing/listingSlice';
 import { toTimeAgo } from '../../../utils/date';
 import { useSearchParams } from 'react-router-dom';
 import { useCallback } from 'react';

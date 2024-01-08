@@ -1,21 +1,19 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { RootState, store } from '../store';
+import { RootState, store } from '../../store';
 import {
   Breed,
   Country,
-  Gender,
   HairCoat,
   LegalTag,
-  ListingCreator,
-  Media,
   SaleType,
   Size,
   Species,
-  StatusType,
-  User,
   Vaccine
-} from '../types';
+} from './types';
 import axios from 'axios';
+import { User } from '../user/types';
+import { Gender, Media, StatusType } from '../types';
+import { ListingCreator } from './types';
 
 interface ListingCreatorState extends ListingCreator {
   status: StatusType;
@@ -90,8 +88,7 @@ export const createListingCreator = createAsyncThunk(
   async (payload: { currentUser: User; saleType: SaleType }) => {
     return await axios
       .post('/kennel/listing-creator', {
-        saleType: payload.saleType,
-        lister: payload.currentUser._id
+        saleType: payload.saleType
       })
       .then((response) => {
         return response.data;
@@ -106,14 +103,12 @@ export const updateBiology = createAsyncThunk(
   '/listingCreator/updateBiology',
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const { species, breeds } = state.listingCreator.biology || {};
-
+    const { _id, biology } = state.listingCreator;
     return await axios
       .post('/kennel/listing-creator/biology', {
-        _id: state.listingCreator._id,
+        _id,
         stage: 1,
-        species,
-        breeds
+        biology
       })
       .then((response) => {
         return response.data;
@@ -127,141 +122,134 @@ export const updateBiology = createAsyncThunk(
 export const updateBiography = createAsyncThunk(
   '/listingCreator/updateBiography',
   async (_, { getState }) => {
-    const state = getState() as RootState;
-    const { name, origin, gender, birthdate, description } =
-      state.listingCreator.biography || {};
-
-    return await axios
-      .post('/kennel/listing-creator/biography', {
-        _id: state.listingCreator._id,
-        stage: 2,
-        name,
-        origin,
-        gender,
-        birthdate: birthdate || new Date(Date.now()),
-        description
-      })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        throw new Error(error.response.data.message);
-      });
+    // const state = getState() as RootState;
+    // const { name, origin, gender, birthdate, description } =
+    //   state.listingCreator.biography || {};
+    // return await axios
+    //   .post('/kennel/listing-creator/biography', {
+    //     _id: state.listingCreator._id,
+    //     stage: 2,
+    //     name,
+    //     origin,
+    //     gender,
+    //     birthdate: birthdate || new Date(Date.now()),
+    //     description
+    //   })
+    //   .then((response) => {
+    //     return response.data;
+    //   })
+    //   .catch((error) => {
+    //     throw new Error(error.response.data.message);
+    //   });
   }
 );
 
 export const updateMedical = createAsyncThunk(
   '/listingCreator/updateMedical',
   async (_, { getState }) => {
-    const state = getState() as RootState;
-    const { size, weight, hairCoat, vaccines } =
-      state.listingCreator.medical || {};
-
-    return await axios
-      .post('/kennel/listing-creator/medical', {
-        _id: state.listingCreator._id,
-        stage: 3,
-        size,
-        weight,
-        hairCoat,
-        vaccines
-      })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        throw new Error(error.response.data.message);
-      });
+    // const state = getState() as RootState;
+    // const { size, weight, hairCoat, vaccines } =
+    //   state.listingCreator.medical || {};
+    // return await axios
+    //   .post('/kennel/listing-creator/medical', {
+    //     _id: state.listingCreator._id,
+    //     stage: 3,
+    //     size,
+    //     weight,
+    //     hairCoat,
+    //     vaccines
+    //   })
+    //   .then((response) => {
+    //     return response.data;
+    //   })
+    //   .catch((error) => {
+    //     throw new Error(error.response.data.message);
+    //   });
   }
 );
 
 export const updateLegal = createAsyncThunk(
   '/listingCreator/updateLegal',
   async (_, { getState }) => {
-    const state = getState() as RootState;
-    const { avsLicenseNumber, legalTags } = state.listingCreator.legal || {};
-
-    return await axios
-      .post('/kennel/listing-creator/legal', {
-        _id: state.listingCreator._id,
-        stage: 4,
-        avsLicenseNumber,
-        legalTags
-      })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        throw new Error(error.response.data.message);
-      });
+    // const state = getState() as RootState;
+    // const { avsLicenseNumber, legalTags } = state.listingCreator.legal || {};
+    // return await axios
+    //   .post('/kennel/listing-creator/legal', {
+    //     _id: state.listingCreator._id,
+    //     stage: 4,
+    //     avsLicenseNumber,
+    //     legalTags
+    //   })
+    //   .then((response) => {
+    //     return response.data;
+    //   })
+    //   .catch((error) => {
+    //     throw new Error(error.response.data.message);
+    //   });
   }
 );
 
 export const updateMedia = createAsyncThunk(
   '/listingCreator/updateMedia',
   async (_, { getState }) => {
-    const state = getState() as RootState;
-    const media = state.listingCreator.media || [];
-
-    const formData = new FormData();
-    formData.append('_id', state.listingCreator._id || '');
-    formData.append('stage', '5');
-    media.forEach((media) => {
-      media.name && formData.append('mediaNames[]', media.name);
-    });
-    media.forEach((media) => {
-      media.file && formData.append('data', media.file);
-    });
-
-    return await axios
-      .post('/kennel/listing-creator/media', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        throw new Error(error.response.data.message);
-      });
+    // const state = getState() as RootState;
+    // const media = state.listingCreator.media || [];
+    // const formData = new FormData();
+    // formData.append('_id', state.listingCreator._id || '');
+    // formData.append('stage', '5');
+    // media.forEach((media) => {
+    //   media.name && formData.append('mediaNames[]', media.name);
+    // });
+    // media.forEach((media) => {
+    //   media.file && formData.append('data', media.file);
+    // });
+    // return await axios
+    //   .post('/kennel/listing-creator/media', formData, {
+    //     headers: { 'Content-Type': 'multipart/form-data' }
+    //   })
+    //   .then((response) => {
+    //     return response.data;
+    //   })
+    //   .catch((error) => {
+    //     throw new Error(error.response.data.message);
+    //   });
   }
 );
 
 export const updatePrice = createAsyncThunk(
   '/listingCreator/updatePrice',
   async (_, { getState }) => {
-    const state = getState() as RootState;
-    const price = state.listingCreator.price || 0;
-
-    return await axios
-      .post('/kennel/listing-creator/price', {
-        _id: state.listingCreator._id,
-        stage: 6,
-        price
-      })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        throw new Error(error.response.data.message);
-      });
+    // const state = getState() as RootState;
+    // const price = state.listingCreator.price || 0;
+    // return await axios
+    //   .post('/kennel/listing-creator/price', {
+    //     _id: state.listingCreator._id,
+    //     stage: 6,
+    //     price
+    //   })
+    //   .then((response) => {
+    //     return response.data;
+    //   })
+    //   .catch((error) => {
+    //     throw new Error(error.response.data.message);
+    //   });
   }
 );
 
 export const createListing = createAsyncThunk(
   '/listingCreator/createListing',
   async (_, { getState }) => {
-    const state = getState() as RootState;
-
-    return await axios
-      .post('/kennel/listing-creator/submit', {
-        listingCreatorId: state.listingCreator._id
-      })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        throw new Error(error.response.data.message);
-      });
+    // const state = getState() as RootState;
+    // return await axios
+    //   .post('/kennel/listing-creator/submit', {
+    //     listingCreatorId: state.listingCreator._id
+    //   })
+    //   .then((response) => {
+    //     return response.data;
+    //   })
+    //   .catch((error) => {
+    //     throw new Error(error.response.data.message);
+    //   });
   }
 );
 
@@ -273,24 +261,37 @@ const listingCreatorSlice = createSlice({
       if (!state.biology) {
         state.biology = {};
       }
+      state.biology.speciesId = action.payload._id;
       state.biology.species = action.payload;
+      state.biology.breedIds = undefined;
+      state.biology.breeds = undefined;
     },
     addBreed: (state, action: PayloadAction<Breed>) => {
       if (!state.biology) {
         state.biology = {};
       }
+      if (!state.biology.breedIds) {
+        state.biology.breedIds = [];
+      }
       if (!state.biology.breeds) {
         state.biology.breeds = [];
       }
+      state.biology.breedIds.push(action.payload._id!);
       state.biology.breeds.push(action.payload);
     },
     removeBreed: (state, action: PayloadAction<Breed>) => {
       if (!state.biology) {
         state.biology = {};
       }
+      if (!state.biology.breedIds) {
+        state.biology.breedIds = [];
+      }
       if (!state.biology.breeds) {
         state.biology.breeds = [];
       }
+      state.biology.breedIds = state.biology.breedIds.filter(
+        (breedId) => breedId !== action.payload._id
+      );
       state.biology.breeds = state.biology.breeds.filter(
         (breed) => breed._id !== action.payload._id
       );
@@ -305,7 +306,7 @@ const listingCreatorSlice = createSlice({
       if (!state.biography) {
         state.biography = {};
       }
-      state.biography.origin = action.payload;
+      state.biography.originId = action.payload._id;
     },
     setGender: (state, action: PayloadAction<Gender>) => {
       if (!state.biography) {
@@ -342,26 +343,26 @@ const listingCreatorSlice = createSlice({
       if (!state.medical) {
         state.medical = {};
       }
-      state.medical.hairCoat = action.payload;
+      state.medical.hairCoatId = action.payload._id;
     },
     addVaccination: (state, action: PayloadAction<Vaccine>) => {
       if (!state.medical) {
         state.medical = {};
       }
-      if (!state.medical.vaccines) {
-        state.medical.vaccines = [];
+      if (!state.medical.vaccineIds) {
+        state.medical.vaccineIds = [];
       }
-      state.medical.vaccines.push(action.payload);
+      state.medical.vaccineIds.push(action.payload._id!);
     },
     removeVaccination: (state, action: PayloadAction<Vaccine>) => {
       if (!state.medical) {
         state.medical = {};
       }
-      if (!state.medical.vaccines) {
-        state.medical.vaccines = [];
+      if (!state.medical.vaccineIds) {
+        state.medical.vaccineIds = [];
       }
-      state.medical.vaccines = state.medical.vaccines.filter(
-        (vaccine) => vaccine._id !== action.payload._id
+      state.medical.vaccineIds = state.medical.vaccineIds.filter(
+        (vaccineId) => vaccineId !== action.payload._id
       );
     },
     setAvsLicenseNumber: (state, action: PayloadAction<string>) => {
@@ -374,20 +375,20 @@ const listingCreatorSlice = createSlice({
       if (!state.legal) {
         state.legal = {};
       }
-      if (!state.legal.legalTags) {
-        state.legal.legalTags = [];
+      if (!state.legal.legalTagIds) {
+        state.legal.legalTagIds = [];
       }
-      state.legal.legalTags.push(action.payload);
+      state.legal.legalTagIds.push(action.payload._id!);
     },
     removeLegalTag: (state, action: PayloadAction<LegalTag>) => {
       if (!state.legal) {
         state.legal = {};
       }
-      if (!state.legal.legalTags) {
-        state.legal.legalTags = [];
+      if (!state.legal.legalTagIds) {
+        state.legal.legalTagIds = [];
       }
-      state.legal.legalTags = state.legal.legalTags.filter(
-        (legalTag) => legalTag !== action.payload
+      state.legal.legalTagIds = state.legal.legalTagIds.filter(
+        (legalTagId) => legalTagId !== action.payload._id
       );
     },
     addMedia: (state, action: PayloadAction<Media[]>) => {

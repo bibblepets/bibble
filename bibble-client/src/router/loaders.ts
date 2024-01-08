@@ -1,5 +1,5 @@
-import { authenticate } from '../features/userSlice';
-import { fetchListings } from '../features/kennelSlice';
+import { authenticate } from '../features/user/userSlice';
+import { fetchListings } from '../features/listing/kennelSlice';
 import {
   generateLoginModalTitle,
   generateRegisterModalTitle
@@ -9,12 +9,13 @@ import {
   fetchAllCountries,
   fetchAllHairCoats,
   fetchAllLegalTags,
+  fetchAllSpecies,
   fetchAllVaccines
-} from '../features/listingOptionsSlice';
+} from '../features/listing/listingOptionsSlice';
 import { store } from '../store';
-import { fetchListingCreatorById } from '../features/listingCreatorSlice';
+import { fetchListingCreatorById } from '../features/listing/listingCreatorSlice';
 import { LoaderFunction } from 'react-router-dom';
-import { fetchListingById } from '../features/listingEditorSlice';
+import { fetchListingById } from '../features/listing/listingEditorSlice';
 
 export const kennelLoader: LoaderFunction = async () => {
   await store.dispatch(authenticate());
@@ -25,6 +26,7 @@ export const kennelLoader: LoaderFunction = async () => {
 };
 
 export const listingLoader: LoaderFunction = async () => {
+  await store.dispatch(fetchAllSpecies());
   await store.dispatch(fetchAllBreeds());
   await store.dispatch(fetchAllCountries());
   await store.dispatch(fetchAllHairCoats());

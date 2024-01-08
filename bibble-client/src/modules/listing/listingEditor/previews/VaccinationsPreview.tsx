@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { selectListingEditorVaccines } from '../../../../features/listingEditorSlice';
-import { selectListingOptionsCoreVaccines } from '../../../../features/listingOptionsSlice';
+import { selectListingEditorVaccines } from '../../../../features/listing/listingEditorSlice';
+import { selectListingOptionsCoreVaccines } from '../../../../features/listing/listingOptionsSlice';
 import { PlusIcon } from '@heroicons/react/24/outline';
 
 const VaccinationsPreview = () => {

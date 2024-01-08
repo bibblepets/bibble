@@ -3,12 +3,12 @@ import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { store } from '../../../../store';
 import { Country } from '../../../../types';
-import { selectListingOptionsCountries } from '../../../../features/listingOptionsSlice';
+import { selectListingOptionsCountries } from '../../../../features/listing/listingOptionsSlice';
 import { useDropdown } from '../../hooks';
 import {
   selectListingEditorOrigin,
   setOrigin
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const OriginDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);

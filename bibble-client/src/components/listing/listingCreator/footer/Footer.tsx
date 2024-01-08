@@ -11,7 +11,7 @@ import {
   selectListingCreatorMediaIsCompleted,
   selectListingCreatorMedicalIsCompleted,
   selectListingCreatorPriceIsCompleted
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
 import './styles.css';
 
 const Footer = () => {

@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorError,
   selectListingCreatorStatus
-} from '../../../features/listingCreatorSlice';
+} from '../../../features/listing/listingCreatorSlice';
 
 interface ListingCreatorSectionProps {
   title: string;

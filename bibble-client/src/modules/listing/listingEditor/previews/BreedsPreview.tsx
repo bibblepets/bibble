@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectListingEditorBreeds } from '../../../../features/listingEditorSlice';
+import { selectListingEditorBreeds } from '../../../../features/listing/listingEditorSlice';
 import DefaultPreview from './DefaultPreview';
 
 const BreedsPreview = () => {

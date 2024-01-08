@@ -4,7 +4,7 @@ import { store } from '../../../../store';
 import {
   selectListingEditorAvsLicenseNumber,
   setAvsLicenseNumber
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const AvsLicenseInput = () => {
   const avsLicenseNumber =

@@ -10,8 +10,8 @@ import {
   Size,
   StatusType,
   Vaccine
-} from '../types';
-import { RootState } from '../store';
+} from '../../types';
+import { RootState } from '../../store';
 import axios from 'axios';
 
 interface ListingEditorState {

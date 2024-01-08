@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectListingEditorName } from '../../../../features/listingEditorSlice';
+import { selectListingEditorName } from '../../../../features/listing/listingEditorSlice';
 import DefaultPreview from './DefaultPreview';
 
 const NamePreview = () => {

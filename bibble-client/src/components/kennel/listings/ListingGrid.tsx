@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectKennelListings } from '../../../features/kennelSlice';
+import { selectKennelListings } from '../../../features/listing/kennelSlice';
 import ListingCard from './ListingCard';
 
 const ListingGrid = () => {

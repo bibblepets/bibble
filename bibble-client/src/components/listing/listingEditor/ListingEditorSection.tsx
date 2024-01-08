@@ -5,7 +5,7 @@ import {
   selectListingEditorStatus,
   updateListingById,
   updateListingMediaById
-} from '../../../features/listingEditorSlice';
+} from '../../../features/listing/listingEditorSlice';
 import { useCallback } from 'react';
 import { store } from '../../../store';
 import FadeComponent from '../../wrapper/FadeComponent';

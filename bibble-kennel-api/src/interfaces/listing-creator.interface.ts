@@ -71,20 +71,32 @@ export interface ILegalCreator {
   legalTags?: ILegalTag[];
 }
 
+export interface IGetListingCreatorByIdRequest
+  extends TypedRequest<{}, { id: string }> {}
+
+export interface IGetListingCreatorByIdResponse
+  extends TypedResponse<IListingCreatorResponse> {}
+
 export interface ICreateListingCreatorRequest
   extends TypedRequest<IListingCreatorRequest> {}
 
 export interface ICreateListingCreatorResponse
   extends TypedResponse<IListingCreatorResponse> {}
 
-export interface IUpdateBiologyRequest
-  extends IAuthorizedRequest<IBiologyCreator> {}
+export interface IUpdateListingCreatorStageRequest<T>
+  extends IAuthorizedRequest<T & { _id: string; stage: number }> {}
 
-export interface IUpdateBiographyRequest
-  extends IAuthorizedRequest<IBiographyCreator> {}
+export interface IUpdateBiologyCreatorRequest
+  extends IUpdateListingCreatorStageRequest<IBiologyCreator> {}
 
-export interface IUpdateMedicalRequest
-  extends IAuthorizedRequest<IMedicalCreator> {}
+export interface IUpdateBiographyCreatorRequest
+  extends IUpdateListingCreatorStageRequest<IBiographyCreator> {}
 
-export interface IUpdateLegalRequest
-  extends IAuthorizedRequest<ILegalCreator> {}
+export interface IUpdateMedicalCreatorRequest
+  extends IUpdateListingCreatorStageRequest<IMedicalCreator> {}
+
+export interface IUpdateLegalCreatorRequest
+  extends IUpdateListingCreatorStageRequest<ILegalCreator> {}
+
+export interface IUpdateListingCreatorResponse
+  extends TypedResponse<IListingCreatorResponse> {}

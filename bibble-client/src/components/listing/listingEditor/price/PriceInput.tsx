@@ -4,7 +4,7 @@ import { store } from '../../../../store';
 import {
   selectListingEditorPrice,
   setPrice
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const MAX_PRICE = 9999;
 

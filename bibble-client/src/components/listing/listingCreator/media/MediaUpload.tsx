@@ -6,7 +6,7 @@ import {
   addMedia,
   removeMedia,
   selectListingCreatorMedia
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
 import { Media } from '../../../../types';
 import toast from 'react-hot-toast';

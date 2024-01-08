@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorGender,
   setGender
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
 import { Gender } from '../../../../types';
 import { toCamelCase } from '../../../../utils/string';

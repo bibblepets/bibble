@@ -6,7 +6,7 @@ import {
   selectListingEditorGender,
   selectListingEditorSize,
   setSize
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const sizes: Size[] = ['Small', 'Medium', 'Large'];
 

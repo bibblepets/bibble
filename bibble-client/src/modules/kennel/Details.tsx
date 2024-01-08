@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import DetailsHeader from '../../components/kennel/details/DetailsHeader';
 import ItemInfo from '../../components/kennel/details/ItemInfo';
 import ListerInfo from '../../components/kennel/details/ListerInfo';
-import { selectListingById } from '../../features/kennelSlice';
+import { selectListingById } from '../../features/listing/kennelSlice';
 import KennelLayout from '../../layouts/KennelLayout';
 import AppointmentBox from '../../components/kennel/details/AppointmentBox';
 

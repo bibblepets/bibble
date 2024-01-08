@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { RootState } from '../store';
-import { Media, StatusType, User } from '../types';
+import { RootState } from '../../store';
+import { StatusType } from '../../types';
+import { User } from './types';
+import { Media } from '../types';
 
 const USER_API_URL = import.meta.env.VITE_USER_API_URL;
 

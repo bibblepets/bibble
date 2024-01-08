@@ -4,7 +4,7 @@ import {
   selectCurrentUser,
   selectUserIsLoading,
   updateUser
-} from '../../../../features/userSlice';
+} from '../../../../features/user/userSlice';
 import SaveButton from './SaveButton';
 import { EditComponentProps } from '../ProfileEditSection';
 import { store } from '../../../../store';

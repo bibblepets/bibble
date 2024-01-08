@@ -3,14 +3,14 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { store } from '../../../store';
 import { SaleType } from '../../../types';
-import { createListingCreator } from '../../../features/listingCreatorSlice';
+import { createListingCreator } from '../../../features/listing/listingCreatorSlice';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../features/userSlice';
+import { selectCurrentUser } from '../../../features/user/userSlice';
 
 const ListingOptions = () => {
   const currentUser = useSelector(selectCurrentUser);
   const navigate = useNavigate();
-  const canListSale = currentUser?.businessProfile?.bibbleTier !== 'Basic';
+  // const canListSale = currentUser?.businessProfile?.bibbleTier !== 'Basic';
 
   const onStart = useCallback(
     async (saleType: SaleType) => {
@@ -30,7 +30,7 @@ const ListingOptions = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <button
-        onClick={() => onStart('Adoption')}
+        onClick={() => onStart('adoption')}
         className="flex flex-row gap-4"
       >
         <div className="p-4 bg-sky-500 rounded-lg">
@@ -48,13 +48,14 @@ const ListingOptions = () => {
       </button>
 
       <button
-        disabled={!canListSale}
-        onClick={() => onStart('Sale')}
+        // disabled={!canListSale}
+        onClick={() => onStart('sale')}
         className="flex flex-row gap-4"
       >
         <div
           className={`p-4 ${
-            canListSale ? 'bg-rose-500' : 'bg-gray-500'
+            'bg-rose-500'
+            // canListSale ? 'bg-rose-500' : 'bg-gray-500'
           } rounded-lg`}
         >
           <SquaresPlusIcon className="w-5 h-5 text-white" />
@@ -63,20 +64,25 @@ const ListingOptions = () => {
           <div className="flex flex-row items-center gap-2">
             <a
               className={`text-sm font-medium ${
-                !canListSale && 'text-gray-500'
+                ''
+                // !canListSale && 'text-gray-500'
               }`}
             >
               List a Sale
             </a>
             <ArrowRightIcon
-              className={`w-3 h-3 ${!canListSale && 'text-gray-500'}`}
+              className={`w-3 h-3 ${
+                ''
+                // !canListSale && 'text-gray-500'
+              }`}
               strokeWidth={3}
             />
           </div>
           <p className="text-sm font-light text-gray-500 whitespace-nowrap overflow-hidden">
-            {canListSale
+            Create a listing for sale
+            {/* {canListSale
               ? 'Create a listing for sale'
-              : 'Upgrade your Bibble Tier to list a sale'}
+              : 'Upgrade your Bibble Tier to list a sale'} */}
           </p>
         </div>
       </button>

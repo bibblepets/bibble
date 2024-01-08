@@ -6,6 +6,11 @@ import {
 } from '../interfaces/listing-creator.interface';
 import { genders, saleTypes, sizes } from '../types/constants';
 import * as s3 from '../services/s3';
+import { ISpeciesModel } from './species.model';
+import { IBreedModel } from './breed.model';
+
+const Species: ISpeciesModel = require('../models/species.model');
+const Breed: IBreedModel = require('../models/breed.model');
 
 export interface IListingCreatorModel
   extends Model<IListingCreator, {}, IListingCreatorMethods> {}
@@ -95,6 +100,20 @@ const ListingCreatorSchema = new Schema<
 
 ListingCreatorSchema.method('formatResponse', async function () {
   const docCopy: IListingCreatorResponse = this.toObject();
+
+  if (docCopy.biology) {
+    if (docCopy.biology.speciesId) {
+      const species = await Species.findById(docCopy.biology.speciesId);
+      if (species) {
+        docCopy.biology.species = species;
+      }
+    }
+    if (Array.isArray(docCopy.biology.breedIds)) {
+      docCopy.biology.breeds = await Breed.find({
+        _id: { $in: docCopy.biology.breedIds }
+      });
+    }
+  }
 
   if (Array.isArray(docCopy.media)) {
     docCopy.media = await Promise.all(

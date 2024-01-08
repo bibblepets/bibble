@@ -6,44 +6,25 @@ import {
   GiSittingDog
 } from 'react-icons/gi';
 import { useSelector } from 'react-redux';
-import { selectListingCreatorSpecies } from '../../../../features/listingCreatorSlice';
+import { selectListingCreatorSpecies } from '../../../../features/listing/listingCreatorSlice';
 import { toCamelCase } from '../../../../utils/string';
 import SpeciesBox from './SpeciesBox';
+import { selectListingOptionsSpecies } from '../../../../features/listing/listingOptionsSlice';
+import { IconType } from 'react-icons';
+
+const speciesIconMap: Record<string, IconType> = {
+  dog: GiSittingDog,
+  cat: GiCat
+};
 
 const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
-  const species = [
-    {
-      type: 'Dog',
-      icon: GiSittingDog
-    },
-    {
-      type: 'Cat',
-      icon: GiCat,
-      disabled: true
-    },
-    {
-      type: 'Rabbit',
-      icon: GiRabbit,
-      disabled: true
-    },
-    {
-      type: 'Mouse',
-      icon: GiRat,
-      disabled: true
-    },
-    {
-      type: 'Bird',
-      icon: GiHummingbird,
-      disabled: true
-    }
-  ];
-
   const selectedSpecies = useSelector(selectListingCreatorSpecies);
+  const speciesOptions = useSelector(selectListingOptionsSpecies);
 
   if (readOnly) {
     return (
       <a className="text-gray-700 text-sm font-medium">
-        {(selectedSpecies && toCamelCase(selectedSpecies)) ||
+        {(selectedSpecies && toCamelCase(selectedSpecies.name)) ||
           'No species selected'}
       </a>
     );
@@ -51,12 +32,11 @@ const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
 
   return (
     <div className="flex flex-row justify-between">
-      {species.map((species, index) => (
+      {speciesOptions.map((species, index) => (
         <SpeciesBox
           key={index}
-          species={species.type}
-          icon={species.icon}
-          disabled={species.disabled}
+          species={species}
+          icon={speciesIconMap[species.name]}
         />
       ))}
     </div>

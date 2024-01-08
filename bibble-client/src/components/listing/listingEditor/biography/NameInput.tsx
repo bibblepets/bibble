@@ -4,7 +4,7 @@ import { store } from '../../../../store';
 import {
   selectListingEditorName,
   setName
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const NameInput = () => {
   const name = useSelector(selectListingEditorName);

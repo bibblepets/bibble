@@ -3,7 +3,7 @@ import {
   selectListingCreatorError,
   selectListingCreatorIsLoading,
   selectListingCreatorStatus
-} from '../../../features/listingCreatorSlice';
+} from '../../../features/listing/listingCreatorSlice';
 import FadeComponent from '../../wrapper/FadeComponent';
 
 interface ListingCreatorStageProps {

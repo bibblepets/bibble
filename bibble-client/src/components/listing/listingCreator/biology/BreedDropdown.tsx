@@ -1,16 +1,17 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useDropdown } from '../../hooks';
 import {
   addBreed,
   removeBreed,
   selectListingCreatorBreeds,
   selectListingCreatorSpecies
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
+import { selectListingOptionsBreeds } from '../../../../features/listing/listingOptionsSlice';
+import { Breed } from '../../../../features/listing/types';
 import { store } from '../../../../store';
-import { Breed } from '../../../../types';
-import { selectListingOptionsBreeds } from '../../../../features/listingOptionsSlice';
-import { useDropdown } from '../../hooks';
+import { toCamelCase } from '../../../../utils/string';
 
 const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,7 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const breeds = allBreeds
-    .filter((breed) => breed.species === selectedSpecies)
+    .filter((breed) => breed.speciesId === selectedSpecies?._id)
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const toggleDropdown = () => {
@@ -43,7 +44,7 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   if (readOnly) {
     return (
       <a className="text-sm font-medium text-gray-700">{`${
-        selectedBreeds?.map((breed) => breed.name).join(', ') ||
+        selectedBreeds?.map((breed) => toCamelCase(breed.name)).join(', ') ||
         'No breed selected'
       }`}</a>
     );
@@ -59,8 +60,9 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
         <span>{`${
           !selectedSpecies
             ? 'Select a species'
-            : selectedBreeds?.map((breed) => breed.name).join(', ') ||
-              'Select a breed'
+            : selectedBreeds
+                ?.map((breed) => toCamelCase(breed.name))
+                .join(', ') || 'Select a breed'
         }`}</span>
         {isOpen ? (
           <ChevronUpIcon className="w-4 h-4" />
@@ -85,7 +87,7 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
                         : ''
                     }`}
                   >
-                    {breed?.name}
+                    {toCamelCase(breed?.name)}
                   </button>
                 </li>
               ))}

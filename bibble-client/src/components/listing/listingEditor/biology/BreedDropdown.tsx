@@ -4,8 +4,8 @@ import {
   removeBreed,
   selectListingEditorBreeds,
   selectListingEditorSpecies
-} from '../../../../features/listingEditorSlice';
-import { selectListingOptionsBreeds } from '../../../../features/listingOptionsSlice';
+} from '../../../../features/listing/listingEditorSlice';
+import { selectListingOptionsBreeds } from '../../../../features/listing/listingOptionsSlice';
 import { useCallback, useRef, useState } from 'react';
 import { Breed } from '../../../../types';
 import { store } from '../../../../store';

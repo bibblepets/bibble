@@ -3,13 +3,13 @@ import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { store } from '../../../../store';
 import { Vaccine } from '../../../../types';
-import { selectListingOptionsVaccines } from '../../../../features/listingOptionsSlice';
+import { selectListingOptionsVaccines } from '../../../../features/listing/listingOptionsSlice';
 import {
   addVaccination,
   removeVaccination,
   selectListingEditorSpecies,
   selectListingEditorVaccines
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const VaccinationList = () => {
   const species = useSelector(selectListingEditorSpecies);

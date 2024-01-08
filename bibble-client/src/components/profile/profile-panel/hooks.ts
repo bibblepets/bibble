@@ -4,7 +4,7 @@ import {
   selectUserPersonalContact,
   selectUserPersonalEmail,
   selectUserPersonalName
-} from '../../../features/userSlice';
+} from '../../../features/user/userSlice';
 import NameEdit from './edit/NameEdit';
 import EmailEdit from './edit/EmailEdit';
 import PhoneEdit from './edit/PhoneEdit';

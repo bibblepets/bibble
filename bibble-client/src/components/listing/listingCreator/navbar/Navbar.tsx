@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
 import { store } from '../../../../store';
-import { updateListingCreatorById } from '../../../../features/listingCreatorSlice';
+import { updateListingCreatorById } from '../../../../features/listing/listingCreatorSlice';
 import { openConfirmDeleteModal } from '../../../../features/modalsSlice';
 import Logo from '../../../global/Logo';
 import {

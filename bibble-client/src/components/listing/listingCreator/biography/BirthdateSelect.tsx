@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorBirthdate,
   setBirthdate
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
 import { useDropdown } from '../../hooks';
 

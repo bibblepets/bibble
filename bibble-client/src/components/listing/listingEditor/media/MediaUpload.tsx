@@ -15,7 +15,7 @@ import {
   addMedia,
   removeMedia,
   selectListingEditorMedia
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const MediaUpload = () => {
   const media = useSelector(selectListingEditorMedia) || [];

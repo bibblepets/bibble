@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorSize,
   setSize
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
 import { Size } from '../../../../types';
 import { store } from '../../../../store';
 import { toCamelCase } from '../../../../utils/string';

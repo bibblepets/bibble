@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectListingEditorPrice } from '../../../../features/listingEditorSlice';
+import { selectListingEditorPrice } from '../../../../features/listing/listingEditorSlice';
 import DefaultPreview from './DefaultPreview';
 
 const PricePreview = () => {

@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectListingEditorWeight } from '../../../../features/listingEditorSlice';
+import { selectListingEditorWeight } from '../../../../features/listing/listingEditorSlice';
 import DefaultPreview from './DefaultPreview';
 
 const WeightPreview = () => {

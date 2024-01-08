@@ -1,25 +1,20 @@
 import { useCallback } from 'react';
 import { IconType } from 'react-icons';
 import { useSelector } from 'react-redux';
+import { toCamelCase } from '../../../../utils/string';
+import { Species } from '../../../../features/listing/types';
 import {
   selectListingCreatorSpecies,
   setSpecies
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
-import { Species } from '../../../../types';
-import { toCamelCase } from '../../../../utils/string';
 
 interface SpeciesBoxProps {
   species: Species;
   icon: IconType;
-  disabled?: boolean;
 }
 
-const SpeciesBox: React.FC<SpeciesBoxProps> = ({
-  species,
-  icon: Icon,
-  disabled
-}) => {
+const SpeciesBox: React.FC<SpeciesBoxProps> = ({ species, icon: Icon }) => {
   const selectedSpecies = useSelector(selectListingCreatorSpecies);
 
   const onSelect = useCallback(
@@ -34,22 +29,13 @@ const SpeciesBox: React.FC<SpeciesBoxProps> = ({
       <button
         onClick={() => onSelect(species)}
         className={`p-4 rounded-lg transition ${
-          selectedSpecies === species
-            ? 'bg-sky-500'
-            : disabled
-            ? 'bg-gray-300'
-            : 'bg-gray-500'
+          selectedSpecies?._id === species._id ? 'bg-sky-500' : 'bg-gray-500'
         }`}
-        disabled={disabled}
       >
         <Icon className="text-white w-6 h-6" />
       </button>
-      <a
-        className={`text-sm font-light ${
-          disabled ? 'text-gray-300' : 'text-gray-500'
-        }`}
-      >
-        {toCamelCase(species)}
+      <a className={`text-sm font-light text-gray-500`}>
+        {toCamelCase(species.name)}
       </a>
     </div>
   );

@@ -4,7 +4,7 @@ import { store } from '../../../../store';
 import {
   selectListingEditorDescription,
   setDescription
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const DescriptionInput = () => {
   const description = useSelector(selectListingEditorDescription) || '';

@@ -1,9 +1,11 @@
 import axios from 'axios';
-import { Breed, Country, StatusType, Vaccine } from '../types';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+import { RootState } from '../../store';
+import { Breed, Country, Species, Vaccine } from './types';
+import { StatusType } from '../types';
 
 interface ListingOptionsSlice {
+  species: Species[];
   breeds: Breed[];
   countries: Country[];
   hairCoats: string[];
@@ -14,6 +16,7 @@ interface ListingOptionsSlice {
 }
 
 const initialState: ListingOptionsSlice = {
+  species: [],
   breeds: [],
   countries: [],
   hairCoats: [],
@@ -23,11 +26,25 @@ const initialState: ListingOptionsSlice = {
   error: undefined
 };
 
+export const fetchAllSpecies = createAsyncThunk(
+  '/listingOptionsSlice/fetchAllSpecies',
+  async () => {
+    return await axios
+      .get(`/kennel/species`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
 export const fetchAllBreeds = createAsyncThunk(
   '/listingOptionsSlice/fetchAllBreeds',
   async () => {
     return await axios
-      .get(`/kennel/developer/breeds/${'Dog'}`)
+      .get(`/kennel/breed`)
       .then((response) => {
         return response.data;
       })
@@ -41,7 +58,7 @@ export const fetchAllCountries = createAsyncThunk(
   '/listingOptionsSlice/fetchAllCountries',
   async () => {
     return await axios
-      .get(`/kennel/developer/countries`)
+      .get(`/kennel/country`)
       .then((response) => {
         return response.data;
       })
@@ -55,7 +72,7 @@ export const fetchAllHairCoats = createAsyncThunk(
   '/listingOptionsSlice/fetchAllHairCoats',
   async () => {
     return await axios
-      .get(`/kennel/developer/hair-coats/${'Dog'}`)
+      .get(`/kennel/hair-coat`)
       .then((response) => {
         return response.data;
       })
@@ -69,7 +86,7 @@ export const fetchAllVaccines = createAsyncThunk(
   '/listingOptionsSlice/fetchAllVaccines',
   async () => {
     return await axios
-      .get(`/kennel/developer/vaccines/${'Dog'}`)
+      .get(`/kennel/vaccine`)
       .then((response) => {
         return response.data;
       })
@@ -83,7 +100,7 @@ export const fetchAllLegalTags = createAsyncThunk(
   '/listingOptionsSlice/fetchAllLegalTags',
   async () => {
     return await axios
-      .get(`/kennel/developer/legal-tags/${'Dog'}`)
+      .get(`/kennel/legal-tag`)
       .then((response) => {
         return response.data;
       })
@@ -98,6 +115,17 @@ export const listingOptionsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(fetchAllSpecies.pending, (state) => {
+      state.status = 'LOADING';
+    });
+    builder.addCase(fetchAllSpecies.fulfilled, (state, action) => {
+      state.status = 'SUCCESS';
+      state.species = action.payload;
+    });
+    builder.addCase(fetchAllSpecies.rejected, (state, action) => {
+      state.status = 'ERROR';
+      state.error = action.error.message;
+    });
     builder.addCase(fetchAllBreeds.pending, (state) => {
       state.status = 'LOADING';
     });
@@ -156,6 +184,8 @@ export const listingOptionsSlice = createSlice({
   }
 });
 
+export const selectListingOptionsSpecies = (state: RootState) =>
+  state.listingOptions.species;
 export const selectListingOptionsBreeds = (state: RootState) =>
   state.listingOptions.breeds;
 export const selectListingOptionsCountries = (state: RootState) =>

@@ -4,7 +4,7 @@ import { store } from '../../../../store';
 import {
   selectListingCreatorAvsLicenseNumber,
   setAvsLicenseNumber
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
 
 const AvsLicenseInput = ({ readOnly }: { readOnly?: boolean }) => {
   const avsLicenseNumber =

@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectListingEditorMedia } from '../../../../features/listingEditorSlice';
+import { selectListingEditorMedia } from '../../../../features/listing/listingEditorSlice';
 import DefaultPreview from './DefaultPreview';
 
 const MediaPreview = () => {

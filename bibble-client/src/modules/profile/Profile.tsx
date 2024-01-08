@@ -3,7 +3,7 @@ import ProfileLayout from '../../layouts/ProfileLayout';
 import UserPanel from '../../components/profile/user-panel/UserPanel';
 import ProfilePanel from '../../components/profile/profile-panel/ProfilePanel';
 import { store } from '../../store';
-import { fetchMyListings } from '../../features/listingSlice';
+import { fetchMyListings } from '../../features/listing/listingSlice';
 
 const Profile = () => {
   useEffect(() => {

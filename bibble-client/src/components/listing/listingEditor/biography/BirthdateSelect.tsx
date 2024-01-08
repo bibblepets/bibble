@@ -6,7 +6,7 @@ import { useDropdown } from '../../hooks';
 import {
   selectListingEditorBirthdate,
   setBirthdate
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const months = [
   'January',

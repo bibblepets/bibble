@@ -3,13 +3,13 @@ import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { store } from '../../../../store';
 import { LegalTag } from '../../../../types';
-import { selectListingOptionsLegalTags } from '../../../../features/listingOptionsSlice';
+import { selectListingOptionsLegalTags } from '../../../../features/listing/listingOptionsSlice';
 import AvsLicenseInput from './AvsLicenseInput';
 import {
   addLegalTag,
   removeLegalTag,
   selectListingEditorLegalTags
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const LegalTagList = () => {
   const selectedLegalTags = useSelector(selectListingEditorLegalTags);

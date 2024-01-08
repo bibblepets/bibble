@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectListingEditorBirthdate } from '../../../../features/listingEditorSlice';
+import { selectListingEditorBirthdate } from '../../../../features/listing/listingEditorSlice';
 import DefaultPreview from './DefaultPreview';
 
 const BirthdatePreview = () => {

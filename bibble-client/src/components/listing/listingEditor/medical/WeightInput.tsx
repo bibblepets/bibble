@@ -5,7 +5,7 @@ import {
   selectListingEditorGender,
   selectListingEditorWeight,
   setWeight
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const WeightInput = () => {
   const selectedGender = useSelector(selectListingEditorGender);

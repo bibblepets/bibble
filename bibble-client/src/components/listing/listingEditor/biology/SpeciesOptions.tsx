@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { toCamelCase } from '../../../../utils/string';
-import { selectListingEditorSpecies } from '../../../../features/listingEditorSlice';
+import { selectListingEditorSpecies } from '../../../../features/listing/listingEditorSlice';
 
 const SpeciesOptions = () => {
   const selectedSpecies = useSelector(selectListingEditorSpecies);

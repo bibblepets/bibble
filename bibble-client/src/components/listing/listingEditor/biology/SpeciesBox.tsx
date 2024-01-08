@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import {
   selectListingCreatorSpecies,
   setSpecies
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
 import { Species } from '../../../../types';
 import { toCamelCase } from '../../../../utils/string';
@@ -37,8 +37,8 @@ const SpeciesBox: React.FC<SpeciesBoxProps> = ({
           selectedSpecies === species
             ? 'bg-sky-500'
             : disabled
-            ? 'bg-gray-300'
-            : 'bg-gray-500'
+              ? 'bg-gray-300'
+              : 'bg-gray-500'
         }`}
         disabled={disabled}
       >

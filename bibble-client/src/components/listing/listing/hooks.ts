@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { ListingCreator } from '../../../types';
+import { ListingCreator } from '../../../features/listing/types';
 
 const stageMap = [
   'Biology',

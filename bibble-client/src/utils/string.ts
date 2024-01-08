@@ -1,4 +1,4 @@
-import { Address } from '../types';
+import { Address } from '../features/types';
 
 export const toCamelCase = (str: string) => {
   return str

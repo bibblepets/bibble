@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { selectListingEditorGender } from '../../../../features/listingEditorSlice';
+import { selectListingEditorGender } from '../../../../features/listing/listingEditorSlice';
 import DefaultPreview from './DefaultPreview';
 
 const GenderPreview = () => {

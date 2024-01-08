@@ -1,13 +1,13 @@
 import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { store } from '../../../../store';
-import { selectListingOptionsHairCoats } from '../../../../features/listingOptionsSlice';
+import { selectListingOptionsHairCoats } from '../../../../features/listing/listingOptionsSlice';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { useDropdown } from '../../hooks';
 import {
   selectListingEditorHairCoat,
   setHairCoat
-} from '../../../../features/listingEditorSlice';
+} from '../../../../features/listing/listingEditorSlice';
 
 const HairCoatSelect = () => {
   const selectedHairCoat = useSelector(selectListingEditorHairCoat);

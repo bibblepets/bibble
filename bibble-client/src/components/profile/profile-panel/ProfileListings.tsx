@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../features/userSlice';
-import { selectMyListings } from '../../../features/listingSlice';
+import { selectCurrentUser } from '../../../features/user/userSlice';
+import { selectMyListings } from '../../../features/listing/listingSlice';
 import ProfileListingCard from './ProfileListingCard';
 
 const ProfileListings = () => {

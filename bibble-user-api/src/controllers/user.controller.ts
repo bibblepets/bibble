@@ -8,7 +8,7 @@ import {
   IUpdateUserResponse
 } from '../interfaces/user.interface';
 import { IUserModel } from '../models/user.model';
-import { KeyNotFoundError } from '../errors/key.error';
+import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
 import { validateObjectId } from '../validators/objectId';
 import { Logger } from '../services/logger';
 import * as s3 from '../services/s3';
@@ -64,6 +64,12 @@ export const updateUser = async (
     Logger.update('Updating user');
 
     validateObjectId(userId);
+
+    const existingUser = await User.findOne({ email: updates.email });
+
+    if (existingUser) {
+      throw new UniqueKeyError('User already exists', 'email', updates.email!);
+    }
 
     const updatedUser = await User.findByIdAndUpdate(userId, updates, {
       new: true

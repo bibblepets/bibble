@@ -5,14 +5,14 @@ import {
   LoginModalType,
   RegisterModalType,
   ViewMoreModalType
-} from '../types';
+} from './types';
 import { NavigateFunction } from 'react-router-dom';
 
 interface ModalsState {
   registerModal: RegisterModalType;
   loginModal: LoginModalType;
   confirmDeleteModal: ConfirmDeleteModalType;
-  viewMoreModal: ViewMoreModalType
+  viewMoreModal: ViewMoreModalType;
 }
 
 const initialState: ModalsState = {

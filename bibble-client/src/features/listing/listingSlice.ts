@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Listing, ListingCreator, StatusType } from '../types';
+import { Listing, StatusType } from '../../types';
 import axios from 'axios';
-import { RootState } from '../store';
+import { RootState } from '../../store';
+import { ListingCreator } from './types';
 
 interface ListingState {
   myListings: {

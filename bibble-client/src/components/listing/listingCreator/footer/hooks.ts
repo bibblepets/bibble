@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { ListingStage } from '../../../../types';
 import { NavigateFunction } from 'react-router-dom';
 import { store } from '../../../../store';
 import {
@@ -10,12 +9,13 @@ import {
   updateMedia,
   updateMedical,
   updatePrice
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
 import { AsyncThunk } from '@reduxjs/toolkit';
+import { ListingCreatorStage } from '../../../../features/listing/types';
 
 export const useProgress = (
   navigate: NavigateFunction,
-  stage: ListingStage,
+  stage: ListingCreatorStage,
   listingId: string
 ) => {
   let back = '';

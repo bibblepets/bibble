@@ -11,10 +11,10 @@ import {
   selectMyListingCreatorsIsLoading,
   selectMyListings,
   selectMyListingsIsLoading
-} from '../../features/listingSlice';
+} from '../../features/listing/listingSlice';
 import ListingCreatorRow from '../../components/listing/listing/ListingCreatorRow';
 import SkeletonLoader from '../../components/loaders/SkeletonLoader';
-import { selectCurrentUser } from '../../features/userSlice';
+import { selectCurrentUser } from '../../features/user/userSlice';
 
 const Listing = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -35,9 +35,7 @@ const Listing = () => {
       <div className="flex flex-col w-full md:w-[756px] justify-center h-[75vh] px-4 overflow-hidden">
         <div className="flex flex-col flex-grow gap-8 overflow-hidden">
           <h1 className="text-3xl font-medium">
-            Welcome back,{' '}
-            {currentUser?.businessProfile?.businessName ||
-              currentUser?.buyerProfile?.firstName}
+            {`Welcome back, ${currentUser?.firstName}`}
           </h1>
 
           <div className="flex flex-col gap-4 h-full overflow-auto">

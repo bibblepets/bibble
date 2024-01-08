@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import userReducer from './features/userSlice';
-import kennelReducer from './features/kennelSlice';
-import listingReducer from './features/listingSlice';
-import listingOptionsReducer from './features/listingOptionsSlice';
-import listingCreatorReducer from './features/listingCreatorSlice';
-import listingEditorReducer from './features/listingEditorSlice';
+import userReducer from './features/user/userSlice';
+import kennelReducer from './features/listing/kennelSlice';
+import listingReducer from './features/listing/listingSlice';
+import listingOptionsReducer from './features/listing/listingOptionsSlice';
+import listingCreatorReducer from './features/listing/listingCreatorSlice';
+import listingEditorReducer from './features/listing/listingEditorSlice';
 import modalsReducer from './features/modalsSlice';
 
 export const store = configureStore({

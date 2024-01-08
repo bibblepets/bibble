@@ -1,7 +1,7 @@
 import { PaperClipIcon, PhotoIcon } from '@heroicons/react/24/outline';
-import { ListingCreator } from '../../../types';
 import placeholderPup from '/images/placeholder-pup.png';
 import { useResume } from './hooks';
+import { ListingCreator } from '../../../features/listing/types';
 
 interface ListingCreatorRowProps {
   listingCreator: ListingCreator;

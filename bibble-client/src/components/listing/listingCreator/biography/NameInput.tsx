@@ -4,7 +4,7 @@ import { store } from '../../../../store';
 import {
   selectListingCreatorName,
   setName
-} from '../../../../features/listingCreatorSlice';
+} from '../../../../features/listing/listingCreatorSlice';
 
 const NameInput = ({ readOnly }: { readOnly?: boolean }) => {
   const name = useSelector(selectListingCreatorName);

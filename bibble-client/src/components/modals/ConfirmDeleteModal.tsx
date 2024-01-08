@@ -7,7 +7,7 @@ import {
   selectConfirmDeleteModalNavigate
 } from '../../features/modalsSlice';
 import { store } from '../../store';
-import { deleteListingCreatorById } from '../../features/listingCreatorSlice';
+import { deleteListingCreatorById } from '../../features/listing/listingCreatorSlice';
 
 const ConfirmDeleteModal = () => {
   const isOpen = useSelector(selectConfirmDeleteModalIsOpen);
