@@ -72,7 +72,8 @@ export const updateUser = async (
     }
 
     const updatedUser = await User.findByIdAndUpdate(userId, updates, {
-      new: true
+      new: true,
+      runValidators: true
     });
 
     if (!updatedUser) {
@@ -115,7 +116,7 @@ export const updateProfilePicture = async (
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { profilePic: uploadedMedia[0] },
-      { new: true }
+      { new: true, runValidators: true }
     );
 
     if (!updatedUser) {

@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { Size } from '../../../../types';
 import { store } from '../../../../store';
 import {
   selectListingEditorGender,
   selectListingEditorSize,
   setSize
 } from '../../../../features/listing/listingEditorSlice';
+import { Size } from '../../../../features/listing/types';
 
-const sizes: Size[] = ['Small', 'Medium', 'Large'];
+const sizes: Size[] = ['small', 'medium', 'large'];
 
 const SizeOptions = () => {
   const selectedSize = useSelector(selectListingEditorSize);

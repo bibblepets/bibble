@@ -2,6 +2,8 @@ import { NextFunction } from 'express';
 import {
   ICreateListingCreatorRequest,
   ICreateListingCreatorResponse,
+  ICreateListingRequest,
+  ICreateListingResponse,
   IDeleteListingCreatorRequest,
   IDeleteListingCreatorResponse,
   IGetListingCreatorByIdRequest,
@@ -19,8 +21,87 @@ import { Logger } from '../services/logger';
 import { KeyNotFoundError } from '../errors/key.error';
 import { IMedia } from '../interfaces/media.interface';
 import * as s3 from '../services/s3';
+import { IListingModel } from '../models/listing.model';
+import { IListing } from '../interfaces/listing.interface';
+
+const Listing: IListingModel = require('../models/listing.model');
 
 const ListingCreator: IListingCreatorModel = require('../models/listing-creator.model');
+
+export const createListingCreator = async (
+  req: ICreateListingCreatorRequest,
+  res: ICreateListingCreatorResponse,
+  next: NextFunction
+) => {
+  const payload = req.body;
+
+  try {
+    Logger.update('Creating listing creator');
+
+    const listingCreator = await ListingCreator.create(payload);
+
+    Logger.success('Listing creator created', listingCreator._id);
+
+    const response = await listingCreator.formatResponse();
+
+    return res.status(200).json(response);
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const createListing = async (
+  req: ICreateListingRequest,
+  res: ICreateListingResponse,
+  next: NextFunction
+) => {
+  const { _id } = req.params;
+
+  try {
+    Logger.update('Creating listing');
+
+    const listingCreator = await ListingCreator.findById(_id);
+
+    if (!listingCreator) {
+      throw new KeyNotFoundError('Listing creator not found', '_id', _id);
+    }
+
+    const listing: IListing = {
+      _id: listingCreator._id,
+      userId: listingCreator.userId,
+      speciesId: listingCreator.biology!.speciesId!,
+      breedIds: listingCreator.biology!.breedIds!,
+      originId: listingCreator.biography!.originId!,
+      hairCoatId: listingCreator.medical!.hairCoatId!,
+      vaccineIds: listingCreator.medical!.vaccineIds!,
+      legalTagIds: listingCreator.legal!.legalTagIds!,
+      saleType: listingCreator.saleType,
+      name: listingCreator.biography!.name,
+      gender: listingCreator.biography!.gender!,
+      birthdate: listingCreator.biography!.birthdate!,
+      description: listingCreator.biography!.description!,
+      size: listingCreator.medical!.size!,
+      weight: listingCreator.medical!.weight!,
+      avsLicenseNumber: listingCreator.legal!.avsLicenseNumber!,
+      price: listingCreator.price!,
+      media: listingCreator.media!
+    };
+
+    const createdListing = await Listing.create(listing);
+
+    Logger.success('Listing created', createdListing._id);
+
+    Logger.update('Deleting listing creator');
+
+    await ListingCreator.findByIdAndDelete(_id);
+
+    Logger.success('Listing creator deleted', _id);
+
+    return res.status(200).json({});
+  } catch (error: any) {
+    next(error);
+  }
+};
 
 export const getListingCreators = async (
   _req: IGetListingCreatorsRequest,
@@ -70,28 +151,6 @@ export const getListingCreatorById = async (
   }
 };
 
-export const createListingCreator = async (
-  req: ICreateListingCreatorRequest,
-  res: ICreateListingCreatorResponse,
-  next: NextFunction
-) => {
-  const payload = req.body;
-
-  try {
-    Logger.update('Creating listing creator');
-
-    const listingCreator = await ListingCreator.create(payload);
-
-    Logger.success('Listing creator created', listingCreator._id);
-
-    const response = await listingCreator.formatResponse();
-
-    return res.status(200).json(response);
-  } catch (error: any) {
-    next(error);
-  }
-};
-
 export const updateListingCreator = async (
   req: IUpdateListingCreatorRequest,
   res: IUpdateListingCreatorResponse,
@@ -106,7 +165,8 @@ export const updateListingCreator = async (
       _id,
       updates,
       {
-        new: true
+        new: true,
+        runValidators: true
       }
     );
 
@@ -138,7 +198,8 @@ export const updateBiologyCreator = async (
       _id,
       updates,
       {
-        new: true
+        new: true,
+        runValidators: true
       }
     );
 
@@ -170,7 +231,8 @@ export const updateBiographyCreator = async (
       _id,
       updates,
       {
-        new: true
+        new: true,
+        runValidators: true
       }
     );
 
@@ -202,7 +264,8 @@ export const updateMedicalCreator = async (
       _id,
       updates,
       {
-        new: true
+        new: true,
+        runValidators: true
       }
     );
 
@@ -234,7 +297,8 @@ export const updateLegalCreator = async (
       _id,
       updates,
       {
-        new: true
+        new: true,
+        runValidators: true
       }
     );
 
@@ -278,7 +342,8 @@ export const updateMediaCreator = async (
       _id,
       updates,
       {
-        new: true
+        new: true,
+        runValidators: true
       }
     );
 
@@ -310,7 +375,8 @@ export const updatePriceCreator = async (
       _id,
       updates,
       {
-        new: true
+        new: true,
+        runValidators: true
       }
     );
 

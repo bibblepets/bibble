@@ -6,8 +6,8 @@ import {
   setGender
 } from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
-import { Gender } from '../../../../types';
 import { toCamelCase } from '../../../../utils/string';
+import { Gender } from '../../../../features/types';
 
 const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
   const selectedGender = useSelector(selectListingCreatorGender);
@@ -26,9 +26,9 @@ const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
           {(selectedGender && toCamelCase(selectedGender)) ||
             'No gender selected'}
         </a>
-        {selectedGender === 'Male' ? (
+        {selectedGender === 'male' ? (
           <BiMaleSign className="w-5 h-5 text-gray-700" />
-        ) : selectedGender === 'Female' ? (
+        ) : selectedGender === 'female' ? (
           <BiFemaleSign className="w-5 h-5 text-gray-700" />
         ) : null}
       </div>
@@ -38,9 +38,9 @@ const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
   return (
     <div className="flex flex-row gap-8 justify-between">
       <button
-        onClick={() => handleClick('Male')}
+        onClick={() => handleClick('male')}
         className={`flex flex-row justify-center p-4 rounded-lg items-center gap-4 w-full transition ${
-          selectedGender === 'Male' ? 'bg-sky-500' : 'bg-gray-500'
+          selectedGender === 'male' ? 'bg-sky-500' : 'bg-gray-500'
         }`}
       >
         <BiMaleSign className="w-5 h-5 text-white" />
@@ -48,9 +48,9 @@ const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
       </button>
 
       <button
-        onClick={() => handleClick('Female')}
+        onClick={() => handleClick('female')}
         className={`flex flex-row justify-center  p-4 rounded-lg items-center gap-4 w-full transition ${
-          selectedGender === 'Female' ? 'bg-rose-500' : 'bg-gray-500'
+          selectedGender === 'female' ? 'bg-rose-500' : 'bg-gray-500'
         }`}
       >
         <BiFemaleSign className="w-5 h-5 text-white" />

@@ -4,11 +4,11 @@ import {
   selectListingCreatorSize,
   setSize
 } from '../../../../features/listing/listingCreatorSlice';
-import { Size } from '../../../../types';
 import { store } from '../../../../store';
 import { toCamelCase } from '../../../../utils/string';
+import { Size } from '../../../../features/listing/types';
 
-const sizes: Size[] = ['Small', 'Medium', 'Large'];
+const sizes: Size[] = ['small', 'medium', 'large'];
 
 const SizeOptions = ({ readOnly }: { readOnly?: boolean }) => {
   const selectedSize = useSelector(selectListingCreatorSize);
@@ -40,7 +40,7 @@ const SizeOptions = ({ readOnly }: { readOnly?: boolean }) => {
             selectedSize === size ? 'bg-sky-500' : 'bg-gray-500'
           }`}
         >
-          <a className="text-sm font-light text-white">{size}</a>
+          <a className="text-sm font-light text-white">{toCamelCase(size)}</a>
         </button>
       ))}
     </div>

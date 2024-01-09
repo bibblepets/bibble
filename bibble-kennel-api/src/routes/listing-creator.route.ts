@@ -10,6 +10,20 @@ const upload = multer({ storage });
 router.use(AuthMiddleware.authHandler);
 
 /**
+ * @route POST /listing-creator
+ * @desc Create a new listing creator
+ * @access Private
+ */
+router.post('/', ListingCreatorController.createListingCreator);
+
+/**
+ * @route POST /listing-creator/:_id
+ * @desc Create a new listing
+ * @access Private
+ */
+router.post('/:_id', ListingCreatorController.createListing);
+
+/**
  * @route GET /listing-creator
  * @desc Get all listing creators
  * @access Private
@@ -24,13 +38,6 @@ router.get('/', ListingCreatorController.getListingCreators);
 router.get('/:_id', ListingCreatorController.getListingCreatorById);
 
 /**
- * @route POST /listing-creator
- * @desc Create a new listing creator
- * @access Private
- */
-router.post('/', ListingCreatorController.createListingCreator);
-
-/**
  * @route PUT /listing-creator/:id
  * @desc Update a listing creator
  * @access Private
@@ -38,50 +45,50 @@ router.post('/', ListingCreatorController.createListingCreator);
 router.put('/', ListingCreatorController.updateListingCreator);
 
 /**
- * @route POST /listing-creator/biology
+ * @route PUT /listing-creator/biology
  * @desc Update a listing creator's biology info
  * @access Private
  */
-router.post('/biology', ListingCreatorController.updateBiologyCreator);
+router.put('/biology', ListingCreatorController.updateBiologyCreator);
 
 /**
- * @route POST /listing-creator/biography
+ * @route PUT /listing-creator/biography
  * @desc Update a listing creator's biography info
  * @access Private
  */
-router.post('/biography', ListingCreatorController.updateBiographyCreator);
+router.put('/biography', ListingCreatorController.updateBiographyCreator);
 
 /**
- * @route POST /listing-creator/medical
+ * @route PUT /listing-creator/medical
  * @desc Update a listing creator's medical info
  * @access Private
  */
-router.post('/medical', ListingCreatorController.updateMedicalCreator);
+router.put('/medical', ListingCreatorController.updateMedicalCreator);
 
 /**
- * @route POST /listing-creator/legal
+ * @route PUT /listing-creator/legal
  * @desc Update a listing creator's legal info
  * @access Private
  */
-router.post('/legal', ListingCreatorController.updateLegalCreator);
+router.put('/legal', ListingCreatorController.updateLegalCreator);
 
 /**
- * @route POST /listing-creator/media
+ * @route PUT /listing-creator/media
  * @desc Update a listing creator's media info
  * @access Private
  */
-router.post(
+router.put(
   '/media',
   upload.array('data'),
   ListingCreatorController.updateMediaCreator
 );
 
 /**
- * @route POST /listing-creator/price
+ * @route PUT /listing-creator/price
  * @desc Update a listing creator's price info
  * @access Private
  */
-router.post('/price', ListingCreatorController.updatePriceCreator);
+router.put('/price', ListingCreatorController.updatePriceCreator);
 
 /**
  * @route DELETE /listing-creator/:id

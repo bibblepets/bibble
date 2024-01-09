@@ -48,7 +48,7 @@ export type BiographyCreator = {
 export type MedicalCreator = {
   hairCoatId: string;
   vaccineIds: string[];
-  size: string;
+  size: Size;
   weight: number;
 
   hairCoat?: HairCoat;

@@ -26,6 +26,38 @@ const initialState: ListingCreatorState = {
   error: undefined
 };
 
+export const createListingCreator = createAsyncThunk(
+  '/listingCreator/createListingCreator',
+  async (payload: { currentUser: User; saleType: SaleType }) => {
+    return await axios
+      .post('/kennel/listing-creator', {
+        saleType: payload.saleType
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
+export const createListing = createAsyncThunk(
+  '/listingCreator/createListing',
+  async (_, { getState }) => {
+    const state = getState() as RootState;
+    const { _id } = state.listingCreator;
+    return await axios
+      .post(`/kennel/listing-creator/${_id}`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
 export const fetchListingCreatorById = createAsyncThunk(
   '/listingCreator/fetchListingCreatorById',
   async (listingId: string) => {
@@ -57,46 +89,13 @@ export const updateListingCreator = createAsyncThunk(
   }
 );
 
-export const deleteListingCreatorById = createAsyncThunk(
-  '/listingCreator/deleteListingCreatorById',
-  async (_, { getState }) => {
-    const state = getState() as RootState;
-    const { _id } = state.listingCreator;
-
-    return await axios
-      .delete(`/kennel/listing-creator/${_id}`)
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        throw new Error(error.response.data.message);
-      });
-  }
-);
-
-export const createListingCreator = createAsyncThunk(
-  '/listingCreator/createListingCreator',
-  async (payload: { currentUser: User; saleType: SaleType }) => {
-    return await axios
-      .post('/kennel/listing-creator', {
-        saleType: payload.saleType
-      })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        throw new Error(error.response.data.message);
-      });
-  }
-);
-
 export const updateBiology = createAsyncThunk(
   '/listingCreator/updateBiology',
   async (_, { getState }) => {
     const state = getState() as RootState;
     const { _id, biology } = state.listingCreator;
     return await axios
-      .post('/kennel/listing-creator/biology', {
+      .put('/kennel/listing-creator/biology', {
         _id,
         stage: 1,
         biology
@@ -116,7 +115,7 @@ export const updateBiography = createAsyncThunk(
     const state = getState() as RootState;
     const { _id, biography } = state.listingCreator;
     return await axios
-      .post('/kennel/listing-creator/biography', {
+      .put('/kennel/listing-creator/biography', {
         _id,
         stage: 2,
         biography
@@ -136,7 +135,7 @@ export const updateMedical = createAsyncThunk(
     const state = getState() as RootState;
     const { _id, medical } = state.listingCreator;
     return await axios
-      .post('/kennel/listing-creator/medical', {
+      .put('/kennel/listing-creator/medical', {
         _id,
         stage: 3,
         medical
@@ -156,7 +155,7 @@ export const updateLegal = createAsyncThunk(
     const state = getState() as RootState;
     const { _id, legal } = state.listingCreator;
     return await axios
-      .post('/kennel/listing-creator/legal', {
+      .put('/kennel/listing-creator/legal', {
         _id,
         stage: 4,
         legal
@@ -190,7 +189,7 @@ export const updateMedia = createAsyncThunk(
       media.file && formData.append('data', media.file);
     });
     return await axios
-      .post('/kennel/listing-creator/media', formData, {
+      .put('/kennel/listing-creator/media', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then((response) => {
@@ -208,7 +207,7 @@ export const updatePrice = createAsyncThunk(
     const state = getState() as RootState;
     const { price } = state.listingCreator;
     return await axios
-      .post('/kennel/listing-creator/price', {
+      .put('/kennel/listing-creator/price', {
         _id: state.listingCreator._id,
         stage: 6,
         price
@@ -222,20 +221,20 @@ export const updatePrice = createAsyncThunk(
   }
 );
 
-export const createListing = createAsyncThunk(
-  '/listingCreator/createListing',
+export const deleteListingCreatorById = createAsyncThunk(
+  '/listingCreator/deleteListingCreatorById',
   async (_, { getState }) => {
-    // const state = getState() as RootState;
-    // return await axios
-    //   .post('/kennel/listing-creator/submit', {
-    //     listingCreatorId: state.listingCreator._id
-    //   })
-    //   .then((response) => {
-    //     return response.data;
-    //   })
-    //   .catch((error) => {
-    //     throw new Error(error.response.data.message);
-    //   });
+    const state = getState() as RootState;
+    const { _id } = state.listingCreator;
+
+    return await axios
+      .delete(`/kennel/listing-creator/${_id}`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
 

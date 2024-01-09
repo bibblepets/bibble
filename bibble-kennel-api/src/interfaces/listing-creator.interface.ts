@@ -8,7 +8,7 @@ import { IMedia, IMediaResponse } from './media.interface';
 import { ILegalTag } from './legal-tag.interface';
 import { TypedRequest } from './request.interface';
 import { TypedResponse } from './response.interface';
-import { IAuthorizedRequest } from './auth.interface';
+import { AuthorizedRequest } from './auth.interface';
 
 export interface IListingCreator {
   _id: Schema.Types.ObjectId;
@@ -30,7 +30,7 @@ export interface IListingCreatorMethods {
 }
 
 export interface IListingCreatorRequest
-  extends IAuthorizedRequest<IListingCreator> {}
+  extends AuthorizedRequest<IListingCreator> {}
 
 export interface IListingCreatorResponse extends IListingCreator {
   media?: IMediaResponse[];
@@ -71,31 +71,36 @@ export interface ILegalCreator {
   legalTags?: ILegalTag[];
 }
 
-export interface IGetListingCreatorsRequest extends IAuthorizedRequest {}
-
-export interface IGetListingCreatorsResponse
-  extends TypedResponse<IListingCreatorResponse[]> {}
-
-export interface IGetListingCreatorByIdRequest
-  extends IAuthorizedRequest<{}, { _id: string }> {}
-
-export interface IGetListingCreatorByIdResponse
-  extends TypedResponse<IListingCreatorResponse> {}
-
 export interface ICreateListingCreatorRequest
   extends TypedRequest<IListingCreatorRequest> {}
 
 export interface ICreateListingCreatorResponse
   extends TypedResponse<IListingCreatorResponse> {}
 
+export interface ICreateListingRequest
+  extends AuthorizedRequest<{}, { _id: string }> {}
+
+export interface ICreateListingResponse extends TypedResponse<{}> {}
+
+export interface IGetListingCreatorsRequest extends AuthorizedRequest {}
+
+export interface IGetListingCreatorsResponse
+  extends TypedResponse<IListingCreatorResponse[]> {}
+
+export interface IGetListingCreatorByIdRequest
+  extends AuthorizedRequest<{}, { _id: string }> {}
+
+export interface IGetListingCreatorByIdResponse
+  extends TypedResponse<IListingCreatorResponse> {}
+
 export interface IUpdateListingCreatorRequest
-  extends IAuthorizedRequest<IListingCreator & { _id: string }> {}
+  extends AuthorizedRequest<IListingCreator & { _id: string }> {}
 
 export interface IUpdateListingCreatorResponse
   extends TypedResponse<IListingCreatorResponse> {}
 
 export interface IUpdateListingCreatorStageRequest<T>
-  extends IAuthorizedRequest<T & { _id: string; stage: number }> {}
+  extends AuthorizedRequest<T & { _id: string; stage: number }> {}
 
 export interface IUpdateBiologyCreatorRequest
   extends IUpdateListingCreatorStageRequest<IBiologyCreator> {}
@@ -119,6 +124,6 @@ export interface IUpdateListingCreatorResponse
   extends TypedResponse<IListingCreatorResponse> {}
 
 export interface IDeleteListingCreatorRequest
-  extends IAuthorizedRequest<{}, { _id: string }> {}
+  extends AuthorizedRequest<{}, { _id: string }> {}
 
 export interface IDeleteListingCreatorResponse extends TypedResponse<{}> {}

@@ -5,13 +5,13 @@ import {
   IListingCreatorResponse
 } from '../interfaces/listing-creator.interface';
 import { genders, saleTypes, sizes } from '../types/constants';
-import * as s3 from '../services/s3';
 import { ISpeciesModel } from './species.model';
 import { IBreedModel } from './breed.model';
 import { ICountryModel } from './country.model';
 import { IHairCoatModel } from './hair-coat.model';
 import { IVaccineModel } from './vaccine.model';
 import { ILegalTagModel } from './legal-tag.model';
+import * as s3 from '../services/s3';
 
 const Species: ISpeciesModel = require('../models/species.model');
 const Breed: IBreedModel = require('../models/breed.model');
