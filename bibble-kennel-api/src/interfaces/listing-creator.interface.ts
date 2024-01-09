@@ -98,5 +98,8 @@ export interface IUpdateMedicalCreatorRequest
 export interface IUpdateLegalCreatorRequest
   extends IUpdateListingCreatorStageRequest<ILegalCreator> {}
 
+export interface IUpdateMediaCreatorRequest
+  extends IUpdateListingCreatorStageRequest<{ mediaNames: string[] }> {}
+
 export interface IUpdateListingCreatorResponse
   extends TypedResponse<IListingCreatorResponse> {}

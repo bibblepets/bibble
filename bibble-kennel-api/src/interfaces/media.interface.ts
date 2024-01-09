@@ -1,5 +1,5 @@
 export interface IMedia {
-  _id: string;
+  _id?: string;
   name: string;
   url?: string;
 }

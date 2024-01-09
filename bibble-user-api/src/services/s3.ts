@@ -33,7 +33,7 @@ const s3Client = new S3Client({
 export const putMedia = async (
   id: Schema.Types.ObjectId | string,
   files: Express.Multer.File | Express.Multer.File[],
-  media?: Omit<IMedia, '_id'> | Omit<IMedia, '_id'>[],
+  media?: IMedia | IMedia[],
   bucketName?: string
 ) => {
   if (!(files instanceof Array)) {
@@ -46,7 +46,7 @@ export const putMedia = async (
 
   let clientMediaNames: Array<string | undefined> | undefined;
   let s3MediaNames: Array<string | undefined> | undefined;
-  const listingMedia: Omit<IMedia, '_id'>[] = [];
+  const listingMedia: IMedia[] = [];
 
   if (Array.isArray(media) && media.length > 0) {
     clientMediaNames = media.map((media) => media.name);

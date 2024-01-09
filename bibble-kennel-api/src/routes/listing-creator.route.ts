@@ -1,8 +1,11 @@
 import { Router } from 'express';
 import * as ListingCreatorController from '../controllers/listing-creator.controller';
 import * as AuthMiddleware from '../middleware/auth.middleware';
+import multer from 'multer';
 
 const router = Router();
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 router.use(AuthMiddleware.authHandler);
 
@@ -53,6 +56,11 @@ router.post('/legal', ListingCreatorController.updateLegalCreator);
  * @desc Update a listing creator's media info
  * @access Private
  */
+router.post(
+  '/media',
+  upload.array('data'),
+  ListingCreatorController.updateMediaCreator
+);
 
 /**
  * @route POST /listing-creator/price

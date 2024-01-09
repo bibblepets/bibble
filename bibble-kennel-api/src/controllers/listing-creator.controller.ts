@@ -5,11 +5,14 @@ import {
   IGetListingCreatorByIdRequest,
   IUpdateBiographyCreatorRequest,
   IUpdateBiologyCreatorRequest,
-  IUpdateListingCreatorResponse
+  IUpdateListingCreatorResponse,
+  IUpdateMediaCreatorRequest
 } from '../interfaces/listing-creator.interface';
 import { IListingCreatorModel } from '../models/listing-creator.model';
 import { Logger } from '../services/logger';
 import { KeyNotFoundError } from '../errors/key.error';
+import { IMedia } from '../interfaces/media.interface';
+import * as s3 from '../services/s3';
 
 const ListingCreator: IListingCreatorModel = require('../models/listing-creator.model');
 
@@ -180,6 +183,50 @@ export const updateLegalCreator = async (
     }
 
     Logger.success('Legal creator updated', _id);
+
+    const response = await updatedListingCreator.formatResponse();
+
+    return res.status(200).json(response);
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const updateMediaCreator = async (
+  req: IUpdateMediaCreatorRequest,
+  res: IUpdateListingCreatorResponse,
+  next: NextFunction
+) => {
+  const { _id, stage, mediaNames } = req.body;
+  const files = req.files as Express.Multer.File[];
+
+  try {
+    Logger.update('Updating media creator');
+
+    let media: IMedia[] | undefined;
+
+    if (Array.isArray(mediaNames) && mediaNames.length) {
+      media = mediaNames.map((name) => ({ name }));
+    }
+
+    const updates = {
+      stage,
+      media: await s3.putMedia(_id, files, media, s3.listingBucketName)
+    };
+
+    const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
+      _id,
+      updates,
+      {
+        new: true
+      }
+    );
+
+    if (!updatedListingCreator) {
+      throw new KeyNotFoundError('Listing creator not found', '_id', _id);
+    }
+
+    Logger.success('Media creator updated', _id);
 
     const response = await updatedListingCreator.formatResponse();
 

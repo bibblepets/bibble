@@ -182,27 +182,32 @@ export const updateLegal = createAsyncThunk(
 export const updateMedia = createAsyncThunk(
   '/listingCreator/updateMedia',
   async (_, { getState }) => {
-    // const state = getState() as RootState;
-    // const media = state.listingCreator.media || [];
-    // const formData = new FormData();
-    // formData.append('_id', state.listingCreator._id || '');
-    // formData.append('stage', '5');
-    // media.forEach((media) => {
-    //   media.name && formData.append('mediaNames[]', media.name);
-    // });
-    // media.forEach((media) => {
-    //   media.file && formData.append('data', media.file);
-    // });
-    // return await axios
-    //   .post('/kennel/listing-creator/media', formData, {
-    //     headers: { 'Content-Type': 'multipart/form-data' }
-    //   })
-    //   .then((response) => {
-    //     return response.data;
-    //   })
-    //   .catch((error) => {
-    //     throw new Error(error.response.data.message);
-    //   });
+    const state = getState() as RootState;
+    const { _id, media } = state.listingCreator;
+
+    if (!_id || !media) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('_id', _id || '');
+    formData.append('stage', '5');
+    media.forEach((media) => {
+      media.name && formData.append('mediaNames[]', media.name);
+    });
+    media.forEach((media) => {
+      media.file && formData.append('data', media.file);
+    });
+    return await axios
+      .post('/kennel/listing-creator/media', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
 
