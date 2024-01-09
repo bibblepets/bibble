@@ -77,7 +77,7 @@ export interface IGetListingCreatorsResponse
   extends TypedResponse<IListingCreatorResponse[]> {}
 
 export interface IGetListingCreatorByIdRequest
-  extends IAuthorizedRequest<{}, { id: string }> {}
+  extends IAuthorizedRequest<{}, { _id: string }> {}
 
 export interface IGetListingCreatorByIdResponse
   extends TypedResponse<IListingCreatorResponse> {}
@@ -86,6 +86,12 @@ export interface ICreateListingCreatorRequest
   extends TypedRequest<IListingCreatorRequest> {}
 
 export interface ICreateListingCreatorResponse
+  extends TypedResponse<IListingCreatorResponse> {}
+
+export interface IUpdateListingCreatorRequest
+  extends IAuthorizedRequest<IListingCreator & { _id: string }> {}
+
+export interface IUpdateListingCreatorResponse
   extends TypedResponse<IListingCreatorResponse> {}
 
 export interface IUpdateListingCreatorStageRequest<T>
@@ -111,3 +117,8 @@ export interface IUpdatePriceCreatorRequest
 
 export interface IUpdateListingCreatorResponse
   extends TypedResponse<IListingCreatorResponse> {}
+
+export interface IDeleteListingCreatorRequest
+  extends IAuthorizedRequest<{}, { _id: string }> {}
+
+export interface IDeleteListingCreatorResponse extends TypedResponse<{}> {}

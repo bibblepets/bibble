@@ -2,11 +2,14 @@ import { NextFunction } from 'express';
 import {
   ICreateListingCreatorRequest,
   ICreateListingCreatorResponse,
+  IDeleteListingCreatorRequest,
+  IDeleteListingCreatorResponse,
   IGetListingCreatorByIdRequest,
   IGetListingCreatorsRequest,
   IGetListingCreatorsResponse,
   IUpdateBiographyCreatorRequest,
   IUpdateBiologyCreatorRequest,
+  IUpdateListingCreatorRequest,
   IUpdateListingCreatorResponse,
   IUpdateMediaCreatorRequest,
   IUpdatePriceCreatorRequest
@@ -20,7 +23,7 @@ import * as s3 from '../services/s3';
 const ListingCreator: IListingCreatorModel = require('../models/listing-creator.model');
 
 export const getListingCreators = async (
-  req: IGetListingCreatorsRequest,
+  _req: IGetListingCreatorsRequest,
   res: IGetListingCreatorsResponse,
   next: NextFunction
 ) => {
@@ -46,18 +49,18 @@ export const getListingCreatorById = async (
   res: ICreateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { id } = req.params;
+  const { _id } = req.params;
 
   try {
     Logger.update('Getting listing creator by id');
 
-    const listingCreator = await ListingCreator.findById(id);
+    const listingCreator = await ListingCreator.findById(_id);
 
     if (!listingCreator) {
-      throw new KeyNotFoundError('Listing creator not found', 'id', id);
+      throw new KeyNotFoundError('Listing creator not found', '_id', _id);
     }
 
-    Logger.success('Listing creator retrieved', listingCreator._id);
+    Logger.success('Listing creator retrieved', _id);
 
     const response = await listingCreator.formatResponse();
 
@@ -82,6 +85,38 @@ export const createListingCreator = async (
     Logger.success('Listing creator created', listingCreator._id);
 
     const response = await listingCreator.formatResponse();
+
+    return res.status(200).json(response);
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const updateListingCreator = async (
+  req: IUpdateListingCreatorRequest,
+  res: IUpdateListingCreatorResponse,
+  next: NextFunction
+) => {
+  const { _id, ...updates } = req.body;
+
+  try {
+    Logger.update('Updating listing creator');
+
+    const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
+      _id,
+      updates,
+      {
+        new: true
+      }
+    );
+
+    if (!updatedListingCreator) {
+      throw new KeyNotFoundError('Listing creator not found', '_id', _id);
+    }
+
+    Logger.success('Listing creator updated', _id);
+
+    const response = await updatedListingCreator.formatResponse();
 
     return res.status(200).json(response);
   } catch (error: any) {
@@ -288,6 +323,31 @@ export const updatePriceCreator = async (
     const response = await updatedListingCreator.formatResponse();
 
     return res.status(200).json(response);
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const deleteListingCreatorById = async (
+  req: IDeleteListingCreatorRequest,
+  res: IDeleteListingCreatorResponse,
+  next: NextFunction
+) => {
+  const { _id } = req.params;
+  Logger.debug('deleteListingCreatorById', req.params);
+
+  try {
+    Logger.update('Deleting listing creator by id');
+
+    const deletedListingCreator = await ListingCreator.findByIdAndDelete(_id);
+
+    if (!deletedListingCreator) {
+      throw new KeyNotFoundError('Listing creator not found', '_id', _id);
+    }
+
+    Logger.success('Listing creator deleted', _id);
+
+    return res.status(200).json({});
   } catch (error: any) {
     next(error);
   }

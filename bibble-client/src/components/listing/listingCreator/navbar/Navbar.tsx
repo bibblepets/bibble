@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
 import { store } from '../../../../store';
-import { updateListingCreatorById } from '../../../../features/listing/listingCreatorSlice';
+import { updateListingCreator } from '../../../../features/listing/listingCreatorSlice';
 import { openConfirmDeleteModal } from '../../../../features/modalsSlice';
 import Logo from '../../../global/Logo';
 import {
@@ -16,9 +16,9 @@ const Navbar = () => {
   const [, , , , stage] = location.pathname.split('/');
 
   const handleSaveAndExit = useCallback(async () => {
-    const action = await store.dispatch(updateListingCreatorById());
+    const action = await store.dispatch(updateListingCreator());
 
-    if (updateListingCreatorById.fulfilled.match(action)) {
+    if (updateListingCreator.fulfilled.match(action)) {
       navigate('/listing');
     }
   }, [store, navigate]);

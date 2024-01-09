@@ -40,23 +40,14 @@ export const fetchListingCreatorById = createAsyncThunk(
   }
 );
 
-export const updateListingCreatorById = createAsyncThunk(
-  '/listingCreator/updateListingCreatorById',
+export const updateListingCreator = createAsyncThunk(
+  '/listingCreator/updateListingCreator',
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const { _id, stage, biology, biography, medical, legal, media, price } =
-      state.listingCreator;
+    const { media, ...listingCreator } = state.listingCreator;
 
     return await axios
-      .put(`/kennel/listing-creator/${_id}`, {
-        stage,
-        biology,
-        biography,
-        medical,
-        legal,
-        // Media not saveable,
-        price
-      })
+      .put(`/kennel/listing-creator`, listingCreator)
       .then((response) => {
         return response.data;
       })
@@ -528,14 +519,14 @@ const listingCreatorSlice = createSlice({
         state.status = 'ERROR';
         state.error = action.error.message;
       })
-      .addCase(updateListingCreatorById.pending, (state) => {
+      .addCase(updateListingCreator.pending, (state) => {
         state.status = 'LOADING';
       })
-      .addCase(updateListingCreatorById.fulfilled, (state, action) => {
+      .addCase(updateListingCreator.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
         resetState(state);
       })
-      .addCase(updateListingCreatorById.rejected, (state, action) => {
+      .addCase(updateListingCreator.rejected, (state, action) => {
         state.status = 'ERROR';
         state.error = action.error.message;
       })

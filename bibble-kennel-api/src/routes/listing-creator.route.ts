@@ -21,7 +21,7 @@ router.get('/', ListingCreatorController.getListingCreators);
  * @desc Get all listing creators
  * @access Private
  */
-router.get('/:id', ListingCreatorController.getListingCreatorById);
+router.get('/:_id', ListingCreatorController.getListingCreatorById);
 
 /**
  * @route POST /listing-creator
@@ -29,6 +29,13 @@ router.get('/:id', ListingCreatorController.getListingCreatorById);
  * @access Private
  */
 router.post('/', ListingCreatorController.createListingCreator);
+
+/**
+ * @route PUT /listing-creator/:id
+ * @desc Update a listing creator
+ * @access Private
+ */
+router.put('/', ListingCreatorController.updateListingCreator);
 
 /**
  * @route POST /listing-creator/biology
@@ -75,5 +82,12 @@ router.post(
  * @access Private
  */
 router.post('/price', ListingCreatorController.updatePriceCreator);
+
+/**
+ * @route DELETE /listing-creator/:id
+ * @desc Delete a listing creator
+ * @access Private
+ */
+router.delete('/:_id', ListingCreatorController.deleteListingCreatorById);
 
 module.exports = router;
