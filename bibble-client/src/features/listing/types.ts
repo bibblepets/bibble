@@ -1,5 +1,35 @@
 import { Gender, Media } from '../types';
 
+export type Listing = {
+  _id?: string;
+  userId: string;
+  speciesId: string;
+  breedIds: string[];
+  originId: string;
+  hairCoatId: string;
+  vaccineIds: string[];
+  legalTagIds: string[];
+  saleType: SaleType;
+  name?: string;
+  gender: string;
+  birthdate: Date | string;
+  description: string;
+  size: Size;
+  weight: number;
+  avsLicenseNumber: string;
+  price: number;
+  media: Media[];
+  createdAt?: Date;
+  updatedAt?: Date;
+
+  species?: Species;
+  breeds?: Breed[];
+  origin?: Country;
+  hairCoat?: HairCoat;
+  vaccines?: Vaccine[];
+  legalTags?: LegalTag[];
+};
+
 export type ListingCreatorStage =
   | 'Biology'
   | 'Biography'

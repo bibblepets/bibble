@@ -27,7 +27,7 @@ const Listing = () => {
   );
 
   useEffect(() => {
-    // store.dispatch(fetchMyListings());
+    store.dispatch(fetchMyListings());
     store.dispatch(fetchMyListingCreators());
   }, [store]);
 

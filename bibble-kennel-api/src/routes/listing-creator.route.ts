@@ -25,10 +25,10 @@ router.post('/:_id', ListingCreatorController.createListing);
 
 /**
  * @route GET /listing-creator
- * @desc Get all listing creators
+ * @desc Get my listing creators
  * @access Private
  */
-router.get('/', ListingCreatorController.getListingCreators);
+router.get('/me', ListingCreatorController.getListingMyCreators);
 
 /**
  * @route GET /listing-creator/:id

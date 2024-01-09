@@ -7,6 +7,7 @@ import { IVaccine } from './vaccine.interface';
 import { ILegalTag } from './legal-tag.interface';
 import { IMedia, IMediaResponse } from './media.interface';
 import { AuthorizedRequest } from './auth.interface';
+import { TypedResponse } from './response.interface';
 
 export interface IListing {
   _id: Schema.Types.ObjectId;
@@ -47,3 +48,8 @@ export interface IListingRequest extends AuthorizedRequest<IListing> {}
 export interface IListingResponse extends IListing {
   media: IMediaResponse[];
 }
+
+export interface IGetMyListingsRequest extends AuthorizedRequest {}
+
+export interface IGetMyListingsResponse
+  extends TypedResponse<IListingResponse[]> {}

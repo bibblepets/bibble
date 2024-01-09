@@ -12,7 +12,7 @@ import { useCallback } from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
 import toast from 'react-hot-toast';
 import { store } from '../../../store';
-import { Media } from '../../../types';
+import { Media } from '../../../features/types';
 
 const UserPanel = () => {
   const currentUser = useSelector(selectCurrentUser);

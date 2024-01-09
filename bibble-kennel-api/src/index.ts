@@ -10,6 +10,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 
 // Project dependencies
+const listingRouter = require('./routes/listing.route');
 const listingCreatorRouter = require('./routes/listing-creator.route');
 const speciesRouter = require('./routes/species.route');
 const breedRouter = require('./routes/breed.route');
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
+app.use('/listing', listingRouter);
 app.use('/listing-creator', listingCreatorRouter);
 app.use('/species', speciesRouter);
 app.use('/breed', breedRouter);

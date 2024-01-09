@@ -1,27 +1,3 @@
-export const toCountdown = (date?: Date | string) => {
-  if (!date) {
-    date = new Date(Date.now());
-  }
-
-  if (typeof date === 'string') {
-    date = new Date(date);
-  }
-
-  const now = new Date();
-  const diff = date.getTime() - now.getTime();
-  const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const minutes = Math.floor(diff / (1000 * 60));
-
-  if (months > 0) {
-    return `${months} month${months > 1 ? 's' : ''}`;
-  } else if (days > 0) {
-    return `${days} day${days > 1 ? 's' : ''}`;
-  } else {
-    return `${minutes} minute${minutes > 1 ? 's' : ''}`;
-  }
-};
-
 export const toAge = (birthDate: Date | string): string => {
   if (typeof birthDate === 'string') {
     birthDate = new Date(birthDate);
@@ -101,6 +77,25 @@ export const toTimeAgo = (date?: Date | string) => {
   } else {
     return { time: diffDays, unit: formatTimeUnit(diffDays, 'Days') };
   }
+};
+
+export const toExpiresAt = (date?: Date | string, numDays: number = 30) => {
+  if (!date) {
+    date = new Date(Date.now());
+  }
+  if (typeof date === 'string') {
+    date = new Date(date);
+  }
+
+  const futureDate = new Date(date.getTime() + numDays * 24 * 60 * 60 * 1000);
+  const today = new Date();
+  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+
+  const diffDays = Math.round(
+    Math.abs((futureDate.getTime() - today.getTime()) / oneDay)
+  );
+
+  return { time: diffDays, unit: formatTimeUnit(diffDays, 'days') };
 };
 
 const formatTimeUnit = (time: number, unit: string) => {

@@ -7,8 +7,8 @@ import {
   IDeleteListingCreatorRequest,
   IDeleteListingCreatorResponse,
   IGetListingCreatorByIdRequest,
-  IGetListingCreatorsRequest,
-  IGetListingCreatorsResponse,
+  IGetMyListingCreatorsRequest,
+  IGetMyListingCreatorsResponse,
   IUpdateBiographyCreatorRequest,
   IUpdateBiologyCreatorRequest,
   IUpdateListingCreatorRequest,
@@ -103,15 +103,17 @@ export const createListing = async (
   }
 };
 
-export const getListingCreators = async (
-  _req: IGetListingCreatorsRequest,
-  res: IGetListingCreatorsResponse,
+export const getListingMyCreators = async (
+  req: IGetMyListingCreatorsRequest,
+  res: IGetMyListingCreatorsResponse,
   next: NextFunction
 ) => {
-  try {
-    Logger.update('Getting listing creators');
+  const { userId } = req.body;
 
-    const listingCreators = await ListingCreator.find();
+  try {
+    Logger.update('Getting listing creators for user', userId);
+
+    const listingCreators = await ListingCreator.find({ userId });
 
     Logger.success('Listing creators retrieved');
 

@@ -82,9 +82,9 @@ export interface ICreateListingRequest
 
 export interface ICreateListingResponse extends TypedResponse<{}> {}
 
-export interface IGetListingCreatorsRequest extends AuthorizedRequest {}
+export interface IGetMyListingCreatorsRequest extends AuthorizedRequest {}
 
-export interface IGetListingCreatorsResponse
+export interface IGetMyListingCreatorsResponse
   extends TypedResponse<IListingCreatorResponse[]> {}
 
 export interface IGetListingCreatorByIdRequest
