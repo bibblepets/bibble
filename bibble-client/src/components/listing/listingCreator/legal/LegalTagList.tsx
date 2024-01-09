@@ -4,19 +4,28 @@ import { useSelector } from 'react-redux';
 import {
   addLegalTag,
   removeLegalTag,
-  selectListingCreatorLegalTags
+  selectListingCreatorLegalTags,
+  selectListingCreatorSpecies
 } from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
 import { selectListingOptionsLegalTags } from '../../../../features/listing/listingOptionsSlice';
 import { LegalTag } from '../../../../features/listing/types';
 
 const LegalTagList = ({ readOnly }: { readOnly?: boolean }) => {
+  const species = useSelector(selectListingCreatorSpecies);
   const selectedLegalTags = useSelector(selectListingCreatorLegalTags);
-  const legalTags = useSelector(selectListingOptionsLegalTags);
+  const allLegalTags = useSelector(selectListingOptionsLegalTags);
+  const legalTags = allLegalTags.filter(
+    (legalTag) => legalTag.speciesId === species?._id
+  );
 
   const handleClick = useCallback(
     (legalTag: LegalTag) => {
-      if (selectedLegalTags?.includes(legalTag)) {
+      if (
+        selectedLegalTags
+          ?.map((legalTag) => legalTag._id)
+          ?.includes(legalTag._id)
+      ) {
         store.dispatch(removeLegalTag(legalTag));
       } else {
         store.dispatch(addLegalTag(legalTag));
@@ -24,21 +33,6 @@ const LegalTagList = ({ readOnly }: { readOnly?: boolean }) => {
     },
     [store, selectedLegalTags]
   );
-
-  const formatTag = (tag: LegalTag) => {
-    let formattedTag = tag.name
-      .replace(/^is/, '')
-      .replace(/([A-Z])/g, ' $1')
-      .trim();
-
-    let words = formattedTag.split(' ');
-    if (words.length > 1) {
-      words[0] = words[0].toUpperCase();
-      formattedTag = words.join(' ');
-    }
-
-    return formattedTag;
-  };
 
   return (
     <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -49,14 +43,16 @@ const LegalTagList = ({ readOnly }: { readOnly?: boolean }) => {
             disabled={readOnly}
             className="p-2 rounded-lg border transition hover:shadow-inner"
           >
-            {selectedLegalTags?.includes(tag as LegalTag) ? (
+            {selectedLegalTags
+              ?.map((legalTag) => legalTag._id)
+              ?.includes(tag._id) ? (
               <CheckIcon className="w-4 h-4" />
             ) : (
               <div className="w-4 h-4" />
             )}
           </button>
           <a key={index} className="text-sm font-light text-gray-500">
-            {formatTag(tag)}
+            {tag.name}
           </a>
         </div>
       ))}
