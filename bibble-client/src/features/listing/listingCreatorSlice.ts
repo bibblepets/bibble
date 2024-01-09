@@ -214,20 +214,20 @@ export const updateMedia = createAsyncThunk(
 export const updatePrice = createAsyncThunk(
   '/listingCreator/updatePrice',
   async (_, { getState }) => {
-    // const state = getState() as RootState;
-    // const price = state.listingCreator.price || 0;
-    // return await axios
-    //   .post('/kennel/listing-creator/price', {
-    //     _id: state.listingCreator._id,
-    //     stage: 6,
-    //     price
-    //   })
-    //   .then((response) => {
-    //     return response.data;
-    //   })
-    //   .catch((error) => {
-    //     throw new Error(error.response.data.message);
-    //   });
+    const state = getState() as RootState;
+    const { price } = state.listingCreator;
+    return await axios
+      .post('/kennel/listing-creator/price', {
+        _id: state.listingCreator._id,
+        stage: 6,
+        price
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
   }
 );
 

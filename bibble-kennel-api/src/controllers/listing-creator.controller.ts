@@ -3,10 +3,13 @@ import {
   ICreateListingCreatorRequest,
   ICreateListingCreatorResponse,
   IGetListingCreatorByIdRequest,
+  IGetListingCreatorsRequest,
+  IGetListingCreatorsResponse,
   IUpdateBiographyCreatorRequest,
   IUpdateBiologyCreatorRequest,
   IUpdateListingCreatorResponse,
-  IUpdateMediaCreatorRequest
+  IUpdateMediaCreatorRequest,
+  IUpdatePriceCreatorRequest
 } from '../interfaces/listing-creator.interface';
 import { IListingCreatorModel } from '../models/listing-creator.model';
 import { Logger } from '../services/logger';
@@ -15,6 +18,28 @@ import { IMedia } from '../interfaces/media.interface';
 import * as s3 from '../services/s3';
 
 const ListingCreator: IListingCreatorModel = require('../models/listing-creator.model');
+
+export const getListingCreators = async (
+  req: IGetListingCreatorsRequest,
+  res: IGetListingCreatorsResponse,
+  next: NextFunction
+) => {
+  try {
+    Logger.update('Getting listing creators');
+
+    const listingCreators = await ListingCreator.find();
+
+    Logger.success('Listing creators retrieved');
+
+    const response = await Promise.all(
+      listingCreators.map((listingCreator) => listingCreator.formatResponse())
+    );
+
+    return res.status(200).json(response);
+  } catch (error: any) {
+    next(error);
+  }
+};
 
 export const getListingCreatorById = async (
   req: IGetListingCreatorByIdRequest,
@@ -227,6 +252,38 @@ export const updateMediaCreator = async (
     }
 
     Logger.success('Media creator updated', _id);
+
+    const response = await updatedListingCreator.formatResponse();
+
+    return res.status(200).json(response);
+  } catch (error: any) {
+    next(error);
+  }
+};
+
+export const updatePriceCreator = async (
+  req: IUpdatePriceCreatorRequest,
+  res: IUpdateListingCreatorResponse,
+  next: NextFunction
+) => {
+  const { _id, ...updates } = req.body;
+
+  try {
+    Logger.update('Updating price creator');
+
+    const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
+      _id,
+      updates,
+      {
+        new: true
+      }
+    );
+
+    if (!updatedListingCreator) {
+      throw new KeyNotFoundError('Listing creator not found', '_id', _id);
+    }
+
+    Logger.success('Price creator updated', _id);
 
     const response = await updatedListingCreator.formatResponse();
 

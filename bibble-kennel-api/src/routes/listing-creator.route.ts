@@ -10,6 +10,13 @@ const upload = multer({ storage });
 router.use(AuthMiddleware.authHandler);
 
 /**
+ * @route GET /listing-creator
+ * @desc Get all listing creators
+ * @access Private
+ */
+router.get('/', ListingCreatorController.getListingCreators);
+
+/**
  * @route GET /listing-creator/:id
  * @desc Get all listing creators
  * @access Private
@@ -67,5 +74,6 @@ router.post(
  * @desc Update a listing creator's price info
  * @access Private
  */
+router.post('/price', ListingCreatorController.updatePriceCreator);
 
 module.exports = router;

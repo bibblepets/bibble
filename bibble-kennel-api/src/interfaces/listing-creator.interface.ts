@@ -71,8 +71,13 @@ export interface ILegalCreator {
   legalTags?: ILegalTag[];
 }
 
+export interface IGetListingCreatorsRequest extends IAuthorizedRequest {}
+
+export interface IGetListingCreatorsResponse
+  extends TypedResponse<IListingCreatorResponse[]> {}
+
 export interface IGetListingCreatorByIdRequest
-  extends TypedRequest<{}, { id: string }> {}
+  extends IAuthorizedRequest<{}, { id: string }> {}
 
 export interface IGetListingCreatorByIdResponse
   extends TypedResponse<IListingCreatorResponse> {}
@@ -100,6 +105,9 @@ export interface IUpdateLegalCreatorRequest
 
 export interface IUpdateMediaCreatorRequest
   extends IUpdateListingCreatorStageRequest<{ mediaNames: string[] }> {}
+
+export interface IUpdatePriceCreatorRequest
+  extends IUpdateListingCreatorStageRequest<{ price: number }> {}
 
 export interface IUpdateListingCreatorResponse
   extends TypedResponse<IListingCreatorResponse> {}

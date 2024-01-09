@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Listing, StatusType } from '../../types';
 import axios from 'axios';
 import { RootState } from '../../store';
 import { ListingCreator } from './types';
+import { StatusType } from '../types';
 
 interface ListingState {
   myListings: {
-    data: Listing[];
+    data: any[];
     status: StatusType;
     error?: string;
   };
@@ -48,7 +48,7 @@ export const fetchMyListingCreators = createAsyncThunk(
   '/listingSlice/fetchMyListingCreators',
   async () => {
     return await axios
-      .get('/kennel/listing-creator/self')
+      .get('/kennel/listing-creator')
       .then((response) => {
         return response.data;
       })
