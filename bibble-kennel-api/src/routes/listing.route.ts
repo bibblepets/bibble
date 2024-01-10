@@ -17,6 +17,7 @@ router.get('/', ListingController.getListings);
 /**
  * @route GET /listing/me
  * @desc Get all listings
+ * @access Private
  */
 router.get('/me', AuthMiddleware.authHandler, ListingController.getMyListings);
 

@@ -12,6 +12,7 @@ import { IHairCoatModel } from './hair-coat.model';
 import { IVaccineModel } from './vaccine.model';
 import { ILegalTagModel } from './legal-tag.model';
 import * as s3 from '../services/s3';
+import * as UserService from '../services/user';
 
 const Species: ISpeciesModel = require('../models/species.model');
 const Breed: IBreedModel = require('../models/breed.model');
@@ -98,6 +99,7 @@ const ListingSchema = new Schema<IListing, IListingModel, IListingMethods>(
 ListingSchema.method('formatResponse', async function () {
   const docCopy: IListingResponse = this.toObject();
 
+  const user = await UserService.getUserById(docCopy.userId.toString());
   const species = await Species.findById(docCopy.speciesId);
   const breeds = await Breed.find({ _id: { $in: docCopy.breedIds } });
   const origin = await Country.findById(docCopy.originId);
@@ -105,6 +107,7 @@ ListingSchema.method('formatResponse', async function () {
   const vaccines = await Vaccine.find({ _id: { $in: docCopy.vaccineIds } });
   const legalTags = await LegalTag.find({ _id: { $in: docCopy.legalTagIds } });
 
+  if (user) docCopy.user = user;
   if (species) docCopy.species = species;
   if (breeds) docCopy.breeds = breeds;
   if (origin) docCopy.origin = origin;

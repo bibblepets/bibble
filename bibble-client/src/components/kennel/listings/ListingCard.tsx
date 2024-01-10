@@ -30,12 +30,10 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
         <div className="flex items-center gap-2">
           <img
             className="h-6 w-6 border border-gray-300 rounded-full"
-            // src={listing.lister.buyerProfile?.profilePic?.url || paw}
-            src={paw}
+            src={listing.user?.profilePic?.url || paw}
           />
           <a className="text-xs text-neutral-500">
-            Posted by {/* {listing.firstName} */}
-            Titus
+            Posted by {listing.user?.firstName}
           </a>
         </div>
       </div>

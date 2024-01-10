@@ -9,6 +9,7 @@ import { IMedia, IMediaResponse } from './media.interface';
 import { AuthorizedRequest } from './auth.interface';
 import { TypedResponse } from './response.interface';
 import { TypedRequest } from './request.interface';
+import { IUser } from './user.interface';
 
 export interface IListing {
   _id: Schema.Types.ObjectId;
@@ -32,6 +33,7 @@ export interface IListing {
   createdAt?: Date;
   updatedAt?: Date;
 
+  user?: IUser;
   species?: ISpecies;
   breeds?: IBreed[];
   origin?: ICountry;

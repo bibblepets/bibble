@@ -1,4 +1,5 @@
 import { Gender, Media } from '../types';
+import { User } from '../user/types';
 
 export type Listing = {
   _id?: string;
@@ -22,6 +23,7 @@ export type Listing = {
   createdAt?: Date;
   updatedAt?: Date;
 
+  user?: User;
   species?: Species;
   breeds?: Breed[];
   origin?: Country;
