@@ -20,19 +20,19 @@ export const getUser = async (
   res: IGetUserResponse,
   next: NextFunction
 ) => {
-  const { id, email } = req.query;
+  const { _id, email } = req.query;
   let user;
 
   try {
     Logger.update('Getting user');
 
-    if (id) {
-      validateObjectId(id);
+    if (_id) {
+      validateObjectId(_id);
 
-      user = await User.findById(id);
+      user = await User.findById(_id);
 
       if (!user) {
-        throw new KeyNotFoundError('User not found', 'id', id);
+        throw new KeyNotFoundError('User not found', 'id', _id);
       }
     } else if (email) {
       user = await User.findOne({ email });
@@ -42,7 +42,11 @@ export const getUser = async (
       }
     }
 
-    Logger.success('User found', id);
+    if (!user) {
+      throw new KeyNotFoundError('User not found', 'id or email', '');
+    }
+
+    Logger.success('User found', user?._id);
 
     const response = await user?.formatResponse();
 

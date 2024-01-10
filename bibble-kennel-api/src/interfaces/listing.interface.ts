@@ -8,6 +8,7 @@ import { ILegalTag } from './legal-tag.interface';
 import { IMedia, IMediaResponse } from './media.interface';
 import { AuthorizedRequest } from './auth.interface';
 import { TypedResponse } from './response.interface';
+import { TypedRequest } from './request.interface';
 
 export interface IListing {
   _id: Schema.Types.ObjectId;
@@ -48,6 +49,12 @@ export interface IListingRequest extends AuthorizedRequest<IListing> {}
 export interface IListingResponse extends IListing {
   media: IMediaResponse[];
 }
+
+export interface IGetListingsRequest
+  extends TypedRequest<{}, {}, { speciesId?: string; name?: string }> {}
+
+export interface IGetListingsResponse
+  extends TypedResponse<IListingResponse[]> {}
 
 export interface IGetMyListingsRequest extends AuthorizedRequest {}
 

@@ -8,7 +8,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 /**
- * @route GET /user/{id|email}
+ * @route GET /user/{_id|email}
  * @desc Get user profile
  * @access Public
  */

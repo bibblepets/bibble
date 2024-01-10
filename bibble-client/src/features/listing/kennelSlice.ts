@@ -5,7 +5,8 @@ import {
 } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../store';
-import { Listing, StatusType } from '../../types';
+import { Listing } from './types';
+import { StatusType } from '../types';
 
 interface KennelState {
   listings: Listing[];
@@ -23,7 +24,7 @@ export const fetchListings = createAsyncThunk(
   '/kennelSlice/fetchListings',
   async () => {
     return await axios
-      .get('/kennel/listings')
+      .get('/kennel/listing')
       .then((response) => {
         return response.data;
       })

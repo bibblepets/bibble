@@ -29,9 +29,13 @@ export const authHandler = async (
       .then((response) => {
         return response.data;
       })
-      .catch((_error) => {
-        throw new AuthTokenError('Unauthorized');
+      .catch((error) => {
+        throw new Error(error);
       });
+
+    if (!user) {
+      throw new AuthTokenError('Invalid auth token');
+    }
 
     Logger.success('User authenticated', user._id);
 
