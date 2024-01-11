@@ -9,13 +9,13 @@ import { useCallback, useState } from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
 import { useSelector } from 'react-redux';
 import { store } from '../../../../store';
-import { Media } from '../../../../types';
 import toast from 'react-hot-toast';
 import {
   addMedia,
   removeMedia,
   selectListingEditorMedia
 } from '../../../../features/listing/listingEditorSlice';
+import { Media } from '../../../../features/types';
 
 const MediaUpload = () => {
   const media = useSelector(selectListingEditorMedia) || [];

@@ -7,6 +7,7 @@ import {
 } from '../../../../features/listing/listingEditorSlice';
 import { store } from '../../../../store';
 import { Gender } from '../../../../features/types';
+import { toTitleCase } from '../../../../utils/string';
 
 const GenderOptions = () => {
   const selectedGender = useSelector(selectListingEditorGender);
@@ -25,20 +26,20 @@ const GenderOptions = () => {
         <button
           onClick={() => handleClick('male')}
           className={`flex flex-row justify-center p-4 lg:p-6 rounded-full items-center gap-4 transition ${
-            selectedGender === 'Male' ? 'bg-sky-500' : 'bg-gray-500'
+            selectedGender === 'male' ? 'bg-sky-500' : 'bg-gray-500'
           }`}
         >
           <BiMaleSign className="w-5 h-5 text-white" />
         </button>
 
         <label className="text-center text-gray-800 text-6xl lg:text-8xl w-[160px] lg:w-[480px]">
-          {selectedGender}
+          {toTitleCase(selectedGender)}
         </label>
 
         <button
           onClick={() => handleClick('female')}
           className={`flex flex-row justify-center p-4 lg:p-6 rounded-full items-center gap-4 transition ${
-            selectedGender === 'Female' ? 'bg-rose-500' : 'bg-gray-500'
+            selectedGender === 'female' ? 'bg-rose-500' : 'bg-gray-500'
           }`}
         >
           <BiFemaleSign className="w-5 h-5 text-white" />

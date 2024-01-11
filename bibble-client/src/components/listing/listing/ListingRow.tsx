@@ -4,7 +4,7 @@ import { toExpiresAt } from '../../../utils/date';
 import { useNavigate } from 'react-router-dom';
 import { useCallback } from 'react';
 import { Listing } from '../../../features/listing/types';
-import { toCamelCase } from '../../../utils/string';
+import { toTitleCase } from '../../../utils/string';
 
 interface ListingRowProps {
   listing: Listing;
@@ -35,13 +35,13 @@ const ListingRow: React.FC<ListingRowProps> = ({ listing }) => {
       <div className="flex flex-col items-start gap-1 p-1">
         <div className="flex flex-row items-center gap-2">
           <a className="text-sm font-medium">
-            {listing.breeds?.map((breed) => toCamelCase(breed.name)).join(', ')}{' '}
-            {toCamelCase(listing.species?.name || '')}
+            {listing.breeds?.map((breed) => toTitleCase(breed.name)).join(', ')}{' '}
+            {toTitleCase(listing.species?.name)}
           </a>
           <PaperClipIcon className="w-3 h-3" strokeWidth={2} />
         </div>
         <p className="text-sm font-light text-gray-500">
-          {toCamelCase(listing.saleType)}, Expires in {time} {unit}
+          {toTitleCase(listing.saleType)}, Expires in {time} {unit}
         </p>
       </div>
     </button>

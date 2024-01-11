@@ -2,7 +2,7 @@ import React from 'react';
 import placeholderPup from '/images/placeholder-pup.png';
 import { useNavigate } from 'react-router-dom';
 import { Listing } from '../../../features/listing/types';
-import { toCamelCase } from '../../../utils/string';
+import { toTitleCase } from '../../../utils/string';
 
 interface ProfileListingCardProps {
   listing: Listing;
@@ -24,16 +24,16 @@ const ProfileListingCard: React.FC<ProfileListingCardProps> = ({ listing }) => {
       </div>
       <div className="flex flex-col gap-2 cursor-pointer">
         <label className="text-gray-800 cursor-pointer">
-          {listing.breeds?.map((breed) => toCamelCase(breed.name)).join(', ')}{' '}
+          {listing.breeds?.map((breed) => toTitleCase(breed.name)).join(', ')}{' '}
           <span className="font-light text-gray-500 cursor-pointer">
-            {toCamelCase(listing.species?.name || '')}
+            {toTitleCase(listing.species?.name)}
           </span>
         </label>
         <label className="font-light text-gray-500 cursor-pointer">
-          {toCamelCase(listing.gender)}
+          {toTitleCase(listing.gender)}
         </label>
         <label className="font-light text-gray-500 cursor-pointer">
-          {toCamelCase(listing.origin?.name || '')}
+          {toTitleCase(listing.origin?.name)}
         </label>
       </div>
     </div>

@@ -2,17 +2,15 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   Breed,
   Country,
-  Gender,
   HairCoat,
   LegalTag,
   Listing,
-  Media,
   Size,
-  StatusType,
   Vaccine
-} from '../../types';
+} from './types';
 import { RootState } from '../../store';
 import axios from 'axios';
+import { Gender, Media, StatusType } from '../types';
 
 interface ListingEditorState {
   listing?: Listing;
@@ -28,7 +26,7 @@ export const fetchListingById = createAsyncThunk(
   'listingEditor/fetchListingById',
   async (id: string) => {
     return await axios
-      .get(`/kennel/listings/${id}`)
+      .get(`/kennel/listing/${id}`)
       .then((response) => {
         return response.data;
       })
@@ -42,10 +40,10 @@ export const updateListingById = createAsyncThunk(
   'listingEditor/updateListingById',
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const { listing } = state.listingEditor;
+    const { media, ...listing } = state.listingEditor.listing || {};
 
     return await axios
-      .put(`/kennel/listings/update/${listing?._id}`, listing)
+      .put(`/kennel/listing`, listing)
       .then((response) => {
         return response.data;
       })
@@ -59,18 +57,22 @@ export const updateListingMediaById = createAsyncThunk(
   'listingEditor/updateListingMediaById',
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const { listing } = state.listingEditor;
+    const { _id, media } = state.listingEditor.listing || {};
+
+    if (!_id || !media) {
+      return;
+    }
 
     const formData = new FormData();
-    listing?.media.forEach((media) => {
+    formData.append('_id', _id);
+    media.forEach((media) => {
       media.name && formData.append('mediaNames[]', media.name);
     });
-    listing?.media.forEach((media) => {
+    media.forEach((media) => {
       media.file && formData.append('data', media.file);
     });
-
     return await axios
-      .put(`/kennel/listings/update-media/${listing?._id}`, formData, {
+      .put(`/kennel/listing/media`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then((response) => {
@@ -87,35 +89,40 @@ const listingEditorSlice = createSlice({
   initialState,
   reducers: {
     setOrigin: (state, action: PayloadAction<Country>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.origin = action.payload;
+      if (state.listing && action.payload._id) {
+        state.listing.originId = action.payload._id;
+        state.listing.origin = action.payload;
       }
     },
     addBreed: (state, action: PayloadAction<Breed>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.breeds.push(action.payload);
+      if (state.listing && action.payload._id) {
+        state.listing.breedIds?.push(action.payload._id);
+        state.listing.breeds?.push(action.payload);
       }
     },
     removeBreed: (state, action: PayloadAction<Breed>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.breeds = state.listing.animal.breeds.filter(
+      if (state.listing) {
+        state.listing.breedIds = state.listing.breedIds?.filter(
+          (breedId) => breedId !== action.payload._id
+        );
+        state.listing.breeds = state.listing.breeds?.filter(
           (breed) => breed._id !== action.payload._id
         );
       }
     },
     setGender: (state, action: PayloadAction<Gender>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.gender = action.payload;
+      if (state.listing) {
+        state.listing.gender = action.payload;
       }
     },
     setName: (state, action: PayloadAction<string>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.name = action.payload;
+      if (state.listing) {
+        state.listing.name = action.payload;
       }
     },
     setBirthdate: (state, action: PayloadAction<string>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.birthdate = new Date(action.payload);
+      if (state.listing) {
+        state.listing.birthdate = new Date(action.payload);
       }
     },
     setDescription: (state, action: PayloadAction<string>) => {
@@ -124,35 +131,56 @@ const listingEditorSlice = createSlice({
       }
     },
     setSize: (state, action: PayloadAction<Size>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.size = action.payload;
+      if (state.listing) {
+        state.listing.size = action.payload;
       }
     },
     setWeight: (state, action: PayloadAction<number>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.weight = action.payload;
+      if (state.listing) {
+        state.listing.weight = action.payload;
       }
     },
     setHairCoat: (state, action: PayloadAction<HairCoat>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.hairCoat = action.payload;
+      if (state.listing && action.payload._id) {
+        state.listing.hairCoatId = action.payload._id;
+        state.listing.hairCoat = action.payload;
       }
     },
     addVaccination: (state, action: PayloadAction<Vaccine>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.vaccines.push(action.payload);
+      if (state.listing && action.payload._id) {
+        state.listing.vaccineIds.push(action.payload._id);
+        state.listing.vaccines?.push(action.payload);
       }
     },
     removeVaccination: (state, action: PayloadAction<Vaccine>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.vaccines = state.listing.animal.vaccines.filter(
+      if (state.listing) {
+        state.listing.vaccineIds = state.listing.vaccineIds.filter(
+          (vaccineId) => vaccineId !== action.payload._id
+        );
+        state.listing.vaccines = state.listing.vaccines?.filter(
           (vaccine) => vaccine._id !== action.payload._id
         );
       }
     },
+    addLegalTag: (state, action: PayloadAction<LegalTag>) => {
+      if (state.listing && action.payload._id) {
+        state.listing.legalTagIds.push(action.payload._id);
+        state.listing.legalTags?.push(action.payload);
+      }
+    },
+    removeLegalTag: (state, action: PayloadAction<LegalTag>) => {
+      if (state.listing) {
+        state.listing.legalTagIds = state.listing.legalTagIds.filter(
+          (legalTagId) => legalTagId !== action.payload._id
+        );
+        state.listing.legalTags = state.listing.legalTags?.filter(
+          (legalTag) => legalTag._id !== action.payload._id
+        );
+      }
+    },
     setAvsLicenseNumber: (state, action: PayloadAction<string>) => {
-      if (state.listing && state.listing.animal) {
-        state.listing.animal.avsLicenseNumber = action.payload;
+      if (state.listing) {
+        state.listing.avsLicenseNumber = action.payload;
       }
     },
     addMedia: (state, action: PayloadAction<Media[]>) => {
@@ -168,48 +196,6 @@ const listingEditorSlice = createSlice({
               (payloadMedia) => payloadMedia.url === media.url
             )
         );
-      }
-    },
-    // TODO: Find a more elegant solution to this
-    addLegalTag: (state, action: PayloadAction<LegalTag>) => {
-      if (state.listing && state.listing.animal) {
-        switch (action.payload) {
-          case 'isHypoallergenic':
-            state.listing.animal.isHypoallergenic = true;
-            break;
-          case 'isMicrochipped':
-            state.listing.animal.isMicrochipped = true;
-            break;
-          case 'isNeutered':
-            state.listing.animal.isNeutered = true;
-            break;
-          case 'isHdbApproved':
-            state.listing.animal.isHdbApproved = true;
-            break;
-          default:
-            break;
-        }
-      }
-    },
-    // TODO: Find a more elegant solution to this
-    removeLegalTag: (state, action: PayloadAction<LegalTag>) => {
-      if (state.listing && state.listing.animal) {
-        switch (action.payload) {
-          case 'isHypoallergenic':
-            state.listing.animal.isHypoallergenic = false;
-            break;
-          case 'isMicrochipped':
-            state.listing.animal.isMicrochipped = false;
-            break;
-          case 'isNeutered':
-            state.listing.animal.isNeutered = false;
-            break;
-          case 'isHdbApproved':
-            state.listing.animal.isHdbApproved = false;
-            break;
-          default:
-            break;
-        }
       }
     },
     setPrice: (state, action: PayloadAction<number>) => {
@@ -236,7 +222,7 @@ const listingEditorSlice = createSlice({
       })
       .addCase(updateListingById.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.listing = action.payload.listing;
+        state.listing = action.payload;
       })
       .addCase(updateListingById.rejected, (state, action) => {
         state.status = 'ERROR';
@@ -247,7 +233,7 @@ const listingEditorSlice = createSlice({
       })
       .addCase(updateListingMediaById.fulfilled, (state, action) => {
         state.status = 'SUCCESS';
-        state.listing = action.payload.listing;
+        state.listing = action.payload;
       })
       .addCase(updateListingMediaById.rejected, (state, action) => {
         state.status = 'ERROR';
@@ -269,11 +255,11 @@ export const {
   setHairCoat,
   addVaccination,
   removeVaccination,
+  addLegalTag,
+  removeLegalTag,
   addMedia,
   removeMedia,
   setAvsLicenseNumber,
-  addLegalTag,
-  removeLegalTag,
   setPrice
 } = listingEditorSlice.actions;
 
@@ -287,49 +273,30 @@ export const selectListingEditorSaleType = (state: RootState) =>
   state.listingEditor.listing?.saleType;
 export const selectListingEditorMedia = (state: RootState) =>
   state.listingEditor.listing?.media;
-export const selectListingEditorAnimal = (state: RootState) =>
-  state.listingEditor.listing?.animal;
 export const selectListingEditorSpecies = (state: RootState) =>
   state.listingEditor.listing?.species;
 export const selectListingEditorBreeds = (state: RootState) =>
-  state.listingEditor.listing?.animal?.breeds;
+  state.listingEditor.listing?.breeds;
 export const selectListingEditorVaccines = (state: RootState) =>
-  state.listingEditor.listing?.animal?.vaccines;
+  state.listingEditor.listing?.vaccines;
+export const selectListingEditorLegalTags = (state: RootState) =>
+  state.listingEditor.listing?.legalTags;
 export const selectListingEditorOrigin = (state: RootState) =>
-  state.listingEditor.listing?.animal?.origin;
+  state.listingEditor.listing?.origin;
 export const selectListingEditorName = (state: RootState) =>
-  state.listingEditor.listing?.animal?.name;
+  state.listingEditor.listing?.name;
 export const selectListingEditorGender = (state: RootState) =>
-  state.listingEditor.listing?.animal?.gender;
+  state.listingEditor.listing?.gender;
 export const selectListingEditorBirthdate = (state: RootState) =>
-  state.listingEditor.listing?.animal?.birthdate;
+  state.listingEditor.listing?.birthdate;
 export const selectListingEditorSize = (state: RootState) =>
-  state.listingEditor.listing?.animal?.size;
+  state.listingEditor.listing?.size;
 export const selectListingEditorWeight = (state: RootState) =>
-  state.listingEditor.listing?.animal?.weight;
+  state.listingEditor.listing?.weight;
 export const selectListingEditorHairCoat = (state: RootState) =>
-  state.listingEditor.listing?.animal?.hairCoat;
+  state.listingEditor.listing?.hairCoat;
 export const selectListingEditorAvsLicenseNumber = (state: RootState) =>
-  state.listingEditor.listing?.animal?.avsLicenseNumber;
-export const selectListingEditorLegalTags = (state: RootState): string[] => {
-  const animal = state.listingEditor.listing?.animal;
-  const legalTags: string[] = [];
-
-  if (animal?.isHypoallergenic) {
-    legalTags.push('isHypoallergenic');
-  }
-  if (animal?.isMicrochipped) {
-    legalTags.push('isMicrochipped');
-  }
-  if (animal?.isNeutered) {
-    legalTags.push('isNeutered');
-  }
-  if (animal?.isHdbApproved) {
-    legalTags.push('isHdbApproved');
-  }
-
-  return legalTags;
-};
+  state.listingEditor.listing?.avsLicenseNumber;
 export const selectListingEditorStatus = (state: RootState) =>
   state.listingEditor.status;
 export const selectListingEditorIsLoading = (state: RootState) =>

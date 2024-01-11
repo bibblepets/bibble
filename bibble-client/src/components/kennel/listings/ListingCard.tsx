@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import paw from '/images/paw.jpeg';
 import placeholderPup from '/images/placeholder-pup.png';
 import { Listing } from '../../../features/listing/types';
-import { toCamelCase } from '../../../utils/string';
+import { toTitleCase } from '../../../utils/string';
 
 interface ListingCardProps {
   listing: Listing;
@@ -23,7 +23,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
       <div className="flex flex-col items-center gap-2">
         <a className="text-neutral-800 whitespace-nowrap overflow-ellipsis">
           {listing.breeds
-            ?.map((listing) => toCamelCase(listing.name))
+            ?.map((listing) => toTitleCase(listing.name))
             .join(', ')}
         </a>
         <a className="text-neutral-500">${listing.price}</a>

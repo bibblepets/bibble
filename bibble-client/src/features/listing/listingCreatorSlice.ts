@@ -180,7 +180,7 @@ export const updateMedia = createAsyncThunk(
     }
 
     const formData = new FormData();
-    formData.append('_id', _id || '');
+    formData.append('_id', _id);
     formData.append('stage', '5');
     media.forEach((media) => {
       media.name && formData.append('mediaNames[]', media.name);

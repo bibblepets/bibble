@@ -2,13 +2,14 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { store } from '../../../../store';
-import { Country } from '../../../../types';
 import { selectListingOptionsCountries } from '../../../../features/listing/listingOptionsSlice';
 import { useDropdown } from '../../hooks';
 import {
   selectListingEditorOrigin,
   setOrigin
 } from '../../../../features/listing/listingEditorSlice';
+import { Country } from '../../../../features/listing/types';
+import { toTitleCase } from '../../../../utils/string';
 
 const OriginDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +57,7 @@ const OriginDropdown = () => {
                           : ''
                       }`}
                     >
-                      {origin?.name}
+                      {toTitleCase(origin?.name)}
                     </button>
                   </li>
                 ))}
@@ -70,7 +71,7 @@ const OriginDropdown = () => {
 
       <div className="flex flex-wrap flex-col lg:flex-row justify-center items-center w-full h-full gap-x-8 p-24">
         <label className="text-2xl lg:text-6xl font-medium p-y-8 lg:p-8 text-gray-800 overflow-hidden">
-          {selectedOrigin?.name || '...'}
+          {toTitleCase(selectedOrigin?.name) || '...'}
         </label>
       </div>
     </div>

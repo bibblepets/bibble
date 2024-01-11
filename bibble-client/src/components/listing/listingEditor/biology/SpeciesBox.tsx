@@ -6,8 +6,8 @@ import {
   setSpecies
 } from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
-import { Species } from '../../../../types';
-import { toCamelCase } from '../../../../utils/string';
+import { toTitleCase } from '../../../../utils/string';
+import { Species } from '../../../../features/listing/types';
 
 interface SpeciesBoxProps {
   species: Species;
@@ -49,7 +49,7 @@ const SpeciesBox: React.FC<SpeciesBoxProps> = ({
           disabled ? 'text-gray-300' : 'text-gray-500'
         }`}
       >
-        {toCamelCase(species)}
+        {toTitleCase(species.name)}
       </a>
     </div>
   );

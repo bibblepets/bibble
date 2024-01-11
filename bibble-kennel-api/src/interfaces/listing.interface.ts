@@ -62,3 +62,23 @@ export interface IGetMyListingsRequest extends AuthorizedRequest {}
 
 export interface IGetMyListingsResponse
   extends TypedResponse<IListingResponse[]> {}
+
+export interface IGetListingByIdRequest
+  extends AuthorizedRequest<{}, { _id: string }> {}
+
+export interface IGetListingByIdResponse
+  extends TypedResponse<IListingResponse> {}
+
+export interface IUpdateListingRequest extends AuthorizedRequest<IListing> {}
+
+export interface IUpdateListingResponse
+  extends TypedResponse<IListingResponse> {}
+
+export interface IUpdateListingMediaRequest
+  extends AuthorizedRequest<{
+    _id: Schema.Types.ObjectId;
+    mediaNames: string[];
+  }> {}
+
+export interface IUpdateListingMediaResponse
+  extends TypedResponse<IListingResponse> {}

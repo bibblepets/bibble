@@ -11,7 +11,7 @@ import {
 import { selectListingOptionsBreeds } from '../../../../features/listing/listingOptionsSlice';
 import { Breed } from '../../../../features/listing/types';
 import { store } from '../../../../store';
-import { toCamelCase } from '../../../../utils/string';
+import { toTitleCase } from '../../../../utils/string';
 
 const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +44,7 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
   if (readOnly) {
     return (
       <a className="text-sm font-medium text-gray-700">{`${
-        selectedBreeds?.map((breed) => toCamelCase(breed.name)).join(', ') ||
+        selectedBreeds?.map((breed) => toTitleCase(breed.name)).join(', ') ||
         'No breed selected'
       }`}</a>
     );
@@ -61,7 +61,7 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
           !selectedSpecies
             ? 'Select a species'
             : selectedBreeds
-                ?.map((breed) => toCamelCase(breed.name))
+                ?.map((breed) => toTitleCase(breed.name))
                 .join(', ') || 'Select a breed'
         }`}</span>
         {isOpen ? (
@@ -87,7 +87,7 @@ const BreedDropdown = ({ readOnly }: { readOnly?: boolean }) => {
                         : ''
                     }`}
                   >
-                    {toCamelCase(breed?.name)}
+                    {toTitleCase(breed?.name)}
                   </button>
                 </li>
               ))}

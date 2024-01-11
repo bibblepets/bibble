@@ -2,7 +2,7 @@ import { PaperClipIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import placeholderPup from '/images/placeholder-pup.png';
 import { useResume } from './hooks';
 import { ListingCreator } from '../../../features/listing/types';
-import { toCamelCase } from '../../../utils/string';
+import { toTitleCase } from '../../../utils/string';
 
 interface ListingCreatorRowProps {
   listingCreator: ListingCreator;
@@ -35,14 +35,14 @@ const ListingCreatorRow: React.FC<ListingCreatorRowProps> = ({
         <div className="flex flex-row items-center gap-2">
           <a className="text-sm font-medium">
             {listingCreator.biology?.breeds
-              ?.map((breed) => toCamelCase(breed.name))
+              ?.map((breed) => toTitleCase(breed.name))
               .join(', ')}{' '}
             {listingCreator.biology?.species?.name}
           </a>
           <PaperClipIcon className="w-3 h-3" strokeWidth={2} />
         </div>
         <p className="text-sm font-light text-gray-500">
-          {toCamelCase(listingCreator.saleType || '')}
+          {toTitleCase(listingCreator.saleType)}
         </p>
       </div>
     </button>

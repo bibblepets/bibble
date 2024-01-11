@@ -86,6 +86,12 @@ const BirthdateSelect = ({ readOnly }: { readOnly?: boolean }) => {
   useDropdown(monthDropdownRef, isMonthOpen, setMonthIsOpen);
   useDropdown(yearDropdownRef, isYearOpen, setYearIsOpen);
 
+  useEffect(() => {
+    if (!birthdateString) {
+      store.dispatch(setBirthdate(birthdate.toISOString()));
+    }
+  }, [store, birthdateString, birthdate]);
+
   if (readOnly) {
     return (
       <a className="text-sm font-medium text-gray-700">

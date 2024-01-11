@@ -9,7 +9,7 @@ import { selectListingOptionsHairCoats } from '../../../../features/listing/list
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { useDropdown } from '../../hooks';
 import { HairCoat } from '../../../../features/listing/types';
-import { toCamelCase } from '../../../../utils/string';
+import { toTitleCase } from '../../../../utils/string';
 
 const HairCoatSelect = ({ readOnly }: { readOnly?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,7 +60,7 @@ const HairCoatSelect = ({ readOnly }: { readOnly?: boolean }) => {
                     onClick={() => handleHairCoatSelected(hairCoat)}
                     className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                   >
-                    {toCamelCase(hairCoat.name)}
+                    {toTitleCase(hairCoat.name)}
                   </button>
                 </li>
               ))}

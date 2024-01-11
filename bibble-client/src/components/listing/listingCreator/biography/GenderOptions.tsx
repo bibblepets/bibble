@@ -6,7 +6,7 @@ import {
   setGender
 } from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
-import { toCamelCase } from '../../../../utils/string';
+import { toTitleCase } from '../../../../utils/string';
 import { Gender } from '../../../../features/types';
 
 const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
@@ -23,7 +23,7 @@ const GenderOptions = ({ readOnly }: { readOnly?: boolean }) => {
     return (
       <div className="flex flex-row gap-2">
         <a className="text-sm font-medium text-gray-700">
-          {(selectedGender && toCamelCase(selectedGender)) ||
+          {(selectedGender && toTitleCase(selectedGender)) ||
             'No gender selected'}
         </a>
         {selectedGender === 'male' ? (

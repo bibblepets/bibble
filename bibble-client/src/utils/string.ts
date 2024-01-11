@@ -1,10 +1,17 @@
 import { Address } from '../features/types';
 
-export const toCamelCase = (str: string) => {
-  return str
+export const toTitleCase = (str?: string) => {
+  if (!str) return '';
+
+  const words = str
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/[_\-]+/g, ' ')
     .toLowerCase()
-    .replace(/[_-](.)/g, (_, char) => char.toUpperCase())
-    .replace(/^(.)/, (_, char) => char.toUpperCase());
+    .split(' ');
+
+  return words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 };
 
 export const toMaskedEmail = (email?: string) => {

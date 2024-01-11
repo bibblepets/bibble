@@ -20,6 +20,7 @@ import { fetchListingById } from '../features/listing/listingEditorSlice';
 export const kennelLoader: LoaderFunction = async () => {
   await store.dispatch(authenticate());
   await store.dispatch(fetchListings());
+  await store.dispatch(fetchAllLegalTags());
   store.dispatch(generateRegisterModalTitle());
   store.dispatch(generateLoginModalTitle());
   return null;

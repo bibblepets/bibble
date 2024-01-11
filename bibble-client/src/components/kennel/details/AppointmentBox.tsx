@@ -1,10 +1,11 @@
 import React from 'react';
-import { Listing } from '../../../types';
 import {
   EnvelopeIcon,
   MapPinIcon,
   PhoneIcon
 } from '@heroicons/react/24/outline';
+import { Listing } from '../../../features/listing/types';
+import { toAddressString } from '../../../utils/string';
 
 interface AppointmentBoxProps {
   listing: Listing;
@@ -13,30 +14,25 @@ interface AppointmentBoxProps {
 const AppointmentBox: React.FC<AppointmentBoxProps> = ({ listing }) => {
   return (
     <div className="sticky flex flex-col gap-4 p-8 top-64 rounded-lg shadow-lg border">
-      <p className="px-8 mb-2 text-center">
-        Contact {listing.lister.businessProfile.businessName}
-      </p>
+      <p className="px-8 mb-2 text-center">Contact {listing.user?.firstName}</p>
       <hr />
       <div className="flex flex-col gap-4 h-full mt-2 font-light text-sm">
         <div className="flex items-center">
           <MapPinIcon className="inline-block w-4 h-4 mr-2" />
           <p className="w-full overflow-auto whitespace-pre-line">
-            {listing.lister.businessProfile.businessAddress?.replaceAll(
-              ';',
-              ','
-            )}
+            {toAddressString(listing.user?.address)}
           </p>
         </div>
         <div className="flex items-center">
           <EnvelopeIcon className="inline-block w-4 h-4 mr-2" />
           <p className="w-full overflow-auto break-words">
-            {listing.lister.businessProfile.businessEmail}
+            {listing.user?.email}
           </p>
         </div>
         <div className="flex items-center">
           <PhoneIcon className="inline-block w-4 h-4 mr-2" />
           <p className="w-full overflow-auto break-words">
-            {listing.lister.businessProfile.businessContact}
+            {listing.user?.contactNumber}
           </p>
         </div>
         <div className="flex justify-between font-semibold">

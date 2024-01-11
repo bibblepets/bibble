@@ -7,7 +7,7 @@ import {
 } from 'react-icons/gi';
 import { useSelector } from 'react-redux';
 import { selectListingCreatorSpecies } from '../../../../features/listing/listingCreatorSlice';
-import { toCamelCase } from '../../../../utils/string';
+import { toTitleCase } from '../../../../utils/string';
 import SpeciesBox from './SpeciesBox';
 import { selectListingOptionsSpecies } from '../../../../features/listing/listingOptionsSlice';
 import { IconType } from 'react-icons';
@@ -24,7 +24,7 @@ const SpeciesOptions = ({ readOnly }: { readOnly?: boolean }) => {
   if (readOnly) {
     return (
       <a className="text-gray-700 text-sm font-medium">
-        {(selectedSpecies && toCamelCase(selectedSpecies.name)) ||
+        {(selectedSpecies && toTitleCase(selectedSpecies.name)) ||
           'No species selected'}
       </a>
     );

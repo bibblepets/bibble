@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { toCamelCase } from '../../../../utils/string';
+import { toTitleCase } from '../../../../utils/string';
 import { selectListingEditorSpecies } from '../../../../features/listing/listingEditorSlice';
 
 const SpeciesOptions = () => {
@@ -7,7 +7,7 @@ const SpeciesOptions = () => {
 
   return (
     <a className="text-gray-700 text-sm font-medium">
-      {(selectedSpecies && toCamelCase(selectedSpecies)) ||
+      {(selectedSpecies && toTitleCase(selectedSpecies.name)) ||
         'No species selected'}
     </a>
   );

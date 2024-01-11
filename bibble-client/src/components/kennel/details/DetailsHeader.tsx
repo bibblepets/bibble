@@ -1,95 +1,99 @@
 import { HeartIcon, ShareIcon } from '@heroicons/react/24/solid';
-import { Listing } from '../../../types';
 import { useSelector } from 'react-redux';
 import {
   selectCurrentUser,
   updateUser
 } from '../../../features/user/userSlice';
 import { store } from '../../../store';
+import { Listing } from '../../../features/listing/types';
+import { toTitleCase } from '../../../utils/string';
 
 interface DetailsHeaderProps {
   listing: Listing;
 }
 
 const DetailsHeader: React.FC<DetailsHeaderProps> = ({ listing }) => {
-  const currentUser = useSelector(selectCurrentUser);
+  // const currentUser = useSelector(selectCurrentUser);
 
-  const isListingFavourited = () => {
-    if (!currentUser) return false;
-    const favourites = currentUser.buyerProfile.favouriteListings;
+  // const isListingFavourited = () => {
+  //   if (!currentUser) return false;
+  //   const favourites = currentUser.buyerProfile.favouriteListings;
 
-    if (favourites && favourites.length > 0) {
-      return (
-        favourites.filter((favourite) => {
-          return favourite._id === listing._id;
-        }).length > 0
-      );
-    }
+  //   if (favourites && favourites.length > 0) {
+  //     return (
+  //       favourites.filter((favourite) => {
+  //         return favourite._id === listing._id;
+  //       }).length > 0
+  //     );
+  //   }
 
-    return false;
-  };
+  //   return false;
+  // };
 
-  const handleFavourite = async (listing: Listing) => {
-    if (!currentUser) return;
+  // const handleFavourite = async (listing: Listing) => {
+  //   if (!currentUser) return;
 
-    const favouriteListings = currentUser.buyerProfile.favouriteListings;
-    if (!favouriteListings) return;
+  //   const favouriteListings = currentUser.buyerProfile.favouriteListings;
+  //   if (!favouriteListings) return;
 
-    if (isListingFavourited()) {
-      // Remove from favourites
-      await store.dispatch(
-        updateUser({
-          ...currentUser,
-          buyerProfile: {
-            ...currentUser.buyerProfile,
-            favouriteListings: favouriteListings.filter(
-              (favourite) => favourite._id !== listing._id
-            )
-          }
-        })
-      );
-    } else {
-      // Add to favourites
-      await store.dispatch(
-        updateUser({
-          ...currentUser,
-          buyerProfile: {
-            ...currentUser.buyerProfile,
-            favouriteListings: [...favouriteListings, listing]
-          }
-        })
-      );
-    }
-  };
+  //   if (isListingFavourited()) {
+  //     // Remove from favourites
+  //     await store.dispatch(
+  //       updateUser({
+  //         ...currentUser,
+  //         buyerProfile: {
+  //           ...currentUser.buyerProfile,
+  //           favouriteListings: favouriteListings.filter(
+  //             (favourite) => favourite._id !== listing._id
+  //           )
+  //         }
+  //       })
+  //     );
+  //   } else {
+  //     // Add to favourites
+  //     await store.dispatch(
+  //       updateUser({
+  //         ...currentUser,
+  //         buyerProfile: {
+  //           ...currentUser.buyerProfile,
+  //           favouriteListings: [...favouriteListings, listing]
+  //         }
+  //       })
+  //     );
+  //   }
+  // };
 
   return (
     <>
       {/* Head Banner */}
       <div className="flex justify-between">
         <div className="flex flex-col gap-4">
-          {listing.animal.name ? (
+          {listing.name ? (
             <>
-              <h1 className="text-2xl font-semibold text-gray-800">{`Hi, I'm ${listing.animal.name} 👋🏼`}</h1>
-              <h2 className="text-xl font-semibold text-gray-600">{`${listing.animal.breeds
-                .map((breed) => breed.name)
-                .join(', ')} ${listing.species}`}</h2>
+              <h1 className="text-2xl font-semibold text-gray-800">{`Hi, I'm ${toTitleCase(
+                listing.name
+              )} 👋🏼`}</h1>
+              <h2 className="text-xl font-semibold text-gray-600">{`${listing.breeds
+                ?.map((breed) => toTitleCase(breed.name))
+                .join(', ')} ${toTitleCase(listing.species?.name)}`}</h2>
             </>
           ) : (
-            <h1 className="text-2xl font-semibold text-gray-800">{`${listing.animal.breeds
-              .map((breed) => breed.name)
-              .join(', ')} ${listing.species}`}</h1>
+            <h1 className="text-2xl font-semibold text-gray-800">{`${listing.breeds
+              ?.map((breed) => breed.name)
+              .join(', ')} ${toTitleCase(listing.species?.name)}`}</h1>
           )}
         </div>
         <div className="flex items-center place-self-end gap-4">
           <button
             className="flex items-center gap-2 text-neutral-700"
-            onClick={() => handleFavourite(listing)}
+            // onClick={() => handleFavourite(listing)}
           >
-            {isListingFavourited() ? (
+            {/* {isListingFavourited() ? (
               <HeartIcon className="w-5 h-5 fill-rose-500" />
             ) : (
               <HeartIcon className="w-5 h-5 fill-neutral-700" />
-            )}
+            )} */}
+            <HeartIcon className="w-5 h-5 fill-neutral-700" />
           </button>
 
           <hr className="w-px h-4 bg-neutral-200" />

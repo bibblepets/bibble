@@ -4,7 +4,7 @@ const InfoSection = ({
   string,
   IconComponent
 }: {
-  string: string;
+  string?: string;
   IconComponent:
     | IconType
     | React.ForwardRefExoticComponent<
@@ -14,6 +14,8 @@ const InfoSection = ({
         } & React.RefAttributes<SVGSVGElement>
       >;
 }) => {
+  if (!string) return null;
+
   return (
     <div className="flex items-center gap-4 pl-1 text-gray-800 font-light">
       <IconComponent className="w-5 h-5" />

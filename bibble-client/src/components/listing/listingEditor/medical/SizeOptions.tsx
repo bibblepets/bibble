@@ -7,6 +7,7 @@ import {
   setSize
 } from '../../../../features/listing/listingEditorSlice';
 import { Size } from '../../../../features/listing/types';
+import { toTitleCase } from '../../../../utils/string';
 
 const sizes: Size[] = ['small', 'medium', 'large'];
 
@@ -35,7 +36,7 @@ const SizeOptions = () => {
               selectedSize === size ? 'bg-sky-500' : 'bg-gray-500'
             }`}
           >
-            <a className="text-xl font-light text-white">{size}</a>
+            <a className="text-xl font-light text-white">{toTitleCase(size)}</a>
           </button>
         ))}
       </div>

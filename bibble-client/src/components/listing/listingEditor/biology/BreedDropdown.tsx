@@ -7,10 +7,11 @@ import {
 } from '../../../../features/listing/listingEditorSlice';
 import { selectListingOptionsBreeds } from '../../../../features/listing/listingOptionsSlice';
 import { useCallback, useRef, useState } from 'react';
-import { Breed } from '../../../../types';
 import { store } from '../../../../store';
 import { useDropdown } from '../../hooks';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import { Breed } from '../../../../features/listing/types';
+import { toTitleCase } from '../../../../utils/string';
 
 const BreedDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,7 @@ const BreedDropdown = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const breeds = allBreeds
-    .filter((breed) => breed.species === selectedSpecies)
+    .filter((breed) => breed.speciesId === selectedSpecies?._id)
     .sort((a, b) => a.name.localeCompare(b.name));
 
   const toggleDropdown = () => {
@@ -79,7 +80,7 @@ const BreedDropdown = () => {
                           : ''
                       }`}
                     >
-                      {breed?.name}
+                      {toTitleCase(breed?.name)}
                     </button>
                   </li>
                 ))}
@@ -98,7 +99,7 @@ const BreedDropdown = () => {
               onClick={() => onRemove(breed)}
               className="text-2xl lg:text-6xl font-medium p-8 text-gray-800 cursor-pointer transition hover:text-rose-500 overflow-hidden lg:whitespace-nowrap"
             >
-              {breed.name}
+              {toTitleCase(breed.name)}
             </label>
           </div>
         ))}

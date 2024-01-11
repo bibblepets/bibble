@@ -16,12 +16,15 @@ import {
 import { CheckBadgeIcon } from '@heroicons/react/24/solid';
 import { BiFemaleSign, BiMaleSign } from 'react-icons/bi';
 import paw from '/images/paw.jpeg';
-import { Listing } from '../../../types';
 import InfoSection from './InfoSection';
 import SectionHeader from './SectionHeader';
 import { DateStringOptions, toAge, toListingAge } from '../../../utils/date';
 import { openViewMoreModal } from '../../../features/modalsSlice';
 import { store } from '../../../store';
+import { Listing } from '../../../features/listing/types';
+import { useSelector } from 'react-redux';
+import { selectListingOptionsLegalTags } from '../../../features/listing/listingOptionsSlice';
+import { toTitleCase } from '../../../utils/string';
 
 const Section = ({ children }: { children: React.ReactNode }) => {
   return <div className="flex flex-col gap-8">{children}</div>;
@@ -32,13 +35,16 @@ interface ItemInfoProps {
 }
 
 const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
-  const listingDate = new Date(listing.createdAt!);
-  const birthDate = new Date(listing.animal.birthdate!);
-  const currentDate = new Date();
+  const listingDate = listing.createdAt && new Date(listing.createdAt);
+  const birthDate = new Date(listing.birthdate);
+  const allLegalTags = useSelector(selectListingOptionsLegalTags);
+  console.log(listing.birthdate);
 
   const handleOpenViewMoreModal = () => {
     store.dispatch(openViewMoreModal(listing.description));
   };
+
+  console.log(allLegalTags);
 
   return (
     <div className="col-span-4 flex flex-col gap-12">
@@ -47,27 +53,23 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
         <div className="flex flex-col gap-4">
           <div className="flex items-center">
             <p className="pr-1 text-xl font-medium">
-              Posted by{' '}
-              {listing.lister.businessProfile?.businessName ||
-                listing.lister.buyerProfile?.firstName}
+              Posted by {listing.user?.firstName}
             </p>
-            {listing.lister.businessProfile &&
+            {/* {listing.lister.businessProfile &&
               listing.lister.businessProfile.bibbleTier !== 'Basic' && (
                 <CheckBadgeIcon className="w-5 h-5 text-sky-500" />
-              )}
+              )} */}
           </div>
-          <p className="font-light text-neutral-500 text-sm">
-            Listed on{' '}
-            {listingDate.toLocaleDateString(undefined, DateStringOptions)} {''}(
-            {toListingAge(listingDate)})
-          </p>
+          {listingDate && (
+            <p className="font-light text-neutral-500 text-sm">
+              Listed on{' '}
+              {listingDate.toLocaleDateString(undefined, DateStringOptions)}{' '}
+              {''}({toListingAge(listingDate)})
+            </p>
+          )}
         </div>
         <img
-          src={
-            listing.lister.businessProfile?.businessPic ||
-            listing.lister.buyerProfile?.profilePic?.url ||
-            paw
-          }
+          src={listing.user?.profilePic?.url || paw}
           className="object-cover w-12 h-12 rounded-full"
         />
       </div>
@@ -80,10 +82,8 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
         />
 
         <InfoSection
-          string={listing.animal.gender}
-          IconComponent={
-            listing.animal.gender === 'Male' ? BiMaleSign : BiFemaleSign
-          }
+          string={toTitleCase(listing.gender)}
+          IconComponent={listing.gender === 'male' ? BiMaleSign : BiFemaleSign}
         />
 
         <InfoSection
@@ -95,27 +95,27 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
         />
 
         <InfoSection
-          string={listing.animal.origin.name}
+          string={toTitleCase(listing.origin?.name)}
           IconComponent={GlobeAsiaAustraliaIcon}
         />
 
         <InfoSection
-          string={listing.animal.breeds.map((b) => b.name).join(', ')}
+          string={listing.breeds?.map((b) => toTitleCase(b.name)).join(', ')}
           IconComponent={FingerPrintIcon}
         />
 
         <InfoSection
-          string={listing.animal.weight.toString() + ' kg'}
+          string={listing.weight.toString() + ' kg'}
           IconComponent={ScaleIcon}
         />
 
         <InfoSection
-          string={listing.animal.size}
+          string={toTitleCase(listing.size)}
           IconComponent={ArrowsPointingOutIcon}
         />
 
         <InfoSection
-          string={listing.animal.hairCoat + ' Coat'}
+          string={toTitleCase(listing.hairCoat?.name) + ' Coat'}
           IconComponent={ScissorsIcon}
         />
       </Section>
@@ -153,7 +153,7 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
           IconComponent={true ? CheckIcon : XMarkIcon}
         />
 
-        {listing.animal.vaccines.map((vaccine, index) => {
+        {listing.vaccines?.map((vaccine, index) => {
           return (
             vaccine.isCore && (
               <div
@@ -172,7 +172,7 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
           IconComponent={true ? CheckIcon : XMarkIcon}
         />
 
-        {listing.animal.vaccines.map((vaccine, index) => {
+        {listing.vaccines?.map((vaccine, index) => {
           return (
             !vaccine.isCore && (
               <div
@@ -185,33 +185,29 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
             )
           );
         })}
-
-        <InfoSection
-          string={'Neutered'}
-          IconComponent={listing.animal.isNeutered ? CheckIcon : XMarkIcon}
-        />
       </Section>
 
       {/* Legal InfoSection */}
       <Section>
         <SectionHeader title="Legal" IconComponent={BriefcaseIcon} />
-
         <InfoSection
-          string={'HDB Approved'}
-          IconComponent={listing.animal.isHdbApproved ? CheckIcon : XMarkIcon}
+          string={'AVS License: ' + listing.avsLicenseNumber}
+          IconComponent={listing.avsLicenseNumber ? CheckIcon : XMarkIcon}
         />
 
-        <InfoSection
-          string={'Mircrochipped'}
-          IconComponent={listing.animal.isMicrochipped ? CheckIcon : XMarkIcon}
-        />
-
-        <InfoSection
-          string={'AVS License: ' + listing.animal.avsLicenseNumber}
-          IconComponent={
-            listing.animal.avsLicenseNumber ? CheckIcon : XMarkIcon
-          }
-        />
+        {allLegalTags
+          .filter((tag) => tag._id && listing.legalTagIds.includes(tag._id))
+          .map((tag, index) => (
+            <InfoSection
+              string={tag.name}
+              IconComponent={
+                listing.legalTags?.find((t) => t._id === tag._id)
+                  ? CheckIcon
+                  : XMarkIcon
+              }
+              key={index}
+            />
+          ))}
       </Section>
     </div>
   );

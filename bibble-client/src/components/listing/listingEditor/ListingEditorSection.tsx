@@ -41,9 +41,12 @@ const ListingEditorSection: React.FC<ListingEditorSectionProps> = ({
   }, [store]);
 
   return (
-    <div className="flex flex-col justify-between w-full h-auto">
-      <div className="flex flex-col gap-6 p-12 h-auto lg:h-full">
-        <div className="flex justify-between items-center">
+    <div className="flex flex-col justify-between w-full">
+      <div
+        className="flex flex-col gap-6 py-12 px-6 h-auto lg:h-full"
+        style={{ maxHeight: 'calc(100vh - 191px)' }}
+      >
+        <div className="flex justify-between items-center px-6">
           <div className="flex flex-row gap-4">
             <button
               onClick={() => navigate(`/listing/edit/${id}`)}
@@ -60,9 +63,13 @@ const ListingEditorSection: React.FC<ListingEditorSectionProps> = ({
           {isError && <p className="text-sm text-rose-500">{'Required *'}</p>}
         </div>
         {description && (
-          <p className="font-light text-gray-600 mb-4">{description}</p>
+          <p className="font-light text-gray-600 mb-4 px-6">{description}</p>
         )}
-        <div className={`h-full pt-8 ${description && '-translate-y-[24px]'}`}>
+        <div
+          className={`h-full pt-8 px-6 ${
+            description && '-translate-y-[24px]'
+          } overflow-auto`}
+        >
           <FadeComponent show={!isLoading}>{children}</FadeComponent>
         </div>
       </div>

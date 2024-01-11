@@ -2,7 +2,6 @@ import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { store } from '../../../../store';
-import { Vaccine } from '../../../../types';
 import { selectListingOptionsVaccines } from '../../../../features/listing/listingOptionsSlice';
 import {
   addVaccination,
@@ -10,11 +9,14 @@ import {
   selectListingEditorSpecies,
   selectListingEditorVaccines
 } from '../../../../features/listing/listingEditorSlice';
+import { Vaccine } from '../../../../features/listing/types';
 
 const VaccinationList = () => {
   const species = useSelector(selectListingEditorSpecies);
   const allVaccines = useSelector(selectListingOptionsVaccines);
-  const vaccines = allVaccines.filter((vaccine) => vaccine.species === species);
+  const vaccines = allVaccines.filter(
+    (vaccine) => vaccine.speciesId === species?._id
+  );
   const selectedVaccines = useSelector(selectListingEditorVaccines);
 
   const isSelected = (vaccine: Vaccine) =>

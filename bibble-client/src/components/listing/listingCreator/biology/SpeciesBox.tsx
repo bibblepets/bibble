@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { IconType } from 'react-icons';
 import { useSelector } from 'react-redux';
-import { toCamelCase } from '../../../../utils/string';
+import { toTitleCase } from '../../../../utils/string';
 import { Species } from '../../../../features/listing/types';
 import {
   selectListingCreatorSpecies,
@@ -35,7 +35,7 @@ const SpeciesBox: React.FC<SpeciesBoxProps> = ({ species, icon: Icon }) => {
         <Icon className="text-white w-6 h-6" />
       </button>
       <a className={`text-sm font-light text-gray-500`}>
-        {toCamelCase(species.name)}
+        {toTitleCase(species.name)}
       </a>
     </div>
   );

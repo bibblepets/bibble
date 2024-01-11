@@ -5,7 +5,7 @@ import {
   setSize
 } from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
-import { toCamelCase } from '../../../../utils/string';
+import { toTitleCase } from '../../../../utils/string';
 import { Size } from '../../../../features/listing/types';
 
 const sizes: Size[] = ['small', 'medium', 'large'];
@@ -24,7 +24,7 @@ const SizeOptions = ({ readOnly }: { readOnly?: boolean }) => {
     return (
       <div className="flex flex-row gap-2">
         <a className="text-sm font-medium text-gray-700">
-          {(selectedSize && toCamelCase(selectedSize)) || 'No size selected'}
+          {(selectedSize && toTitleCase(selectedSize)) || 'No size selected'}
         </a>
       </div>
     );
@@ -40,7 +40,7 @@ const SizeOptions = ({ readOnly }: { readOnly?: boolean }) => {
             selectedSize === size ? 'bg-sky-500' : 'bg-gray-500'
           }`}
         >
-          <a className="text-sm font-light text-white">{toCamelCase(size)}</a>
+          <a className="text-sm font-light text-white">{toTitleCase(size)}</a>
         </button>
       ))}
     </div>

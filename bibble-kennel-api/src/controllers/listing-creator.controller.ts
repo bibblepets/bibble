@@ -20,9 +20,9 @@ import { IListingCreatorModel } from '../models/listing-creator.model';
 import { Logger } from '../services/logger';
 import { KeyNotFoundError } from '../errors/key.error';
 import { IMedia } from '../interfaces/media.interface';
-import * as s3 from '../services/s3';
 import { IListingModel } from '../models/listing.model';
 import { IListing } from '../interfaces/listing.interface';
+import * as s3 from '../services/s3';
 
 const Listing: IListingModel = require('../models/listing.model');
 
