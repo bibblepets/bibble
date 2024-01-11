@@ -8,8 +8,8 @@ import {
   selectListingCreatorMedia
 } from '../../../../features/listing/listingCreatorSlice';
 import { store } from '../../../../store';
-import { Media } from '../../../../types';
 import toast from 'react-hot-toast';
+import { Media } from '../../../../features/types';
 
 const MediaUpload = ({ readOnly }: { readOnly?: boolean }) => {
   const media = useSelector(selectListingCreatorMedia) || [];

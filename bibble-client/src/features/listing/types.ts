@@ -33,6 +33,7 @@ export type Listing = {
 };
 
 export type ListingCreatorStage =
+  | ''
   | 'Biology'
   | 'Biography'
   | 'Medical'

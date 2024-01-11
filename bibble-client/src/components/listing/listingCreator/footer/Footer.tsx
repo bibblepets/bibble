@@ -1,5 +1,4 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ListingStage } from '../../../../types';
 import { useProgress } from './hooks';
 import ProgressBar from './ProgressBar';
 import { useSelector } from 'react-redux';
@@ -13,6 +12,7 @@ import {
   selectListingCreatorPriceIsCompleted
 } from '../../../../features/listing/listingCreatorSlice';
 import './styles.css';
+import { ListingCreatorStage } from '../../../../features/listing/types';
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const Footer = () => {
       isCompleted = false;
   }
 
-  const stages: ListingStage[] = [
+  const stages: ListingCreatorStage[] = [
     '',
     'Biology',
     'Biography',
@@ -60,7 +60,7 @@ const Footer = () => {
 
   const { onBack, onNext } = useProgress(
     navigate,
-    stage as ListingStage,
+    stage as ListingCreatorStage,
     listingId
   );
 
@@ -71,7 +71,7 @@ const Footer = () => {
   return (
     <footer className="fixed w-full bottom-0 z-40">
       <ProgressBar
-        stage={stages.indexOf(stage as ListingStage)}
+        stage={stages.indexOf(stage as ListingCreatorStage)}
         totalStages={stages.length}
       />
       <div className="flex justify-between bg-white">

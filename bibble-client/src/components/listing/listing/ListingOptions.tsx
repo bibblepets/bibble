@@ -2,10 +2,10 @@ import { ArrowRightIcon, SquaresPlusIcon } from '@heroicons/react/24/outline';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { store } from '../../../store';
-import { SaleType } from '../../../types';
 import { createListingCreator } from '../../../features/listing/listingCreatorSlice';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../../features/user/userSlice';
+import { SaleType } from '../../../features/listing/types';
 
 const ListingOptions = () => {
   const currentUser = useSelector(selectCurrentUser);
