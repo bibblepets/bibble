@@ -14,6 +14,19 @@ services:
     networks:
       - bibble-network
 
+  bibble-gateway:
+    image: bibble-gateway
+    container_name: bibble-gateway
+    build:
+      context: ./bibble-gateway
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./bibble-gateway:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - bibble-network
+
   bibble-kennel-api:
     image: bibble-kennel-api
     container_name: bibble-kennel-api
@@ -81,6 +94,7 @@ services:
       - bibble-network
     depends_on:
       - bibble-client
+      - bibble-gateway
       - bibble-kennel-api
       - bibble-user-api
 

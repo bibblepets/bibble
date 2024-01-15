@@ -13,7 +13,9 @@ export const errorHandler = (
   if (err instanceof BaseError) {
     Logger.error(err);
 
-    return res.status(err.errorCode).send({ errors: err.serializeErrors() });
+    return res
+      .status(err.errorCode)
+      .send({ errorType: err.errorType, errors: err.serializeErrors() });
   } else if (err instanceof mongoose.Error.ValidationError) {
     const errors = Object.entries(err.errors).map(([k, v]) => ({
       message: v.message,
