@@ -5,7 +5,7 @@ import { TypedResponse } from './response.interface';
 
 export interface IVaccine {
   _id: Schema.Types.ObjectId;
-  speciesId: ISpecies['_id'];
+  speciesId: Schema.Types.ObjectId;
   name: string;
   isCore: boolean;
 

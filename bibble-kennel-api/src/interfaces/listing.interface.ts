@@ -14,12 +14,12 @@ import { IUser } from './user.interface';
 export interface IListing {
   _id: Schema.Types.ObjectId;
   userId: Schema.Types.ObjectId;
-  speciesId: ISpecies['_id'];
-  breedIds: IBreed['_id'][];
-  originId: ICountry['_id'];
-  hairCoatId: IHairCoat['_id'];
-  vaccineIds: IVaccine['_id'][];
-  legalTagIds: ILegalTag['_id'][];
+  speciesId: Schema.Types.ObjectId;
+  breedIds: Schema.Types.ObjectId[];
+  originId: Schema.Types.ObjectId;
+  hairCoatId: Schema.Types.ObjectId;
+  vaccineIds: Schema.Types.ObjectId[];
+  legalTagIds: Schema.Types.ObjectId[];
   saleType: string;
   name?: string;
   gender: string;

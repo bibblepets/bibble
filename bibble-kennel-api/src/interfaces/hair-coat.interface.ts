@@ -5,7 +5,7 @@ import { TypedResponse } from './response.interface';
 
 export interface IHairCoat {
   _id: Schema.Types.ObjectId;
-  speciesId: ISpecies['_id'];
+  speciesId: Schema.Types.ObjectId;
   name: string;
 
   species?: ISpecies;

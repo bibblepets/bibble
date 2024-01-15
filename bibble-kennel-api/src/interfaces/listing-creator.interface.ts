@@ -37,15 +37,15 @@ export interface IListingCreatorResponse extends IListingCreator {
 }
 
 export interface IBiologyCreator {
-  speciesId?: ISpecies['_id'];
-  breedIds?: IBreed['_id'][];
+  speciesId?: Schema.Types.ObjectId;
+  breedIds?: Schema.Types.ObjectId[];
 
   species?: ISpecies;
   breeds?: IBreed[];
 }
 
 export interface IBiographyCreator {
-  originId?: ICountry['_id'];
+  originId?: Schema.Types.ObjectId;
 
   name?: string;
   origin?: ICountry;
@@ -57,8 +57,8 @@ export interface IBiographyCreator {
 export interface IMedicalCreator {
   size?: string;
   weight?: number;
-  hairCoatId?: IHairCoat['_id'];
-  vaccineIds?: IVaccine['_id'][];
+  hairCoatId?: Schema.Types.ObjectId;
+  vaccineIds?: Schema.Types.ObjectId[];
 
   hairCoat?: IHairCoat;
   vaccines?: IVaccine[];
@@ -66,7 +66,7 @@ export interface IMedicalCreator {
 
 export interface ILegalCreator {
   avsLicenseNumber?: string;
-  legalTagIds?: ILegalTag['_id'][];
+  legalTagIds?: Schema.Types.ObjectId[];
 
   legalTags?: ILegalTag[];
 }
