@@ -38,13 +38,10 @@ const ItemInfo: React.FC<ItemInfoProps> = ({ listing }) => {
   const listingDate = listing.createdAt && new Date(listing.createdAt);
   const birthDate = new Date(listing.birthdate);
   const allLegalTags = useSelector(selectListingOptionsLegalTags);
-  console.log(listing.birthdate);
 
   const handleOpenViewMoreModal = () => {
     store.dispatch(openViewMoreModal(listing.description));
   };
-
-  console.log(allLegalTags);
 
   return (
     <div className="col-span-4 flex flex-col gap-12">

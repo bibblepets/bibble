@@ -1,45 +1,38 @@
 import axios from 'axios';
 import { Request, Response, NextFunction } from 'express';
-import * as cookie from 'cookie';
-import { Logger } from '../services/logger';
-import dotenv from 'dotenv';
+import * as jwt from '../services/jwt';
 import { UserAPIError } from '../errors/api.error';
-
-dotenv.config();
-
-const bibbleUserApiUrl = process.env.BIBBLE_USER_API_URL;
+import { GatewayError } from '../errors/gateway.error';
+import { USER_API_URL } from '../resources/servers';
 
 export const authHandler = async (
   req: Request,
-  _res: Response,
+  res: Response,
   next: NextFunction
 ) => {
-  const cookies = cookie.parse(req.headers.cookie || '');
-  const authToken = cookies.authToken;
+  const authToken = req.cookies.authToken;
 
   try {
-    Logger.update('Authenticating user');
+    if (!authToken) {
+      throw new GatewayError("Auth token doesn't exist");
+    }
 
-    const user = await axios
-      .get(`${bibbleUserApiUrl}/auth`, {
-        headers: {
-          Cookie: `authToken=${authToken}`
-        }
-      })
+    const decodedToken = jwt.verifyAuthToken(authToken);
+
+    const response = await axios
+      .get(`${USER_API_URL}/auth/${decodedToken.id}`)
       .then((response) => {
-        return response.data;
+        return response;
       })
       .catch((error) => {
-        const errorCode = error.response.status;
-        const { errorType, errors } = error.response.data;
-
-        throw new UserAPIError(errorCode, errorType, errors);
+        throw new UserAPIError(error.response);
       });
 
-    Logger.success('User authenticated', user._id);
+    const userId = response.data._id;
 
-    req.body.userId = user._id;
+    jwt.signAuthToken(req, res, userId);
 
+    req.params.userId = userId;
     next();
   } catch (error: any) {
     next(error);

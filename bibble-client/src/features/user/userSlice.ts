@@ -26,7 +26,7 @@ export const authenticate = createAsyncThunk(
   '/userSlice/authenticate',
   async () => {
     return await axios
-      .get(`${USER_API_URL}/auth`)
+      .get(`/api/user/auth`)
       .then((response) => {
         return response.data;
       })
@@ -40,7 +40,7 @@ export const registerUser = createAsyncThunk(
   '/userSlice/register',
   async (credentials: User) => {
     return await axios
-      .post(`${USER_API_URL}/auth/register`, credentials)
+      .post(`/api/user/register`, credentials)
       .then((response) => {
         return response.data;
       })
@@ -54,7 +54,7 @@ export const loginUser = createAsyncThunk(
   '/userSlice/loginUser',
   async (credentials: User) => {
     return await axios
-      .post(`${USER_API_URL}/auth/login`, credentials)
+      .post(`/api/user/login`, credentials)
       .then((response) => {
         return response.data;
       })
@@ -68,7 +68,7 @@ export const logoutUser = createAsyncThunk(
   '/userSlice/logoutUser',
   async () => {
     return await axios
-      .post(`${USER_API_URL}/auth/logout`)
+      .post(`/api/user/logout`)
       .then((response) => {
         return response.data;
       })
@@ -82,7 +82,7 @@ export const updateUser = createAsyncThunk(
   '/userSlice/updateUser',
   async (updates: Partial<User>) => {
     return await axios
-      .put(`${USER_API_URL}/user`, updates)
+      .put(`/api/user`, updates)
       .then((response) => {
         return response.data;
       })
@@ -100,7 +100,7 @@ export const updateProfilePicture = createAsyncThunk(
     profilePic.file && formData.append('data', profilePic.file);
 
     return await axios
-      .put(`${USER_API_URL}/user/profile-picture`, formData, {
+      .put(`/api/user/profile-picture`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then((response) => {

@@ -2,20 +2,13 @@ import { NextFunction } from 'express';
 import {
   ILoginUserRequest,
   ILoginUserResponse,
-  ILogoutUserRequest,
-  ILogoutUserResponse,
   IRegisterUserRequest,
   IRegisterUserResponse
 } from '../interfaces/user.interface';
 import { Logger } from '../services/logger';
 import { IUserModel } from '../models/user.model';
-import {
-  deleteAuthToken,
-  signAuthToken,
-  verifyAuthToken
-} from '../services/jwt';
 import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
-import { AuthTokenError, PasswordError } from '../errors/auth.error';
+import { PasswordError } from '../errors/auth.error';
 import { IAuthRequest, IAuthResponse } from '../interfaces/auth.interface';
 
 const User: IUserModel = require('../models/user.model');
@@ -25,24 +18,16 @@ export const authenticate = async (
   res: IAuthResponse,
   next: NextFunction
 ) => {
-  const authToken = req.cookies.authToken;
+  const { userId } = req.params;
 
   try {
     Logger.update('Authenticating user');
 
-    if (!authToken) {
-      throw new AuthTokenError("Auth token doesn't exist");
-    }
-
-    const decodedToken = verifyAuthToken(authToken);
-
-    const user = await User.findById(decodedToken.id);
+    const user = await User.findById(userId);
 
     if (!user) {
-      throw new AuthTokenError('Invalid auth token');
+      throw new KeyNotFoundError('User not found', 'id', userId);
     }
-
-    signAuthToken(req, res, user._id);
 
     Logger.success('User authenticated', user._id);
 
@@ -80,8 +65,6 @@ export const registerUser = async (
 
     Logger.success('User created', createdUser._id);
 
-    signAuthToken(req, res, createdUser._id);
-
     const response = await createdUser.formatResponse();
 
     return res.status(201).json(response);
@@ -115,8 +98,6 @@ export const loginUser = async (
       throw new PasswordError();
     }
 
-    signAuthToken(req, res, user._id);
-
     Logger.success('User logged in', user._id);
 
     const response = await user.formatResponse();
@@ -125,17 +106,4 @@ export const loginUser = async (
   } catch (error: any) {
     next(error);
   }
-};
-
-export const logoutUser = (
-  _req: ILogoutUserRequest,
-  res: ILogoutUserResponse
-) => {
-  Logger.update('Logging out user');
-
-  deleteAuthToken(res);
-
-  Logger.success('User logged out');
-
-  return res.status(200).json('User logged out successfully');
 };

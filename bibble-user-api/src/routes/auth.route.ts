@@ -4,11 +4,11 @@ import * as AuthController from '../controllers/auth.controller';
 const router = Router();
 
 /**
- * @route GET /auth
+ * @route GET /auth/:userId
  * @desc Authenticate a user
  * @access Public
  */
-router.get('/', AuthController.authenticate);
+router.get('/:userId', AuthController.authenticate);
 
 /**
  * @route POST /auth/register
@@ -23,12 +23,5 @@ router.post('/register', AuthController.registerUser);
  * @access Public
  */
 router.post('/login', AuthController.loginUser);
-
-/**
- * @route POST /auth/logout
- * @desc Logout an existing user
- * @access Private
- */
-router.post('/logout', AuthController.logoutUser);
 
 module.exports = router;

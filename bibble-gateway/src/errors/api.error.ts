@@ -1,5 +1,13 @@
 import BaseError from './base.error';
 
+type APIErrorResponse = {
+  status: number;
+  data: {
+    errorType: string;
+    errors: any;
+  };
+};
+
 abstract class APIError extends BaseError {
   errorCode: number;
   errorType: string;
@@ -32,7 +40,10 @@ abstract class APIError extends BaseError {
 }
 
 export class UserAPIError extends APIError {
-  constructor(errorCode: number, errorType: string, errors: any) {
+  constructor(res: APIErrorResponse) {
+    const errorCode = res.status;
+    const { errorType, errors } = res.data;
+
     super(errorCode, errorType, 'bibble-user-api', errors);
 
     Object.setPrototypeOf(this, UserAPIError.prototype);
@@ -40,7 +51,10 @@ export class UserAPIError extends APIError {
 }
 
 export class KennelAPIError extends APIError {
-  constructor(errorCode: number, errorType: string, errors: any) {
+  constructor(res: APIErrorResponse) {
+    const errorCode = res.status;
+    const { errorType, errors } = res.data;
+
     super(errorCode, errorType, 'bibble-kennel-api', errors);
 
     Object.setPrototypeOf(this, KennelAPIError.prototype);

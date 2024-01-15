@@ -5,9 +5,9 @@ import {
   IUserResponse
 } from '../interfaces/user.interface';
 import { Schema } from 'mongoose';
-import { ServerError } from '../errors/server.error';
 import { TypedRequest } from '../interfaces/request.interface';
 import { TypedResponse } from '../interfaces/response.interface';
+import { GatewayError } from '../errors/gateway.error';
 
 const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
 
@@ -23,7 +23,7 @@ export function signAuthToken(
   id: Schema.Types.ObjectId
 ) {
   if (!SECRET_JWT_CODE) {
-    throw new ServerError('SECRET_JWT_CODE not found');
+    throw new GatewayError('SECRET_JWT_CODE not found');
   }
 
   const { email } = req.body;
@@ -35,13 +35,13 @@ export function signAuthToken(
 
 export function verifyAuthToken(authToken: string) {
   if (!SECRET_JWT_CODE) {
-    throw new ServerError('SECRET_JWT_CODE not found');
+    throw new GatewayError('SECRET_JWT_CODE not found');
   }
 
   const decodedToken = jwt.verify(authToken, SECRET_JWT_CODE);
 
   if (typeof decodedToken === 'string') {
-    throw new ServerError('Decoded JWT became a string');
+    throw new GatewayError('Decoded JWT became a string');
   }
 
   return decodedToken;

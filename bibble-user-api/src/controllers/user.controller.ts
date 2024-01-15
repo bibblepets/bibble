@@ -94,7 +94,7 @@ export const updateUser = async (
   }
 };
 
-export const updateProfilePicture = async (
+export const updateUserProfilePicture = async (
   req: IUpdateUserProfilePictureRequest,
   res: IUpdateUserProfilePictureResponse,
   next: NextFunction

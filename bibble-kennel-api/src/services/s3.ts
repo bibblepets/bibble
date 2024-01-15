@@ -78,6 +78,7 @@ export const putMedia = async (
 
     clientMediaNames.forEach((clientMediaName) => {
       clientMediaName &&
+        clientMediaName !== 'undefined' &&
         listingMedia.push({ name: clientMediaName, url: undefined });
     });
   }

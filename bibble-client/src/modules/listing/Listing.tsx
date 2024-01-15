@@ -20,7 +20,6 @@ const Listing = () => {
   const currentUser = useSelector(selectCurrentUser);
   const listings = useSelector(selectMyListings);
   const listingCreators = useSelector(selectMyListingCreators);
-  console.log(listingCreators);
   const isListingsLoading = useSelector(selectMyListingsIsLoading);
   const isListingCreatorsLoading = useSelector(
     selectMyListingCreatorsIsLoading

@@ -3,9 +3,9 @@ import { TypedResponse } from './response.interface';
 import { IUserResponse } from './user.interface';
 
 export interface IAuthRequest extends Request {
-  cookies: {
-    authToken: string;
-  } & Request['cookies'];
+  params: {
+    userId: string;
+  };
 }
 
 export interface IAuthResponse extends TypedResponse<IUserResponse> {}

@@ -1,0 +1,61 @@
+import { Schema } from 'mongoose';
+import { ParamsDictionary } from 'express-serve-static-core';
+import { IMedia, IMediaResponse } from './media.interface';
+import { IAddress } from './address.interface';
+import { TypedRequest } from './request.interface';
+import { TypedResponse } from './response.interface';
+
+export interface IUser {
+  _id: Schema.Types.ObjectId;
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+  contactNumber?: string;
+  address?: IAddress;
+  profilePic?: IMedia;
+  bio?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IUserRequest<T, P = ParamsDictionary>
+  extends TypedRequest<T, P & { userId: string }> {}
+
+export interface IUserResponse extends Omit<IUser, 'password'> {
+  password?: string;
+  profilePic?: IMediaResponse;
+}
+
+export interface IAuthUserRequest extends TypedRequest<IUser> {}
+
+export interface IAuthUserResponse extends TypedResponse<IUserResponse> {}
+
+export interface IRegisterUserRequest extends TypedRequest<IUser> {}
+
+export interface IRegisterUserResponse extends TypedResponse<IUserResponse> {}
+
+export interface ILoginUserRequest extends TypedRequest<IUser> {}
+
+export interface ILoginUserResponse extends TypedResponse<IUserResponse> {}
+
+export interface ILogoutUserRequest extends TypedRequest<{}> {}
+
+export interface ILogoutUserResponse extends TypedResponse<string> {}
+
+export interface IGetUserRequest
+  extends TypedRequest<{}, {}, { _id?: string; email?: string }> {}
+
+export interface IGetUserResponse extends TypedResponse<IUserResponse> {}
+
+export interface IUpdateUserRequest extends IUserRequest<Partial<IUser>> {}
+
+export interface IUpdateUserResponse extends TypedResponse<IUserResponse> {}
+
+export interface IUpdateUserProfilePictureRequest
+  extends IUserRequest<{ profilePic: string }> {
+  file?: Express.Multer.File;
+}
+
+export interface IUpdateUserProfilePictureResponse
+  extends TypedResponse<IUserResponse> {}
