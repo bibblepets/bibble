@@ -1,9 +1,9 @@
 import { Schema } from 'mongoose';
 import { ParamsDictionary } from 'express-serve-static-core';
-import { IMedia, IMediaResponse } from './media.interface';
-import { IAddress } from './address.interface';
-import { TypedRequest } from './request.interface';
-import { TypedResponse } from './response.interface';
+import { IMedia, IMediaResponse } from '../media.interface';
+import { IAddress } from '../address.interface';
+import { TypedRequest } from '../request.interface';
+import { TypedResponse } from '../response.interface';
 
 export interface IUser {
   _id: Schema.Types.ObjectId;
@@ -19,7 +19,7 @@ export interface IUser {
   updatedAt?: Date;
 }
 
-export interface IUserRequest<T, P = ParamsDictionary>
+export interface IUserRequest<T = {}, P = ParamsDictionary>
   extends TypedRequest<T, P & { userId: string }> {}
 
 export interface IUserResponse extends Omit<IUser, 'password'> {

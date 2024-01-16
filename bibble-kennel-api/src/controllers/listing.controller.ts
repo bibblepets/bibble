@@ -48,7 +48,7 @@ export const getMyListings = async (
   res: IGetMyListingsResponse,
   next: NextFunction
 ) => {
-  const { userId } = req.body;
+  const { userId } = req.query;
 
   try {
     Logger.update('Getting listings for user', userId);
@@ -98,7 +98,8 @@ export const updateListing = async (
   res: IUpdateListingResponse,
   next: NextFunction
 ) => {
-  const { _id, ...updates } = req.body;
+  const { _id } = req.params;
+  const updates = req.body;
 
   try {
     Logger.update('Updating listing', _id);
@@ -127,7 +128,8 @@ export const updateListingMedia = async (
   res: IUpdateListingMediaResponse,
   next: NextFunction
 ) => {
-  const { _id, mediaNames } = req.body;
+  const { _id } = req.params;
+  const { mediaNames } = req.body;
   const files = req.files as Express.Multer.File[];
 
   try {

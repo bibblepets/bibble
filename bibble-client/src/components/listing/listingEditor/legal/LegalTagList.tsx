@@ -32,7 +32,8 @@ const LegalTagList = () => {
     [store, selectedLegalTags]
   );
 
-  const isSelected = (tag: LegalTag) => selectedLegalTags?.includes(tag);
+  const isSelected = (tag: LegalTag) =>
+    selectedLegalTags?.map((t) => t._id)?.includes(tag._id);
 
   return (
     <div className="flex flex-col gap-4 w-full h-full">

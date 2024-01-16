@@ -24,9 +24,9 @@ const initialState: ListingEditorState = {
 
 export const fetchListingById = createAsyncThunk(
   'listingEditor/fetchListingById',
-  async (id: string) => {
+  async (_id: string) => {
     return await axios
-      .get(`/kennel/listing/${id}`)
+      .get(`/api/kennel/listing/${_id}`)
       .then((response) => {
         return response.data;
       })
@@ -40,10 +40,10 @@ export const updateListingById = createAsyncThunk(
   'listingEditor/updateListingById',
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const { media, ...listing } = state.listingEditor.listing || {};
+    const { _id, media, ...listing } = state.listingEditor.listing || {};
 
     return await axios
-      .put(`/kennel/listing`, listing)
+      .put(`/api/kennel/listing/${_id}`, listing)
       .then((response) => {
         return response.data;
       })
@@ -72,7 +72,7 @@ export const updateListingMediaById = createAsyncThunk(
       media.file && formData.append('data', media.file);
     });
     return await axios
-      .put(`/kennel/listing/media`, formData, {
+      .put(`/api/kennel/listing/media/${_id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then((response) => {

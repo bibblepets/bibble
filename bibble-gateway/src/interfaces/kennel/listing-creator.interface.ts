@@ -2,13 +2,13 @@ import { Schema } from 'mongoose';
 import { IBreed } from './breed.interface';
 import { ISpecies } from './species.interface';
 import { IHairCoat } from './hair-coat.interface';
-import { IMedia, IMediaResponse } from './media.interface';
+import { IMedia, IMediaResponse } from '../media.interface';
 import { ILegalTag } from './legal-tag.interface';
-import { TypedRequest } from './request.interface';
-import { TypedResponse } from './response.interface';
-import { AuthorizedRequest } from './auth.interface';
+import { TypedRequest } from '../request.interface';
+import { TypedResponse } from '../response.interface';
 import { ICountry } from './country.interface';
 import { IVaccine } from './vaccine.interface';
+import { IUserRequest } from '../user/user.interface';
 
 export interface IListingCreator {
   _id: Schema.Types.ObjectId;
@@ -30,7 +30,7 @@ export interface IListingCreatorMethods {
 }
 
 export interface IListingCreatorRequest<T = {}>
-  extends AuthorizedRequest<T, { _id: string }> {}
+  extends IUserRequest<T, { _id: string }> {}
 
 export interface IListingCreatorResponse extends IListingCreator {
   media?: IMediaResponse[];

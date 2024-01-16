@@ -14,7 +14,7 @@ import {
   IUpdateUserProfilePictureResponse,
   IUpdateUserRequest,
   IUpdateUserResponse
-} from '../interfaces/user.interface';
+} from '../interfaces/user/user.interface';
 import { Logger } from '../services/logger';
 import axios from 'axios';
 import { UserAPIError } from '../errors/api.error';

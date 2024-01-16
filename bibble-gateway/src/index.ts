@@ -9,6 +9,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 
 // Project dependencies
+const kennelRouter = require('./routes/kennel.route');
 const userRouter = require('./routes/user.route');
 
 // Express initialization
@@ -21,6 +22,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/user', userRouter);
+app.use('/kennel', kennelRouter);
 
 // Error handling
 app.use(errorHandler);

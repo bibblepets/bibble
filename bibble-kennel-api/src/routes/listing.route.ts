@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import * as ListingController from '../controllers/listing.controller';
-import * as AuthMiddleware from '../middleware/auth.middleware';
 import multer from 'multer';
 
 const router = Router();
@@ -14,12 +13,10 @@ const upload = multer({ storage });
  */
 router.get('/', ListingController.getListings);
 
-router.use(AuthMiddleware.authHandler);
-
 /**
  * @route GET /listing/me
  * @desc Get all listings
- * @access Private
+ * @access Public
  */
 router.get('/me', ListingController.getMyListings);
 
@@ -31,20 +28,20 @@ router.get('/me', ListingController.getMyListings);
 router.get('/:_id', ListingController.getListingById);
 
 /**
- * @route PUT /listing
+ * @route PUT /listing/:_id
  * @desc Update a listing
- * @access Private
+ * @access Public
  */
-router.put('/', ListingController.updateListing);
+router.put('/:_id', ListingController.updateListing);
 
 /**
- * @route PUT /listing/media
+ * @route PUT /listing/media/:_id
  * @desc Update a listing's media
- * @access Private
+ * @access Public
  */
 router.put(
-  '/media',
-  upload.array('media'),
+  '/media/:_id',
+  upload.array('data'),
   ListingController.updateListingMedia
 );
 

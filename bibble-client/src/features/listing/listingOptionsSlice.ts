@@ -30,7 +30,7 @@ export const fetchAllSpecies = createAsyncThunk(
   '/listingOptionsSlice/fetchAllSpecies',
   async () => {
     return await axios
-      .get(`/kennel/species`)
+      .get(`/api/kennel/species`)
       .then((response) => {
         return response.data;
       })
@@ -44,7 +44,7 @@ export const fetchAllBreeds = createAsyncThunk(
   '/listingOptionsSlice/fetchAllBreeds',
   async () => {
     return await axios
-      .get(`/kennel/breed`)
+      .get(`/api/kennel/breed`)
       .then((response) => {
         return response.data;
       })
@@ -58,7 +58,7 @@ export const fetchAllCountries = createAsyncThunk(
   '/listingOptionsSlice/fetchAllCountries',
   async () => {
     return await axios
-      .get(`/kennel/country`)
+      .get(`/api/kennel/country`)
       .then((response) => {
         return response.data;
       })
@@ -72,7 +72,7 @@ export const fetchAllHairCoats = createAsyncThunk(
   '/listingOptionsSlice/fetchAllHairCoats',
   async () => {
     return await axios
-      .get(`/kennel/hair-coat`)
+      .get(`/api/kennel/hair-coat`)
       .then((response) => {
         return response.data;
       })
@@ -86,7 +86,7 @@ export const fetchAllVaccines = createAsyncThunk(
   '/listingOptionsSlice/fetchAllVaccines',
   async () => {
     return await axios
-      .get(`/kennel/vaccine`)
+      .get(`/api/kennel/vaccine`)
       .then((response) => {
         return response.data;
       })
@@ -100,7 +100,7 @@ export const fetchAllLegalTags = createAsyncThunk(
   '/listingOptionsSlice/fetchAllLegalTags',
   async () => {
     return await axios
-      .get(`/kennel/legal-tag`)
+      .get(`/api/kennel/legal-tag`)
       .then((response) => {
         return response.data;
       })

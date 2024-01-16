@@ -3,7 +3,7 @@ import {
   ILogoutUserResponse,
   IUser,
   IUserResponse
-} from '../interfaces/user.interface';
+} from '../interfaces/user/user.interface';
 import { Schema } from 'mongoose';
 import { TypedRequest } from '../interfaces/request.interface';
 import { TypedResponse } from '../interfaces/response.interface';

@@ -30,7 +30,7 @@ export const createListingCreator = createAsyncThunk(
   '/listingCreator/createListingCreator',
   async (payload: { currentUser: User; saleType: SaleType }) => {
     return await axios
-      .post('/kennel/listing-creator', {
+      .post('/api/kennel/listing-creator', {
         saleType: payload.saleType
       })
       .then((response) => {
@@ -48,7 +48,7 @@ export const createListing = createAsyncThunk(
     const state = getState() as RootState;
     const { _id } = state.listingCreator;
     return await axios
-      .post(`/kennel/listing-creator/${_id}`)
+      .post(`/api/kennel/listing-creator/${_id}`)
       .then((response) => {
         return response.data;
       })
@@ -62,7 +62,7 @@ export const fetchListingCreatorById = createAsyncThunk(
   '/listingCreator/fetchListingCreatorById',
   async (listingId: string) => {
     return await axios
-      .get(`/kennel/listing-creator/${listingId}`)
+      .get(`/api/kennel/listing-creator/${listingId}`)
       .then((response) => {
         return response.data;
       })
@@ -76,10 +76,10 @@ export const updateListingCreator = createAsyncThunk(
   '/listingCreator/updateListingCreator',
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const { media, ...listingCreator } = state.listingCreator;
+    const { _id, media, ...listingCreator } = state.listingCreator;
 
     return await axios
-      .put(`/kennel/listing-creator`, listingCreator)
+      .put(`/api/kennel/listing-creator/${_id}`, listingCreator)
       .then((response) => {
         return response.data;
       })
@@ -95,9 +95,7 @@ export const updateBiology = createAsyncThunk(
     const state = getState() as RootState;
     const { _id, biology } = state.listingCreator;
     return await axios
-      .put('/kennel/listing-creator/biology', {
-        _id,
-        stage: 1,
+      .put(`/api/kennel/listing-creator/biology/${_id}`, {
         biology
       })
       .then((response) => {
@@ -115,9 +113,7 @@ export const updateBiography = createAsyncThunk(
     const state = getState() as RootState;
     const { _id, biography } = state.listingCreator;
     return await axios
-      .put('/kennel/listing-creator/biography', {
-        _id,
-        stage: 2,
+      .put(`/api/kennel/listing-creator/biography/${_id}`, {
         biography
       })
       .then((response) => {
@@ -135,9 +131,7 @@ export const updateMedical = createAsyncThunk(
     const state = getState() as RootState;
     const { _id, medical } = state.listingCreator;
     return await axios
-      .put('/kennel/listing-creator/medical', {
-        _id,
-        stage: 3,
+      .put(`/api/kennel/listing-creator/medical/${_id}`, {
         medical
       })
       .then((response) => {
@@ -155,9 +149,7 @@ export const updateLegal = createAsyncThunk(
     const state = getState() as RootState;
     const { _id, legal } = state.listingCreator;
     return await axios
-      .put('/kennel/listing-creator/legal', {
-        _id,
-        stage: 4,
+      .put(`/api/kennel/listing-creator/legal/${_id}`, {
         legal
       })
       .then((response) => {
@@ -180,8 +172,6 @@ export const updateMedia = createAsyncThunk(
     }
 
     const formData = new FormData();
-    formData.append('_id', _id);
-    formData.append('stage', '5');
     media.forEach((media) => {
       media.name && formData.append('mediaNames[]', media.name);
     });
@@ -189,7 +179,7 @@ export const updateMedia = createAsyncThunk(
       media.file && formData.append('data', media.file);
     });
     return await axios
-      .put('/kennel/listing-creator/media', formData, {
+      .put(`/api/kennel/listing-creator/media/${_id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then((response) => {
@@ -205,11 +195,9 @@ export const updatePrice = createAsyncThunk(
   '/listingCreator/updatePrice',
   async (_, { getState }) => {
     const state = getState() as RootState;
-    const { price } = state.listingCreator;
+    const { _id, price } = state.listingCreator;
     return await axios
-      .put('/kennel/listing-creator/price', {
-        _id: state.listingCreator._id,
-        stage: 6,
+      .put(`/api/kennel/listing-creator/price/${_id}`, {
         price
       })
       .then((response) => {
@@ -228,7 +216,7 @@ export const deleteListingCreatorById = createAsyncThunk(
     const { _id } = state.listingCreator;
 
     return await axios
-      .delete(`/kennel/listing-creator/${_id}`)
+      .delete(`/api/kennel/listing-creator/${_id}`)
       .then((response) => {
         return response.data;
       })

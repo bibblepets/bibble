@@ -5,11 +5,10 @@ import { ICountry } from './country.interface';
 import { IHairCoat } from './hair-coat.interface';
 import { IVaccine } from './vaccine.interface';
 import { ILegalTag } from './legal-tag.interface';
-import { IMedia, IMediaResponse } from './media.interface';
-import { AuthorizedRequest } from './auth.interface';
-import { TypedResponse } from './response.interface';
-import { TypedRequest } from './request.interface';
-import { IUser } from './user.interface';
+import { IMedia, IMediaResponse } from '../media.interface';
+import { TypedResponse } from '../response.interface';
+import { TypedRequest } from '../request.interface';
+import { IUserRequest } from '../user/user.interface';
 
 export interface IListing {
   _id: Schema.Types.ObjectId;
@@ -33,7 +32,6 @@ export interface IListing {
   createdAt?: Date;
   updatedAt?: Date;
 
-  user?: IUser;
   species?: ISpecies;
   breeds?: IBreed[];
   origin?: ICountry;
@@ -42,11 +40,7 @@ export interface IListing {
   legalTags?: ILegalTag[];
 }
 
-export interface IListingMethods {
-  formatResponse(): Promise<IListingResponse>;
-}
-
-export interface IListingRequest extends AuthorizedRequest<IListing> {}
+export interface IListingRequest extends IUserRequest<IListing> {}
 
 export interface IListingResponse extends IListing {
   media: IMediaResponse[];
@@ -58,25 +52,25 @@ export interface IGetListingsRequest
 export interface IGetListingsResponse
   extends TypedResponse<IListingResponse[]> {}
 
-export interface IGetMyListingsRequest extends AuthorizedRequest {}
+export interface IGetMyListingsRequest extends IUserRequest {}
 
 export interface IGetMyListingsResponse
   extends TypedResponse<IListingResponse[]> {}
 
 export interface IGetListingByIdRequest
-  extends AuthorizedRequest<{}, { _id: string }> {}
+  extends IUserRequest<{}, { _id: string }> {}
 
 export interface IGetListingByIdResponse
   extends TypedResponse<IListingResponse> {}
 
 export interface IUpdateListingRequest
-  extends AuthorizedRequest<IListing, { _id: string }> {}
+  extends IUserRequest<IListing, { _id: string }> {}
 
 export interface IUpdateListingResponse
   extends TypedResponse<IListingResponse> {}
 
 export interface IUpdateListingMediaRequest
-  extends AuthorizedRequest<{ mediaNames: string[] }, { _id: string }> {}
+  extends IUserRequest<{ mediaNames: string[] }, { _id: string }> {}
 
 export interface IUpdateListingMediaResponse
   extends TypedResponse<IListingResponse> {}

@@ -1,8 +1,4 @@
-import {
-  createAsyncThunk,
-  createSelector,
-  createSlice
-} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../store';
 import { Listing } from './types';
@@ -24,7 +20,7 @@ export const fetchListings = createAsyncThunk(
   '/kennelSlice/fetchListings',
   async () => {
     return await axios
-      .get('/kennel/listing')
+      .get('/api/kennel/listing')
       .then((response) => {
         return response.data;
       })

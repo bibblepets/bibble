@@ -1,99 +1,96 @@
 import { Router } from 'express';
 import * as ListingCreatorController from '../controllers/listing-creator.controller';
-import * as AuthMiddleware from '../middleware/auth.middleware';
 import multer from 'multer';
 
 const router = Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-router.use(AuthMiddleware.authHandler);
-
 /**
  * @route POST /listing-creator
  * @desc Create a new listing creator
- * @access Private
+ * @access Public
  */
 router.post('/', ListingCreatorController.createListingCreator);
 
 /**
  * @route POST /listing-creator/:_id
  * @desc Create a new listing
- * @access Private
+ * @access Public
  */
 router.post('/:_id', ListingCreatorController.createListing);
 
 /**
- * @route GET /listing-creator
+ * @route GET /listing-creator/me
  * @desc Get my listing creators
- * @access Private
+ * @access Public
  */
-router.get('/me', ListingCreatorController.getListingMyCreators);
+router.get('/me', ListingCreatorController.getMyListingCreators);
 
 /**
  * @route GET /listing-creator/:id
  * @desc Get all listing creators
- * @access Private
+ * @access Public
  */
 router.get('/:_id', ListingCreatorController.getListingCreatorById);
 
 /**
  * @route PUT /listing-creator/:id
  * @desc Update a listing creator
- * @access Private
+ * @access Public
  */
-router.put('/', ListingCreatorController.updateListingCreator);
+router.put('/:_id', ListingCreatorController.updateListingCreator);
 
 /**
- * @route PUT /listing-creator/biology
+ * @route PUT /listing-creator/biology/:_id
  * @desc Update a listing creator's biology info
- * @access Private
+ * @access Public
  */
-router.put('/biology', ListingCreatorController.updateBiologyCreator);
+router.put('/biology/:_id', ListingCreatorController.updateBiologyCreator);
 
 /**
- * @route PUT /listing-creator/biography
+ * @route PUT /listing-creator/biography/:_id
  * @desc Update a listing creator's biography info
- * @access Private
+ * @access Public
  */
-router.put('/biography', ListingCreatorController.updateBiographyCreator);
+router.put('/biography/:_id', ListingCreatorController.updateBiographyCreator);
 
 /**
- * @route PUT /listing-creator/medical
+ * @route PUT /listing-creator/medical/:_id
  * @desc Update a listing creator's medical info
- * @access Private
+ * @access Public
  */
-router.put('/medical', ListingCreatorController.updateMedicalCreator);
+router.put('/medical/:_id', ListingCreatorController.updateMedicalCreator);
 
 /**
- * @route PUT /listing-creator/legal
+ * @route PUT /listing-creator/legal/:_id
  * @desc Update a listing creator's legal info
- * @access Private
+ * @access Public
  */
-router.put('/legal', ListingCreatorController.updateLegalCreator);
+router.put('/legal/:_id', ListingCreatorController.updateLegalCreator);
 
 /**
- * @route PUT /listing-creator/media
+ * @route PUT /listing-creator/media/:_id
  * @desc Update a listing creator's media info
- * @access Private
+ * @access Public
  */
 router.put(
-  '/media',
+  '/media/:_id',
   upload.array('data'),
   ListingCreatorController.updateMediaCreator
 );
 
 /**
- * @route PUT /listing-creator/price
+ * @route PUT /listing-creator/price/:_id
  * @desc Update a listing creator's price info
- * @access Private
+ * @access Public
  */
-router.put('/price', ListingCreatorController.updatePriceCreator);
+router.put('/price/:_id', ListingCreatorController.updatePriceCreator);
 
 /**
  * @route DELETE /listing-creator/:id
  * @desc Delete a listing creator
- * @access Private
+ * @access Public
  */
 router.delete('/:_id', ListingCreatorController.deleteListingCreatorById);
 
