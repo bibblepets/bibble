@@ -3,10 +3,8 @@ import {
   IGetHairCoatsRequest,
   IGetHairCoatsResponse
 } from '../interfaces/hair-coat.interface';
-import { IHairCoatModel } from '../models/hair-coat.model';
+import HairCoat from '../models/hair-coat.model';
 import { Logger } from '../services/logger';
-
-const HairCoat: IHairCoatModel = require('../models/hair-coat.model');
 
 export const getHairCoats = async (
   req: IGetHairCoatsRequest,

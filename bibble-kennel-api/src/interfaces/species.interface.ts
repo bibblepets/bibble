@@ -8,6 +8,6 @@ export interface ISpecies {
 }
 
 export interface IGetSpeciesRequest
-  extends TypedRequest<{}, {}, { name?: string }> {}
+  extends TypedRequest<object, object, { name?: string }> {}
 
 export interface IGetSpeciesResponse extends TypedResponse<ISpecies[]> {}

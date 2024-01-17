@@ -1,4 +1,5 @@
 import { NextFunction } from 'express';
+import { KeyNotFoundError } from '../errors/key.error';
 import {
   ICreateListingCreatorRequest,
   ICreateListingCreatorResponse,
@@ -16,17 +17,12 @@ import {
   IUpdateMediaCreatorRequest,
   IUpdatePriceCreatorRequest
 } from '../interfaces/listing-creator.interface';
-import { IListingCreatorModel } from '../models/listing-creator.model';
-import { Logger } from '../services/logger';
-import { KeyNotFoundError } from '../errors/key.error';
-import { IMedia } from '../interfaces/media.interface';
-import { IListingModel } from '../models/listing.model';
 import { IListing } from '../interfaces/listing.interface';
+import { IMedia } from '../interfaces/media.interface';
+import ListingCreator from '../models/listing-creator.model';
+import Listing from '../models/listing.model';
+import { Logger } from '../services/logger';
 import * as s3 from '../services/s3';
-
-const Listing: IListingModel = require('../models/listing.model');
-
-const ListingCreator: IListingCreatorModel = require('../models/listing-creator.model');
 
 export const createListingCreator = async (
   req: ICreateListingCreatorRequest,
@@ -40,12 +36,12 @@ export const createListingCreator = async (
 
     const listingCreator = await ListingCreator.create(payload);
 
-    Logger.success('Listing creator created', listingCreator._id);
+    Logger.success('Listing creator created', listingCreator._id.toString());
 
     const response = await listingCreator.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -89,7 +85,7 @@ export const createListing = async (
 
     const createdListing = await Listing.create(listing);
 
-    Logger.success('Listing created', createdListing._id);
+    Logger.success('Listing created', createdListing._id.toString());
 
     Logger.update('Deleting listing creator');
 
@@ -98,7 +94,7 @@ export const createListing = async (
     Logger.success('Listing creator deleted', _id);
 
     return res.status(200).json({});
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -122,7 +118,7 @@ export const getMyListingCreators = async (
     );
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -148,7 +144,7 @@ export const getListingCreatorById = async (
     const response = await listingCreator.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -182,7 +178,7 @@ export const updateListingCreator = async (
     const response = await updatedListingCreator.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -220,7 +216,7 @@ export const updateBiologyCreator = async (
     const response = await updatedListingCreator.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -257,7 +253,7 @@ export const updateBiographyCreator = async (
     const response = await updatedListingCreator.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -294,7 +290,7 @@ export const updateMedicalCreator = async (
     const response = await updatedListingCreator.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -331,7 +327,7 @@ export const updateLegalCreator = async (
     const response = await updatedListingCreator.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -379,7 +375,7 @@ export const updateMediaCreator = async (
     const response = await updatedListingCreator.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -416,7 +412,7 @@ export const updatePriceCreator = async (
     const response = await updatedListingCreator.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -440,7 +436,7 @@ export const deleteListingCreatorById = async (
     Logger.success('Listing creator deleted', _id);
 
     return res.status(200).json({});
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };

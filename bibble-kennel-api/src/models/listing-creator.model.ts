@@ -4,24 +4,17 @@ import {
   IListingCreatorMethods,
   IListingCreatorResponse
 } from '../interfaces/listing-creator.interface';
-import { genders, saleTypes, sizes } from '../types/constants';
-import { ISpeciesModel } from './species.model';
-import { IBreedModel } from './breed.model';
-import { ICountryModel } from './country.model';
-import { IHairCoatModel } from './hair-coat.model';
-import { IVaccineModel } from './vaccine.model';
-import { ILegalTagModel } from './legal-tag.model';
+import Breed from '../models/breed.model';
+import Country from '../models/country.model';
+import HairCoat from '../models/hair-coat.model';
+import LegalTag from '../models/legal-tag.model';
+import Species from '../models/species.model';
+import Vaccine from '../models/vaccine.model';
 import * as s3 from '../services/s3';
-
-const Species: ISpeciesModel = require('../models/species.model');
-const Breed: IBreedModel = require('../models/breed.model');
-const Country: ICountryModel = require('../models/country.model');
-const HairCoat: IHairCoatModel = require('../models/hair-coat.model');
-const Vaccine: IVaccineModel = require('../models/vaccine.model');
-const LegalTag: ILegalTagModel = require('../models/legal-tag.model');
+import { genders, saleTypes, sizes } from '../types/constants';
 
 export interface IListingCreatorModel
-  extends Model<IListingCreator, {}, IListingCreatorMethods> {}
+  extends Model<IListingCreator, unknown, IListingCreatorMethods> {}
 
 const ListingCreatorSchema = new Schema<
   IListingCreator,
@@ -170,4 +163,4 @@ const ListingCreator = mongoose.model<IListingCreator, IListingCreatorModel>(
   ListingCreatorSchema
 );
 
-module.exports = ListingCreator;
+export default ListingCreator;

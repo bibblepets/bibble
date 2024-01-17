@@ -10,4 +10,4 @@ const router = Router();
  */
 router.get('/', HairCoatController.getHairCoats);
 
-module.exports = router;
+export default router;

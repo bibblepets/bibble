@@ -3,10 +3,8 @@ import {
   IGetVaccinesRequest,
   IGetVaccinesResponse
 } from '../interfaces/vaccine.interface';
-import { IVaccineModel } from '../models/vaccine.model';
+import Vaccine from '../models/vaccine.model';
 import { Logger } from '../services/logger';
-
-const Vaccine: IVaccineModel = require('../models/vaccine.model');
 
 export const getVaccines = async (
   req: IGetVaccinesRequest,

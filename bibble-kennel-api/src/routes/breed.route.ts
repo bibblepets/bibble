@@ -10,4 +10,4 @@ const router = Router();
  */
 router.get('/', BreedController.getBreeds);
 
-module.exports = router;
+export default router;

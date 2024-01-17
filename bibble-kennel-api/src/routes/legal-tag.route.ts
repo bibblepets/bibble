@@ -10,4 +10,4 @@ const router = Router();
  */
 router.get('/', LegalTagController.getLegalTags);
 
-module.exports = router;
+export default router;

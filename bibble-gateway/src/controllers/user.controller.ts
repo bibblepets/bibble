@@ -16,19 +16,19 @@ import {
   IUpdateUserResponse
 } from '../interfaces/user/user.interface';
 import { Logger } from '../services/logger';
-import axios from 'axios';
 import { UserAPIError } from '../errors/api.error';
-import * as jwt from '../services/jwt';
 import { USER_API_URL } from '../resources/servers';
+import * as jwt from '../services/jwt';
+import axios from 'axios';
 
 export const registerUser = async (
   req: IRegisterUserRequest,
   res: IRegisterUserResponse,
   next: NextFunction
 ) => {
-  const request = req.body;
-
   try {
+    const request = req.body;
+
     Logger.update('Registering user');
 
     const response = await axios
@@ -57,9 +57,9 @@ export const loginUser = async (
   res: ILoginUserResponse,
   next: NextFunction
 ) => {
-  const request = req.body;
-
   try {
+    const request = req.body;
+
     Logger.update('Logging in user');
 
     const response = await axios
@@ -85,15 +85,20 @@ export const loginUser = async (
 
 export const logoutUser = async (
   _req: ILogoutUserRequest,
-  res: ILogoutUserResponse
+  res: ILogoutUserResponse,
+  next: NextFunction
 ) => {
-  Logger.update('Logging out user');
+  try {
+    Logger.update('Logging out user');
 
-  jwt.deleteAuthToken(res);
+    jwt.deleteAuthToken(res);
 
-  Logger.success('User logged out');
+    Logger.success('User logged out');
 
-  return res.status(200).json('User logged out');
+    return res.status(200).json('User logged out');
+  } catch (error: any) {
+    next(error);
+  }
 };
 
 export const authenticateUser = async (
@@ -101,9 +106,9 @@ export const authenticateUser = async (
   res: IAuthUserResponse,
   next: NextFunction
 ) => {
-  const userId = req.params.userId;
-
   try {
+    const userId = req.params.userId;
+
     Logger.update('Authenticating user');
 
     const response = await axios
@@ -128,9 +133,9 @@ export const getUser = async (
   res: IGetUserResponse,
   next: NextFunction
 ) => {
-  const { _id, email } = req.query;
-
   try {
+    const { _id, email } = req.query;
+
     Logger.update('Getting user');
 
     const response = await axios
@@ -155,10 +160,10 @@ export const updateUser = async (
   res: IUpdateUserResponse,
   next: NextFunction
 ) => {
-  const userId = req.params.userId;
-  const updates = req.body;
-
   try {
+    const userId = req.params.userId;
+    const updates = req.body;
+
     Logger.update('Updating user');
 
     const response = await axios
@@ -183,12 +188,12 @@ export const updateUserProfilePicture = async (
   res: IUpdateUserProfilePictureResponse,
   next: NextFunction
 ) => {
-  const userId = req.params.userId;
-  const { profilePic } = req.body;
-  const file = req.file as Express.Multer.File;
-  const blob = new Blob([file.buffer], { type: file.mimetype });
-
   try {
+    const userId = req.params.userId;
+    const { profilePic } = req.body;
+    const file = req.file as Express.Multer.File;
+    const blob = new Blob([file.buffer], { type: file.mimetype });
+
     Logger.update('Updating user profile picture');
 
     const formData = new FormData();

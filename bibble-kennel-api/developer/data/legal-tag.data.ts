@@ -1,12 +1,10 @@
 import { Schema } from 'mongoose';
-import { ILegalTagModel } from '../../src/models/legal-tag.model';
-import { ISpeciesModel } from '../../src/models/species.model';
+import { ISpecies } from '../../src/interfaces/species.interface';
+import LegalTag from '../../src/models/legal-tag.model';
+import Species from '../../src/models/species.model';
 import { Logger } from '../../src/services/logger';
-import { dogLegalTags } from '../static/dogs';
 import { catLegalTags } from '../static/cats';
-
-const Species: ISpeciesModel = require('../../src/models/species.model');
-const LegalTag: ILegalTagModel = require('../../src/models/legal-tag.model');
+import { dogLegalTags } from '../static/dogs';
 
 export const initLegalTags = async () => {
   Logger.update('Initializing legal tags');
@@ -14,7 +12,7 @@ export const initLegalTags = async () => {
   const species = await Species.find();
 
   await Promise.all(
-    species.map(async (s: any) => {
+    species.map(async (s: ISpecies) => {
       if (s.name === 'dog') {
         await initDogLegalTags(s._id);
       } else if (s.name === 'cat') {
@@ -33,7 +31,7 @@ export const initDogLegalTags = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Fetching dog legal tags success');
 
     Logger.update('Dumping dog legal tags');
-    const dump = legalTags.map((legalTag: any) => ({
+    const dump = legalTags.map((legalTag: string) => ({
       speciesId,
       name: legalTag
     }));
@@ -41,8 +39,8 @@ export const initDogLegalTags = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Dumping dog legal tags success');
 
     Logger.success('Initializing dog legal tags success');
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(String(error));
   }
 };
 
@@ -53,7 +51,7 @@ export const initCatLegalTags = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Fetching cat legal tags success');
 
     Logger.update('Dumping cat legal tags');
-    const dump = legalTags.map((legalTag: any) => ({
+    const dump = legalTags.map((legalTag: string) => ({
       speciesId,
       name: legalTag
     }));
@@ -61,7 +59,7 @@ export const initCatLegalTags = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Dumping cat legal tags success');
 
     Logger.success('Initializing cat legal tags success');
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(String(error));
   }
 };

@@ -39,7 +39,6 @@ import {
   IUpdateListingRequest,
   IUpdateListingResponse
 } from '../interfaces/kennel/listing.interface';
-import { ListBucketInventoryConfigurationsOutputFilterSensitiveLog } from '@aws-sdk/client-s3';
 import {
   ICreateListingCreatorRequest,
   ICreateListingCreatorResponse,
@@ -57,15 +56,16 @@ import {
   IUpdateMedicalCreatorRequest,
   IUpdatePriceCreatorRequest
 } from '../interfaces/kennel/listing-creator.interface';
+import { getUserForListings } from '../services/user';
 
 export const getSpecies = async (
   req: IGetSpeciesRequest,
   res: IGetSpeciesResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching species');
 
     const response = await axios
@@ -90,9 +90,9 @@ export const getBreeds = async (
   res: IGetBreedsResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching breeds');
 
     const response = await axios
@@ -117,9 +117,9 @@ export const getCountries = async (
   res: IGetCountriesResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching countries');
 
     const response = await axios
@@ -144,9 +144,9 @@ export const getHairCoats = async (
   res: IGetHairCoatsResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching hair coats');
 
     const response = await axios
@@ -171,9 +171,9 @@ export const getLegalTags = async (
   res: IGetLegalTagsResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching legal tags');
 
     const response = await axios
@@ -198,9 +198,9 @@ export const getVaccines = async (
   res: IGetVaccinesResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching vaccines');
 
     const response = await axios
@@ -225,9 +225,9 @@ export const getListings = async (
   res: IGetListingsResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching listings');
 
     const response = await axios
@@ -239,9 +239,11 @@ export const getListings = async (
         throw new KennelAPIError(error.response);
       });
 
+    const listings = await getUserForListings(response.data);
+
     Logger.success('Listings fetched');
 
-    return res.status(response.status).json(response.data);
+    return res.status(response.status).json(listings);
   } catch (error: any) {
     next(error);
   }
@@ -252,9 +254,9 @@ export const getMyListings = async (
   res: IGetMyListingsResponse,
   next: NextFunction
 ) => {
-  const { userId } = req.params;
-
   try {
+    const { userId } = req.params;
+
     Logger.update('Getting my listings for user', userId);
 
     const response = await axios
@@ -279,9 +281,9 @@ export const getListingById = async (
   res: IGetListingByIdResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-
   try {
+    const { _id } = req.params;
+
     Logger.update('Getting listing', _id);
 
     const response = await axios
@@ -306,10 +308,10 @@ export const updateListing = async (
   res: IUpdateListingResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating listing', _id);
 
     const response = await axios
@@ -334,12 +336,12 @@ export const updateListingMedia = async (
   res: IUpdateListingMediaResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const { mediaNames } = req.body;
-  const files = req.files as Express.Multer.File[];
-  const blobs = files.map((f) => new Blob([f.buffer], { type: f.mimetype }));
-
   try {
+    const { _id } = req.params;
+    const { mediaNames } = req.body;
+    const files = req.files as Express.Multer.File[];
+    const blobs = files.map((f) => new Blob([f.buffer], { type: f.mimetype }));
+
     Logger.update('Updating listing media', _id);
 
     const formData = new FormData();
@@ -378,10 +380,10 @@ export const createListingCreator = async (
   res: ICreateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { userId } = req.params;
-  const payload = { userId, ...req.body };
-
   try {
+    const { userId } = req.params;
+    const payload = { userId, ...req.body };
+
     Logger.update('Creating listing creator');
 
     const response = await axios
@@ -406,9 +408,9 @@ export const createListing = async (
   res: ICreateListingResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-
   try {
+    const { _id } = req.params;
+
     Logger.update('Creating listing');
 
     const response = await axios
@@ -433,9 +435,9 @@ export const getMyListingCreators = async (
   res: IGetMyListingCreatorsResponse,
   next: NextFunction
 ) => {
-  const { userId } = req.params;
-
   try {
+    const { userId } = req.params;
+
     Logger.update('Getting my listing creators for user', userId);
 
     const response = await axios
@@ -460,9 +462,9 @@ export const getListingCreatorById = async (
   res: IGetListingByIdResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-
   try {
+    const { _id } = req.params;
+
     Logger.update('Getting listing creator', _id);
 
     const response = await axios
@@ -487,10 +489,10 @@ export const updateListingCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating listing creator', _id);
 
     const response = await axios
@@ -515,10 +517,10 @@ export const updateBiologyCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating listing creator biology', _id);
 
     const response = await axios
@@ -543,10 +545,10 @@ export const updateBiographyCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating listing creator biography', _id);
 
     const response = await axios
@@ -571,10 +573,10 @@ export const updateMedicalCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating listing creator medical', _id);
 
     const response = await axios
@@ -599,10 +601,10 @@ export const updateLegalCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating listing creator legal', _id);
 
     const response = await axios
@@ -627,12 +629,12 @@ export const updateMediaCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const { mediaNames } = req.body;
-  const files = req.files as Express.Multer.File[];
-  const blobs = files.map((f) => new Blob([f.buffer], { type: f.mimetype }));
-
   try {
+    const { _id } = req.params;
+    const { mediaNames } = req.body;
+    const files = req.files as Express.Multer.File[];
+    const blobs = files.map((f) => new Blob([f.buffer], { type: f.mimetype }));
+
     Logger.update('Updating listing creator media', _id);
 
     const formData = new FormData();
@@ -671,10 +673,10 @@ export const updatePriceCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating listing creator price', _id);
 
     const response = await axios
@@ -699,9 +701,9 @@ export const deleteListingCreatorById = async (
   res: IDeleteListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-
   try {
+    const { _id } = req.params;
+
     Logger.update('Deleting listing creator', _id);
 
     const response = await axios

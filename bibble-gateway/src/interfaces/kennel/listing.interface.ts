@@ -8,7 +8,7 @@ import { ILegalTag } from './legal-tag.interface';
 import { IMedia, IMediaResponse } from '../media.interface';
 import { TypedResponse } from '../response.interface';
 import { TypedRequest } from '../request.interface';
-import { IUserRequest } from '../user/user.interface';
+import { IUser, IUserRequest } from '../user/user.interface';
 
 export interface IListing {
   _id: Schema.Types.ObjectId;
@@ -32,6 +32,7 @@ export interface IListing {
   createdAt?: Date;
   updatedAt?: Date;
 
+  user?: IUser;
   species?: ISpecies;
   breeds?: IBreed[];
   origin?: ICountry;

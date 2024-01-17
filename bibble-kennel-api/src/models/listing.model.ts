@@ -4,24 +4,17 @@ import {
   IListingMethods,
   IListingResponse
 } from '../interfaces/listing.interface';
-import { genders, saleTypes, sizes } from '../types/constants';
-import { ISpeciesModel } from './species.model';
-import { IBreedModel } from './breed.model';
-import { ICountryModel } from './country.model';
-import { IHairCoatModel } from './hair-coat.model';
-import { IVaccineModel } from './vaccine.model';
-import { ILegalTagModel } from './legal-tag.model';
+import Breed from '../models/breed.model';
+import Country from '../models/country.model';
+import HairCoat from '../models/hair-coat.model';
+import LegalTag from '../models/legal-tag.model';
+import Species from '../models/species.model';
+import Vaccine from '../models/vaccine.model';
 import * as s3 from '../services/s3';
-import * as UserService from '../services/user';
+import { genders, saleTypes, sizes } from '../types/constants';
 
-const Species: ISpeciesModel = require('../models/species.model');
-const Breed: IBreedModel = require('../models/breed.model');
-const Country: ICountryModel = require('../models/country.model');
-const HairCoat: IHairCoatModel = require('../models/hair-coat.model');
-const Vaccine: IVaccineModel = require('../models/vaccine.model');
-const LegalTag: ILegalTagModel = require('../models/legal-tag.model');
-
-export interface IListingModel extends Model<IListing, {}, IListingMethods> {}
+export interface IListingModel
+  extends Model<IListing, unknown, IListingMethods> {}
 
 const ListingSchema = new Schema<IListing, IListingModel, IListingMethods>(
   {
@@ -99,7 +92,6 @@ const ListingSchema = new Schema<IListing, IListingModel, IListingMethods>(
 ListingSchema.method('formatResponse', async function () {
   const docCopy: IListingResponse = this.toObject();
 
-  const user = await UserService.getUserById(docCopy.userId.toString());
   const species = await Species.findById(docCopy.speciesId);
   const breeds = await Breed.find({ _id: { $in: docCopy.breedIds } });
   const origin = await Country.findById(docCopy.originId);
@@ -107,7 +99,6 @@ ListingSchema.method('formatResponse', async function () {
   const vaccines = await Vaccine.find({ _id: { $in: docCopy.vaccineIds } });
   const legalTags = await LegalTag.find({ _id: { $in: docCopy.legalTagIds } });
 
-  if (user) docCopy.user = user;
   if (species) docCopy.species = species;
   if (breeds) docCopy.breeds = breeds;
   if (origin) docCopy.origin = origin;
@@ -130,4 +121,4 @@ const Listing = mongoose.model<IListing, IListingModel>(
   ListingSchema
 );
 
-module.exports = Listing;
+export default Listing;

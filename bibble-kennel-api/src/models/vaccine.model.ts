@@ -17,4 +17,4 @@ const Vaccine = mongoose.model<IVaccine, IVaccineModel>(
   VaccineSchema
 );
 
-module.exports = Vaccine;
+export default Vaccine;

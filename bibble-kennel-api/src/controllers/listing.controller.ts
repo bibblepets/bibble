@@ -1,4 +1,5 @@
 import { NextFunction } from 'express';
+import { KeyNotFoundError } from '../errors/key.error';
 import {
   IGetListingByIdRequest,
   IGetListingByIdResponse,
@@ -11,13 +12,10 @@ import {
   IUpdateListingRequest,
   IUpdateListingResponse
 } from '../interfaces/listing.interface';
-import { IListingModel } from '../models/listing.model';
-import { Logger } from '../services/logger';
-import { KeyNotFoundError } from '../errors/key.error';
 import { IMedia } from '../interfaces/media.interface';
+import Listing from '../models/listing.model';
+import { Logger } from '../services/logger';
 import * as s3 from '../services/s3';
-
-const Listing: IListingModel = require('../models/listing.model');
 
 export const getListings = async (
   req: IGetListingsRequest,
@@ -38,7 +36,7 @@ export const getListings = async (
     );
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -62,7 +60,7 @@ export const getMyListings = async (
     );
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -88,7 +86,7 @@ export const getListingById = async (
     const response = await listing.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -118,7 +116,7 @@ export const updateListing = async (
     const response = await updatedListing.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -159,7 +157,7 @@ export const updateListingMedia = async (
     const response = await updatedListing.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };

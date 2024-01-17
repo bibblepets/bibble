@@ -1,12 +1,15 @@
 import { Schema } from 'mongoose';
+import { ISpecies } from '../../src/interfaces/species.interface';
+import Species from '../../src/models/species.model';
+import Vaccine from '../../src/models/vaccine.model';
 import { Logger } from '../../src/services/logger';
-import { ISpeciesModel } from '../../src/models/species.model';
-import { IVaccineModel } from '../../src/models/vaccine.model';
-import { dogVaccines } from '../static/dogs';
 import { catVaccines } from '../static/cats';
+import { dogVaccines } from '../static/dogs';
 
-const Species: ISpeciesModel = require('../../src/models/species.model');
-const Vaccine: IVaccineModel = require('../../src/models/vaccine.model');
+type VaccineType = {
+  name: string;
+  isCore: boolean;
+};
 
 export const initVaccines = async () => {
   Logger.update('Initializing dog vaccines');
@@ -14,7 +17,7 @@ export const initVaccines = async () => {
   const species = await Species.find();
 
   await Promise.all(
-    species.map(async (s: any) => {
+    species.map(async (s: ISpecies) => {
       if (s.name === 'dog') {
         await initDogVaccines(s._id);
       } else if (s.name === 'cat') {
@@ -33,7 +36,7 @@ export const initDogVaccines = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Fetching dog vaccines success');
 
     Logger.update('Dumping dog vaccines');
-    const dump = vaccines.map((vaccine: any) => ({
+    const dump = vaccines.map((vaccine: VaccineType) => ({
       speciesId,
       ...vaccine
     }));
@@ -41,8 +44,8 @@ export const initDogVaccines = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Dumping dog vaccines success');
 
     Logger.success('Initializing dog vaccines success');
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(String(error));
   }
 };
 
@@ -53,7 +56,7 @@ export const initCatVaccines = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Fetching cat vaccines success');
 
     Logger.update('Dumping cat vaccines');
-    const dump = vaccines.map((vaccine: any) => ({
+    const dump = vaccines.map((vaccine: VaccineType) => ({
       speciesId,
       ...vaccine
     }));
@@ -61,7 +64,7 @@ export const initCatVaccines = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Dumping cat vaccines success');
 
     Logger.success('Initializing cat vaccines success');
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(String(error));
   }
 };

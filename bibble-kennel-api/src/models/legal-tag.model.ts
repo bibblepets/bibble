@@ -16,4 +16,4 @@ const LegalTag = mongoose.model<ILegalTag, ILegalTagModel>(
   LegalTagSchema
 );
 
-module.exports = LegalTag;
+export default LegalTag;

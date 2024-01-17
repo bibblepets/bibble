@@ -10,4 +10,4 @@ const router = Router();
  */
 router.get('/', CountryController.getCountries);
 
-module.exports = router;
+export default router;

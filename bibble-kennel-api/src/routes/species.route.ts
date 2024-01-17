@@ -10,4 +10,4 @@ const router = Router();
  */
 router.get('/', SpeciesController.getSpecies);
 
-module.exports = router;
+export default router;

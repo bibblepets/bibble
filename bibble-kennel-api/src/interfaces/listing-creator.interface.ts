@@ -1,13 +1,13 @@
 import { Schema } from 'mongoose';
+import { AuthorizedRequest } from './auth.interface';
 import { IBreed } from './breed.interface';
-import { ISpecies } from './species.interface';
+import { ICountry } from './country.interface';
 import { IHairCoat } from './hair-coat.interface';
-import { IMedia, IMediaResponse } from './media.interface';
 import { ILegalTag } from './legal-tag.interface';
+import { IMedia, IMediaResponse } from './media.interface';
 import { TypedRequest } from './request.interface';
 import { TypedResponse } from './response.interface';
-import { AuthorizedRequest } from './auth.interface';
-import { ICountry } from './country.interface';
+import { ISpecies } from './species.interface';
 import { IVaccine } from './vaccine.interface';
 
 export interface IListingCreator {
@@ -29,7 +29,7 @@ export interface IListingCreatorMethods {
   formatResponse(): Promise<IListingCreatorResponse>;
 }
 
-export interface IListingCreatorRequest<T = {}>
+export interface IListingCreatorRequest<T = object>
   extends AuthorizedRequest<T, { _id: string }> {}
 
 export interface IListingCreatorResponse extends IListingCreator {
@@ -79,7 +79,7 @@ export interface ICreateListingCreatorResponse
 
 export interface ICreateListingRequest extends IListingCreatorRequest {}
 
-export interface ICreateListingResponse extends TypedResponse<{}> {}
+export interface ICreateListingResponse extends TypedResponse {}
 
 export interface IGetMyListingCreatorsRequest extends IListingCreatorRequest {}
 
@@ -123,4 +123,4 @@ export interface IUpdateListingCreatorResponse
 
 export interface IDeleteListingCreatorRequest extends IListingCreatorRequest {}
 
-export interface IDeleteListingCreatorResponse extends TypedResponse<{}> {}
+export interface IDeleteListingCreatorResponse extends TypedResponse {}

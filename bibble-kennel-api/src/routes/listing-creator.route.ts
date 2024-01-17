@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as ListingCreatorController from '../controllers/listing-creator.controller';
 import multer from 'multer';
+import * as ListingCreatorController from '../controllers/listing-creator.controller';
 
 const router = Router();
 const storage = multer.memoryStorage();
@@ -94,4 +94,4 @@ router.put('/price/:_id', ListingCreatorController.updatePriceCreator);
  */
 router.delete('/:_id', ListingCreatorController.deleteListingCreatorById);
 
-module.exports = router;
+export default router;

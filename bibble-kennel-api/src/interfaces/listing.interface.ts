@@ -1,15 +1,14 @@
 import { Schema } from 'mongoose';
-import { ISpecies } from './species.interface';
+import { AuthorizedRequest } from './auth.interface';
 import { IBreed } from './breed.interface';
 import { ICountry } from './country.interface';
 import { IHairCoat } from './hair-coat.interface';
-import { IVaccine } from './vaccine.interface';
 import { ILegalTag } from './legal-tag.interface';
 import { IMedia, IMediaResponse } from './media.interface';
-import { AuthorizedRequest } from './auth.interface';
-import { TypedResponse } from './response.interface';
 import { TypedRequest } from './request.interface';
-import { IUser } from './user.interface';
+import { TypedResponse } from './response.interface';
+import { ISpecies } from './species.interface';
+import { IVaccine } from './vaccine.interface';
 
 export interface IListing {
   _id: Schema.Types.ObjectId;
@@ -33,7 +32,6 @@ export interface IListing {
   createdAt?: Date;
   updatedAt?: Date;
 
-  user?: IUser;
   species?: ISpecies;
   breeds?: IBreed[];
   origin?: ICountry;
@@ -53,7 +51,7 @@ export interface IListingResponse extends IListing {
 }
 
 export interface IGetListingsRequest
-  extends TypedRequest<{}, {}, { speciesId?: string; name?: string }> {}
+  extends TypedRequest<object, object, { speciesId?: string; name?: string }> {}
 
 export interface IGetListingsResponse
   extends TypedResponse<IListingResponse[]> {}
@@ -64,7 +62,7 @@ export interface IGetMyListingsResponse
   extends TypedResponse<IListingResponse[]> {}
 
 export interface IGetListingByIdRequest
-  extends AuthorizedRequest<{}, { _id: string }> {}
+  extends AuthorizedRequest<object, { _id: string }> {}
 
 export interface IGetListingByIdResponse
   extends TypedResponse<IListingResponse> {}

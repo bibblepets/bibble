@@ -1,10 +1,12 @@
 import axios from 'axios';
+import Country from '../../src/models/country.model';
 import { Logger } from '../../src/services/logger';
-import { ICountryModel } from '../../src/models/country.model';
+
+type CountryType = {
+  name: { common: string };
+};
 
 const REST_COUNTRIES_URL = 'https://restcountries.com/v3.1/all?fields=';
-
-const Country: ICountryModel = require('../../src/models/country.model');
 
 export const initCountries = async () => {
   Logger.update('Initializing countries');
@@ -17,14 +19,14 @@ export const initCountries = async () => {
     Logger.success('Fetching countries success');
 
     Logger.update('Dumping countries');
-    const dump = countries.map((country: any) => ({
+    const dump = countries.map((country: CountryType) => ({
       name: country.name.common
     }));
     await Country.create(dump);
     Logger.success('Dumping countries success');
 
     Logger.success('Initializing countries success');
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(String(error));
   }
 };

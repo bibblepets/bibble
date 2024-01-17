@@ -1,15 +1,14 @@
-import { Connection } from 'mongoose';
+import dotenv from 'dotenv';
+import connection from '../src/mongodb/connection';
 import { Logger } from '../src/services/logger';
-import { initCountries } from './data/countries.data';
-import { initSpecies } from './data/species.data';
 import { initBreeds } from './data/breed.data';
+import { initCountries } from './data/countries.data';
 import { initHairCoats } from './data/hair-coat.data';
-import { initVaccines } from './data/vaccine.data';
 import { initLegalTags } from './data/legal-tag.data';
+import { initSpecies } from './data/species.data';
+import { initVaccines } from './data/vaccine.data';
 
-require('dotenv').config();
-
-export const connection: Connection = require('../src/mongodb/connection');
+dotenv.config();
 
 const run = async () => {
   try {
@@ -27,8 +26,8 @@ const run = async () => {
     await initHairCoats();
     await initVaccines();
     await initLegalTags();
-  } catch (error: any) {
-    Logger.fail(error);
+  } catch (error: unknown) {
+    Logger.fail(new Error(String(error)));
   } finally {
     connection.close();
     Logger.success('Database connection closed');

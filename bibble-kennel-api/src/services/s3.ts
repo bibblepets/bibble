@@ -1,14 +1,14 @@
-import { Schema } from 'mongoose';
 import {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
   DeleteObjectCommand,
-  ListObjectsV2Command
+  GetObjectCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
+import { Schema } from 'mongoose';
 import { IMedia } from '../interfaces/media.interface';
 
 dotenv.config();

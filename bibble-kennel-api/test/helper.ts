@@ -1,7 +1,9 @@
+import dotenv from 'dotenv';
+import { after, before } from 'mocha';
 import { Connection } from 'mongoose';
-import { before, after } from 'mocha';
 
-require('dotenv').config();
+dotenv.config();
+
 let db: Connection;
 
 before(async function () {

@@ -1,8 +1,7 @@
+import Species from '../../src/models/species.model';
 import { Logger } from '../../src/services/logger';
 
 const speciesData = ['dog', 'cat'];
-
-const Species = require('../../src/models/species.model');
 
 export const initSpecies = async () => {
   Logger.update('Initializing species');
@@ -13,14 +12,14 @@ export const initSpecies = async () => {
     Logger.success('Fetching species success');
 
     Logger.update('Dumping species');
-    const dump = species.map((species: any) => ({
+    const dump = species.map((species: string) => ({
       name: species
     }));
     await Species.create(dump);
     Logger.success('Dumping species success');
 
     Logger.success('Initializing species success');
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(String(error));
   }
 };

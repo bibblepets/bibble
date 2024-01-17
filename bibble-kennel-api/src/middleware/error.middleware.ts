@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { Logger } from '../services/logger';
-import BaseError from '../errors/base.error';
 import mongoose from 'mongoose';
+import BaseError from '../errors/base.error';
 import { ValidationError } from '../errors/validation.error';
+import { Logger } from '../services/logger';
 
 export const errorHandler = (
   err: Error,

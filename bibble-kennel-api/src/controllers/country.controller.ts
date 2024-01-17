@@ -3,10 +3,8 @@ import {
   IGetCountriesRequest,
   IGetCountriesResponse
 } from '../interfaces/country.interface';
-import { ICountryModel } from '../models/country.model';
+import Country from '../models/country.model';
 import { Logger } from '../services/logger';
-
-const Country: ICountryModel = require('../models/country.model');
 
 export const getCountries = async (
   req: IGetCountriesRequest,

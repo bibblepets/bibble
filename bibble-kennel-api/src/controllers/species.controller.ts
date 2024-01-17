@@ -3,10 +3,8 @@ import {
   IGetSpeciesRequest,
   IGetSpeciesResponse
 } from '../interfaces/species.interface';
-import { ISpeciesModel } from '../models/species.model';
+import Species from '../models/species.model';
 import { Logger } from '../services/logger';
-
-const Species: ISpeciesModel = require('../models/species.model');
 
 export const getSpecies = async (
   req: IGetSpeciesRequest,
@@ -23,7 +21,7 @@ export const getSpecies = async (
     Logger.success('Species fetched');
 
     return res.status(200).json(species);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };

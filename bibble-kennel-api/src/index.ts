@@ -1,23 +1,20 @@
-// Global dependencies
-import { Express } from 'express';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+import express, { Express } from 'express';
 import { errorHandler } from './middleware/error.middleware';
+import breedRouter from './routes/breed.route';
+import countryRouter from './routes/country.route';
+import hairCoatRouter from './routes/hair-coat.route';
+import legalTagRouter from './routes/legal-tag.route';
+import listingCreatorRouter from './routes/listing-creator.route';
+import listingRouter from './routes/listing.route';
+import speciesRouter from './routes/species.route';
+import vaccineRouter from './routes/vaccine.route';
 import { Logger } from './services/logger';
 
-require('dotenv').config();
+dotenv.config();
+
 require('./mongodb/connection');
-
-const express = require('express');
-const cookieParser = require('cookie-parser');
-
-// Project dependencies
-const listingRouter = require('./routes/listing.route');
-const listingCreatorRouter = require('./routes/listing-creator.route');
-const speciesRouter = require('./routes/species.route');
-const breedRouter = require('./routes/breed.route');
-const countryRouter = require('./routes/country.route');
-const vaccineRouter = require('./routes/vaccine.route');
-const legalTagRouter = require('./routes/legal-tag.route');
-const hairCoatRouter = require('./routes/hair-coat.route');
 
 // Express initialization
 const app: Express = express();

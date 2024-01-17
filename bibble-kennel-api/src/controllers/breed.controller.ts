@@ -1,12 +1,10 @@
 import { NextFunction } from 'express';
-import { IBreedModel } from '../models/breed.model';
-import { Logger } from '../services/logger';
 import {
   IGetBreedsRequest,
   IGetBreedsResponse
 } from '../interfaces/breed.interface';
-
-const Breed: IBreedModel = require('../models/breed.model');
+import Breed from '../models/breed.model';
+import { Logger } from '../services/logger';
 
 export const getBreeds = async (
   req: IGetBreedsRequest,
@@ -23,7 +21,7 @@ export const getBreeds = async (
     Logger.success('Breeds fetched');
 
     return res.status(200).json(breeds);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };

@@ -13,4 +13,4 @@ const BreedSchema = new Schema(
 
 const Breed = mongoose.model<IBreed, IBreedModel>('Breed', BreedSchema);
 
-module.exports = Breed;
+export default Breed;

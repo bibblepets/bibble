@@ -15,4 +15,4 @@ const Country = mongoose.model<ICountry, ICountryModel>(
   CountrySchema
 );
 
-module.exports = Country;
+export default Country;

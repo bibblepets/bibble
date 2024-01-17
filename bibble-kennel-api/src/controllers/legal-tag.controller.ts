@@ -3,10 +3,8 @@ import {
   IGetLegalTagsRequest,
   IGetLegalTagsResponse
 } from '../interfaces/legal-tag.interface';
-import { ILegalTagModel } from '../models/legal-tag.model';
+import LegalTag from '../models/legal-tag.model';
 import { Logger } from '../services/logger';
-
-const LegalTag: ILegalTagModel = require('../models/legal-tag.model');
 
 export const getLegalTags = async (
   req: IGetLegalTagsRequest,
@@ -23,7 +21,7 @@ export const getLegalTags = async (
     Logger.success('Legal tags fetched');
 
     return res.status(200).json(legalTags);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };

@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
-import { ISpecies } from './species.interface';
 import { TypedRequest } from './request.interface';
 import { TypedResponse } from './response.interface';
+import { ISpecies } from './species.interface';
 
 export interface IVaccine {
   _id: Schema.Types.ObjectId;
@@ -14,8 +14,8 @@ export interface IVaccine {
 
 export interface IGetVaccinesRequest
   extends TypedRequest<
-    {},
-    {},
+    object,
+    object,
     { speciesId?: string; name?: string; isCore?: boolean }
   > {}
 

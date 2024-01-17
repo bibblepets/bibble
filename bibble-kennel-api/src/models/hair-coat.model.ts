@@ -16,4 +16,4 @@ const HairCoat = mongoose.model<IHairCoat, IHairCoatModel>(
   HairCoatSchema
 );
 
-module.exports = HairCoat;
+export default HairCoat;

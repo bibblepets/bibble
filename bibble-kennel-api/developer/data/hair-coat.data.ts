@@ -1,13 +1,10 @@
 import { Schema } from 'mongoose';
 import { ISpecies } from '../../src/interfaces/species.interface';
-import { ISpeciesModel } from '../../src/models/species.model';
+import HairCoat from '../../src/models/hair-coat.model';
+import Species from '../../src/models/species.model';
 import { Logger } from '../../src/services/logger';
-import { dogHairCoats } from '../static/dogs';
-import { IHairCoatModel } from '../../src/models/hair-coat.model';
 import { catHairCoats } from '../static/cats';
-
-const Species: ISpeciesModel = require('../../src/models/species.model');
-const HairCoat: IHairCoatModel = require('../../src/models/hair-coat.model');
+import { dogHairCoats } from '../static/dogs';
 
 export const initHairCoats = async () => {
   Logger.update('Initializing hair coats');
@@ -34,7 +31,7 @@ export const initDogHairCoats = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Fetching dog hair coats success');
 
     Logger.update('Dumping dog hair coats');
-    const dump = hairCoats.map((hairCoat: any) => ({
+    const dump = hairCoats.map((hairCoat: string) => ({
       speciesId,
       name: hairCoat
     }));
@@ -42,8 +39,8 @@ export const initDogHairCoats = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Dumping dog hair coats success');
 
     Logger.success('Initializing dog hair coats success');
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(String(error));
   }
 };
 
@@ -54,7 +51,7 @@ export const initCatHairCoats = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Fetching cat hair coats success');
 
     Logger.update('Dumping cat hair coats');
-    const dump = hairCoats.map((hairCoat: any) => ({
+    const dump = hairCoats.map((hairCoat: string) => ({
       speciesId,
       name: hairCoat
     }));
@@ -62,7 +59,7 @@ export const initCatHairCoats = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Dumping cat hair coats success');
 
     Logger.success('Initializing cat hair coats success');
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(String(error));
   }
 };

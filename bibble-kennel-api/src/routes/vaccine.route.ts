@@ -10,4 +10,4 @@ const router = Router();
  */
 router.get('/', VaccineController.getVaccines);
 
-module.exports = router;
+export default router;

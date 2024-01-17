@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as ListingController from '../controllers/listing.controller';
 import multer from 'multer';
+import * as ListingController from '../controllers/listing.controller';
 
 const router = Router();
 const storage = multer.memoryStorage();
@@ -45,4 +45,4 @@ router.put(
   ListingController.updateListingMedia
 );
 
-module.exports = router;
+export default router;

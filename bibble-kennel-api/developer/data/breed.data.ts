@@ -1,15 +1,12 @@
 import axios from 'axios';
-import { Logger } from '../../src/services/logger';
-import { IBreedModel } from '../../src/models/breed.model';
-import { ISpeciesModel } from '../../src/models/species.model';
 import { Schema } from 'mongoose';
 import { ISpecies } from '../../src/interfaces/species.interface';
+import Breed from '../../src/models/breed.model';
+import Species from '../../src/models/species.model';
+import { Logger } from '../../src/services/logger';
 import { cats } from '../static/cats';
 
 const DOG_CEO_URL = 'https://dog.ceo/api/breeds/list/all';
-
-const Species: ISpeciesModel = require('../../src/models/species.model');
-const Breed: IBreedModel = require('../../src/models/breed.model');
 
 export const initBreeds = async () => {
   Logger.update('Initializing breeds');
@@ -56,8 +53,8 @@ export const initDogBreeds = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Dumping dog breeds success');
 
     Logger.success('Initializing dog breeds success');
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(String(error));
   }
 };
 
@@ -68,7 +65,7 @@ export const initCatBreeds = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Fetching cat breeds success');
 
     Logger.update('Dumping cat breeds');
-    const dump = breeds.map((breed: any) => ({
+    const dump = breeds.map((breed: string) => ({
       speciesId,
       name: breed
     }));
@@ -76,7 +73,7 @@ export const initCatBreeds = async (speciesId: Schema.Types.ObjectId) => {
     Logger.success('Dumping cat breeds success');
 
     Logger.success('Initializing cat breeds success');
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error: unknown) {
+    throw new Error(String(error));
   }
 };

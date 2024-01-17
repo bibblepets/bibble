@@ -15,4 +15,4 @@ const Species = mongoose.model<ISpecies, ISpeciesModel>(
   SpeciesSchema
 );
 
-module.exports = Species;
+export default Species;
