@@ -11,9 +11,9 @@ export const getCountries = async (
   res: IGetCountriesResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching countries');
 
     const countries = await Country.find(query);

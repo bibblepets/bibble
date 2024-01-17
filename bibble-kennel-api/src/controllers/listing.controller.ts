@@ -22,9 +22,9 @@ export const getListings = async (
   res: IGetListingsResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching listings');
 
     const listings = await Listing.find(query);
@@ -46,9 +46,9 @@ export const getMyListings = async (
   res: IGetMyListingsResponse,
   next: NextFunction
 ) => {
-  const { userId } = req.query;
-
   try {
+    const { userId } = req.query;
+
     Logger.update('Getting listings for user', userId);
 
     const listings = await Listing.find({ userId });
@@ -70,9 +70,9 @@ export const getListingById = async (
   res: IGetListingByIdResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-
   try {
+    const { _id } = req.params;
+
     Logger.update('Getting listing', _id);
 
     const listing = await Listing.findById(_id);
@@ -96,10 +96,10 @@ export const updateListing = async (
   res: IUpdateListingResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating listing', _id);
 
     const updatedListing = await Listing.findByIdAndUpdate(_id, updates, {
@@ -126,11 +126,11 @@ export const updateListingMedia = async (
   res: IUpdateListingMediaResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const { mediaNames } = req.body;
-  const files = req.files as Express.Multer.File[];
-
   try {
+    const { _id } = req.params;
+    const { mediaNames } = req.body;
+    const files = req.files as Express.Multer.File[];
+
     Logger.update('Updating listing media', _id);
 
     let media: IMedia[] | undefined;

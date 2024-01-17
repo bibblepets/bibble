@@ -11,9 +11,9 @@ export const getLegalTags = async (
   res: IGetLegalTagsResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching legal tags');
 
     const legalTags = await LegalTag.find(query);

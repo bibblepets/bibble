@@ -11,9 +11,9 @@ export const getVaccines = async (
   res: IGetVaccinesResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching vaccines');
 
     const vaccines = await Vaccine.find(query);

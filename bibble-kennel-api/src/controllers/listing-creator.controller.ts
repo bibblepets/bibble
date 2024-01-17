@@ -29,9 +29,9 @@ export const createListingCreator = async (
   res: ICreateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const payload = req.body;
-
   try {
+    const payload = req.body;
+
     Logger.update('Creating listing creator');
 
     const listingCreator = await ListingCreator.create(payload);
@@ -51,9 +51,9 @@ export const createListing = async (
   res: ICreateListingResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-
   try {
+    const { _id } = req.params;
+
     Logger.update('Creating listing');
 
     const listingCreator = await ListingCreator.findById(_id);
@@ -104,9 +104,9 @@ export const getMyListingCreators = async (
   res: IGetMyListingCreatorsResponse,
   next: NextFunction
 ) => {
-  const { userId } = req.query;
-
   try {
+    const { userId } = req.query;
+
     Logger.update('Getting listing creators for user', userId);
 
     const listingCreators = await ListingCreator.find({ userId });
@@ -128,9 +128,9 @@ export const getListingCreatorById = async (
   res: ICreateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-
   try {
+    const { _id } = req.params;
+
     Logger.update('Getting listing creator by id');
 
     const listingCreator = await ListingCreator.findById(_id);
@@ -154,10 +154,10 @@ export const updateListingCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating listing creator');
 
     const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
@@ -188,11 +188,10 @@ export const updateBiologyCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-  console.log(updates);
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating biology creator');
 
     const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
@@ -226,10 +225,10 @@ export const updateBiographyCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating biography creator');
 
     const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
@@ -263,10 +262,10 @@ export const updateMedicalCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating medical creator');
 
     const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
@@ -300,10 +299,10 @@ export const updateLegalCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating legal creator');
 
     const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
@@ -337,11 +336,11 @@ export const updateMediaCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const { mediaNames } = req.body;
-  const files = req.files as Express.Multer.File[];
-
   try {
+    const { _id } = req.params;
+    const { mediaNames } = req.body;
+    const files = req.files as Express.Multer.File[];
+
     Logger.update('Updating media creator');
 
     let media: IMedia[] | undefined;
@@ -385,10 +384,10 @@ export const updatePriceCreator = async (
   res: IUpdateListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-  const updates = req.body;
-
   try {
+    const { _id } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating price creator');
 
     const updatedListingCreator = await ListingCreator.findByIdAndUpdate(
@@ -422,9 +421,9 @@ export const deleteListingCreatorById = async (
   res: IDeleteListingCreatorResponse,
   next: NextFunction
 ) => {
-  const { _id } = req.params;
-
   try {
+    const { _id } = req.params;
+
     Logger.update('Deleting listing creator by id');
 
     const deletedListingCreator = await ListingCreator.findByIdAndDelete(_id);

@@ -11,9 +11,9 @@ export const getHairCoats = async (
   res: IGetHairCoatsResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching hair coats');
 
     const hairCoats = await HairCoat.find(query);

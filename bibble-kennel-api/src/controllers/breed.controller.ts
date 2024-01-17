@@ -11,9 +11,9 @@ export const getBreeds = async (
   res: IGetBreedsResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching breeds');
 
     const breeds = await Breed.find(query);

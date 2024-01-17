@@ -11,9 +11,9 @@ export const getSpecies = async (
   res: IGetSpeciesResponse,
   next: NextFunction
 ) => {
-  const query = req.query;
-
   try {
+    const query = req.query;
+
     Logger.update('Fetching species');
 
     const species = await Species.find(query);
