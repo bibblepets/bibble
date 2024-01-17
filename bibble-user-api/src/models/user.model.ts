@@ -1,20 +1,20 @@
-import mongoose, { Model, Schema, mongo } from 'mongoose';
+import { compareSync, hashSync } from 'bcrypt';
+import mongoose, { Model, Schema } from 'mongoose';
 import {
   IUser,
   IUserMethods,
   IUserResponse
 } from '../interfaces/user.interface';
-import { emailError, validateEmail } from '../validators/email';
-import { passwordError, validatePassword } from '../validators/password';
+import * as s3 from '../services/s3';
 import {
   contactNumberError,
   validateContactNumber
 } from '../validators/contactNumber';
-import { compareSync, hashSync } from 'bcrypt';
+import { emailError, validateEmail } from '../validators/email';
 import { nameError, validateName } from '../validators/name';
-import * as s3 from '../services/s3';
+import { passwordError, validatePassword } from '../validators/password';
 
-export interface IUserModel extends Model<IUser, {}, IUserMethods> {}
+export interface IUserModel extends Model<IUser, object, IUserMethods> {}
 
 const UserSchema = new Schema<IUser, IUserModel, IUserMethods>(
   {
@@ -95,16 +95,16 @@ UserSchema.pre('save', function (next) {
   next();
 });
 
-UserSchema.pre('findOneAndUpdate', function (next) {
-  if ((this as any)._update.password) {
-    (this as any)._update.password = hashSync(
-      (this as any)._update.password,
-      10
-    );
-  }
+UserSchema.pre(
+  'findOneAndUpdate',
+  function (this: { _update: { password?: string } }, next) {
+    if (this._update.password) {
+      this._update.password = hashSync(this._update.password, 10);
+    }
 
-  next();
-});
+    next();
+  }
+);
 
 UserSchema.method('isCorrectPassword', function (password: string) {
   return compareSync(password, this.password);
@@ -126,4 +126,4 @@ UserSchema.method('formatResponse', async function () {
 
 const User = mongoose.model<IUser, IUserModel>('User', UserSchema);
 
-module.exports = User;
+export default User;

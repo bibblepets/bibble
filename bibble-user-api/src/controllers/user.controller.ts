@@ -1,4 +1,5 @@
 import { NextFunction } from 'express';
+import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
 import {
   IGetUserRequest,
   IGetUserResponse,
@@ -7,13 +8,10 @@ import {
   IUpdateUserRequest,
   IUpdateUserResponse
 } from '../interfaces/user.interface';
-import { IUserModel } from '../models/user.model';
-import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
-import { validateObjectId } from '../validators/objectId';
+import User from '../models/user.model';
 import { Logger } from '../services/logger';
 import * as s3 from '../services/s3';
-
-const User: IUserModel = require('../models/user.model');
+import { validateObjectId } from '../validators/objectId';
 
 export const getUser = async (
   req: IGetUserRequest,
@@ -46,12 +44,12 @@ export const getUser = async (
       throw new KeyNotFoundError('User not found', 'id or email', '');
     }
 
-    Logger.success('User found', user?._id);
+    Logger.success('User found', user?._id.toString());
 
     const response = await user?.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -89,7 +87,7 @@ export const updateUser = async (
     const response = await updatedUser?.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };

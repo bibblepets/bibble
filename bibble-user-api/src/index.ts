@@ -1,17 +1,13 @@
-// Global dependencies
-import { Express } from 'express';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+import express, { Express } from 'express';
 import { errorHandler } from './middleware/error.middleware';
+import authRouter from './routes/auth.route';
+import userRouter from './routes/user.route';
 import { Logger } from './services/logger';
 
-require('dotenv').config();
+dotenv.config();
 require('./mongodb/connection');
-
-const express = require('express');
-const cookieParser = require('cookie-parser');
-
-// Project dependencies
-const authRouter = require('./routes/auth.route');
-const userRouter = require('./routes/user.route');
 
 // Express initialization
 const app: Express = express();

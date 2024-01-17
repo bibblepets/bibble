@@ -1,17 +1,15 @@
 import { NextFunction } from 'express';
+import { PasswordError } from '../errors/auth.error';
+import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
+import { IAuthRequest, IAuthResponse } from '../interfaces/auth.interface';
 import {
   ILoginUserRequest,
   ILoginUserResponse,
   IRegisterUserRequest,
   IRegisterUserResponse
 } from '../interfaces/user.interface';
+import User from '../models/user.model';
 import { Logger } from '../services/logger';
-import { IUserModel } from '../models/user.model';
-import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
-import { PasswordError } from '../errors/auth.error';
-import { IAuthRequest, IAuthResponse } from '../interfaces/auth.interface';
-
-const User: IUserModel = require('../models/user.model');
 
 export const authenticate = async (
   req: IAuthRequest,
@@ -29,12 +27,12 @@ export const authenticate = async (
       throw new KeyNotFoundError('User not found', 'id', userId);
     }
 
-    Logger.success('User authenticated', user._id);
+    Logger.success('User authenticated', user._id.toString());
 
     const response = await user.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -63,15 +61,15 @@ export const registerUser = async (
       password
     });
 
-    Logger.success('User created', createdUser._id);
+    Logger.success('User created', createdUser._id.toString());
 
     const response = await createdUser.formatResponse();
 
     return res.status(201).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (createdUser) {
       await createdUser.deleteOne();
-      Logger.update('User deleted', createdUser._id);
+      Logger.update('User deleted', createdUser._id.toString());
     }
 
     next(error);
@@ -98,12 +96,12 @@ export const loginUser = async (
       throw new PasswordError();
     }
 
-    Logger.success('User logged in', user._id);
+    Logger.success('User logged in', user._id.toString());
 
     const response = await user.formatResponse();
 
     return res.status(200).json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };

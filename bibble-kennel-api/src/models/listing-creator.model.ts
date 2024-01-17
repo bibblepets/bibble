@@ -14,7 +14,7 @@ import * as s3 from '../services/s3';
 import { genders, saleTypes, sizes } from '../types/constants';
 
 export interface IListingCreatorModel
-  extends Model<IListingCreator, unknown, IListingCreatorMethods> {}
+  extends Model<IListingCreator, object, IListingCreatorMethods> {}
 
 const ListingCreatorSchema = new Schema<
   IListingCreator,
