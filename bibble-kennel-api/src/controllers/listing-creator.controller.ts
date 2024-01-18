@@ -350,7 +350,7 @@ export const updateMediaCreator = async (
     }
 
     const updates = {
-      media: await s3.putMedia(_id, files, media, s3.listingBucketName)
+      media: await s3.putMedia(_id, files, media, s3.LISTING_BUCKET_NAME)
     };
 
     const updatedListingCreator = await ListingCreator.findByIdAndUpdate(

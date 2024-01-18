@@ -1,20 +1,15 @@
-// Global dependencies
-import { Express } from 'express';
+import cookieParser from 'cookie-parser';
+import express, { Express } from 'express';
+import Config from './config';
 import { errorHandler } from './middleware/error.middleware';
+import kennelRouter from './routes/kennel.route';
+import userRouter from './routes/user.route';
 import { Logger } from './services/logger';
-
-require('dotenv').config();
-
-const express = require('express');
-const cookieParser = require('cookie-parser');
-
-// Project dependencies
-const kennelRouter = require('./routes/kennel.route');
-const userRouter = require('./routes/user.route');
 
 // Express initialization
 const app: Express = express();
-const SERVER_PORT = process.env.SERVER_PORT;
+export const { SERVER_PORT, KENNEL_API_URL, USER_API_URL, SECRET_JWT_CODE } =
+  Config.getVars();
 
 // Middlewares
 app.use(express.json());

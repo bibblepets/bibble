@@ -1,15 +1,14 @@
 import jwt from 'jsonwebtoken';
+import { Schema } from 'mongoose';
+import { SECRET_JWT_CODE } from '..';
+import { GatewayError } from '../errors/gateway.error';
+import { TypedRequest } from '../interfaces/request.interface';
+import { TypedResponse } from '../interfaces/response.interface';
 import {
   ILogoutUserResponse,
   IUser,
   IUserResponse
 } from '../interfaces/user/user.interface';
-import { Schema } from 'mongoose';
-import { TypedRequest } from '../interfaces/request.interface';
-import { TypedResponse } from '../interfaces/response.interface';
-import { GatewayError } from '../errors/gateway.error';
-
-const SECRET_JWT_CODE = process.env.SECRET_JWT_CODE;
 
 const COOKIE_OPTIONS = {
   httpOnly: true,

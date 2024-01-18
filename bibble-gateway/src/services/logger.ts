@@ -7,7 +7,7 @@ export class Logger {
     return timestamp.toISOString();
   }
 
-  public static update(...args: any[]) {
+  public static update(...args: string[]) {
     const message = args.map((arg) => JSON.stringify(arg)).join(' ');
 
     console.log(
@@ -16,7 +16,7 @@ export class Logger {
     );
   }
 
-  public static success(...args: any[]) {
+  public static success(...args: string[]) {
     const message = args.map((arg) => JSON.stringify(arg)).join(' ');
 
     console.log(
@@ -25,7 +25,7 @@ export class Logger {
     );
   }
 
-  public static error(err: BaseError, ...args: any[]) {
+  public static error(err: BaseError, ...args: string[]) {
     const message = args.map((arg) => JSON.stringify(arg)).join(' ');
 
     console.error(
@@ -34,7 +34,7 @@ export class Logger {
     );
   }
 
-  public static debug(...args: any[]) {
+  public static debug(...args: string[]) {
     const message = args.map((arg) => JSON.stringify(arg)).join(' ');
 
     console.log(

@@ -8,6 +8,6 @@ export interface ICountry {
 }
 
 export interface IGetCountriesRequest
-  extends TypedRequest<{}, {}, { name?: string }> {}
+  extends TypedRequest<object, object, { name?: string }> {}
 
 export interface IGetCountriesResponse extends TypedResponse<ICountry[]> {}

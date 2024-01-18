@@ -1,7 +1,7 @@
 import { Router } from 'express';
+import multer from 'multer';
 import * as KennelController from '../controllers/kennel.controller';
 import * as AuthMiddleware from '../middleware/auth.middleware';
-import multer from 'multer';
 
 const router = Router();
 const storage = multer.memoryStorage();
@@ -230,4 +230,4 @@ router.delete(
   KennelController.deleteListingCreatorById
 );
 
-module.exports = router;
+export default router;

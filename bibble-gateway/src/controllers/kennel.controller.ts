@@ -1,16 +1,11 @@
-import { NextFunction } from 'express';
-import {
-  IGetSpeciesRequest,
-  IGetSpeciesResponse
-} from '../interfaces/kennel/species.interface';
-import { Logger } from '../services/logger';
 import axios from 'axios';
+import { NextFunction } from 'express';
+import { KENNEL_API_URL } from '..';
 import { KennelAPIError } from '../errors/api.error';
 import {
   IGetBreedsRequest,
   IGetBreedsResponse
 } from '../interfaces/kennel/breed.interface';
-import { KENNEL_API_URL } from '../resources/servers';
 import {
   IGetCountriesRequest,
   IGetCountriesResponse
@@ -23,22 +18,6 @@ import {
   IGetLegalTagsRequest,
   IGetLegalTagsResponse
 } from '../interfaces/kennel/legal-tag.interface';
-import {
-  IGetVaccinesRequest,
-  IGetVaccinesResponse
-} from '../interfaces/kennel/vaccine.interface';
-import {
-  IGetListingByIdRequest,
-  IGetListingByIdResponse,
-  IGetListingsRequest,
-  IGetListingsResponse,
-  IGetMyListingsRequest,
-  IGetMyListingsResponse,
-  IUpdateListingMediaRequest,
-  IUpdateListingMediaResponse,
-  IUpdateListingRequest,
-  IUpdateListingResponse
-} from '../interfaces/kennel/listing.interface';
 import {
   ICreateListingCreatorRequest,
   ICreateListingCreatorResponse,
@@ -56,6 +35,27 @@ import {
   IUpdateMedicalCreatorRequest,
   IUpdatePriceCreatorRequest
 } from '../interfaces/kennel/listing-creator.interface';
+import {
+  IGetListingByIdRequest,
+  IGetListingByIdResponse,
+  IGetListingsRequest,
+  IGetListingsResponse,
+  IGetMyListingsRequest,
+  IGetMyListingsResponse,
+  IUpdateListingMediaRequest,
+  IUpdateListingMediaResponse,
+  IUpdateListingRequest,
+  IUpdateListingResponse
+} from '../interfaces/kennel/listing.interface';
+import {
+  IGetSpeciesRequest,
+  IGetSpeciesResponse
+} from '../interfaces/kennel/species.interface';
+import {
+  IGetVaccinesRequest,
+  IGetVaccinesResponse
+} from '../interfaces/kennel/vaccine.interface';
+import { Logger } from '../services/logger';
 import { getUserForListings } from '../services/user';
 
 export const getSpecies = async (
@@ -80,7 +80,7 @@ export const getSpecies = async (
     Logger.success('Species fetched');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -107,7 +107,7 @@ export const getBreeds = async (
     Logger.success('Breeds fetched');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -134,7 +134,7 @@ export const getCountries = async (
     Logger.success('Countries fetched');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -161,7 +161,7 @@ export const getHairCoats = async (
     Logger.success('Hair coats fetched');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -188,7 +188,7 @@ export const getLegalTags = async (
     Logger.success('Legal tags fetched');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -215,7 +215,7 @@ export const getVaccines = async (
     Logger.success('Vaccines fetched');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -244,7 +244,7 @@ export const getListings = async (
     Logger.success('Listings fetched');
 
     return res.status(response.status).json(listings);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -271,7 +271,7 @@ export const getMyListings = async (
     Logger.update('My listings retrieved');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -298,7 +298,7 @@ export const getListingById = async (
     Logger.update('Listing retrieved');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -326,7 +326,7 @@ export const updateListing = async (
     Logger.update('Listing updated');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -370,7 +370,7 @@ export const updateListingMedia = async (
     Logger.success('Listing media updated');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -398,7 +398,7 @@ export const createListingCreator = async (
     Logger.success('Listing creator created');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -425,7 +425,7 @@ export const createListing = async (
     Logger.success('Listing created');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -452,7 +452,7 @@ export const getMyListingCreators = async (
     Logger.update('My listing creators retrieved');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -479,7 +479,7 @@ export const getListingCreatorById = async (
     Logger.update('Listing creator retrieved');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -507,7 +507,7 @@ export const updateListingCreator = async (
     Logger.update('Listing creator updated');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -535,7 +535,7 @@ export const updateBiologyCreator = async (
     Logger.update('Listing creator biology updated');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -563,7 +563,7 @@ export const updateBiographyCreator = async (
     Logger.update('Listing creator biography updated');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -591,7 +591,7 @@ export const updateMedicalCreator = async (
     Logger.update('Listing creator medical updated');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -619,7 +619,7 @@ export const updateLegalCreator = async (
     Logger.update('Listing creator legal updated');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -663,7 +663,7 @@ export const updateMediaCreator = async (
     Logger.success('Listing creator media updated');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -691,7 +691,7 @@ export const updatePriceCreator = async (
     Logger.update('Listing creator price updated');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -718,7 +718,7 @@ export const deleteListingCreatorById = async (
     Logger.update('Listing creator deleted');
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };

@@ -117,7 +117,7 @@ UserSchema.method('formatResponse', async function () {
   if (docCopy.profilePic) {
     docCopy.profilePic.url = await s3.getMediaUrl(
       docCopy.profilePic.name,
-      s3.userBucketName
+      s3.USER_BUCKET_NAME
     );
   }
 

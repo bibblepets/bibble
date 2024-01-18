@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { IListingResponse } from '../interfaces/kennel/listing.interface';
-import { USER_API_URL } from '../resources/servers';
+import { USER_API_URL } from '..';
 import { UserAPIError } from '../errors/api.error';
+import { IListingResponse } from '../interfaces/kennel/listing.interface';
 
 export const getUserForListing = async (listing: IListingResponse) => {
   const user = await axios

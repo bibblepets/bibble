@@ -1,7 +1,7 @@
-import { Schema } from 'mongoose';
 import { ParamsDictionary } from 'express-serve-static-core';
-import { IMedia, IMediaResponse } from '../media.interface';
+import { Schema } from 'mongoose';
 import { IAddress } from '../address.interface';
+import { IMedia, IMediaResponse } from '../media.interface';
 import { TypedRequest } from '../request.interface';
 import { TypedResponse } from '../response.interface';
 
@@ -19,7 +19,7 @@ export interface IUser {
   updatedAt?: Date;
 }
 
-export interface IUserRequest<T = {}, P = ParamsDictionary>
+export interface IUserRequest<T = object, P = ParamsDictionary>
   extends TypedRequest<T, P & { userId: string }> {}
 
 export interface IUserResponse extends Omit<IUser, 'password'> {
@@ -39,12 +39,12 @@ export interface ILoginUserRequest extends TypedRequest<IUser> {}
 
 export interface ILoginUserResponse extends TypedResponse<IUserResponse> {}
 
-export interface ILogoutUserRequest extends TypedRequest<{}> {}
+export interface ILogoutUserRequest extends TypedRequest {}
 
 export interface ILogoutUserResponse extends TypedResponse<string> {}
 
 export interface IGetUserRequest
-  extends TypedRequest<{}, {}, { _id?: string; email?: string }> {}
+  extends TypedRequest<object, object, { _id?: string; email?: string }> {}
 
 export interface IGetUserResponse extends TypedResponse<IUserResponse> {}
 

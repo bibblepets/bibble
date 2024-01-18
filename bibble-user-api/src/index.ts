@@ -1,17 +1,16 @@
 import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
 import express, { Express } from 'express';
+import Config from './config';
 import { errorHandler } from './middleware/error.middleware';
 import authRouter from './routes/auth.route';
 import userRouter from './routes/user.route';
 import { Logger } from './services/logger';
 
-dotenv.config();
 require('./mongodb/connection');
 
 // Express initialization
 const app: Express = express();
-const SERVER_PORT = process.env.SERVER_PORT;
+export const { SERVER_PORT, MONGO_URI } = Config.getVars();
 
 // Middlewares
 app.use(express.json());

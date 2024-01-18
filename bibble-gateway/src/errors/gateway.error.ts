@@ -10,7 +10,7 @@ export class GatewayError extends BaseError {
     Object.setPrototypeOf(this, GatewayError.prototype);
   }
 
-  serializeErrors(): { source: string; errors: any } {
+  serializeErrors(): { source: string; errors: unknown } {
     return { source: 'bibble-gateway', errors: [{ message: this.message }] };
   }
 

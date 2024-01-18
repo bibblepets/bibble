@@ -110,7 +110,7 @@ export const updateUserProfilePicture = async (
       userId,
       file,
       media,
-      s3.userBucketName
+      s3.USER_BUCKET_NAME
     );
 
     Logger.update('Updating user');

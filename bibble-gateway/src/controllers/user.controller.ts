@@ -1,4 +1,7 @@
+import axios from 'axios';
 import { NextFunction } from 'express';
+import { USER_API_URL } from '..';
+import { UserAPIError } from '../errors/api.error';
 import {
   IAuthUserRequest,
   IAuthUserResponse,
@@ -15,11 +18,8 @@ import {
   IUpdateUserRequest,
   IUpdateUserResponse
 } from '../interfaces/user/user.interface';
-import { Logger } from '../services/logger';
-import { UserAPIError } from '../errors/api.error';
-import { USER_API_URL } from '../resources/servers';
 import * as jwt from '../services/jwt';
-import axios from 'axios';
+import { Logger } from '../services/logger';
 
 export const registerUser = async (
   req: IRegisterUserRequest,
@@ -47,7 +47,7 @@ export const registerUser = async (
     Logger.success('User registered', userId);
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -78,7 +78,7 @@ export const loginUser = async (
     Logger.success('User logged in', userId);
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -96,7 +96,7 @@ export const logoutUser = async (
     Logger.success('User logged out');
 
     return res.status(200).json('User logged out');
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -123,7 +123,7 @@ export const authenticateUser = async (
     Logger.success('User found', response.data._id);
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -150,7 +150,7 @@ export const getUser = async (
     Logger.success('User found', response.data.user?._id);
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -178,7 +178,7 @@ export const updateUser = async (
     Logger.success('User updated', response.data.user?._id);
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -216,7 +216,7 @@ export const updateUserProfilePicture = async (
     Logger.success('User profile picture updated', response.data._id);
 
     return res.status(response.status).json(response.data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };

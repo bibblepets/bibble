@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
-import * as AuthMiddleware from '../middleware/auth.middleware';
 import * as UserController from '../controllers/user.controller';
+import * as AuthMiddleware from '../middleware/auth.middleware';
 
 const router = Router();
 const storage = multer.memoryStorage();
@@ -65,4 +65,4 @@ router.put(
   UserController.updateUserProfilePicture
 );
 
-module.exports = router;
+export default router;

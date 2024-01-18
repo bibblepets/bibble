@@ -1,14 +1,14 @@
 import { Schema } from 'mongoose';
-import { ISpecies } from './species.interface';
+import { IMedia, IMediaResponse } from '../media.interface';
+import { TypedRequest } from '../request.interface';
+import { TypedResponse } from '../response.interface';
+import { IUserRequest } from '../user/user.interface';
 import { IBreed } from './breed.interface';
 import { ICountry } from './country.interface';
 import { IHairCoat } from './hair-coat.interface';
-import { IVaccine } from './vaccine.interface';
 import { ILegalTag } from './legal-tag.interface';
-import { IMedia, IMediaResponse } from '../media.interface';
-import { TypedResponse } from '../response.interface';
-import { TypedRequest } from '../request.interface';
-import { IUser, IUserRequest } from '../user/user.interface';
+import { ISpecies } from './species.interface';
+import { IVaccine } from './vaccine.interface';
 
 export interface IListing {
   _id: Schema.Types.ObjectId;
@@ -32,13 +32,16 @@ export interface IListing {
   createdAt?: Date;
   updatedAt?: Date;
 
-  user?: IUser;
   species?: ISpecies;
   breeds?: IBreed[];
   origin?: ICountry;
   hairCoat?: IHairCoat;
   vaccines?: IVaccine[];
   legalTags?: ILegalTag[];
+}
+
+export interface IListingMethods {
+  formatResponse(): Promise<IListingResponse>;
 }
 
 export interface IListingRequest extends IUserRequest<IListing> {}
@@ -48,7 +51,7 @@ export interface IListingResponse extends IListing {
 }
 
 export interface IGetListingsRequest
-  extends TypedRequest<{}, {}, { speciesId?: string; name?: string }> {}
+  extends TypedRequest<object, object, { speciesId?: string; name?: string }> {}
 
 export interface IGetListingsResponse
   extends TypedResponse<IListingResponse[]> {}
@@ -59,7 +62,7 @@ export interface IGetMyListingsResponse
   extends TypedResponse<IListingResponse[]> {}
 
 export interface IGetListingByIdRequest
-  extends IUserRequest<{}, { _id: string }> {}
+  extends IUserRequest<object, { _id: string }> {}
 
 export interface IGetListingByIdResponse
   extends TypedResponse<IListingResponse> {}

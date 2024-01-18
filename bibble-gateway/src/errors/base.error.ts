@@ -8,7 +8,7 @@ abstract class BaseError extends Error {
     Object.setPrototypeOf(this, BaseError.prototype);
   }
 
-  abstract serializeErrors(): { source: string; errors: any };
+  abstract serializeErrors(): { source: string; errors: unknown };
 
   abstract toString(): string;
 }

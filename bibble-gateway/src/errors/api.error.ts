@@ -4,7 +4,7 @@ type APIErrorResponse = {
   status: number;
   data: {
     errorType: string;
-    errors: any;
+    errors: unknown;
   };
 };
 
@@ -12,13 +12,13 @@ abstract class APIError extends BaseError {
   errorCode: number;
   errorType: string;
   source: string;
-  errors: any;
+  errors: unknown;
 
   constructor(
     errorCode: number,
     errorType: string,
     source: string,
-    errors: any
+    errors: unknown
   ) {
     super(`Error from ${source}`);
 
@@ -30,7 +30,7 @@ abstract class APIError extends BaseError {
     Object.setPrototypeOf(this, APIError.prototype);
   }
 
-  serializeErrors(): { source: string; errors: any } {
+  serializeErrors(): { source: string; errors: unknown } {
     return { source: this.source, errors: this.errors };
   }
 

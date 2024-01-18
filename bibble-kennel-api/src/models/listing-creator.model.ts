@@ -150,7 +150,7 @@ ListingCreatorSchema.method('formatResponse', async function () {
   if (Array.isArray(docCopy.media)) {
     docCopy.media = await Promise.all(
       docCopy.media.map(async (media) => {
-        media.url = await s3.getMediaUrl(media.name, s3.listingBucketName);
+        media.url = await s3.getMediaUrl(media.name, s3.LISTING_BUCKET_NAME);
         return media;
       })
     );

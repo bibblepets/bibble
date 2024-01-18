@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
-import { ISpecies } from './species.interface';
 import { TypedRequest } from '../request.interface';
 import { TypedResponse } from '../response.interface';
+import { ISpecies } from './species.interface';
 
 export interface IBreed {
   _id: Schema.Types.ObjectId;
@@ -12,6 +12,6 @@ export interface IBreed {
 }
 
 export interface IGetBreedsRequest
-  extends TypedRequest<{}, {}, { speciesId?: string; name?: string }> {}
+  extends TypedRequest<object, object, { speciesId?: string; name?: string }> {}
 
 export interface IGetBreedsResponse extends TypedResponse<IBreed[]> {}

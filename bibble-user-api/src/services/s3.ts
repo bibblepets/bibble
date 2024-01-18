@@ -7,27 +7,27 @@ import {
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import crypto from 'crypto';
-import dotenv from 'dotenv';
 import { Schema } from 'mongoose';
+import Config from '../config';
 import { IMedia } from '../interfaces/media.interface';
 
-dotenv.config();
+export const {
+  AWS_ACCESS_KEY,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_BUCKET_REGION,
+  USER_BUCKET_NAME
+} = Config.getAwsVars();
 
-const awsBucketRegion = process.env.AWS_BUCKET_REGION;
-const awsAccessKey = process.env.AWS_ACCESS_KEY;
-const awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-export const userBucketName = process.env.USER_BUCKET_NAME;
-
-if (!awsAccessKey || !awsSecretAccessKey || !awsBucketRegion) {
+if (!AWS_ACCESS_KEY || !AWS_SECRET_ACCESS_KEY || !AWS_BUCKET_REGION) {
   throw new Error('AWS credentials or region are not defined');
 }
 
 const s3Client = new S3Client({
   credentials: {
-    accessKeyId: awsAccessKey,
-    secretAccessKey: awsSecretAccessKey
+    accessKeyId: AWS_ACCESS_KEY,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY
   },
-  region: awsBucketRegion
+  region: AWS_BUCKET_REGION
 });
 
 export const putMedia = async (

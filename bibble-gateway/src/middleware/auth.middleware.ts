@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { Request, Response, NextFunction } from 'express';
-import * as jwt from '../services/jwt';
+import { NextFunction, Request, Response } from 'express';
+import { USER_API_URL } from '..';
 import { UserAPIError } from '../errors/api.error';
 import { GatewayError } from '../errors/gateway.error';
-import { USER_API_URL } from '../resources/servers';
+import * as jwt from '../services/jwt';
 
 export const authHandler = async (
   req: Request,
@@ -34,7 +34,7 @@ export const authHandler = async (
 
     req.params.userId = userId;
     next();
-  } catch (error: any) {
+  } catch (error: unknown) {
     next(error);
   }
 };
