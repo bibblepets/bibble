@@ -18,30 +18,24 @@ export const getUser = async (
   res: IGetUserResponse,
   next: NextFunction
 ) => {
-  const { _id, email } = req.query;
+  const { userId } = req.params;
   let user;
 
   try {
     Logger.update('Getting user');
 
-    if (_id) {
-      validateObjectId(_id);
+    if (userId) {
+      validateObjectId(userId);
 
-      user = await User.findById(_id);
-
-      if (!user) {
-        throw new KeyNotFoundError('User not found', 'id', _id);
-      }
-    } else if (email) {
-      user = await User.findOne({ email });
+      user = await User.findById(userId);
 
       if (!user) {
-        throw new KeyNotFoundError('User not found', 'email', email);
+        throw new KeyNotFoundError('User not found', 'id', userId);
       }
     }
 
     if (!user) {
-      throw new KeyNotFoundError('User not found', 'id or email', '');
+      throw new KeyNotFoundError('User not found', 'id', userId);
     }
 
     Logger.success('User found', user?._id.toString());
@@ -59,7 +53,7 @@ export const updateUser = async (
   res: IUpdateUserResponse,
   next: NextFunction
 ) => {
-  const userId = req.params.userId;
+  const { userId } = req.params;
   const updates = req.body;
 
   try {
@@ -98,13 +92,13 @@ export const updateUserProfilePicture = async (
   next: NextFunction
 ) => {
   const userId = req.params.userId;
-  const { profilePic } = req.body;
+  const { media: name } = req.body;
   const file = req.file as Express.Multer.File;
 
   try {
     Logger.update('Uploading profile picture to S3');
 
-    const media = { name: profilePic, url: undefined };
+    const media = { name };
 
     const uploadedMedia = await s3.putMedia(
       userId,

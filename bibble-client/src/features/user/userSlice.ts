@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../store';
-import { User } from './types';
 import { Media, StatusType } from '../types';
+import { User } from './types';
 
 const USER_API_URL = import.meta.env.VITE_USER_API_URL;
 
@@ -96,7 +96,7 @@ export const updateProfilePicture = createAsyncThunk(
   '/userSlice/updateProfilePicture',
   async (profilePic: Media) => {
     const formData = new FormData();
-    profilePic.name && formData.append('profilePic', profilePic.name);
+    profilePic.name && formData.append('media', profilePic.name);
     profilePic.file && formData.append('data', profilePic.file);
 
     return await axios

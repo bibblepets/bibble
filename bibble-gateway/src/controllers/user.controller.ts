@@ -1,222 +1,223 @@
-import axios from 'axios';
-import { NextFunction } from 'express';
-import { USER_API_URL } from '..';
-import { UserAPIError } from '../errors/api.error';
-import {
-  IAuthUserRequest,
-  IAuthUserResponse,
-  IGetUserRequest,
-  IGetUserResponse,
-  ILoginUserRequest,
-  ILoginUserResponse,
-  ILogoutUserRequest,
-  ILogoutUserResponse,
-  IRegisterUserRequest,
-  IRegisterUserResponse,
-  IUpdateUserProfilePictureRequest,
-  IUpdateUserProfilePictureResponse,
-  IUpdateUserRequest,
-  IUpdateUserResponse
-} from '../interfaces/user/user.interface';
-import * as jwt from '../services/jwt';
-import { Logger } from '../services/logger';
+// import axios from 'axios';
+// import { NextFunction } from 'express';
+// import { UserAPIError } from '../errors/api.error';
+// import {
+//   IAuthUserRequest,
+//   IAuthUserResponse,
+//   IGetUserRequest,
+//   IGetUserResponse,
+//   ILoginUserRequest,
+//   ILoginUserResponse,
+//   ILogoutUserRequest,
+//   ILogoutUserResponse,
+//   IRegisterUserRequest,
+//   IRegisterUserResponse,
+//   IUpdateUserProfilePictureRequest,
+//   IUpdateUserProfilePictureResponse,
+//   IUpdateUserRequest,
+//   IUpdateUserResponse
+// } from '../interfaces/user/user.interface';
+// import * as jwt from '../services/jwt';
+// import { Logger } from '../services/logger';
 
-export const registerUser = async (
-  req: IRegisterUserRequest,
-  res: IRegisterUserResponse,
-  next: NextFunction
-) => {
-  try {
-    const request = req.body;
+// const USER_API_URL = '';
 
-    Logger.update('Registering user');
+// export const registerUser = async (
+//   req: IRegisterUserRequest,
+//   res: IRegisterUserResponse,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const request = req.body;
 
-    const response = await axios
-      .post(`${USER_API_URL}/auth/register`, request)
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        throw new UserAPIError(error.response);
-      });
+//     Logger.update('Registering user');
 
-    const userId = response.data._id;
+//     const response = await axios
+//       .post(`${USER_API_URL}/auth/register`, request)
+//       .then((response) => {
+//         return response;
+//       })
+//       .catch((error) => {
+//         throw new UserAPIError(error.response);
+//       });
 
-    jwt.signAuthToken(req, res, userId);
+//     const userId = response.data._id;
 
-    Logger.success('User registered', userId);
+//     jwt.signAuthToken(req, res, userId);
 
-    return res.status(response.status).json(response.data);
-  } catch (error: unknown) {
-    next(error);
-  }
-};
+//     Logger.success('User registered', userId);
 
-export const loginUser = async (
-  req: ILoginUserRequest,
-  res: ILoginUserResponse,
-  next: NextFunction
-) => {
-  try {
-    const request = req.body;
+//     return res.status(response.status).json(response.data);
+//   } catch (error: unknown) {
+//     next(error);
+//   }
+// };
 
-    Logger.update('Logging in user');
+// export const loginUser = async (
+//   req: ILoginUserRequest,
+//   res: ILoginUserResponse,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const request = req.body;
 
-    const response = await axios
-      .post(`${USER_API_URL}/auth/login`, request)
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        throw new UserAPIError(error.response);
-      });
+//     Logger.update('Logging in user');
 
-    const userId = response.data._id;
+//     const response = await axios
+//       .post(`${USER_API_URL}/auth/login`, request)
+//       .then((response) => {
+//         return response;
+//       })
+//       .catch((error) => {
+//         throw new UserAPIError(error.response);
+//       });
 
-    jwt.signAuthToken(req, res, userId);
+//     const userId = response.data._id;
 
-    Logger.success('User logged in', userId);
+//     jwt.signAuthToken(req, res, userId);
 
-    return res.status(response.status).json(response.data);
-  } catch (error: unknown) {
-    next(error);
-  }
-};
+//     Logger.success('User logged in', userId);
 
-export const logoutUser = async (
-  _req: ILogoutUserRequest,
-  res: ILogoutUserResponse,
-  next: NextFunction
-) => {
-  try {
-    Logger.update('Logging out user');
+//     return res.status(response.status).json(response.data);
+//   } catch (error: unknown) {
+//     next(error);
+//   }
+// };
 
-    jwt.deleteAuthToken(res);
+// export const logoutUser = async (
+//   _req: ILogoutUserRequest,
+//   res: ILogoutUserResponse,
+//   next: NextFunction
+// ) => {
+//   try {
+//     Logger.update('Logging out user');
 
-    Logger.success('User logged out');
+//     jwt.deleteAuthToken(res);
 
-    return res.status(200).json('User logged out');
-  } catch (error: unknown) {
-    next(error);
-  }
-};
+//     Logger.success('User logged out');
 
-export const authenticateUser = async (
-  req: IAuthUserRequest,
-  res: IAuthUserResponse,
-  next: NextFunction
-) => {
-  try {
-    const userId = req.params.userId;
+//     return res.status(200).json('User logged out');
+//   } catch (error: unknown) {
+//     next(error);
+//   }
+// };
 
-    Logger.update('Authenticating user');
+// export const authenticateUser = async (
+//   req: IAuthUserRequest,
+//   res: IAuthUserResponse,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const userId = req.params.userId;
 
-    const response = await axios
-      .get(`${USER_API_URL}/auth/${userId}`)
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        throw new UserAPIError(error.response);
-      });
+//     Logger.update('Authenticating user');
 
-    Logger.success('User found', response.data._id);
+//     const response = await axios
+//       .get(`${USER_API_URL}/auth/${userId}`)
+//       .then((response) => {
+//         return response;
+//       })
+//       .catch((error) => {
+//         throw new UserAPIError(error.response);
+//       });
 
-    return res.status(response.status).json(response.data);
-  } catch (error: unknown) {
-    next(error);
-  }
-};
+//     Logger.success('User found', response.data._id);
 
-export const getUser = async (
-  req: IGetUserRequest,
-  res: IGetUserResponse,
-  next: NextFunction
-) => {
-  try {
-    const { _id, email } = req.query;
+//     return res.status(response.status).json(response.data);
+//   } catch (error: unknown) {
+//     next(error);
+//   }
+// };
 
-    Logger.update('Getting user');
+// export const getUser = async (
+//   req: IGetUserRequest,
+//   res: IGetUserResponse,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const { _id, email } = req.query;
 
-    const response = await axios
-      .get(`${USER_API_URL}/user?_id=${_id}&email=${email}`)
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        throw new UserAPIError(error.response);
-      });
+//     Logger.update('Getting user');
 
-    Logger.success('User found', response.data.user?._id);
+//     const response = await axios
+//       .get(`${USER_API_URL}/user?_id=${_id}&email=${email}`)
+//       .then((response) => {
+//         return response;
+//       })
+//       .catch((error) => {
+//         throw new UserAPIError(error.response);
+//       });
 
-    return res.status(response.status).json(response.data);
-  } catch (error: unknown) {
-    next(error);
-  }
-};
+//     Logger.success('User found', response.data.user?._id);
 
-export const updateUser = async (
-  req: IUpdateUserRequest,
-  res: IUpdateUserResponse,
-  next: NextFunction
-) => {
-  try {
-    const userId = req.params.userId;
-    const updates = req.body;
+//     return res.status(response.status).json(response.data);
+//   } catch (error: unknown) {
+//     next(error);
+//   }
+// };
 
-    Logger.update('Updating user');
+// export const updateUser = async (
+//   req: IUpdateUserRequest,
+//   res: IUpdateUserResponse,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const userId = req.params.userId;
+//     const updates = req.body;
 
-    const response = await axios
-      .put(`${USER_API_URL}/user/${userId}`, updates)
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        throw new UserAPIError(error.response);
-      });
+//     Logger.update('Updating user');
 
-    Logger.success('User updated', response.data.user?._id);
+//     const response = await axios
+//       .put(`${USER_API_URL}/user/${userId}`, updates)
+//       .then((response) => {
+//         return response;
+//       })
+//       .catch((error) => {
+//         throw new UserAPIError(error.response);
+//       });
 
-    return res.status(response.status).json(response.data);
-  } catch (error: unknown) {
-    next(error);
-  }
-};
+//     Logger.success('User updated', response.data.user?._id);
 
-export const updateUserProfilePicture = async (
-  req: IUpdateUserProfilePictureRequest,
-  res: IUpdateUserProfilePictureResponse,
-  next: NextFunction
-) => {
-  try {
-    const userId = req.params.userId;
-    const { profilePic } = req.body;
-    const file = req.file as Express.Multer.File;
-    const blob = new Blob([file.buffer], { type: file.mimetype });
+//     return res.status(response.status).json(response.data);
+//   } catch (error: unknown) {
+//     next(error);
+//   }
+// };
 
-    Logger.update('Updating user profile picture');
+// export const updateUserProfilePicture = async (
+//   req: IUpdateUserProfilePictureRequest,
+//   res: IUpdateUserProfilePictureResponse,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const userId = req.params.userId;
+//     const { profilePic } = req.body;
+//     const file = req.file as Express.Multer.File;
+//     const blob = new Blob([file.buffer], { type: file.mimetype });
 
-    const formData = new FormData();
-    formData.append('profilePic', profilePic);
-    formData.append('data', blob, file.originalname);
+//     Logger.update('Updating user profile picture');
 
-    const response = await axios
-      .put(`${USER_API_URL}/user/profile-picture/${userId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        throw new UserAPIError(error.response);
-      });
+//     const formData = new FormData();
+//     formData.append('profilePic', profilePic);
+//     formData.append('data', blob, file.originalname);
 
-    Logger.success('User profile picture updated', response.data._id);
+//     const response = await axios
+//       .put(`${USER_API_URL}/user/profile-picture/${userId}`, formData, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data'
+//         }
+//       })
+//       .then((response) => {
+//         return response;
+//       })
+//       .catch((error) => {
+//         throw new UserAPIError(error.response);
+//       });
 
-    return res.status(response.status).json(response.data);
-  } catch (error: unknown) {
-    next(error);
-  }
-};
+//     Logger.success('User profile picture updated', response.data._id);
+
+//     return res.status(response.status).json(response.data);
+//   } catch (error: unknown) {
+//     next(error);
+//   }
+// };

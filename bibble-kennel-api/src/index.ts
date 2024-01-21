@@ -36,5 +36,7 @@ app.use('/hair-coat', hairCoatRouter);
 app.use(errorHandler);
 
 app.listen(SERVER_PORT, () => {
-  Logger.success(`Bibble User API is alive at http://localhost:${SERVER_PORT}`);
+  Logger.success(
+    `Bibble Kennel API is alive at http://localhost:${SERVER_PORT}`
+  );
 });

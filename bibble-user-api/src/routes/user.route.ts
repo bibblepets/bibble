@@ -7,11 +7,11 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 /**
- * @route GET /user/{_id|email}
+ * @route GET /user/:userId
  * @desc Get user profile
  * @access Public
  */
-router.get('/', UserController.getUser);
+router.get('/:userId', UserController.getUser);
 
 /**
  * @route PUT /user/:userId

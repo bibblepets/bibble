@@ -1,19 +1,22 @@
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
 import express, { Express } from 'express';
-import Config from './config';
+import { configHandler } from './middleware/config.middleware';
 import { errorHandler } from './middleware/error.middleware';
 import kennelRouter from './routes/kennel.route';
 import userRouter from './routes/user.route';
 import { Logger } from './services/logger';
 
+dotenv.config();
+
 // Express initialization
 const app: Express = express();
-export const { SERVER_PORT, KENNEL_API_URL, USER_API_URL, SECRET_JWT_CODE } =
-  Config.getVars();
+const SERVER_PORT = process.env.SERVER_PORT;
 
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
+app.use(configHandler);
 
 // Routes
 app.use('/user', userRouter);

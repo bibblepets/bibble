@@ -97,8 +97,6 @@ export const putMedia = async (
     listingMedia.push({ name: name, url: undefined });
   }
 
-  console.log(listingMedia);
-
   return listingMedia;
 };
 

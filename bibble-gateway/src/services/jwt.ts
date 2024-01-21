@@ -1,14 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { Schema } from 'mongoose';
-import { SECRET_JWT_CODE } from '..';
 import { GatewayError } from '../errors/gateway.error';
-import { TypedRequest } from '../interfaces/request.interface';
+import { IAuthorizedRequest } from '../interfaces/auth.interface';
 import { TypedResponse } from '../interfaces/response.interface';
-import {
-  ILogoutUserResponse,
-  IUser,
-  IUserResponse
-} from '../interfaces/user/user.interface';
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
@@ -17,10 +11,12 @@ const COOKIE_OPTIONS = {
 };
 
 export function signAuthToken(
-  req: TypedRequest<IUser>,
-  res: TypedResponse<IUserResponse>,
+  req: IAuthorizedRequest,
+  res: TypedResponse,
   id: Schema.Types.ObjectId
 ) {
+  const { SECRET_JWT_CODE } = req.app.locals;
+
   if (!SECRET_JWT_CODE) {
     throw new GatewayError('SECRET_JWT_CODE not found');
   }
@@ -32,7 +28,9 @@ export function signAuthToken(
   res.cookie('authToken', token, COOKIE_OPTIONS);
 }
 
-export function verifyAuthToken(authToken: string) {
+export function verifyAuthToken(req: IAuthorizedRequest, authToken: string) {
+  const { SECRET_JWT_CODE } = req.app.locals;
+
   if (!SECRET_JWT_CODE) {
     throw new GatewayError('SECRET_JWT_CODE not found');
   }
@@ -46,6 +44,6 @@ export function verifyAuthToken(authToken: string) {
   return decodedToken;
 }
 
-export function deleteAuthToken(res: ILogoutUserResponse) {
+export function deleteAuthToken(res: TypedResponse) {
   res.clearCookie('authToken', COOKIE_OPTIONS);
 }

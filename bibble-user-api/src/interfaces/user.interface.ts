@@ -44,7 +44,7 @@ export interface ILogoutUserRequest extends TypedRequest {}
 export interface ILogoutUserResponse extends TypedResponse<string> {}
 
 export interface IGetUserRequest
-  extends TypedRequest<object, object, { _id?: string; email?: string }> {}
+  extends TypedRequest<object, { userId: string }> {}
 
 export interface IGetUserResponse extends TypedResponse<IUserResponse> {}
 
@@ -53,7 +53,7 @@ export interface IUpdateUserRequest extends IUserRequest<Partial<IUser>> {}
 export interface IUpdateUserResponse extends TypedResponse<IUserResponse> {}
 
 export interface IUpdateUserProfilePictureRequest
-  extends IUserRequest<{ profilePic: string }> {
+  extends IUserRequest<{ media: string }> {
   file?: Express.Multer.File;
 }
 

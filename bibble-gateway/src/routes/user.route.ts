@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
-import * as UserController from '../controllers/user.controller';
 import * as AuthMiddleware from '../middleware/auth.middleware';
+import * as GatewayService from '../services/gateway';
 
 const router = Router();
 const storage = multer.memoryStorage();
@@ -12,21 +12,35 @@ const upload = multer({ storage });
  * @desc Register a new user
  * @access Public
  */
-router.post('/register', UserController.registerUser);
+router.post(
+  '/register',
+  GatewayService.forwardRequest('post', 'user', '/auth/register'),
+  AuthMiddleware.setAuthTokenHandler,
+  GatewayService.returnResponse(201)
+);
 
 /**
  * @route POST /user/login
  * @desc Login an existing user
  * @access Public
  */
-router.post('/login', UserController.loginUser);
+router.post(
+  '/login',
+  GatewayService.forwardRequest('post', 'user', '/auth/login'),
+  AuthMiddleware.setAuthTokenHandler,
+  GatewayService.returnResponse()
+);
 
 /**
  * @route POST /user/logout
  * @desc Logout an existing user
  * @access Public
  */
-router.post('/logout', UserController.logoutUser);
+router.post(
+  '/logout',
+  AuthMiddleware.deleteAuthTokenHandler,
+  GatewayService.returnResponse()
+);
 
 /**
  * @route GET /user/auth
@@ -36,22 +50,33 @@ router.post('/logout', UserController.logoutUser);
 router.get(
   '/auth',
   AuthMiddleware.authHandler,
-  UserController.authenticateUser
+  GatewayService.forwardRequest('get', 'user', '/auth/:userId'),
+  GatewayService.returnResponse()
 );
 
 /**
- * @route GET /user/{_id|email}
+ * @route GET /user
  * @desc Get user profile
  * @access Private
  */
-router.get('/', AuthMiddleware.authHandler, UserController.getUser);
+router.get(
+  '/',
+  AuthMiddleware.authHandler,
+  GatewayService.forwardRequest('get', 'user', '/user/:userId'),
+  GatewayService.returnResponse()
+);
 
 /**
  * @route PUT /user
  * @desc Update user profile
  * @access Private
  */
-router.put('/', AuthMiddleware.authHandler, UserController.updateUser);
+router.put(
+  '/',
+  AuthMiddleware.authHandler,
+  GatewayService.forwardRequest('put', 'user', '/user/:userId'),
+  GatewayService.returnResponse()
+);
 
 /**
  * @route PUT /user/profile-picture
@@ -62,7 +87,8 @@ router.put(
   '/profile-picture',
   upload.single('data'),
   AuthMiddleware.authHandler,
-  UserController.updateUserProfilePicture
+  GatewayService.forwardFileRequest('user', '/user/profile-picture/:userId'),
+  GatewayService.returnResponse()
 );
 
 export default router;
