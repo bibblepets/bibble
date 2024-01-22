@@ -1,19 +1,19 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { RootState, store } from '../../store';
+import axios from 'axios';
+import { RootState } from '../../store';
+import { Gender, Media, StatusType } from '../types';
+import { User } from '../user/types';
 import {
   Breed,
   Country,
   HairCoat,
   LegalTag,
+  ListingCreator,
   SaleType,
   Size,
   Species,
   Vaccine
 } from './types';
-import axios from 'axios';
-import { User } from '../user/types';
-import { Gender, Media, StatusType } from '../types';
-import { ListingCreator } from './types';
 
 interface ListingCreatorState extends ListingCreator {
   status: StatusType;
@@ -173,7 +173,7 @@ export const updateMedia = createAsyncThunk(
 
     const formData = new FormData();
     media.forEach((media) => {
-      media.name && formData.append('mediaNames[]', media.name);
+      media.name && formData.append('media[]', media.name);
     });
     media.forEach((media) => {
       media.file && formData.append('data', media.file);

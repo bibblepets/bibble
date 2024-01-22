@@ -7,25 +7,25 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 /**
- * @route POST /listing-creator
- * @desc Create a new listing creator
- * @access Public
- */
-router.post('/', ListingCreatorController.createListingCreator);
-
-/**
  * @route POST /listing-creator/:_id
  * @desc Create a new listing
  * @access Public
  */
-router.post('/:_id', ListingCreatorController.createListing);
+router.post('/create/:_id', ListingCreatorController.createListing);
+
+/**
+ * @route POST /listing-creator
+ * @desc Create a new listing creator
+ * @access Public
+ */
+router.post('/:userId', ListingCreatorController.createListingCreator);
 
 /**
  * @route GET /listing-creator/me
  * @desc Get my listing creators
  * @access Public
  */
-router.get('/me', ListingCreatorController.getMyListingCreators);
+router.get('/me/:userId', ListingCreatorController.getMyListingCreators);
 
 /**
  * @route GET /listing-creator/:id

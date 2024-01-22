@@ -31,4 +31,11 @@ router.put(
   UserController.updateUserProfilePicture
 );
 
+/**
+ * @route POST /user/append-users
+ * @desc Append users
+ * @access Private
+ */
+router.post('/append-users', UserController.appendUsers);
+
 export default router;

@@ -12,4 +12,4 @@ export interface IForwardRequest<
 }
 
 export interface IForwardFileRequest
-  extends IAuthorizedRequest<{ media: string }> {}
+  extends IAuthorizedRequest<{ media?: string | string[] }> {}

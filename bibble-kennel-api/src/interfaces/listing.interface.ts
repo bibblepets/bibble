@@ -74,7 +74,7 @@ export interface IUpdateListingResponse
   extends TypedResponse<IListingResponse> {}
 
 export interface IUpdateListingMediaRequest
-  extends AuthorizedRequest<{ mediaNames: string[] }, { _id: string }> {}
+  extends AuthorizedRequest<{ media: string[] }, { _id: string }> {}
 
 export interface IUpdateListingMediaResponse
   extends TypedResponse<IListingResponse> {}

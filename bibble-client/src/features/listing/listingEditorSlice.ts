@@ -1,4 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { RootState } from '../../store';
+import { Gender, Media, StatusType } from '../types';
 import {
   Breed,
   Country,
@@ -8,9 +11,6 @@ import {
   Size,
   Vaccine
 } from './types';
-import { RootState } from '../../store';
-import axios from 'axios';
-import { Gender, Media, StatusType } from '../types';
 
 interface ListingEditorState {
   listing?: Listing;
@@ -66,7 +66,7 @@ export const updateListingMediaById = createAsyncThunk(
     const formData = new FormData();
     formData.append('_id', _id);
     media.forEach((media) => {
-      media.name && formData.append('mediaNames[]', media.name);
+      media.name && formData.append('media[]', media.name);
     });
     media.forEach((media) => {
       media.file && formData.append('data', media.file);

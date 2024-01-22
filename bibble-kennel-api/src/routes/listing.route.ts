@@ -18,7 +18,7 @@ router.get('/', ListingController.getListings);
  * @desc Get all listings
  * @access Public
  */
-router.get('/me', ListingController.getMyListings);
+router.get('/me/:userId', ListingController.getMyListings);
 
 /**
  * @route GET /listing/:_id

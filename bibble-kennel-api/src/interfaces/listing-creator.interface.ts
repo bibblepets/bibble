@@ -113,7 +113,7 @@ export interface IUpdateLegalCreatorRequest
   extends IUpdateListingCreatorStageRequest<ILegalCreator> {}
 
 export interface IUpdateMediaCreatorRequest
-  extends IUpdateListingCreatorStageRequest<{ mediaNames: string[] }> {}
+  extends IUpdateListingCreatorStageRequest<{ media: string[] }> {}
 
 export interface IUpdatePriceCreatorRequest
   extends IUpdateListingCreatorStageRequest<{ price: number }> {}

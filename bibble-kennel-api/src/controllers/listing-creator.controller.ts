@@ -24,28 +24,6 @@ import Listing from '../models/listing.model';
 import { Logger } from '../services/logger';
 import * as s3 from '../services/s3';
 
-export const createListingCreator = async (
-  req: ICreateListingCreatorRequest,
-  res: ICreateListingCreatorResponse,
-  next: NextFunction
-) => {
-  try {
-    const payload = req.body;
-
-    Logger.update('Creating listing creator');
-
-    const listingCreator = await ListingCreator.create(payload);
-
-    Logger.success('Listing creator created', listingCreator._id.toString());
-
-    const response = await listingCreator.formatResponse();
-
-    return res.status(200).json(response);
-  } catch (error: unknown) {
-    next(error);
-  }
-};
-
 export const createListing = async (
   req: ICreateListingRequest,
   res: ICreateListingResponse,
@@ -99,13 +77,36 @@ export const createListing = async (
   }
 };
 
+export const createListingCreator = async (
+  req: ICreateListingCreatorRequest,
+  res: ICreateListingCreatorResponse,
+  next: NextFunction
+) => {
+  try {
+    const { userId } = req.params;
+    const payload = { ...req.body, userId };
+
+    Logger.update('Creating listing creator');
+
+    const listingCreator = await ListingCreator.create(payload);
+
+    Logger.success('Listing creator created', listingCreator._id.toString());
+
+    const response = await listingCreator.formatResponse();
+
+    return res.status(200).json(response);
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
 export const getMyListingCreators = async (
   req: IGetMyListingCreatorsRequest,
   res: IGetMyListingCreatorsResponse,
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.query;
+    const { userId } = req.params;
 
     Logger.update('Getting listing creators for user', userId);
 
@@ -338,19 +339,19 @@ export const updateMediaCreator = async (
 ) => {
   try {
     const { _id } = req.params;
-    const { mediaNames } = req.body;
+    const { media } = req.body;
     const files = req.files as Express.Multer.File[];
 
     Logger.update('Updating media creator');
 
-    let media: IMedia[] | undefined;
+    let mediaUpdates: IMedia[] | undefined;
 
-    if (Array.isArray(mediaNames) && mediaNames.length) {
-      media = mediaNames.map((name) => ({ name }));
+    if (Array.isArray(media) && media.length) {
+      mediaUpdates = media.map((name) => ({ name }));
     }
 
     const updates = {
-      media: await s3.putMedia(_id, files, media, s3.LISTING_BUCKET_NAME)
+      media: await s3.putMedia(_id, files, mediaUpdates, s3.LISTING_BUCKET_NAME)
     };
 
     const updatedListingCreator = await ListingCreator.findByIdAndUpdate(

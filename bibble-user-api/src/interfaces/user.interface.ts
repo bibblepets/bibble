@@ -59,3 +59,20 @@ export interface IUpdateUserProfilePictureRequest
 
 export interface IUpdateUserProfilePictureResponse
   extends TypedResponse<IUserResponse> {}
+
+export interface IAppendUserRequest
+  extends TypedRequest<
+    {
+      _id: Schema.Types.ObjectId;
+      userId: Schema.Types.ObjectId;
+    }[]
+  > {}
+
+export interface IAppendUserResponse
+  extends TypedResponse<
+    {
+      _id: Schema.Types.ObjectId;
+      userId: Schema.Types.ObjectId;
+      user?: IUserResponse;
+    }[]
+  > {}

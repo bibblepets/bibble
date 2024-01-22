@@ -47,7 +47,7 @@ export const getMyListings = async (
   next: NextFunction
 ) => {
   try {
-    const { userId } = req.query;
+    const { userId } = req.params;
 
     Logger.update('Getting listings for user', userId);
 
@@ -128,19 +128,19 @@ export const updateListingMedia = async (
 ) => {
   try {
     const { _id } = req.params;
-    const { mediaNames } = req.body;
+    const { media } = req.body;
     const files = req.files as Express.Multer.File[];
 
     Logger.update('Updating listing media', _id);
 
-    let media: IMedia[] | undefined;
+    let mediaUpdates: IMedia[] | undefined;
 
-    if (Array.isArray(mediaNames) && mediaNames.length) {
-      media = mediaNames.map((name) => ({ name }));
+    if (Array.isArray(media) && media.length) {
+      mediaUpdates = media.map((name) => ({ name }));
     }
 
     const updates = {
-      media: await s3.putMedia(_id, files, media, s3.LISTING_BUCKET_NAME)
+      media: await s3.putMedia(_id, files, mediaUpdates, s3.LISTING_BUCKET_NAME)
     };
 
     const updatedListing = await Listing.findByIdAndUpdate(_id, updates, {

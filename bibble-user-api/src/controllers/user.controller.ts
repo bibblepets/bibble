@@ -1,6 +1,8 @@
 import { NextFunction } from 'express';
 import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
 import {
+  IAppendUserRequest,
+  IAppendUserResponse,
   IGetUserRequest,
   IGetUserResponse,
   IUpdateUserProfilePictureRequest,
@@ -18,10 +20,10 @@ export const getUser = async (
   res: IGetUserResponse,
   next: NextFunction
 ) => {
-  const { userId } = req.params;
-  let user;
-
   try {
+    const { userId } = req.params;
+    let user;
+
     Logger.update('Getting user');
 
     if (userId) {
@@ -53,10 +55,10 @@ export const updateUser = async (
   res: IUpdateUserResponse,
   next: NextFunction
 ) => {
-  const { userId } = req.params;
-  const updates = req.body;
-
   try {
+    const { userId } = req.params;
+    const updates = req.body;
+
     Logger.update('Updating user');
 
     validateObjectId(userId);
@@ -91,11 +93,11 @@ export const updateUserProfilePicture = async (
   res: IUpdateUserProfilePictureResponse,
   next: NextFunction
 ) => {
-  const userId = req.params.userId;
-  const { media: name } = req.body;
-  const file = req.file as Express.Multer.File;
-
   try {
+    const userId = req.params.userId;
+    const { media: name } = req.body;
+    const file = req.file as Express.Multer.File;
+
     Logger.update('Uploading profile picture to S3');
 
     const media = { name };
@@ -125,6 +127,35 @@ export const updateUserProfilePicture = async (
 
     return res.status(200).json(response);
   } catch (error) {
+    next(error);
+  }
+};
+
+export const appendUsers = async (
+  req: IAppendUserRequest,
+  res: IAppendUserResponse,
+  next: NextFunction
+) => {
+  try {
+    const body = req.body;
+
+    Logger.update('Appending users');
+
+    const appendedUsers = await Promise.all(
+      body.map(async (item) => {
+        const user = await User.findById(item.userId);
+        const formattedUser = await user?.formatResponse();
+
+        return { ...item, user: formattedUser };
+      })
+    );
+
+    Logger.success('Users appended');
+
+    const response = appendedUsers;
+
+    return res.status(200).json(response);
+  } catch (error: unknown) {
     next(error);
   }
 };
