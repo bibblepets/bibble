@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../store';
 import { Media, StatusType } from '../types';
-import { User } from './types';
+import { AccountType, User } from './types';
 
 const USER_API_URL = import.meta.env.VITE_USER_API_URL;
 
@@ -201,6 +201,7 @@ export const userSlice = createSlice({
 
 export const { resetStatus } = userSlice.actions;
 
+export const selectAccountType = (state: RootState) => 'user' as AccountType; // TODO
 export const selectCurrentUser = (state: RootState) => state.user.currentUser;
 export const selectIsAuthenticated = (state: RootState) =>
   !!state.user.currentUser;

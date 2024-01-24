@@ -1,15 +1,15 @@
-import ProfileAbout from './ProfileAbout';
-import ProfileListings from './ProfileListings';
 import { useSearchParams } from 'react-router-dom';
-import ProfileEdit from './ProfileEdit';
+import UserProfileAbout from './UserProfileAbout';
+import UserProfileEdit from './UserProfileEdit';
+import UserProfileListings from './UserProfileListings';
 
-const ProfilePanel = () => {
+const UserProfilePanel = () => {
   const [searchParams] = useSearchParams();
 
   if (searchParams.get('edit')) {
     return (
       <section className="flex-grow p-8">
-        <ProfileEdit />
+        <UserProfileEdit />
       </section>
     );
   }
@@ -17,12 +17,12 @@ const ProfilePanel = () => {
   return (
     <section className="flex-grow p-8">
       <div className="flex flex-col gap-8">
-        <ProfileAbout />
+        <UserProfileAbout />
         <hr />
-        <ProfileListings />
+        <UserProfileListings />
       </div>
     </section>
   );
 };
 
-export default ProfilePanel;
+export default UserProfilePanel;

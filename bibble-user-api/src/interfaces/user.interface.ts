@@ -31,6 +31,7 @@ export interface IUserResponse extends Omit<IUser, 'password'> {
   password?: string;
   profilePic?: IMediaResponse;
 }
+
 export interface IRegisterUserRequest extends TypedRequest<IUser> {}
 
 export interface IRegisterUserResponse extends TypedResponse<IUserResponse> {}
@@ -38,10 +39,6 @@ export interface IRegisterUserResponse extends TypedResponse<IUserResponse> {}
 export interface ILoginUserRequest extends TypedRequest<IUser> {}
 
 export interface ILoginUserResponse extends TypedResponse<IUserResponse> {}
-
-export interface ILogoutUserRequest extends TypedRequest {}
-
-export interface ILogoutUserResponse extends TypedResponse<string> {}
 
 export interface IGetUserRequest
   extends TypedRequest<object, { userId: string }> {}

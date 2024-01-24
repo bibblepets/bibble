@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../features/user/userSlice';
 import { useSearchParams } from 'react-router-dom';
+import { selectCurrentUser } from '../../../../features/user/userSlice';
 
-const ProfileAbout = () => {
+const UserProfileAbout = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -38,4 +38,4 @@ const ProfileAbout = () => {
   );
 };
 
-export default ProfileAbout;
+export default UserProfileAbout;

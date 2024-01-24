@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import ProfileEditSection from './ProfileEditSection';
-import { useProfileEdit } from './hooks';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BioEdit from './edit/BioEdit';
+import BioEdit from '../edit/BioEdit';
+import UserProfileEditSection from './UserProfileEditSection';
+import { useProfileEdit } from './hooks';
 
-const ProfileEdit = () => {
+const UserProfileEdit = () => {
   const navigate = useNavigate();
   const profile = useProfileEdit();
   const [editValue, setEditValue] = useState('');
@@ -16,7 +16,7 @@ const ProfileEdit = () => {
       <div className="flex flex-col gap-8">
         <h1 className="text-2xl font-semibold text-gray-800">Personal info</h1>
         {Object.entries(profile).map(([key, value]) => (
-          <ProfileEditSection
+          <UserProfileEditSection
             key={key}
             label={value.label}
             value={value.value}
@@ -61,4 +61,4 @@ const ProfileEdit = () => {
   );
 };
 
-export default ProfileEdit;
+export default UserProfileEdit;

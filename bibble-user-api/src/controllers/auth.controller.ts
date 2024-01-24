@@ -1,24 +1,36 @@
 import { NextFunction } from 'express';
 import { PasswordError } from '../errors/auth.error';
 import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
-import { IAuthRequest, IAuthResponse } from '../interfaces/auth.interface';
+import {
+  IAuthBusinessRequest,
+  IAuthBusinessResponse,
+  IAuthUserRequest,
+  IAuthUserResponse
+} from '../interfaces/auth.interface';
+import {
+  ILoginBusinessRequest,
+  ILoginBusinessResponse,
+  IRegisterBusinessRequest,
+  IRegisterBusinessResponse
+} from '../interfaces/business.interface';
 import {
   ILoginUserRequest,
   ILoginUserResponse,
   IRegisterUserRequest,
   IRegisterUserResponse
 } from '../interfaces/user.interface';
+import Business from '../models/business.model';
 import User from '../models/user.model';
 import { Logger } from '../services/logger';
 
-export const authenticate = async (
-  req: IAuthRequest,
-  res: IAuthResponse,
+export const authenticateUser = async (
+  req: IAuthUserRequest,
+  res: IAuthUserResponse,
   next: NextFunction
 ) => {
-  const { userId } = req.params;
-
   try {
+    const { userId } = req.params;
+
     Logger.update('Authenticating user');
 
     const user = await User.findById(userId);
@@ -42,10 +54,11 @@ export const registerUser = async (
   res: IRegisterUserResponse,
   next: NextFunction
 ) => {
-  const { firstName, lastName, email, password } = req.body;
   let createdUser;
 
   try {
+    const { firstName, lastName, email, password } = req.body;
+
     Logger.update('Creating user');
 
     const existingUser = await User.findOne({ email });
@@ -81,9 +94,9 @@ export const loginUser = async (
   res: ILoginUserResponse,
   next: NextFunction
 ) => {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
+
     Logger.update('Logging in user');
 
     const user = await User.findOne({ email });
@@ -99,6 +112,98 @@ export const loginUser = async (
     Logger.success('User logged in', user._id.toString());
 
     const response = await user.formatResponse();
+
+    return res.status(200).json(response);
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const authenticateBusiness = async (
+  req: IAuthBusinessRequest,
+  res: IAuthBusinessResponse,
+  next: NextFunction
+) => {
+  try {
+    const { businessId } = req.params;
+
+    Logger.update('Authenticating business');
+
+    const business = await Business.findById(businessId);
+
+    if (!business) {
+      throw new KeyNotFoundError('Business not found', 'id', businessId);
+    }
+
+    Logger.success('Business authenticated', business._id.toString());
+
+    const response = await business.formatResponse();
+
+    return res.status(200).json(response);
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const registerBusiness = async (
+  req: IRegisterBusinessRequest,
+  res: IRegisterBusinessResponse,
+  next: NextFunction
+) => {
+  let createdBusiness;
+
+  try {
+    const business = req.body;
+    const { email } = business;
+
+    Logger.update('Creating business');
+
+    const existingBusiness = await Business.findOne({ email });
+
+    if (existingBusiness) {
+      throw new UniqueKeyError('Business already exists', 'email', email);
+    }
+
+    createdBusiness = await Business.create(business);
+
+    Logger.success('Business created', createdBusiness._id.toString());
+
+    const response = await createdBusiness.formatResponse();
+
+    return res.status(201).json(response);
+  } catch (error: unknown) {
+    if (createdBusiness) {
+      await createdBusiness.deleteOne();
+      Logger.update('User deleted', createdBusiness._id.toString());
+    }
+
+    next(error);
+  }
+};
+
+export const loginBusiness = async (
+  req: ILoginBusinessRequest,
+  res: ILoginBusinessResponse,
+  next: NextFunction
+) => {
+  try {
+    const { email, password } = req.body;
+
+    Logger.update('Logging in business');
+
+    const business = await Business.findOne({ email });
+
+    if (!business) {
+      throw new KeyNotFoundError('Business not found', 'email', email);
+    }
+
+    if (!business.isCorrectPassword(password)) {
+      throw new PasswordError();
+    }
+
+    Logger.success('Business logged in', business._id.toString());
+
+    const response = await business.formatResponse();
 
     return res.status(200).json(response);
   } catch (error: unknown) {

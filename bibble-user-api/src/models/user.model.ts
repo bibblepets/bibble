@@ -13,7 +13,6 @@ import {
 import { emailError, validateEmail } from '../validators/email';
 import { nameError, validateName } from '../validators/name';
 import { passwordError, validatePassword } from '../validators/password';
-
 export interface IUserModel extends Model<IUser, object, IUserMethods> {}
 
 const UserSchema = new Schema<IUser, IUserModel, IUserMethods>(

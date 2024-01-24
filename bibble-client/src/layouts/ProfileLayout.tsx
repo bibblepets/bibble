@@ -9,9 +9,7 @@ const ProfileLayout: React.FC<ProfileLayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col items-center w-full">
       <Navbar />
-      <main className="flex flex-col lg:flex-row justify-center max-w-screen-xl w-full mt-4">
-        {children}
-      </main>
+      <main className="max-w-screen-xl w-full mt-4">{children}</main>
     </div>
   );
 };

@@ -1,14 +1,16 @@
 import React from 'react';
-import placeholderPup from '/images/placeholder-pup.png';
 import { useNavigate } from 'react-router-dom';
-import { Listing } from '../../../features/listing/types';
-import { toTitleCase } from '../../../utils/string';
+import { Listing } from '../../../../features/listing/types';
+import { toTitleCase } from '../../../../utils/string';
+import placeholderPup from '/images/placeholder-pup.png';
 
-interface ProfileListingCardProps {
+interface UserProfileListingCardProps {
   listing: Listing;
 }
 
-const ProfileListingCard: React.FC<ProfileListingCardProps> = ({ listing }) => {
+const UserProfileListingCard: React.FC<UserProfileListingCardProps> = ({
+  listing
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -40,4 +42,4 @@ const ProfileListingCard: React.FC<ProfileListingCardProps> = ({ listing }) => {
   );
 };
 
-export default ProfileListingCard;
+export default UserProfileListingCard;

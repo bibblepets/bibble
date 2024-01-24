@@ -4,12 +4,12 @@ import {
   selectUserPersonalContact,
   selectUserPersonalEmail,
   selectUserPersonalName
-} from '../../../features/user/userSlice';
-import NameEdit from './edit/NameEdit';
-import EmailEdit from './edit/EmailEdit';
-import PhoneEdit from './edit/PhoneEdit';
-import AddressEdit from './edit/AddressEdit';
-import { toAddressString, toMaskedEmail } from '../../../utils/string';
+} from '../../../../features/user/userSlice';
+import { toAddressString, toMaskedEmail } from '../../../../utils/string';
+import AddressEdit from '../edit/AddressEdit';
+import EmailEdit from '../edit/EmailEdit';
+import NameEdit from '../edit/NameEdit';
+import PhoneEdit from '../edit/PhoneEdit';
 
 export const useProfileEdit = () => {
   const name = useSelector(selectUserPersonalName);

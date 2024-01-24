@@ -1,21 +1,19 @@
-import React, { useEffect } from 'react';
-import ProfileLayout from '../../layouts/ProfileLayout';
-import UserPanel from '../../components/profile/user-panel/UserPanel';
-import ProfilePanel from '../../components/profile/profile-panel/ProfilePanel';
-import { store } from '../../store';
-import { fetchMyListings } from '../../features/listing/listingSlice';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router';
+import { selectAccountType } from '../../features/user/userSlice';
+import UserProfile from './UserProfile';
 
 const Profile = () => {
-  useEffect(() => {
-    store.dispatch(fetchMyListings());
-  }, [store]);
+  const accountType = useSelector(selectAccountType);
 
-  return (
-    <ProfileLayout>
-      <UserPanel />
-      <ProfilePanel />
-    </ProfileLayout>
-  );
+  switch (accountType) {
+    case 'user':
+      return <UserProfile />;
+    case 'business':
+      return <div>Business profile to implement</div>;
+    default:
+      return <Navigate to="/" replace={true} />;
+  }
 };
 
 export default Profile;

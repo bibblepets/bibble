@@ -8,7 +8,7 @@ const router = Router();
  * @desc Authenticate a user
  * @access Public
  */
-router.get('/:userId', AuthController.authenticate);
+router.get('/:userId', AuthController.authenticateUser);
 
 /**
  * @route POST /auth/register

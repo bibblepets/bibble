@@ -4,7 +4,7 @@ export interface EditComponentProps {
   setEditValue: (value: string) => void;
 }
 
-interface ProfileEditSectionProps {
+interface UserProfileEditSectionProps {
   label: string;
   value?: string | boolean;
   editValue: string;
@@ -13,7 +13,7 @@ interface ProfileEditSectionProps {
   editComponent: React.FC<EditComponentProps>;
 }
 
-const ProfileEditSection: React.FC<ProfileEditSectionProps> = ({
+const UserProfileEditSection: React.FC<UserProfileEditSectionProps> = ({
   label,
   value,
   editValue,
@@ -68,4 +68,4 @@ const ProfileEditSection: React.FC<ProfileEditSectionProps> = ({
   );
 };
 
-export default ProfileEditSection;
+export default UserProfileEditSection;

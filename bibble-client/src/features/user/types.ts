@@ -1,5 +1,7 @@
 import { Address, Media } from '../types';
 
+export type AccountType = 'user' | 'business' | undefined;
+
 export type User = {
   _id?: string;
   email: string;

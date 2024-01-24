@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../features/user/userSlice';
-import { selectMyListings } from '../../../features/listing/listingSlice';
-import ProfileListingCard from './ProfileListingCard';
+import { selectMyListings } from '../../../../features/listing/listingSlice';
+import { selectCurrentUser } from '../../../../features/user/userSlice';
+import UserProfileListingCard from './UserProfileListingCard';
 
-const ProfileListings = () => {
+const UserProfileListings = () => {
   const currentUser = useSelector(selectCurrentUser);
   const myListings = useSelector(selectMyListings);
   const [isShowingAll, setIsShowingAll] = useState(false);
@@ -17,7 +17,7 @@ const ProfileListings = () => {
       </h2>
       <div className="grid grid-cols-2 gap-4">
         {shownListings.map((listing, index) => (
-          <ProfileListingCard key={index} listing={listing} />
+          <UserProfileListingCard key={index} listing={listing} />
         ))}
       </div>
       <div>
@@ -34,4 +34,4 @@ const ProfileListings = () => {
   );
 };
 
-export default ProfileListings;
+export default UserProfileListings;

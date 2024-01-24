@@ -3,22 +3,22 @@ import Details from '../modules/kennel/Details';
 import Featured from '../modules/kennel/Featured';
 import Kennel from '../modules/kennel/Kennel';
 import Rescue from '../modules/kennel/Rescue';
+import Listing from '../modules/listing/Listing';
 import Biography from '../modules/listing/listingCreator/Biography';
 import Biology from '../modules/listing/listingCreator/Biology';
 import Legal from '../modules/listing/listingCreator/Legal';
-import Listing from '../modules/listing/Listing';
 import Media from '../modules/listing/listingCreator/Media';
 import Medical from '../modules/listing/listingCreator/Medical';
 import Price from '../modules/listing/listingCreator/Price';
 import Summary from '../modules/listing/listingCreator/Summary';
+import ListingEditor from '../modules/listing/listingEditor/ListingEditor';
+import Profile from '../modules/profile/Profile';
 import {
   kennelLoader,
   listingCreatorLoader,
-  listingLoader,
-  listingEditorLoader
+  listingEditorLoader,
+  listingLoader
 } from './loaders';
-import ListingEditor from '../modules/listing/listingEditor/ListingEditor';
-import Profile from '../modules/profile/Profile';
 
 export const router = createBrowserRouter([
   {

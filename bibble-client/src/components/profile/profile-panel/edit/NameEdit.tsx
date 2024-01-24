@@ -5,9 +5,9 @@ import {
   selectUserIsLoading,
   updateUser
 } from '../../../../features/user/userSlice';
-import SaveButton from './SaveButton';
 import { store } from '../../../../store';
-import { EditComponentProps } from '../ProfileEditSection';
+import { EditComponentProps } from '../user/UserProfileEditSection';
+import SaveButton from './SaveButton';
 
 const NameEdit: React.FC<EditComponentProps> = ({ setEditValue }) => {
   const isLoading = useSelector(selectUserIsLoading);
