@@ -1,6 +1,6 @@
-import logo from '/images/logo.png';
-import logoIcon from '/images/logo-icon.png';
 import React from 'react';
+import logoIcon from '/images/logo-icon.png';
+import logo from '/images/logo.png';
 
 interface LogoProps {
   small?: boolean;

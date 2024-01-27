@@ -1,4 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
+import BusinessDashbaord from '../modules/business/BusinessDashbaord';
+import BusinessRegister from '../modules/business/BusinessRegister';
 import Details from '../modules/kennel/Details';
 import Featured from '../modules/kennel/Featured';
 import Kennel from '../modules/kennel/Kennel';
@@ -93,6 +95,19 @@ export const router = createBrowserRouter([
       {
         path: 'profile',
         element: <Profile />
+      }
+    ]
+  },
+  {
+    path: 'business',
+    children: [
+      {
+        index: true,
+        element: <BusinessDashbaord />
+      },
+      {
+        path: 'register',
+        element: <BusinessRegister />
       }
     ]
   }

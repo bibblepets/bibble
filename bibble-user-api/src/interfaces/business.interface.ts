@@ -11,8 +11,6 @@ export interface IBusiness {
   password: string;
   contactNumber: string;
   address: IAddress;
-  opensAt: Date;
-  closesAt: Date;
   media: IMedia[];
   description: string;
   instagramLink?: string;

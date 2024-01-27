@@ -68,14 +68,6 @@ const BusinessSchema = new Schema<IBusiness, IBusinessModel, IBusinessMethods>(
       },
       required: [true, 'Address is required']
     },
-    opensAt: {
-      type: Date,
-      required: [true, 'Opening time is required']
-    },
-    closesAt: {
-      type: Date,
-      required: [true, 'Closing time is required']
-    },
     media: [
       {
         name: {
