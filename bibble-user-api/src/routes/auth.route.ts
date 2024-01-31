@@ -24,4 +24,25 @@ router.post('/register', AuthController.registerUser);
  */
 router.post('/login', AuthController.loginUser);
 
+/**
+ * @route GET /auth/business/:businessId
+ * @desc Authenticate a business
+ * @access Public
+ */
+router.get('/business/:businessId', AuthController.authenticateBusiness);
+
+/**
+ * @route POST /auth/business/register
+ * @desc Register a new business
+ * @access Public
+ */
+router.post('/business/register', AuthController.registerBusiness);
+
+/**
+ * @route POST /auth/business/login
+ * @desc Login an existing business
+ * @access Public
+ */
+router.post('/business/login', AuthController.loginBusiness);
+
 export default router;

@@ -71,6 +71,7 @@ export const updateListingMediaById = createAsyncThunk(
     media.forEach((media) => {
       media.file && formData.append('data', media.file);
     });
+
     return await axios
       .put(`/api/kennel/listing/media/${_id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }

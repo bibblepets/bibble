@@ -1,3 +1,4 @@
+import { ParamsDictionary } from 'express-serve-static-core';
 import { Schema } from 'mongoose';
 import { IAddress } from './address.interface';
 import { IMedia, IMediaResponse } from './media.interface';
@@ -32,6 +33,9 @@ export interface IBusinessMethods {
   formatResponse(): Promise<IBusinessResponse>;
 }
 
+export interface IBusinessRequest<T, P = ParamsDictionary>
+  extends TypedRequest<T, P & { businessId: string }> {}
+
 export interface IBusinessResponse
   extends Omit<IBusiness, 'password' | 'media'> {
   password?: string;
@@ -47,4 +51,22 @@ export interface ILoginBusinessRequest
   extends TypedRequest<Pick<IBusiness, 'email' | 'password'>> {}
 
 export interface ILoginBusinessResponse
+  extends TypedResponse<IBusinessResponse> {}
+
+export interface IGetBusinessRequest
+  extends TypedRequest<object, { businessId: string }> {}
+
+export interface IGetBusinessResponse
+  extends TypedResponse<IBusinessResponse> {}
+
+export interface IUpdateBusinessRequest
+  extends IBusinessRequest<Partial<IBusiness>> {}
+
+export interface IUpdateBusinessResponse
+  extends TypedResponse<IBusinessResponse> {}
+
+export interface IUpdateBusinessMediaRequest
+  extends IBusinessRequest<{ media: string[] }> {}
+
+export interface IUpdateBusinessMediaResponse
   extends TypedResponse<IBusinessResponse> {}

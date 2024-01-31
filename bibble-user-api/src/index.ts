@@ -3,6 +3,7 @@ import express, { Express } from 'express';
 import Config from './config';
 import { errorHandler } from './middleware/error.middleware';
 import authRouter from './routes/auth.route';
+import businessRouter from './routes/business.route';
 import userRouter from './routes/user.route';
 import { Logger } from './services/logger';
 
@@ -19,6 +20,7 @@ app.use(cookieParser());
 // Routes
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
+app.use('/business', businessRouter);
 
 // Error handling
 app.use(errorHandler);

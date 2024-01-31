@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   selectCurrentUser,
@@ -6,8 +6,8 @@ import {
   selectUserIsLoading,
   updateUser
 } from '../../../../features/user/userSlice';
-import SaveButton from './SaveButton';
 import { store } from '../../../../store';
+import SaveButton from './SaveButton';
 
 interface BioEditProps {
   editValue: string;

@@ -1,26 +1,24 @@
-import {
-  Bars3Icon,
-  BellIcon,
-  BuildingStorefrontIcon
-} from '@heroicons/react/24/outline';
+import { Bars3Icon, BellIcon, HomeIcon } from '@heroicons/react/24/outline';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { openLoginModal, openRegisterModal } from '../../features/modalsSlice';
-import { logoutUser, selectCurrentUser } from '../../features/user/userSlice';
-import { store } from '../../store';
+import {
+  logoutBusiness,
+  selectCurrentBusiness
+} from '../../../features/business/businessSlice';
+import { store } from '../../../store';
 import paw from '/images/paw.jpeg';
 
-interface UserMenuProps {
+interface BusinessMenuProps {
   tabs: { name: string; path: string }[];
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
+const BusinessMenu: React.FC<BusinessMenuProps> = ({ tabs }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const currentUser = useSelector(selectCurrentUser);
+  const currentBusiness = useSelector(selectCurrentBusiness);
 
   const logout = useCallback(() => {
-    store.dispatch(logoutUser());
+    store.dispatch(logoutBusiness());
     setIsOpen(false);
   }, []);
 
@@ -40,7 +38,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
     };
   }, [isOpen, setIsOpen]);
 
-  if (!currentUser) {
+  if (!currentBusiness) {
     return (
       <div className="relative">
         <div className="flex justify-end w-64">
@@ -73,22 +71,20 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
                 </a>
               ))}
 
-              <hr className="m-4" />
-
-              <button
-                onClick={() => store.dispatch(openLoginModal())}
-                className="block px-4 py-3 w-full text-sm text-left transition leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                role="menuitem"
-              >
-                Login
-              </button>
-              <button
-                onClick={() => store.dispatch(openRegisterModal())}
+              <a
+                href={'/business/register'}
                 className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
                 Register
-              </button>
+              </a>
+              <a
+                href={'/business/login'}
+                className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                role="menuitem"
+              >
+                Login
+              </a>
             </div>
           </div>
         )}
@@ -100,16 +96,16 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
     <div className="relative">
       <div className="flex flex-row justify-end items-center gap-4 w-64">
         <a
-          href="/listing"
+          href="/business"
           className="hidden lg:block border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300 text-sm px-4 py-2 text-neutral-500"
         >
           <div className="flex flex-row gap-2">
-            <BuildingStorefrontIcon className="h-5 w-5" />
-            <p>Listing</p>
+            <HomeIcon className="h-5 w-5" />
+            <p>Dashboard</p>
           </div>
         </a>
         <a
-          href="/messages"
+          href="/business/messages"
           className="hidden lg:block border rounded-full shadow-md hover:scale-95 active:scale-95 transition duration-300"
         >
           <BellIcon className="h-5 w-5 m-2" aria-hidden="true" />
@@ -120,7 +116,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
         >
           <img
             className="object-cover h-8 w-8 rounded-full"
-            src={currentUser.profilePic?.url || paw}
+            src={currentBusiness.media[0]?.url || paw}
           />
         </button>
       </div>
@@ -147,21 +143,21 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
             ))}
             {tabs && tabs.length > 0 && <hr className="mx-4" />}
             <a
-              href={'/listing'}
+              href={'/business/listing'}
               className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
               Listings
             </a>
             <a
-              href={'/messages'}
+              href={'/business/messages'}
               className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
               Messages
             </a>
             <a
-              href={'/profile'}
+              href={'/business/profile'}
               className="block px-4 py-3 w-full text-sm text-left leading-5 transition text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
@@ -182,4 +178,4 @@ const UserMenu: React.FC<UserMenuProps> = ({ tabs }) => {
   );
 };
 
-export default UserMenu;
+export default BusinessMenu;

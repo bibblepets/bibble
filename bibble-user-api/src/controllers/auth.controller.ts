@@ -154,6 +154,7 @@ export const registerBusiness = async (
 
   try {
     const business = req.body;
+    console.log(req.body);
     const { email } = business;
 
     Logger.update('Creating business');

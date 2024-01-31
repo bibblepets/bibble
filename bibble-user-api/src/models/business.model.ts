@@ -7,9 +7,25 @@ import {
 } from '../interfaces/business.interface';
 import * as s3 from '../services/s3';
 import {
+  cityError,
+  countryError,
+  postcodeError,
+  streetAddressError,
+  unitError,
+  validateCity,
+  validateCountry,
+  validatePostcode,
+  validateStreetAddress,
+  validateUnit
+} from '../validators/address';
+import {
   contactNumberError,
   validateContactNumber
 } from '../validators/contactNumber';
+import {
+  descriptionError,
+  validateDescription
+} from '../validators/description';
 import { emailError, validateEmail } from '../validators/email';
 import { nameError, validateName } from '../validators/name';
 import { passwordError, validatePassword } from '../validators/password';
@@ -47,23 +63,28 @@ const BusinessSchema = new Schema<IBusiness, IBusinessModel, IBusinessMethods>(
       type: {
         country: {
           type: String,
-          trim: true
+          trim: true,
+          validate: [validateCountry, countryError]
         },
         streetAddress: {
           type: String,
-          trim: true
+          trim: true,
+          validate: [validateStreetAddress, streetAddressError]
         },
         unit: {
           type: String,
-          trim: true
+          trim: true,
+          validate: [validateUnit, unitError]
         },
         city: {
           type: String,
-          trim: true
+          trim: true,
+          validate: [validateCity, cityError]
         },
         postcode: {
           type: String,
-          trim: true
+          trim: true,
+          validate: [validatePostcode, postcodeError]
         }
       },
       required: [true, 'Address is required']
@@ -77,7 +98,8 @@ const BusinessSchema = new Schema<IBusiness, IBusinessModel, IBusinessMethods>(
     ],
     description: {
       type: String,
-      trim: true
+      trim: true,
+      validate: [validateDescription, descriptionError]
     },
     instagramLink: {
       type: String,

@@ -1,5 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import BusinessDashbaord from '../modules/business/BusinessDashbaord';
+import BusinessLogin from '../modules/business/BusinessLogin';
+import BusinessProfile from '../modules/business/BusinessProfile';
 import BusinessRegister from '../modules/business/BusinessRegister';
 import Details from '../modules/kennel/Details';
 import Featured from '../modules/kennel/Featured';
@@ -14,8 +16,9 @@ import Medical from '../modules/listing/listingCreator/Medical';
 import Price from '../modules/listing/listingCreator/Price';
 import Summary from '../modules/listing/listingCreator/Summary';
 import ListingEditor from '../modules/listing/listingEditor/ListingEditor';
-import Profile from '../modules/profile/Profile';
+import UserProfile from '../modules/profile/UserProfile';
 import {
+  businessLoader,
   kennelLoader,
   listingCreatorLoader,
   listingEditorLoader,
@@ -94,12 +97,13 @@ export const router = createBrowserRouter([
       },
       {
         path: 'profile',
-        element: <Profile />
+        element: <UserProfile />
       }
     ]
   },
   {
     path: 'business',
+    loader: businessLoader,
     children: [
       {
         index: true,
@@ -108,6 +112,14 @@ export const router = createBrowserRouter([
       {
         path: 'register',
         element: <BusinessRegister />
+      },
+      {
+        path: 'login',
+        element: <BusinessLogin />
+      },
+      {
+        path: 'profile',
+        element: <BusinessProfile />
       }
     ]
   }

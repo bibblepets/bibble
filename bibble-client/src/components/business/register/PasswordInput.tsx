@@ -4,8 +4,8 @@ import { InputProps } from '../../../modules/business/BusinessRegister';
 import Input from './Input';
 
 type PasswordInputProps = InputProps & {
-  confirmPassword: string;
-  setConfirmPassword: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  confirmPassword?: string;
+  setConfirmPassword?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const PasswordInput: React.FC<PasswordInputProps> = ({
@@ -31,13 +31,15 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
           value={value}
           onChange={onChange}
         />
-        <input
-          className={`text-sm w-full p-2 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline`}
-          type={showPassword ? 'text' : 'password'}
-          placeholder="Confirm password"
-          value={confirmPassword}
-          onChange={setConfirmPassword}
-        />
+        {confirmPassword !== undefined && setConfirmPassword && (
+          <input
+            className={`text-sm w-full p-2 text-gray-700 border rounded-lg focus:outline-none focus:shadow-outline`}
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+          />
+        )}
         <button onClick={toggleShowPassword} className="text-gray-500">
           {showPassword ? (
             <EyeSlashIcon className="h-5 w-5" />

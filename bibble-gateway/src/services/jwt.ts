@@ -1,7 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { Schema } from 'mongoose';
 import { GatewayError } from '../errors/gateway.error';
-import { IAuthorizedRequest } from '../interfaces/auth.interface';
+import {
+  IBusinessAuthorizedRequest,
+  IUserAuthorizedRequest
+} from '../interfaces/auth.interface';
 import { TypedResponse } from '../interfaces/response.interface';
 
 const COOKIE_OPTIONS = {
@@ -11,7 +14,7 @@ const COOKIE_OPTIONS = {
 };
 
 export function signAuthToken(
-  req: IAuthorizedRequest,
+  req: IUserAuthorizedRequest,
   res: TypedResponse,
   id: Schema.Types.ObjectId
 ) {
@@ -28,7 +31,10 @@ export function signAuthToken(
   res.cookie('authToken', token, COOKIE_OPTIONS);
 }
 
-export function verifyAuthToken(req: IAuthorizedRequest, authToken: string) {
+export function verifyAuthToken(
+  req: IUserAuthorizedRequest,
+  authToken: string
+) {
   const { SECRET_JWT_CODE } = req.app.locals;
 
   if (!SECRET_JWT_CODE) {
@@ -46,4 +52,45 @@ export function verifyAuthToken(req: IAuthorizedRequest, authToken: string) {
 
 export function deleteAuthToken(res: TypedResponse) {
   res.clearCookie('authToken', COOKIE_OPTIONS);
+}
+
+export function signBusinessAuthToken(
+  req: IBusinessAuthorizedRequest,
+  res: TypedResponse,
+  id: Schema.Types.ObjectId
+) {
+  const { SECRET_JWT_CODE } = req.app.locals;
+
+  if (!SECRET_JWT_CODE) {
+    throw new GatewayError('SECRET_JWT_CODE not found');
+  }
+
+  const { email } = req.body;
+  const token = jwt.sign({ id, email }, SECRET_JWT_CODE);
+
+  req.params.businessId = id.toString();
+  res.cookie('businessAuthToken', token, COOKIE_OPTIONS);
+}
+
+export function verifyBusinessAuthToken(
+  req: IBusinessAuthorizedRequest,
+  businessAuthToken: string
+) {
+  const { SECRET_JWT_CODE } = req.app.locals;
+
+  if (!SECRET_JWT_CODE) {
+    throw new GatewayError('SECRET_JWT_CODE not found');
+  }
+
+  const decodedToken = jwt.verify(businessAuthToken, SECRET_JWT_CODE);
+
+  if (typeof decodedToken === 'string') {
+    throw new GatewayError('Decoded JWT became a string');
+  }
+
+  return decodedToken;
+}
+
+export function deleteBusinessAuthToken(res: TypedResponse) {
+  res.clearCookie('businessAuthToken', COOKIE_OPTIONS);
 }

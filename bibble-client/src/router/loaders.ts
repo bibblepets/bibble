@@ -1,9 +1,8 @@
-import { authenticate } from '../features/user/userSlice';
+import { LoaderFunction } from 'react-router-dom';
+import { authenticateBusiness } from '../features/business/businessSlice';
 import { fetchListings } from '../features/listing/kennelSlice';
-import {
-  generateLoginModalTitle,
-  generateRegisterModalTitle
-} from '../features/modalsSlice';
+import { fetchListingCreatorById } from '../features/listing/listingCreatorSlice';
+import { fetchListingById } from '../features/listing/listingEditorSlice';
 import {
   fetchAllBreeds,
   fetchAllCountries,
@@ -12,10 +11,12 @@ import {
   fetchAllSpecies,
   fetchAllVaccines
 } from '../features/listing/listingOptionsSlice';
+import {
+  generateLoginModalTitle,
+  generateRegisterModalTitle
+} from '../features/modalsSlice';
+import { authenticate } from '../features/user/userSlice';
 import { store } from '../store';
-import { fetchListingCreatorById } from '../features/listing/listingCreatorSlice';
-import { LoaderFunction } from 'react-router-dom';
-import { fetchListingById } from '../features/listing/listingEditorSlice';
 
 export const kennelLoader: LoaderFunction = async () => {
   await store.dispatch(authenticate());
@@ -50,5 +51,10 @@ export const listingEditorLoader: LoaderFunction = async ({ params }) => {
 
 export const profileLoader: LoaderFunction = async () => {
   await store.dispatch(authenticate());
+  return null;
+};
+
+export const businessLoader: LoaderFunction = async () => {
+  await store.dispatch(authenticateBusiness());
   return null;
 };

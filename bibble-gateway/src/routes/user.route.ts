@@ -91,4 +91,92 @@ router.put(
   GatewayService.returnResponse()
 );
 
+/**
+ * @route PUT /user/business/auth
+ * @desc Authenticate business
+ * @access Private
+ */
+router.get(
+  '/business/auth',
+  AuthMiddleware.businessAuthHandler,
+  GatewayService.forwardRequest('get', 'user', '/auth/business/:businessId'),
+  GatewayService.returnResponse()
+);
+
+/**
+ * @route GET /user/business/register
+ * @desc Authenticate business
+ * @access Private
+ */
+router.post(
+  '/business/register',
+  GatewayService.forwardRequest('post', 'user', '/auth/business/register'),
+  AuthMiddleware.setBusinessAuthTokenHandler,
+  GatewayService.returnResponse(201)
+);
+
+/**
+ * @route POST /user/business/login
+ * @desc Login an existing business
+ * @access Public
+ */
+router.post(
+  '/business/login',
+  GatewayService.forwardRequest('post', 'user', '/auth/business/login'),
+  AuthMiddleware.setBusinessAuthTokenHandler,
+  GatewayService.returnResponse()
+);
+
+/**
+ * @route POST /user/business/logout
+ * @desc Logout an existing business
+ * @access Public
+ */
+router.post(
+  '/business/logout',
+  AuthMiddleware.deleteBusinessAuthTokenHandler,
+  GatewayService.returnResponse()
+);
+
+/**
+ * @route GET /user/business
+ * @desc Get business profile
+ * @access Private
+ */
+router.get(
+  '/business',
+  AuthMiddleware.businessAuthHandler,
+  GatewayService.forwardRequest('get', 'user', '/business/:businessId'),
+  GatewayService.returnResponse()
+);
+
+/**
+ * @route PUT /user/business
+ * @desc Update business profile
+ * @access Private
+ */
+router.put(
+  '/business',
+  AuthMiddleware.businessAuthHandler,
+  GatewayService.forwardRequest('put', 'user', '/business/:businessId'),
+  GatewayService.returnResponse()
+);
+
+/**
+ * @route PUT /user/business/media
+ * @desc Update business media
+ * @access Private
+ */
+router.put(
+  '/business/media',
+  upload.array('data'),
+  AuthMiddleware.businessAuthHandler,
+  GatewayService.forwardFileRequest(
+    'user',
+    '/business/media/:businessId',
+    true
+  ),
+  GatewayService.returnResponse()
+);
+
 export default router;

@@ -8,9 +8,10 @@ const GOOGLE_MAPS_API_KEY = 'AIzaSyB7fMl7N6wsGHbbw5duRQUMPzY3lwGYRHE';
 
 interface MapCardProps {
   location?: string;
+  height?: number;
 }
 
-const MapCard: React.FC<MapCardProps> = ({ location }) => {
+const MapCard: React.FC<MapCardProps> = ({ location, height }) => {
   const [data, setData] = useState<{
     address: string;
     coordinates: { lat: number; lng: number };
@@ -53,17 +54,21 @@ const MapCard: React.FC<MapCardProps> = ({ location }) => {
   const center = useMemo(() => data?.coordinates, [data?.coordinates]);
 
   return data && isLoaded ? (
-    <div className="h-96 w-full bg-neutral-200 shadow-xl rounded-2xl">
+    <div
+      className={`${
+        height ? `h-[${height}px]` : 'h-96'
+      } w-full bg-neutral-200 shadow-xl rounded-2xl`}
+    >
       {/* Header */}
       <div className="flex flex-rows m-4 justify-between items-center">
-        <MapPinIcon className="w-4 h-4fill-neutral-500" />
+        <MapPinIcon className="w-4 h-4 fill-neutral-500" />
         <p className="text-neutral-500">
           {data ? data.address : 'NO ADDRESS FOUND'}
         </p>
       </div>
 
       {/* Map */}
-      <div className="h-3/4 content-center">
+      <div className="h-full content-center pb-28">
         <GoogleMap
           mapContainerClassName="w-full h-full"
           center={center}

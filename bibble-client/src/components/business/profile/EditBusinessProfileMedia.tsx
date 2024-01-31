@@ -1,25 +1,17 @@
-import {
-  CheckIcon,
-  PhotoIcon,
-  PlusIcon,
-  TrashIcon
-} from '@heroicons/react/24/outline';
+import { CheckIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useCallback, useState } from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
 import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
-import {
-  addMedia,
-  removeMedia,
-  selectListingEditorMedia
-} from '../../../../features/listing/listingEditorSlice';
-import { Media } from '../../../../features/types';
-import { store } from '../../../../store';
+import { selectCurrentBusiness } from '../../../features/business/businessSlice';
+import { Media } from '../../../features/types';
+import { store } from '../../../store';
 
-const MediaUpload = () => {
-  const media = useSelector(selectListingEditorMedia) || [];
+const EditBusinessProfileMedia = () => {
+  const currentBusiness = useSelector(selectCurrentBusiness);
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<Media[]>([]);
+  const [media, setMedia] = useState<Media[]>(currentBusiness?.media || []);
 
   const isSelected = (medium: Media) =>
     selectedMedia.map((m) => m.url).includes(medium?.url);
@@ -27,21 +19,20 @@ const MediaUpload = () => {
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       if (acceptedFiles?.length) {
-        store.dispatch(
-          addMedia(
-            acceptedFiles.map(
-              (file: File) =>
-                ({ file, url: URL.createObjectURL(file) }) as Media
-            )
+        // store.dispatch();
+        setMedia([
+          ...media,
+          ...acceptedFiles.map(
+            (file: File) => ({ file, url: URL.createObjectURL(file) }) as Media
           )
-        );
+        ]);
       }
 
       if (fileRejections?.length) {
         toast.error(fileRejections[0]?.errors[0]?.message.replace(/\/\*$/, ''));
       }
     },
-    [store]
+    [store, media]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -52,7 +43,8 @@ const MediaUpload = () => {
   });
 
   const onRemove = useCallback(() => {
-    store.dispatch(removeMedia(selectedMedia));
+    // store.dispatch(removeMedia(selectedMedia));
+    setMedia(media.filter((m) => !isSelected(m)));
   }, [store, selectedMedia]);
 
   const onManage = useCallback(() => {
@@ -60,6 +52,7 @@ const MediaUpload = () => {
       setSelectedMedia([]);
     }
 
+    setSelectedMedia([]);
     setIsSelecting(!isSelecting);
   }, [isSelecting]);
 
@@ -75,24 +68,22 @@ const MediaUpload = () => {
   );
 
   return (
-    <div className="flex flex-col items-center gap-8 h-full">
-      {media?.length === 0 ? (
-        <div className="flex flex-col items-center gap-4">
-          <PhotoIcon className="w-12 h-12 text-gray-500" />
-          <div className="flex flex-col items-center gap-1">
-            <a className="font-medium">No media</a>
-            <p className="text-sm font-light text-gray-500">
-              Get started by adding a photo or video.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
-          {media?.map((medium, index) => (
+    <div className="flex flex-col gap-8">
+      <div
+        {...getRootProps({
+          className:
+            'flex flex-col items-center w-full rounded-lg border-[2px] border-dashed p-3 transition hover:border-gray-300 cursor-pointer'
+        })}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {media.map((medium, index) => (
             <div
               key={index}
-              onClick={() => onSelect(medium)}
-              className={`relative aspect-square cursor-pointer transition hover:scale-105 rounded-lg transition ${
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect(medium);
+              }}
+              className={`relative aspect-[4/3] cursor-pointer transition hover:scale-105 rounded-lg transition ${
                 isSelecting && 'border border-gray-200'
               } ${
                 isSelecting &&
@@ -115,12 +106,17 @@ const MediaUpload = () => {
             </div>
           ))}
         </div>
-      )}
+        <br />
+        <p className="text-sm text-gray-500">
+          Drop files to upload or <b>browse</b> to choose files
+        </p>
+        <input {...getInputProps()} />
+      </div>
       <div className="flex flex-row gap-4">
         {/* MANAGE BUTTON */}
         <button
           onClick={onManage}
-          className={`flex justify-center items-center px-4 bg-gray-200 rounded-full transition hover:scale-95 hover:opacity-80 ${
+          className={`flex justify-center items-center h-[38px] px-4 bg-gray-200 rounded-full transition hover:scale-95 hover:opacity-80 ${
             isSelecting && 'scale-95 opacity-80 text-gray-500'
           }`}
         >
@@ -136,20 +132,9 @@ const MediaUpload = () => {
             <TrashIcon className="w-4 h-4" />
           </button>
         )}
-
-        {/* UPLOAD BUTTON */}
-        <div
-          {...getRootProps({
-            className:
-              'flex flex-row gap-2 items-center rounded-full bg-sky-500 p-3 text-white transition hover:scale-95 hover:opacity-80 cursor-pointer'
-          })}
-        >
-          <input {...getInputProps()} />
-          <PlusIcon className="w-4 h-4" strokeWidth={3} />
-        </div>
       </div>
     </div>
   );
 };
 
-export default MediaUpload;
+export default EditBusinessProfileMedia;
