@@ -76,6 +76,20 @@ export const logoutBusiness = createAsyncThunk(
   }
 );
 
+export const updateBusiness = createAsyncThunk(
+  '/businessSlice/updateBusiness',
+  async (updates: Partial<Business>) => {
+    return await axios
+      .put(`/api/user/business`, updates)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        throw new Error(error.response.data.message);
+      });
+  }
+);
+
 export const updateBusinessMedia = createAsyncThunk(
   '/businessSlice/updateBusinessMedia',
   async (media: Media[]) => {
@@ -150,6 +164,30 @@ export const businessSlice = createSlice({
       state.currentBusiness = undefined;
     });
     builder.addCase(logoutBusiness.rejected, (state, action) => {
+      state.status = 'ERROR';
+      state.error = action.error.message;
+    });
+    builder.addCase(updateBusiness.pending, (state) => {
+      state.status = 'LOADING';
+      state.error = undefined;
+    });
+    builder.addCase(updateBusiness.fulfilled, (state, action) => {
+      state.status = 'SUCCESS';
+      state.currentBusiness = action.payload;
+    });
+    builder.addCase(updateBusiness.rejected, (state, action) => {
+      state.status = 'ERROR';
+      state.error = action.error.message;
+    });
+    builder.addCase(updateBusinessMedia.pending, (state) => {
+      state.status = 'LOADING';
+      state.error = undefined;
+    });
+    builder.addCase(updateBusinessMedia.fulfilled, (state, action) => {
+      state.status = 'SUCCESS';
+      state.currentBusiness = action.payload;
+    });
+    builder.addCase(updateBusinessMedia.rejected, (state, action) => {
       state.status = 'ERROR';
       state.error = action.error.message;
     });

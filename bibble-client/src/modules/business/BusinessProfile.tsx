@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import BusinessProfileContactInfo from '../../components/business/profile/BusinessProfileContactInfo';
 import BusinessProfileDescription from '../../components/business/profile/BusinessProfileDescription';
 import BusinessProfileHeader from '../../components/business/profile/BusinessProfileHeader';
@@ -11,37 +12,43 @@ import EditBusinessProfileMedia from '../../components/business/profile/EditBusi
 import BusinessLayout from '../../layouts/BusinessLayout';
 
 const BusinessProfile = () => {
+  const [isEditingContactInfo, setIsEditingContactInfo] = useState(false);
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [isEditingLocation, setIsEditingLocation] = useState(false);
+  const [isEditingMedia, setIsEditingMedia] = useState(false);
   return (
     <BusinessLayout small>
       <div className="flex flex-col items-center justify-center h-full gap-8">
-        <BusinessProfileSection>
-          <BusinessProfileHeader />
-        </BusinessProfileSection>
         <BusinessProfileSection
-          title="Contact Information"
+          isEditing={false}
+          setIsEditing={() => {}}
+          component={BusinessProfileHeader}
+        />
+        <BusinessProfileSection
+          isEditing={isEditingContactInfo}
+          setIsEditing={setIsEditingContactInfo}
+          component={BusinessProfileContactInfo}
           editComponent={EditBusinessProfileContactInfo}
-        >
-          <BusinessProfileContactInfo />
-        </BusinessProfileSection>
+        />
         <BusinessProfileSection
-          title="About"
+          isEditing={isEditingDescription}
+          setIsEditing={setIsEditingDescription}
+          component={BusinessProfileDescription}
           editComponent={EditBusinessProfileDescription}
-        >
-          <BusinessProfileDescription />
-        </BusinessProfileSection>
+        />
         <BusinessProfileSection
-          title="Location"
+          isEditing={isEditingLocation}
+          setIsEditing={setIsEditingLocation}
+          component={BusinessProfileLocation}
           editComponent={EditBusinessProfileLocation}
-        >
-          <BusinessProfileLocation />
-        </BusinessProfileSection>
+        />
         <BusinessProfileSection
-          title="Media"
+          isEditing={isEditingMedia}
+          setIsEditing={setIsEditingMedia}
+          component={BusinessProfileMedia}
           editComponent={EditBusinessProfileMedia}
-        >
-          <BusinessProfileMedia />
-        </BusinessProfileSection>
-        <h1 className="text-4xl font-bold">Listings</h1>
+        />
+        :<h1 className="text-4xl font-bold">Listings</h1>
         <h1 className="text-4xl font-bold">Reviews</h1>
         <h1 className="text-4xl font-bold">Links</h1>
       </div>

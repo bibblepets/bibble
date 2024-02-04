@@ -1,5 +1,5 @@
 import { NextFunction } from 'express';
-import { KeyNotFoundError, UniqueKeyError } from '../errors/key.error';
+import { KeyNotFoundError } from '../errors/key.error';
 import {
   IGetBusinessRequest,
   IGetBusinessResponse,
@@ -61,16 +61,6 @@ export const updateBusiness = async (
     Logger.update('Updating business');
 
     validateObjectId(businessId);
-
-    const existingBusiness = await Business.findById({ email: updates.email });
-
-    if (existingBusiness) {
-      throw new UniqueKeyError(
-        'Business already exists',
-        'email',
-        updates.email!
-      );
-    }
 
     const updatedBusiness = await Business.findByIdAndUpdate(
       businessId,
