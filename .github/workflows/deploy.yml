@@ -1,0 +1,47 @@
+name: Deploy to EC2
+
+on:
+  workflow_dispatch: # Enable manual triggering of the workflow
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-to-ec2:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install SSH client
+        run: sudo apt-get install -y openssh-client
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Checkout code
+        uses: actions/checkout@v5.0.0
+
+      - name: Copy deploy folder to EC2
+        run: scp -r ./deploy/* ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:${{ secrets.DEPLOY_PATH }}
+
+      - name: Deploy via SSH
+        run: |
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd ${{ secrets.DEPLOY_PATH }}
+
+            echo "${{ secrets.GHCR_PAT }}" | sudo docker login ghcr.io -u ${{ secrets.GHCR_USER }} --password-stdin
+
+            sudo docker-compose -f docker-compose.prod.yml --env-file .env.prod pull
+            sudo docker-compose -f docker-compose.prod.yml --env-file .env.prod up -d
+
+            sudo docker image prune -f
+          EOF
+
+      - name: Remove SSH private key from runner
+        if: ${{ always() }}
+        run: |
+          rm -f ~/.ssh/id_rsa
+          rm -rf ~/.ssh

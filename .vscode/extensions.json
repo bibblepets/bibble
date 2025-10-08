@@ -1,0 +1,13 @@
+{
+	"recommendations": [
+		// Jest extension (Orta)
+		"Orta.vscode-jest",
+		// Vitest extension (Vitest)
+		"vitest.explorer"
+	],
+	"unwantedRecommendations": [
+		// Prevents redundant or conflicting testing extensions
+		"jest.vscode-jest-runner",
+		"ZixuanChen.vitest-explorer"
+	]
+}

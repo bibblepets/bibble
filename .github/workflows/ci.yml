@@ -1,0 +1,131 @@
+name: Continuous Integration (CI)
+
+on:
+    pull_request:
+        branches:
+            - main
+            - develop
+
+permissions:
+  contents: read
+
+jobs:
+    # Job 1: Run CI for client
+    run-ci-client:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
+            id-token: write
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v5.0.0
+
+            - name: Build client Docker image
+              uses: docker/build-push-action@v6.18.0
+              with:
+                  context: ./client # Point to the client directory
+                  push: false
+                  tags: ghcr.io/${{ github.repository }}/client:ci-${{ github.run_id }}
+                  target: build
+
+            - name: Run client CI
+              run: |
+                  mkdir -p ${{ github.workspace }}/coverage-client
+                  docker run --rm \
+                  -v ${{ github.workspace }}/coverage-client:/app/coverage \
+                  ghcr.io/${{ github.repository }}/client:ci-${{ github.run_id }} \
+                  sh -c "npm ci && npm run ci"
+
+            - name: Upload coverage artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: coverage-reports-client
+                  path: coverage-client/**
+
+            - name: Coverage Summary (Client)
+              uses: actions/github-script@v7
+              with:
+                  script: |
+                      const fs = require('fs');
+                      const file = 'coverage-client/reports/coverage-summary.json';
+                      if (!fs.existsSync(file)) {
+                          core.warning(`${file} not found. Did you enable 'json-summary' in Vitest coverageReporters?`);
+                          return;
+                      }
+                      const sum = JSON.parse(fs.readFileSync(file, 'utf8')).total;
+                      const row = (label, obj) => `| ${label} | ${obj.pct}% | ${obj.covered}/${obj.total} |`;
+                      const md = `
+                      ## Client Code Coverage (Vitest)
+
+                      | Metric | % | Covered/Total |
+                      |---|---:|---:|
+                      ${row('Lines', sum.lines)}
+                      ${row('Statements', sum.statements)}
+                      ${row('Branches', sum.branches)}
+                      ${row('Functions', sum.functions)}
+
+                      **Artifacts uploaded:** \`coverage-client/reports\` (lcov, clover.xml, cobertura, html)
+                      `;
+                      core.summary.addRaw(md).write();
+
+    # Job 2: Run CI for server
+    run-ci-server:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
+            id-token: write
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v5.0.0
+
+            - name: Build server Docker image
+              uses: docker/build-push-action@v6.18.0
+              with:
+                  context: ./server # Point to the server directory
+                  push: false
+                  tags: ghcr.io/${{ github.repository }}/server:ci-${{ github.run_id }}
+                  target: development
+
+            - name: Run server CI
+              run: |
+                  mkdir -p ${{ github.workspace }}/coverage-server
+                  docker run --rm \
+                  -v ${{ github.workspace }}/coverage-server:/app/coverage \
+                  ghcr.io/${{ github.repository }}/server:ci-${{ github.run_id }} \
+                  sh -c "npm ci && npm run ci"
+
+            - name: Upload coverage artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: coverage-reports-server
+                  path: coverage-server/**
+
+            - name: Coverage Summary (Server)
+              uses: actions/github-script@v7
+              with:
+                  script: |
+                      const fs = require('fs');
+                      const file = 'coverage-server/coverage-summary.json';
+                      if (!fs.existsSync(file)) {
+                          core.warning(`${file} not found. Did you enable 'json-summary' in Jest coverageReporters?`);
+                          return;
+                      }
+                      const sum = JSON.parse(fs.readFileSync(file, 'utf8')).total;
+                      const row = (label, obj) => `| ${label} | ${obj.pct}% | ${obj.covered}/${obj.total} |`;
+                      const md = `
+                      ## Server Code Coverage (Jest)
+
+                      | Metric | % | Covered/Total |
+                      |---|---:|---:|
+                      ${row('Lines', sum.lines)}
+                      ${row('Statements', sum.statements)}
+                      ${row('Branches', sum.branches)}
+                      ${row('Functions', sum.functions)}
+
+                      **Artifacts uploaded:** \`coverage-server/\` (lcov, clover.xml, cobertura, html)
+                      `;
+                      core.summary.addRaw(md).write();

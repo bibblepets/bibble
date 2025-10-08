@@ -1,0 +1,36 @@
+# Docker Compose - Production Environment
+services:
+  server:
+    # image: INCLUDE IMAGE NAME HERE
+    container_name: bibble-server
+    environment:
+      - POSTGRES_URI=${POSTGRES_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}
+      - AWS_REGION=${AWS_REGION}
+    restart: always
+    networks:
+      - bibble-network
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/api/ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  client:
+    # image: INLCUDE IMAGE NAME HERE
+    container_name: bibble-client
+    ports:
+      - '80:80'
+    depends_on:
+      server:
+        condition: service_healthy
+    restart: always
+    networks:
+      - bibble-network
+
+networks:
+  bibble-network:
+    driver: bridge

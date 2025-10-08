@@ -1,0 +1,30 @@
+{
+	"folders": [
+		{
+			"path": "client"
+		},
+		{
+			"path": "server"
+		},
+		{
+			"path": "nginx"
+		},
+		{
+			"path": "deploy"
+		},
+		{
+			"name": "root",
+			"path": "."
+		}
+	],
+	"settings": {
+		"cSpell.words": ["Bibble"],
+		"files.exclude": {
+			"server": true,
+			"client": true,
+			"nginx": true,
+			"deploy": true
+		},
+		"jest.enable": false
+	}
+}
