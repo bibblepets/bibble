@@ -33,7 +33,14 @@ npm run dev                    # http://localhost:3000
 | Mailpit (auth email) | http://127.0.0.1:54324                                  |
 | Postgres             | postgresql://postgres:postgres@127.0.0.1:54322/postgres |
 
-Seeded dev users: `alice@bibble.test` and `bob@bibble.test`, both with password `password123`.
+Seeded dev users, all with password `password123`:
+
+| User                | Role                                                |
+| ------------------- | --------------------------------------------------- |
+| `alice@bibble.test` | Owner of Pawsome Kennels, a verified breeder (dogs) |
+| `bob@bibble.test`   | Buyer with no seller account                        |
+| `carol@bibble.test` | Platform admin                                      |
+| `dave@bibble.test`  | Owner of Happy Paws Pet Shop, a verified pet shop   |
 
 ## Scripts
 
@@ -52,6 +59,7 @@ Seeded dev users: `alice@bibble.test` and `bob@bibble.test`, both with password 
 | `db:migration <name>`     | Create a new migration file                         |
 | `db:types`                | Regenerate `types/database.ts` from the local DB    |
 | `db:lint`                 | Lint the database schema                            |
+| `db:test`                 | pgTAP tests in `supabase/tests/database`            |
 
 A Husky pre-commit hook runs ESLint and Prettier on staged files.
 
@@ -73,7 +81,14 @@ tests/            unit/ (Vitest) and e2e/ (Playwright)
 1. `npm run db:migration add_pets`: creates `supabase/migrations/<timestamp>_add_pets.sql`.
 2. Write the SQL. **Every table needs RLS enabled and explicit policies.**
 3. `npm run db:reset` applies it locally. `npm run db:types` regenerates types.
+   Add pgTAP tests under `supabase/tests/database/` for every new policy, grant and function, and run `npm run db:test`.
 4. Commit the migration together with `types/database.ts`. CI fails if the types are stale.
+
+**Platform admins** verify sellers and review listings. There's deliberately no UI for granting admin access. Run this in the SQL editor of the hosted project:
+
+```sql
+insert into public.platform_admins (user_id) select id from auth.users where email = 'someone@bibble.sg';
+```
 
 Migrations go to production automatically when you merge to `main`. Keep them backwards-compatible, because the previous deployment keeps serving traffic until the new one is live.
 

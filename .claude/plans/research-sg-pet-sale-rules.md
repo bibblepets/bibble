@@ -20,7 +20,7 @@ Checked 2026-10-02 by a research agent. **This is not legal advice.** Confirm th
 ## Effect on the plan
 
 1. **Seller accounts (PR 3)** add:
-   - `seller_type` (pet shop, dog breeder, cat breeder, welfare group)
+   - `seller_type` (`pet_shop` or `breeder`; `animal_shelter` later), plus the species the licence covers (`seller_species`)
    - `licence_type`, `licence_expiry`, approved animal types
    - legal name matching ACRA
    - a check on the licence-number format
