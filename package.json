@@ -18,7 +18,11 @@
 		"db:reset": "supabase db reset",
 		"db:lint": "supabase db lint --level warning",
 		"db:migration": "supabase migration new",
-		"db:types": "supabase gen types typescript --local > types/database.ts && prettier --write types/database.ts"
+		"db:types": "supabase gen types typescript --local > types/database.ts && prettier --write types/database.ts",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage",
+		"test:e2e": "playwright test"
 	},
 	"dependencies": {
 		"@base-ui/react": "^1.8.0",
@@ -35,21 +39,28 @@
 		"zod": "^4.6.5"
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.63.0",
 		"@tailwindcss/postcss": "^4",
+		"@testing-library/dom": "^10.4.2",
+		"@testing-library/jest-dom": "^7.0.1",
+		"@testing-library/react": "^16.3.3",
 		"@types/node": "^24.19.0",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
+		"@vitest/coverage-v8": "^4.1.11",
 		"babel-plugin-react-compiler": "1.0.0",
 		"eslint": "^9",
 		"eslint-config-next": "16.3.8",
 		"husky": "^9.1.7",
+		"jsdom": "^29.1.1",
 		"lint-staged": "^17.6.0",
 		"prettier": "^3.9.9",
 		"prettier-plugin-organize-imports": "^4.3.0",
 		"prettier-plugin-tailwindcss": "^0.8.1",
 		"supabase": "^2.119.0",
 		"tailwindcss": "^4",
-		"typescript": "^5"
+		"typescript": "^5",
+		"vitest": "^4.1.11"
 	},
 	"engines": {
 		"node": ">=24 <25"
