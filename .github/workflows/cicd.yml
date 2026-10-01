@@ -18,6 +18,9 @@ env:
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
   VERCEL_CLI: vercel@62
 
+# VERCEL_TOKEN is only given to the `pull` and `deploy` steps (the CLI reads it from env).
+# `vercel build` runs repo code (install scripts, next.config) and gets no secrets.
+
 jobs:
   ci:
     uses: ./.github/workflows/ci.yml
@@ -25,8 +28,11 @@ jobs:
   preview:
     name: Deploy preview
     needs: ci
-    # Fork PRs have no access to secrets, so they get CI only.
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    # Fork and Dependabot PRs have no access to Actions secrets, so they get CI only.
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -37,6 +43,8 @@ jobs:
       url: ${{ steps.deploy.outputs.url }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-node@v7
         with:
@@ -44,15 +52,19 @@ jobs:
           cache: npm
 
       - name: Pull Vercel environment
-        run: npx ${{ env.VERCEL_CLI }} pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: npx ${{ env.VERCEL_CLI }} pull --yes --environment=preview
 
       - name: Build
-        run: npx ${{ env.VERCEL_CLI }} build --token=${{ secrets.VERCEL_TOKEN }}
+        run: npx ${{ env.VERCEL_CLI }} build
 
       - name: Deploy
         id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          url=$(npx ${{ env.VERCEL_CLI }} deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          url=$(npx ${{ env.VERCEL_CLI }} deploy --prebuilt)
           echo "url=$url" >> "$GITHUB_OUTPUT"
 
       - name: Comment preview URL on PR
@@ -62,7 +74,8 @@ jobs:
         with:
           script: |
             const marker = "<!-- vercel-preview -->"
-            const body = `${marker}\n**Preview deployment:** ${process.env.PREVIEW_URL}\n\nCommit: ${context.sha.slice(0, 7)}`
+            const sha = context.payload.pull_request.head.sha.slice(0, 7)
+            const body = `${marker}\n**Preview deployment:** ${process.env.PREVIEW_URL}\n\nCommit: ${sha}`
             const { owner, repo } = context.repo
             const issue_number = context.issue.number
             const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number })
@@ -84,6 +97,8 @@ jobs:
       url: ${{ steps.deploy.outputs.url }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-node@v7
         with:
@@ -91,6 +106,15 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      - name: Pull Vercel environment
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: npx ${{ env.VERCEL_CLI }} pull --yes --environment=production
+
+      # Build before migrating: a failed build must never leave the schema changed with no deploy.
+      - name: Build
+        run: npx ${{ env.VERCEL_CLI }} build --prod
 
       # Migrate before deploying so new code never runs against an old schema.
       # Keep migrations backwards-compatible: the previous deployment serves traffic until the new one is live.
@@ -102,14 +126,10 @@ jobs:
           npx supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }}
           npx supabase db push
 
-      - name: Pull Vercel environment
-        run: npx ${{ env.VERCEL_CLI }} pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build
-        run: npx ${{ env.VERCEL_CLI }} build --prod --token=${{ secrets.VERCEL_TOKEN }}
-
       - name: Deploy
         id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          url=$(npx ${{ env.VERCEL_CLI }} deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          url=$(npx ${{ env.VERCEL_CLI }} deploy --prebuilt --prod)
           echo "url=$url" >> "$GITHUB_OUTPUT"

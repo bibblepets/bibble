@@ -108,4 +108,4 @@ The `CI/CD` workflow (`.github/workflows/cicd.yml`) runs on every PR and every p
 5. **Supabase Auth URLs:** set Site URL to the production domain, and add `https://*.vercel.app/**` to the redirect URLs for previews.
 6. (Recommended) Add required reviewers to the `production` GitHub environment, and protect `main` so the `CI/CD` checks must pass.
 
-> Previews currently share the production Supabase project. Before real user data exists, add a separate staging project for previews.
+> Previews currently share the production Supabase project and never run migrations, so a PR that changes the schema is previewed against the old schema. Verify schema changes locally and in CI (which applies every migration to a fresh database). Before real user data exists, add a separate staging project for previews.

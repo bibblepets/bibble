@@ -19,7 +19,8 @@ export default defineConfig({
 			exclude: [
 				// shadcn-generated primitives
 				"components/ui/**",
-				// Async Server Components, route handlers and Supabase wiring are covered by e2e tests
+				// Thin wiring that needs a live Next.js/Supabase runtime. Keep logic out of these files:
+				// extract it into lib/ (e.g. lib/redirect.ts) where it is unit-tested and counted.
 				"app/**/route.ts",
 				"app/layout.tsx",
 				"lib/supabase/**",
