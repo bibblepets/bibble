@@ -64,7 +64,7 @@ favourites (user_id, listing_id, created_at)
 | #   | PR                                                   | Depends on | Plan                                                           |
 | --- | ---------------------------------------------------- | ---------- | -------------------------------------------------------------- |
 | 1   | Brand and app shell                                  | –          | [pr1-brand-shell.plan.md](pr1-brand-shell.plan.md) (in review) |
-| 2   | Authentication                                       | 1          | [pr2-auth.plan.md](pr2-auth.plan.md)                           |
+| 2   | Authentication                                       | 1          | [pr2-auth.plan.md](pr2-auth.plan.md) (in review)               |
 | 3   | Seller accounts and onboarding (plus pgTAP in CI)    | 2          | pending                                                        |
 | 4   | Admin console and seller verification                | 3          | pending                                                        |
 | 5   | Listings model and seller CRUD                       | 3          | pending                                                        |

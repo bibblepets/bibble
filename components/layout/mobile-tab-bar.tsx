@@ -6,15 +6,18 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { navLinks } from "./nav-links"
 
-const tabs: { href: string; label: string; icon: LucideIcon }[] = [
+type Tab = { href: string; label: string; icon: LucideIcon }
+
+const browseTabs: Tab[] = [
 	{ href: navLinks.explore, label: "Explore", icon: SearchIcon },
 	{ href: navLinks.favourites, label: "Favourites", icon: HeartIcon },
-	{ href: navLinks.logIn, label: "Log in", icon: UserCircleIcon },
 ]
+const logInTab: Tab = { href: navLinks.logIn, label: "Log in", icon: UserCircleIcon }
 
-/** Airbnb-style bottom navigation, shown below the `md` breakpoint only. */
-export function MobileTabBar() {
+/** Airbnb-style bottom navigation, shown below the `md` breakpoint only. Signed-in users reach their account through the header menu. */
+export function MobileTabBar({ signedIn }: { signedIn: boolean }) {
 	const pathname = usePathname()
+	const tabs = signedIn ? browseTabs : [...browseTabs, logInTab]
 
 	return (
 		<nav

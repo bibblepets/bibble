@@ -4,6 +4,8 @@
 **Depends on**: PR 1 (header and user menu)
 **Complexity**: Medium
 
+> **As built:** the Server Actions live in `lib/auth/actions.ts` (not `app/(auth)/actions.ts`) because the header's user menu also imports `logOut`. Sonner was dropped: confirmations get their own pages, and it would have pulled in `next-themes`. Email links always use the Site URL, so `next` is fixed per template (`/` and `/reset-password`). The mobile tab bar hides "Log in" when signed in.
+
 ## Summary
 
 Email and password authentication with email confirmation: sign up, confirm, log in, log out, forgot password and reset password. Adds a server-only session helper (`getCurrentUser` / `requireUser`), which later PRs use for every protected page and action. The header shows who is signed in.

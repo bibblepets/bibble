@@ -1,7 +1,9 @@
 import { Logo } from "@/components/brand/logo"
 import Link from "next/link"
+import { Suspense } from "react"
 import { navLinks } from "./nav-links"
-import { UserMenu } from "./user-menu"
+import { UserMenuFallback } from "./user-menu"
+import { UserMenuSlot } from "./user-menu-slot"
 
 export function SiteHeader() {
 	return (
@@ -15,7 +17,9 @@ export function SiteHeader() {
 					>
 						Become a seller
 					</Link>
-					<UserMenu />
+					<Suspense fallback={<UserMenuFallback />}>
+						<UserMenuSlot />
+					</Suspense>
 				</nav>
 			</div>
 		</header>
