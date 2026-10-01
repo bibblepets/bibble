@@ -20,7 +20,7 @@ export type Database = {
 	}
 	public: {
 		Tables: {
-			planning_areas: {
+			areas: {
 				Row: {
 					id: number
 					name: string
@@ -224,6 +224,7 @@ export type Database = {
 			sellers: {
 				Row: {
 					about: string | null
+					area_id: number | null
 					created_at: string
 					display_name: string | null
 					entity_type: string
@@ -231,7 +232,6 @@ export type Database = {
 					legal_name: string | null
 					licence_expires_on: string | null
 					licence_no: string | null
-					planning_area_id: number | null
 					seller_type: string
 					slug: string | null
 					submitted_at: string | null
@@ -242,6 +242,7 @@ export type Database = {
 				}
 				Insert: {
 					about?: string | null
+					area_id?: number | null
 					created_at?: string
 					display_name?: string | null
 					entity_type?: string
@@ -249,7 +250,6 @@ export type Database = {
 					legal_name?: string | null
 					licence_expires_on?: string | null
 					licence_no?: string | null
-					planning_area_id?: number | null
 					seller_type: string
 					slug?: string | null
 					submitted_at?: string | null
@@ -260,6 +260,7 @@ export type Database = {
 				}
 				Update: {
 					about?: string | null
+					area_id?: number | null
 					created_at?: string
 					display_name?: string | null
 					entity_type?: string
@@ -267,7 +268,6 @@ export type Database = {
 					legal_name?: string | null
 					licence_expires_on?: string | null
 					licence_no?: string | null
-					planning_area_id?: number | null
 					seller_type?: string
 					slug?: string | null
 					submitted_at?: string | null
@@ -278,10 +278,10 @@ export type Database = {
 				}
 				Relationships: [
 					{
-						foreignKeyName: "sellers_planning_area_id_fkey"
-						columns: ["planning_area_id"]
+						foreignKeyName: "sellers_area_id_fkey"
+						columns: ["area_id"]
 						isOneToOne: false
-						referencedRelation: "planning_areas"
+						referencedRelation: "areas"
 						referencedColumns: ["id"]
 					},
 				]

@@ -15,7 +15,7 @@ First shippable version: accounts, verified sellers, admin-reviewed dog-for-sale
 | Buyers              | Favourites only. Payments, messaging and kennel-visit scheduling are separate tickets.                                                                                                                                                                                                                                                                                                                                                                                  |
 | Listings            | One dog per listing. Leave room for litters later (a nullable `litter_id`). No images in v1; cards show a gradient placeholder with initials.                                                                                                                                                                                                                                                                                                                           |
 | Pricing             | Fixed price in SGD, stored in cents. Deposits, negotiation etc. are out of scope.                                                                                                                                                                                                                                                                                                                                                                                       |
-| Location            | Listings show planning area + region (e.g. "Tampines, East"). The full kennel address lives in the seller's private details, visible only to seller members and admins.                                                                                                                                                                                                                                                                                                 |
+| Location            | Listings show area + region (e.g. "Tampines, East"). The full kennel address lives in the seller's private details, visible only to seller members and admins.                                                                                                                                                                                                                                                                                                          |
 | Availability        | Reserved and sold listings stay visible, with a badge.                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | Market              | Singapore: SGD, metric units, en-SG formatting, ACRA UEN, NParks/AVS licensing.                                                                                                                                                                                                                                                                                                                                                                                         |
 | Search              | Out of scope for v1.                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
@@ -36,7 +36,7 @@ First shippable version: accounts, verified sellers, admin-reviewed dog-for-sale
 ```
 platform_admins (user_id)
 sellers (id, entity_type, seller_type, name, legal_name, slug, uen, licence_type, licence_no,
-         licence_expiry, verification_status, planning_area, region, ...)
+         licence_expiry, verification_status, area, region, ...)
 seller_private_details (seller_id, address, postal_code, phone, email)  -- members + admins only
 seller_members (seller_id, user_id, role)                              -- unique(user_id) in v1
 
@@ -47,7 +47,7 @@ seller_species (seller_id, species_id)                              -- what the 
 breeds (id, species_id, slug, name, hdb_approved, specified_dog_part)
 
 listings (id, category_id, vertical, seller_id, title, description, price_cents, currency,
-          status, planning_area, region, published_at, ...)          -- unique(id, vertical)
+          status, area, region, published_at, ...)          -- unique(id, vertical)
 pet_listing_details (listing_id, vertical = 'animal', breed_id, is_mixed_breed, sex, date_of_birth,
                      ready_date, weight_kg, height_cm, colour, microchip_no, source,
                      sterilised, attributes jsonb)                   -- fk (listing_id, vertical)

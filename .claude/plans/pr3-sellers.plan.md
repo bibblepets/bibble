@@ -33,7 +33,7 @@
 ### Data model
 
 ```
-planning_areas (id, slug, name, region)            -- URA's 55 planning areas; reference data, in the migration
+areas (id, slug, name, region)            -- URA's 55 planning areas as public areas; reference data, in the migration
 platform_admins (user_id)                          -- granted via SQL only; admin UI is PR 4
 
 sellers
@@ -45,7 +45,7 @@ sellers
   uen             unique
   licence_no, licence_expires_on                   -- AVS; shown publicly on listings (legal requirement)
   about           public bio, max 1,000 characters
-  planning_area_id → planning_areas                -- public location ("Tampines, East")
+  area_id → areas                -- public location ("Tampines, East")
   verification_status 'incomplete' | 'pending' | 'verified' | 'rejected' | 'suspended'
   submitted_at, verified_at, created_at, updated_at
   check: status = 'incomplete' OR all required fields are present
@@ -92,18 +92,18 @@ seller_documents (id, seller_id, kind 'avs_licence' | 'acra_bizfile', storage_pa
 
 ### Files
 
-| File                                                                  | Action | Why                                                                                                                                                                                             |
-| --------------------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `supabase/migrations/<ts>_create_sellers.sql`                         | CREATE | Everything above                                                                                                                                                                                |
-| `supabase/seed.sql`                                                   | UPDATE | Seed users and sellers above                                                                                                                                                                    |
-| `supabase/tests/database/sellers.test.sql`, `seller_storage.test.sql` | CREATE | pgTAP                                                                                                                                                                                           |
-| `.github/workflows/ci.yml`, `package.json`                            | UPDATE | `db:test` script; CI step after "Lint database schema"                                                                                                                                          |
-| `types/database.ts`                                                   | UPDATE | `npm run db:types`                                                                                                                                                                              |
-| `lib/sellers/schema.ts`                                               | CREATE | zod per wizard step: UEN, licence number per seller type (`AS…` for pet shops, `BR…` for breeders), at least one species, licence expiry in the future, SG postal code, SG phone, planning area |
-| `lib/sellers/queries.ts`                                              | CREATE | `getCurrentSeller = cache(…)` (seller + private details + latest documents), `requireSeller()`, `listPlanningAreas()`                                                                           |
-| `lib/sellers/progress.ts`                                             | CREATE | Pure: which wizard steps are complete, the next step to resume at, and dashboard status copy                                                                                                    |
-| `tests/unit/sellers-*.test.ts`                                        | CREATE | Schema, progress, queries                                                                                                                                                                       |
-| `README.md`                                                           | UPDATE | `db:test`; how to make someone an admin                                                                                                                                                         |
+| File                                                                  | Action | Why                                                                                                                                                                                    |
+| --------------------------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `supabase/migrations/<ts>_create_sellers.sql`                         | CREATE | Everything above                                                                                                                                                                       |
+| `supabase/seed.sql`                                                   | UPDATE | Seed users and sellers above                                                                                                                                                           |
+| `supabase/tests/database/sellers.test.sql`, `seller_storage.test.sql` | CREATE | pgTAP                                                                                                                                                                                  |
+| `.github/workflows/ci.yml`, `package.json`                            | UPDATE | `db:test` script; CI step after "Lint database schema"                                                                                                                                 |
+| `types/database.ts`                                                   | UPDATE | `npm run db:types`                                                                                                                                                                     |
+| `lib/sellers/schema.ts`                                               | CREATE | zod per wizard step: UEN, licence number per seller type (`AS…` for pet shops, `BR…` for breeders), at least one species, licence expiry in the future, SG postal code, SG phone, area |
+| `lib/sellers/queries.ts`                                              | CREATE | `getCurrentSeller = cache(…)` (seller + private details + latest documents), `requireSeller()`, `listAreas()`                                                                          |
+| `lib/sellers/progress.ts`                                             | CREATE | Pure: which wizard steps are complete, the next step to resume at, and dashboard status copy                                                                                           |
+| `tests/unit/sellers-*.test.ts`                                        | CREATE | Schema, progress, queries                                                                                                                                                              |
+| `README.md`                                                           | UPDATE | `db:test`; how to make someone an admin                                                                                                                                                |
 
 ### pgTAP coverage
 
@@ -130,7 +130,7 @@ Full-screen, Airbnb-style. A minimal header has the logo and **"Save & exit"**. 
 | Intro | `/seller/onboarding`           | "Sell on Bibble": three stages (your business → your documents → review), and why verification matters. **Get started** (or **Continue** if a seller exists, resuming at the first incomplete step). |
 | 1     | `/seller/onboarding/type`      | Pet shop or breeder, as large selectable cards explaining the licence each needs, plus "Which animals does your licence cover?" (Dogs; Cats shown as coming soon). Creates the seller.               |
 | 2     | `/seller/onboarding/business`  | Trading name, legal name (ACRA), UEN, AVS licence number and expiry. The licence number hint and format depend on the type.                                                                          |
-| 3     | `/seller/onboarding/location`  | Address, postal code, planning area (with a live preview: "Buyers will see: Tampines, East"), contact phone and email (email prefilled from the account), optional bio.                              |
+| 3     | `/seller/onboarding/location`  | Address, postal code, area (with a live preview: "Buyers will see: Tampines, East"), contact phone and email (email prefilled from the account), optional bio.                                       |
 | 4     | `/seller/onboarding/documents` | Two upload tiles (AVS licence, ACRA BizFile), with type and size checked before upload, a progress bar, and re-upload.                                                                               |
 | 5     | `/seller/onboarding/review`    | Summary with an **Edit** link per section, then **Submit for verification**.                                                                                                                         |
 

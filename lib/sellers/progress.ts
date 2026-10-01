@@ -19,7 +19,7 @@ export type SellerProgressInput = {
 	uen: string | null
 	licenceNo: string | null
 	licenceExpiresOn: string | null
-	planningAreaId: number | null
+	areaId: number | null
 	addressLine1: string | null
 	postalCode: string | null
 	contactPhone: string | null
@@ -30,7 +30,7 @@ export type SellerProgressInput = {
 const stepDone: Record<Exclude<WizardStep, "review">, (seller: SellerProgressInput) => boolean> = {
 	type: (s) => s.speciesCount > 0,
 	business: (s) => Boolean(s.displayName && s.legalName && s.uen && s.licenceNo && s.licenceExpiresOn),
-	location: (s) => Boolean(s.planningAreaId && s.addressLine1 && s.postalCode && s.contactPhone && s.contactEmail),
+	location: (s) => Boolean(s.areaId && s.addressLine1 && s.postalCode && s.contactPhone && s.contactEmail),
 	documents: (s) => documentKinds.every((kind) => s.documentKinds.includes(kind)),
 }
 

@@ -56,7 +56,7 @@ select throws_ok(
 update public.sellers set
 	display_name = 'Owner''s Dogs', legal_name = 'Owner Dogs Pte. Ltd.', uen = '202399999Z', licence_no = 'BR29999',
 	licence_expires_on = current_date + 30,
-	planning_area_id = (select id from public.planning_areas where slug = 'bedok');
+	area_id = (select id from public.areas where slug = 'bedok');
 
 select throws_ok(
 	$$ select public.submit_seller_for_verification(current_setting('test.seller_id')::uuid) $$,

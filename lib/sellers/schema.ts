@@ -71,7 +71,7 @@ export const locationStepSchema = z.object({
 		.string()
 		.trim()
 		.regex(/^\d{6}$/, "Enter a 6-digit postal code."),
-	planningAreaId: z.coerce
+	areaId: z.coerce
 		.number("Choose the area your premises are in.")
 		.int("Choose the area your premises are in.")
 		.positive("Choose the area your premises are in."),

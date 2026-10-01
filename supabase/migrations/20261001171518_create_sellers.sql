@@ -6,16 +6,16 @@
 -- Reference data
 ----------------------------------------------------------------------------------------------------
 
-create table public.planning_areas (
+create table public.areas (
 	id smallint generated always as identity primary key,
 	slug text not null unique,
 	name text not null unique,
 	region text not null check (region in ('central', 'east', 'north', 'north_east', 'west'))
 );
 
-comment on table public.planning_areas is 'URA Master Plan 2019 planning areas. Public location for sellers and listings.';
+comment on table public.areas is 'Areas of Singapore (URA Master Plan 2019 planning areas) and their region. Public location for sellers and listings.';
 
-insert into public.planning_areas (slug, name, region)
+insert into public.areas (slug, name, region)
 values
 	('bishan', 'Bishan', 'central'),
 	('bukit-merah', 'Bukit Merah', 'central'),
@@ -86,11 +86,11 @@ comment on table public.species is 'Animal species the marketplace knows about. 
 insert into public.species (slug, name, is_active)
 values ('dog', 'Dogs', true), ('cat', 'Cats', false);
 
-alter table public.planning_areas enable row level security;
+alter table public.areas enable row level security;
 alter table public.species enable row level security;
 
-create policy "Planning areas are viewable by everyone"
-	on public.planning_areas for select
+create policy "Areas are viewable by everyone"
+	on public.areas for select
 	to anon, authenticated
 	using (true);
 
@@ -99,8 +99,8 @@ create policy "Species are viewable by everyone"
 	to anon, authenticated
 	using (true);
 
-revoke all on public.planning_areas, public.species from anon, authenticated;
-grant select on public.planning_areas, public.species to anon, authenticated;
+revoke all on public.areas, public.species from anon, authenticated;
+grant select on public.areas, public.species to anon, authenticated;
 
 ----------------------------------------------------------------------------------------------------
 -- Platform admins
@@ -144,7 +144,7 @@ create table public.sellers (
 	licence_no text check (licence_no ~ '^[0-9A-Z]{5,12}$'),
 	licence_expires_on date,
 	about text check (char_length(about) <= 1000),
-	planning_area_id smallint references public.planning_areas (id),
+	area_id smallint references public.areas (id),
 	verification_status text not null default 'incomplete'
 		check (verification_status in ('incomplete', 'pending', 'verified', 'rejected', 'suspended')),
 	submitted_at timestamptz,
@@ -160,7 +160,7 @@ create table public.sellers (
 			and uen is not null
 			and licence_no is not null
 			and licence_expires_on is not null
-			and planning_area_id is not null
+			and area_id is not null
 		)
 	)
 );
@@ -168,7 +168,7 @@ create table public.sellers (
 comment on table public.sellers is
 	'Businesses that sell on Bibble. Publicly visible once verified. Format rules for UEN and licence numbers live in the app (lib/sellers/schema.ts).';
 
-create index sellers_planning_area_id_idx on public.sellers (planning_area_id);
+create index sellers_area_id_idx on public.sellers (area_id);
 
 create table public.seller_members (
 	seller_id uuid not null references public.sellers (id) on delete cascade,
@@ -389,7 +389,7 @@ begin
 	end if;
 
 	if seller.display_name is null or seller.legal_name is null or seller.uen is null or seller.licence_no is null
-		or seller.licence_expires_on is null or seller.planning_area_id is null
+		or seller.licence_expires_on is null or seller.area_id is null
 	then
 		raise exception 'missing_business_details';
 	end if;
@@ -456,7 +456,7 @@ revoke all on public.sellers, public.seller_members, public.seller_private_detai
 -- Sellers: rows are created by create_seller(); status, slug and timestamps are set by functions only.
 grant select on public.sellers to anon, authenticated;
 grant update (
-	seller_type, display_name, legal_name, uen, licence_no, licence_expires_on, about, planning_area_id
+	seller_type, display_name, legal_name, uen, licence_no, licence_expires_on, about, area_id
 ) on public.sellers to authenticated;
 
 create policy "Verified sellers are viewable by everyone"

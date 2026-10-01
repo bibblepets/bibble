@@ -35,19 +35,19 @@ insert into public.platform_admins (user_id) values ('33333333-3333-3333-3333-33
 
 -- Verified sellers, licensed for dogs, with licences valid for a year.
 insert into public.sellers (
-	id, slug, seller_type, display_name, legal_name, uen, licence_no, licence_expires_on, about, planning_area_id,
+	id, slug, seller_type, display_name, legal_name, uen, licence_no, licence_expires_on, about, area_id,
 	verification_status, submitted_at, verified_at
 )
 values
 	(
 		'aaaaaaaa-0000-0000-0000-000000000001', 'pawsome-kennels', 'breeder', 'Pawsome Kennels', 'Pawsome Kennels Pte. Ltd.',
 		'202301234K', 'BR25001', current_date + 365, 'Family-run breeder of small companion dogs.',
-		(select id from public.planning_areas where slug = 'lim-chu-kang'), 'verified', now(), now()
+		(select id from public.areas where slug = 'lim-chu-kang'), 'verified', now(), now()
 	),
 	(
 		'aaaaaaaa-0000-0000-0000-000000000002', 'happy-paws-pet-shop', 'pet_shop', 'Happy Paws Pet Shop',
 		'Happy Paws Trading', '53123456A', 'AS24A00123', current_date + 365, 'Neighbourhood pet shop since 2012.',
-		(select id from public.planning_areas where slug = 'tampines'), 'verified', now(), now()
+		(select id from public.areas where slug = 'tampines'), 'verified', now(), now()
 	);
 
 insert into public.seller_members (seller_id, user_id, role)

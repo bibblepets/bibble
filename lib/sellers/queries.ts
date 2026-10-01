@@ -21,7 +21,7 @@ export type CurrentSeller = SellerProgressInput & {
 	slug: string | null
 	sellerType: SellerType
 	about: string | null
-	planningArea: { name: string; region: string } | null
+	area: { name: string; region: string } | null
 	addressLine2: string | null
 	species: { slug: string; name: string }[]
 	/** The newest document of each kind. */
@@ -33,9 +33,9 @@ export type CurrentSeller = SellerProgressInput & {
 const sellerColumns = `
 	role,
 	seller:sellers (
-		id, slug, seller_type, display_name, legal_name, uen, licence_no, licence_expires_on, about, planning_area_id,
+		id, slug, seller_type, display_name, legal_name, uen, licence_no, licence_expires_on, about, area_id,
 		verification_status, submitted_at, verified_at,
-		planning_area:planning_areas ( name, region ),
+		area:areas ( name, region ),
 		private:seller_private_details ( address_line1, address_line2, postal_code, contact_phone, contact_email ),
 		seller_species ( species ( slug, name ) ),
 		seller_documents ( id, kind, file_name, size_bytes, created_at )
@@ -90,8 +90,8 @@ export const getCurrentSeller = cache(async (): Promise<CurrentSeller | null> =>
 		licenceNo: seller.licence_no,
 		licenceExpiresOn: seller.licence_expires_on,
 		about: seller.about,
-		planningAreaId: seller.planning_area_id,
-		planningArea: seller.planning_area,
+		areaId: seller.area_id,
+		area: seller.area,
 		addressLine1: seller.private?.address_line1 ?? null,
 		addressLine2: seller.private?.address_line2 ?? null,
 		postalCode: seller.private?.postal_code ?? null,
@@ -116,13 +116,13 @@ export async function requireSeller(returnTo: string): Promise<CurrentSeller> {
 	return seller
 }
 
-export type PlanningArea = { id: number; name: string; region: string }
+export type Area = { id: number; name: string; region: string }
 
-export const listPlanningAreas = cache(async (): Promise<PlanningArea[]> => {
+export const listAreas = cache(async (): Promise<Area[]> => {
 	const supabase = await createClient()
-	const { data, error } = await supabase.from("planning_areas").select("id, name, region").order("name")
+	const { data, error } = await supabase.from("areas").select("id, name, region").order("name")
 	if (error) {
-		throw new Error(`Failed to load planning areas: ${error.message}`)
+		throw new Error(`Failed to load areas: ${error.message}`)
 	}
 	return data
 })

@@ -17,7 +17,7 @@ const started: SellerProgressInput = {
 	uen: null,
 	licenceNo: null,
 	licenceExpiresOn: null,
-	planningAreaId: null,
+	areaId: null,
 	addressLine1: null,
 	postalCode: null,
 	contactPhone: null,
@@ -34,7 +34,7 @@ const withBusiness = {
 }
 const withLocation = {
 	...withBusiness,
-	planningAreaId: 1,
+	areaId: 1,
 	addressLine1: "1 Road",
 	postalCode: "123456",
 	contactPhone: "+6591234567",

@@ -103,7 +103,7 @@ describe("locationStepSchema", () => {
 		addressLine1: "59 Sungei Tengah Road",
 		addressLine2: "",
 		postalCode: "699012",
-		planningAreaId: "30",
+		areaId: "30",
 		contactPhone: "9123 4567",
 		contactEmail: "Alice@Bibble.test",
 		about: "  ",
@@ -114,7 +114,7 @@ describe("locationStepSchema", () => {
 			addressLine1: "59 Sungei Tengah Road",
 			addressLine2: null,
 			postalCode: "699012",
-			planningAreaId: 30,
+			areaId: 30,
 			contactPhone: "+6591234567",
 			contactEmail: "alice@bibble.test",
 			about: null,
@@ -131,8 +131,8 @@ describe("locationStepSchema", () => {
 
 	it.each([
 		[{ postalCode: "12345" }, "Enter a 6-digit postal code."],
-		[{ planningAreaId: "" }, "Choose the area your premises are in."],
-		[{ planningAreaId: "abc" }, "Choose the area your premises are in."],
+		[{ areaId: "" }, "Choose the area your premises are in."],
+		[{ areaId: "abc" }, "Choose the area your premises are in."],
 		[{ addressLine1: "" }, "Enter your premises address."],
 		[{ about: "x".repeat(1001) }, "Use 1,000 characters or fewer."],
 	])("rejects %j", (override, message) => {

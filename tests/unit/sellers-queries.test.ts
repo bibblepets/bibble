@@ -30,7 +30,7 @@ vi.mock("@/lib/supabase/server", () => {
 	return { createClient: async () => ({ from: builder.from }) }
 })
 
-const { getCurrentSeller, listPlanningAreas, listSpecies, requireSeller } = await import("@/lib/sellers/queries")
+const { getCurrentSeller, listAreas, listSpecies, requireSeller } = await import("@/lib/sellers/queries")
 
 const row = {
 	role: "owner",
@@ -44,11 +44,11 @@ const row = {
 		licence_no: "BR25001",
 		licence_expires_on: "2027-10-01",
 		about: null,
-		planning_area_id: 30,
+		area_id: 30,
 		verification_status: "pending",
 		submitted_at: "2026-10-02T00:00:00Z",
 		verified_at: null,
-		planning_area: { name: "Lim Chu Kang", region: "north" },
+		area: { name: "Lim Chu Kang", region: "north" },
 		private: {
 			address_line1: "59 Sungei Tengah Road",
 			address_line2: null,
@@ -100,7 +100,7 @@ describe("getCurrentSeller", () => {
 			status: "pending",
 			sellerType: "breeder",
 			displayName: "Pawsome Kennels",
-			planningArea: { name: "Lim Chu Kang", region: "north" },
+			area: { name: "Lim Chu Kang", region: "north" },
 			addressLine1: "59 Sungei Tengah Road",
 			contactPhone: "+6591234567",
 			species: [{ slug: "dog", name: "Dogs" }],
@@ -135,9 +135,9 @@ describe("requireSeller", () => {
 })
 
 describe("reference data", () => {
-	it("lists planning areas by name", async () => {
+	it("lists areas by name", async () => {
 		result.current = { data: [{ id: 1, name: "Bedok", region: "east" }], error: null }
-		expect(await listPlanningAreas()).toEqual([{ id: 1, name: "Bedok", region: "east" }])
+		expect(await listAreas()).toEqual([{ id: 1, name: "Bedok", region: "east" }])
 		expect(calls).toContainEqual(["order", "name"])
 	})
 
@@ -147,7 +147,7 @@ describe("reference data", () => {
 	})
 
 	it.each([
-		["planning areas", () => listPlanningAreas()],
+		["areas", () => listAreas()],
 		["species", () => listSpecies()],
 	])("throws when %s fail to load", async (label, load) => {
 		result.current = { data: null, error: { message: "down" } }
