@@ -1,4 +1,5 @@
--- Storage policies for the private seller-documents bucket.
+-- Storage policies for the private seller-documents bucket. Checks are scoped to this test's seller folder, since a
+-- local database may hold uploads from e2e runs.
 begin;
 create extension if not exists pgtap with schema extensions;
 select plan(9);
@@ -56,12 +57,15 @@ select is(
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"33333333-3333-3333-3333-333333333333","role":"authenticated"}', true);
 select is(
-	(select count(*)::int from storage.objects where bucket_id = 'seller-documents'), 1, 'admins can read every seller''s files'
+	(select count(*)::int from storage.objects
+		where bucket_id = 'seller-documents' and name like current_setting('test.seller_id') || '/%'),
+	1, 'admins can read every seller''s files'
 );
 
 reset role;
 select is(
-	(select name from storage.objects where bucket_id = 'seller-documents'),
+	(select name from storage.objects
+		where bucket_id = 'seller-documents' and name like current_setting('test.seller_id') || '/%'),
 	current_setting('test.seller_id') || '/licence.pdf', 'members cannot rename or delete uploads'
 );
 
