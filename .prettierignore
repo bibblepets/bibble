@@ -12,6 +12,5 @@ package-lock.json
 
 # Generated
 next-env.d.ts
-types/database.ts
 supabase/.temp
 supabase/.branches
