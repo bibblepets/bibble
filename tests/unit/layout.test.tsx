@@ -20,6 +20,9 @@ vi.mock("@/lib/auth/session", () => ({ getCurrentUser: async () => session.user 
 const seller = vi.hoisted(() => ({ current: null as object | null }))
 vi.mock("@/lib/sellers/queries", () => ({ getCurrentSeller: async () => seller.current }))
 
+const admin = vi.hoisted(() => ({ current: false }))
+vi.mock("@/lib/admin/session", () => ({ isPlatformAdmin: async () => admin.current }))
+
 const logOut = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/auth/actions", () => ({ logOut }))
 
@@ -97,6 +100,19 @@ describe("session slots", () => {
 
 		session.user = null
 		seller.current = null
+	})
+
+	it("link admins to the console", async () => {
+		const user = userEvent.setup()
+		session.user = alice
+		admin.current = true
+
+		render(await UserMenuSlot())
+		await user.click(screen.getByRole("button", { name: "Open menu" }))
+		expect(await screen.findByRole("menuitem", { name: "Admin" })).toHaveAttribute("href", "/admin")
+
+		session.user = null
+		admin.current = false
 	})
 
 	it("pass the current user through", async () => {

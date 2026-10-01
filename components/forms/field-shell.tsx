@@ -1,5 +1,5 @@
 import { Label } from "@/components/ui/label"
-import type { ReactNode } from "react"
+import { useId, type ReactNode } from "react"
 
 export type FieldControlProps = {
 	id: string
@@ -18,7 +18,8 @@ type FieldShellProps = {
 
 /** Label, error and hint around any form control, wired up through `aria-describedby`. */
 export function FieldShell({ name, label, error, hint, children }: FieldShellProps) {
-	const id = `field-${name}`
+	// Unique per instance: two forms on a page can share field names (e.g. internalNote).
+	const id = `${useId()}${name}`
 	// The error replaces the hint rather than stacking two messages under the field.
 	const hintId = hint && !error ? `${id}-hint` : undefined
 	const errorId = error ? `${id}-error` : undefined

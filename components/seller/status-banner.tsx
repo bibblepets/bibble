@@ -11,7 +11,14 @@ const tones: Record<ReturnType<typeof statusCopy>["tone"], { className: string; 
 	danger: { className: "border-red-200 bg-red-50 text-red-950", icon: OctagonAlertIcon },
 }
 
-export function StatusBanner({ status, children }: { status: SellerStatus; children?: ReactNode }) {
+type StatusBannerProps = {
+	status: SellerStatus
+	/** The admin's message for a rejection or suspension. */
+	reason?: string | null
+	children?: ReactNode
+}
+
+export function StatusBanner({ status, reason, children }: StatusBannerProps) {
 	const { title, description, tone } = statusCopy(status)
 	const { className, icon: Icon } = tones[tone]
 
@@ -26,6 +33,11 @@ export function StatusBanner({ status, children }: { status: SellerStatus; child
 				<div>
 					<h2 className="text-lg font-semibold">{title}</h2>
 					<p className="mt-1">{description}</p>
+					{reason && (
+						<p className="mt-2">
+							<span className="font-semibold">Reason:</span> {reason}
+						</p>
+					)}
 				</div>
 				{children}
 			</div>
