@@ -1,42 +1,6 @@
-import { expect, test, type Page } from "@playwright/test"
+import { expect, test } from "@playwright/test"
+import { formAlert, logIn, logOut, openMenu, password, signUp } from "./helpers/auth"
 import { authLinkFor, uniqueEmail } from "./helpers/mailpit"
-
-const password = "password123"
-
-async function signUp(page: Page, email: string, name = "E2E Tester") {
-	await page.goto("/signup")
-	await page.getByLabel("Name").fill(name)
-	await page.getByLabel("Email").fill(email)
-	await page.getByLabel("Password").fill(password)
-	await page.getByRole("button", { name: "Create account" }).click()
-	await expect(page.getByRole("heading", { name: "Check your email" })).toBeVisible()
-}
-
-async function logIn(page: Page, email: string, pass = password) {
-	await page.goto("/login")
-	await page.getByLabel("Email").fill(email)
-	await page.getByLabel("Password").fill(pass)
-	await page.getByRole("button", { name: "Log in" }).click()
-}
-
-async function openMenu(page: Page) {
-	await page.getByRole("banner").getByRole("button", { name: "Open menu" }).click()
-	return page.getByRole("menu")
-}
-
-async function logOut(page: Page) {
-	await (await openMenu(page)).getByRole("menuitem", { name: "Log out" }).click()
-	// Wait for the session cookie to go before navigating, or /login would bounce a still-signed-in user.
-	await expect(async () => {
-		const cookies = await page.context().cookies()
-		expect(cookies.filter((cookie) => cookie.name.includes("auth-token"))).toEqual([])
-	}).toPass()
-}
-
-/** The form's error, not Next.js's route announcer (which also has role="alert"). */
-function formAlert(page: Page) {
-	return page.getByRole("main").getByRole("alert")
-}
 
 test("sign up, confirm by email, log out and log back in", async ({ page, request }) => {
 	const email = uniqueEmail("signup")

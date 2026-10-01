@@ -80,6 +80,16 @@ export const locationStepSchema = z.object({
 	about: optionalText(1000, "Use 1,000 characters or fewer."),
 })
 
+/** Fields a seller can still change after submitting: everything except what admins verify. */
+export function profileSchema(today: string = todayInSingapore()) {
+	return locationStepSchema.extend({
+		displayName: z.string().trim().min(1, "Enter the name buyers will see.").max(80, "Use 80 characters or fewer."),
+		licenceExpiresOn: z.iso
+			.date("Enter the licence expiry date.")
+			.refine((date) => date >= today, "This licence has expired. Renew it with AVS first."),
+	})
+}
+
 export type TypeStep = z.infer<typeof typeStepSchema>
 export type BusinessStep = z.infer<ReturnType<typeof businessStepSchema>>
 export type LocationStep = z.infer<typeof locationStepSchema>

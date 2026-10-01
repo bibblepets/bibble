@@ -5,4 +5,5 @@ export const navLinks = {
 	logIn: "/login",
 	signUp: "/signup",
 	becomeSeller: "/seller/onboarding",
+	sellerDashboard: "/seller",
 } as const
