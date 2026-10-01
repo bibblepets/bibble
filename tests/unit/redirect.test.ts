@@ -1,4 +1,4 @@
-import { safeRedirectUrl } from "@/lib/redirect"
+import { safeRedirectPath, safeRedirectUrl } from "@/lib/redirect"
 import { describe, expect, it } from "vitest"
 
 const origin = "http://localhost:3000"
@@ -36,4 +36,21 @@ describe("safeRedirectUrl", () => {
 	it("uses a custom fallback", () => {
 		expect(safeRedirectUrl("//evil.com", origin, "/home").href).toBe("http://localhost:3000/home")
 	})
+})
+
+describe("safeRedirectPath", () => {
+	it.each([
+		["/seller/listings", "/seller/listings"],
+		["/reset-password?step=2#form", "/reset-password?step=2#form"],
+	])("keeps relative target %j", (next, expected) => {
+		expect(safeRedirectPath(next)).toBe(expected)
+	})
+
+	it.each([null, "", "//evil.com", "/\\evil.com", "https://evil.com/x", "http://localhost:3000/account"])(
+		"falls back for %j",
+		(next) => {
+			expect(safeRedirectPath(next)).toBe("/")
+			expect(safeRedirectPath(next, "/login")).toBe("/login")
+		}
+	)
 })

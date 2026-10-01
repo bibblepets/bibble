@@ -77,6 +77,25 @@ tests/            unit/ (Vitest) and e2e/ (Playwright)
 
 Migrations go to production automatically when you merge to `main`. Keep them backwards-compatible, because the previous deployment keeps serving traffic until the new one is live.
 
+## Authentication
+
+Email and password sign-up, with email confirmation required before logging in.
+
+- **Locally**, confirmation and password-reset emails go to Mailpit (http://127.0.0.1:54324). The e2e tests read them from there too. Seeded users are already confirmed.
+- **Email links** use `token_hash` and are verified by `app/auth/confirm`, so a link works even when opened on a different device. The templates live in `supabase/templates/` and are wired up in `supabase/config.toml`.
+- **Protecting pages and Server Actions:** call `requireUser(returnTo)` from `lib/auth/session.ts` in each one. Layouts don't re-run on navigation, so they must not be the only check.
+
+**Hosted project settings.** `supabase/config.toml` only configures the local stack. Push the auth settings to the hosted project with `npx supabase config push --project-ref <ref>`, or set them in the dashboard to match:
+
+- **Authentication → Sign In / Providers → Email:**
+  - confirm email: on
+  - minimum password length: 8
+  - password requirements: letters and digits
+- **Authentication → Emails → Templates:** use the HTML from `supabase/templates/` for "Confirm signup" and "Reset password", with the same subjects as in `config.toml`.
+- **Authentication → URL Configuration:** see step 5 of [One-time setup](#one-time-setup). Email links use the **Site URL**, so a confirmation email sent from a preview deploy links to production.
+
+> **Before public launch, set up custom SMTP** (Authentication → Emails → SMTP Settings). Supabase's built-in email only delivers to members of your Supabase project's team, and only a few emails an hour. Real users won't receive confirmation emails until custom SMTP is set up.
+
 ## CI/CD
 
 The `CI/CD` workflow (`.github/workflows/cicd.yml`) runs on every PR and every push to `main`:
