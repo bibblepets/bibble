@@ -7,6 +7,13 @@
 - **3a – Seller schema, Storage and pgTAP** (Medium): migration, seed data, database tests in CI, generated types, `lib/sellers` data layer. No UI.
 - **3b – Onboarding wizard and seller dashboard** (Medium/Large): the step-by-step "Become a seller" flow, document upload, dashboard, profile edit, header switch.
 
+> **As built (3a: #9, 3b: stacked on it):**
+>
+> - **Locked fields:** besides after verification, they're also locked while `pending`, so nothing changes under an admin's review. The lock triggers apply only to the `authenticated` role; migrations, the seed, the service role and security definer functions are trusted.
+> - **Upload confirmation:** a spinner instead of a progress bar, since supabase-js uploads don't report progress. The server reads size and type back from Storage (`info()`) rather than trusting the browser.
+> - **Wizard footer:** a labelled `nav` ("Steps"), because a `<footer>` inside `<main>` isn't a landmark.
+> - **Route groups:** the wizard lives in `app/(wizard)/seller/onboarding` (full screen, no site header). The dashboard and profile live in `app/(marketplace)/seller`.
+
 ## Decisions (agreed 2026-10-02)
 
 | Topic              | Decision                                                                                                                                                                                                                                                                |

@@ -1,6 +1,7 @@
 import MarketplaceLayout from "@/app/(marketplace)/layout"
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar"
 import { MobileTabBarSlot } from "@/components/layout/mobile-tab-bar-slot"
+import { SellerLinkSlot } from "@/components/layout/seller-link"
 import { SiteHeader } from "@/components/layout/site-header"
 import { UserMenu } from "@/components/layout/user-menu"
 import { UserMenuSlot } from "@/components/layout/user-menu-slot"
@@ -15,6 +16,9 @@ vi.mock("next/navigation", () => ({ usePathname: () => pathname.current }))
 
 const session = vi.hoisted(() => ({ user: null as CurrentUser | null }))
 vi.mock("@/lib/auth/session", () => ({ getCurrentUser: async () => session.user }))
+
+const seller = vi.hoisted(() => ({ current: null as object | null }))
+vi.mock("@/lib/sellers/queries", () => ({ getCurrentSeller: async () => seller.current }))
 
 const logOut = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/auth/actions", () => ({ logOut }))
@@ -58,6 +62,10 @@ describe("UserMenu when signed in", () => {
 		expect(menu).toHaveTextContent("alice@bibble.test")
 		expect(within(menu).getByRole("menuitem", { name: "Favourites" })).toHaveAttribute("href", "/favourites")
 		expect(within(menu).queryByRole("menuitem", { name: "Log in" })).toBeNull()
+		expect(within(menu).getByRole("menuitem", { name: "Become a seller" })).toHaveAttribute(
+			"href",
+			"/seller/onboarding"
+		)
 
 		await user.click(within(menu).getByRole("menuitem", { name: "Log out" }))
 		expect(logOut).toHaveBeenCalledOnce()
@@ -75,6 +83,22 @@ describe("UserMenu when signed in", () => {
 
 // Async Server Components can't render in jsdom, so the slots are awaited by hand.
 describe("session slots", () => {
+	it("offer selling to users with a seller account", async () => {
+		const user = userEvent.setup()
+		session.user = alice
+		seller.current = { id: "seller-1" }
+
+		render(await SellerLinkSlot())
+		expect(screen.getByRole("link", { name: "Switch to selling" })).toHaveAttribute("href", "/seller")
+
+		render(await UserMenuSlot())
+		await user.click(screen.getByRole("button", { name: "Open menu" }))
+		expect(await screen.findByRole("menuitem", { name: "Switch to selling" })).toHaveAttribute("href", "/seller")
+
+		session.user = null
+		seller.current = null
+	})
+
 	it("pass the current user through", async () => {
 		session.user = alice
 		render(await UserMenuSlot())
