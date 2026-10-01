@@ -15,11 +15,15 @@ import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { makeNewSeller, makeSeller } from "./fixtures/seller"
 
-const state = vi.hoisted(() => ({ seller: null as CurrentSeller | null }))
+const state = vi.hoisted(() => ({
+	seller: null as CurrentSeller | null,
+	feedback: null as { message: string | null } | null,
+}))
 
 vi.mock("@/lib/auth/session", () => ({ requireUser: vi.fn() }))
 vi.mock("@/lib/sellers/queries", () => ({
 	getCurrentSeller: async () => state.seller,
+	getSellerFeedback: async () => state.feedback,
 	requireSeller: async () => state.seller,
 	listSpecies: async () => [
 		{ id: 1, slug: "dog", name: "Dogs", isActive: true },
@@ -62,6 +66,7 @@ vi.mock("@/lib/supabase/client", () => ({
 
 beforeEach(() => {
 	state.seller = null
+	state.feedback = null
 	vi.clearAllMocks()
 	for (const action of Object.values(actions)) action.mockResolvedValue({})
 	upload.mockResolvedValue({ data: {}, error: null })
@@ -295,6 +300,7 @@ describe("Review step", () => {
 
 	it("explains a rejection and shows submit errors", async () => {
 		state.seller = makeSeller({ status: "rejected", about: null, addressLine1: null })
+		state.feedback = { message: "Licence not in the AVS registry." }
 		actions.submitForVerification.mockResolvedValue({
 			formError: "Upload both your AVS licence and your ACRA BizFile.",
 		})
@@ -302,6 +308,7 @@ describe("Review step", () => {
 		render(await ReviewStepPage())
 
 		expect(screen.getByText(/couldn't verify your previous submission/)).toBeInTheDocument()
+		expect(screen.getByRole("main")).toHaveTextContent("Reason: Licence not in the AVS registry.")
 		expect(screen.getAllByText("Not provided").length).toBeGreaterThan(0)
 		await user.click(screen.getByRole("button", { name: "Submit for verification" }))
 		expect(await screen.findByRole("alert")).toHaveTextContent("Upload both")
@@ -321,12 +328,25 @@ describe("Seller dashboard", () => {
 		expect(screen.queryByRole("link", { name: "Edit details" })).toBeNull()
 	})
 
-	it("asks rejected sellers to resubmit", async () => {
+	it("asks rejected sellers to resubmit, with the reason", async () => {
 		state.seller = makeSeller({ status: "rejected" })
+		state.feedback = { message: "Licence not in the AVS registry." }
 		render(await SellerDashboardPage())
+		expect(screen.getByRole("status", { name: "Verification status" })).toHaveTextContent(
+			"Reason: Licence not in the AVS registry."
+		)
 		expect(screen.getByRole("link", { name: "Review and resubmit" })).toHaveAttribute(
 			"href",
 			"/seller/onboarding/review"
+		)
+	})
+
+	it("shows suspended sellers why", async () => {
+		state.seller = makeSeller({ status: "suspended" })
+		state.feedback = { message: "Complaint under review." }
+		render(await SellerDashboardPage())
+		expect(screen.getByRole("status", { name: "Verification status" })).toHaveTextContent(
+			"Reason: Complaint under review."
 		)
 	})
 

@@ -1,22 +1,7 @@
 import { expect, test, type Page } from "@playwright/test"
-import path from "node:path"
 import { logIn, signUpConfirmed } from "./helpers/auth"
 import { uniqueEmail } from "./helpers/mailpit"
-
-const fixture = (name: string) => path.join(__dirname, "fixtures", name)
-
-/** A UEN no other run has used: 8 random digits + a letter. */
-function uniqueUen() {
-	return `${String(Math.floor(Math.random() * 1e8)).padStart(8, "0")}A`
-}
-
-function isoDate(daysFromNow: number) {
-	return new Date(Date.now() + daysFromNow * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
-}
-
-function next(page: Page) {
-	return page.getByRole("navigation", { name: "Steps" }).getByRole("button", { name: "Next" })
-}
+import { fixture, isoDate, wizardNext as next, uniqueUen } from "./helpers/seller"
 
 function uploadTile(page: Page, title: string) {
 	return page.getByRole("region", { name: title })
