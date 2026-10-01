@@ -1,0 +1,17 @@
+# Build artifacts
+.next
+out
+build
+coverage
+playwright-report
+test-results
+
+# Dependencies
+node_modules
+package-lock.json
+
+# Generated
+next-env.d.ts
+types/database.ts
+supabase/.temp
+supabase/.branches
