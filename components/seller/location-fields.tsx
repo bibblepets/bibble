@@ -4,23 +4,23 @@ import { Field } from "@/components/forms/field"
 import { SelectField } from "@/components/forms/select-field"
 import { TextareaField } from "@/components/forms/textarea-field"
 import type { LocationField } from "@/lib/sellers/actions"
-import type { CurrentSeller, PlanningArea } from "@/lib/sellers/queries"
+import type { Area, CurrentSeller } from "@/lib/sellers/queries"
 import { formatLocation, regionLabels } from "@/lib/sellers/status"
 import { MapPinIcon } from "lucide-react"
 import { useState } from "react"
 
 type LocationFieldsProps = {
 	seller: CurrentSeller
-	planningAreas: PlanningArea[]
+	areas: Area[]
 	values?: Partial<Record<LocationField, string>>
 	errors?: Partial<Record<LocationField, string>>
 }
 
 /** Address, public area and contact fields, shared by the wizard and the profile page. */
-export function LocationFields({ seller, planningAreas, values = {}, errors = {} }: LocationFieldsProps) {
-	const [areaId, setAreaId] = useState(values.planningAreaId ?? String(seller.planningAreaId ?? ""))
-	const area = planningAreas.find((a) => String(a.id) === areaId) ?? null
-	const regions = Object.keys(regionLabels).filter((region) => planningAreas.some((a) => a.region === region))
+export function LocationFields({ seller, areas, values = {}, errors = {} }: LocationFieldsProps) {
+	const [areaId, setAreaId] = useState(values.areaId ?? String(seller.areaId ?? ""))
+	const area = areas.find((a) => String(a.id) === areaId) ?? null
+	const regions = Object.keys(regionLabels).filter((region) => areas.some((a) => a.region === region))
 
 	return (
 		<div className="grid gap-6">
@@ -53,17 +53,17 @@ export function LocationFields({ seller, planningAreas, values = {}, errors = {}
 					error={errors.postalCode}
 				/>
 				<SelectField
-					name="planningAreaId"
+					name="areaId"
 					label="Area"
 					required
 					value={areaId}
 					onChange={(event) => setAreaId(event.target.value)}
-					error={errors.planningAreaId}
+					error={errors.areaId}
 				>
 					<option value="">Choose an area</option>
 					{regions.map((region) => (
 						<optgroup key={region} label={regionLabels[region]}>
-							{planningAreas
+							{areas
 								.filter((a) => a.region === region)
 								.map((a) => (
 									<option key={a.id} value={a.id}>

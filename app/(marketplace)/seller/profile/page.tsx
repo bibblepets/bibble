@@ -1,4 +1,4 @@
-import { listPlanningAreas, requireSeller } from "@/lib/sellers/queries"
+import { listAreas, requireSeller } from "@/lib/sellers/queries"
 import { sellerTypeLabels } from "@/lib/sellers/status"
 import type { Metadata } from "next"
 import Link from "next/link"
@@ -12,7 +12,7 @@ export default async function SellerProfilePage() {
 	if (seller.status === "incomplete") {
 		redirect("/seller/onboarding")
 	}
-	const planningAreas = await listPlanningAreas()
+	const areas = await listAreas()
 
 	const locked = [
 		{ label: "Business type", value: sellerTypeLabels[seller.sellerType] },
@@ -48,7 +48,7 @@ export default async function SellerProfilePage() {
 				</dl>
 			</section>
 
-			<ProfileForm seller={seller} planningAreas={planningAreas} />
+			<ProfileForm seller={seller} areas={areas} />
 		</main>
 	)
 }

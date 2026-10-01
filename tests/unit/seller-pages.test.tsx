@@ -25,7 +25,7 @@ vi.mock("@/lib/sellers/queries", () => ({
 		{ id: 1, slug: "dog", name: "Dogs", isActive: true },
 		{ id: 2, slug: "cat", name: "Cats", isActive: false },
 	],
-	listPlanningAreas: async () => [
+	listAreas: async () => [
 		{ id: 1, name: "Bedok", region: "east" },
 		{ id: 28, name: "Tampines", region: "east" },
 		{ id: 40, name: "Woodlands", region: "north" },

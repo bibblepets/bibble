@@ -9,7 +9,7 @@ type SelectFieldProps = Omit<ComponentProps<"select">, "id" | "name"> & {
 	hint?: string
 }
 
-/** Native select: accessible and mobile-friendly for long lists like planning areas. */
+/** Native select: accessible and mobile-friendly for long lists like areas. */
 export function SelectField({ name, label, error, hint, className, children, ...props }: SelectFieldProps) {
 	return (
 		<FieldShell name={name} label={label} error={error} hint={hint}>

@@ -14,7 +14,7 @@ import { businessStepSchema, locationStepSchema, profileSchema, typeStepSchema }
 export type TypeField = "sellerType" | "species"
 export type BusinessField = "displayName" | "legalName" | "uen" | "licenceNo" | "licenceExpiresOn"
 export type LocationField =
-	"addressLine1" | "addressLine2" | "postalCode" | "planningAreaId" | "contactPhone" | "contactEmail" | "about"
+	"addressLine1" | "addressLine2" | "postalCode" | "areaId" | "contactPhone" | "contactEmail" | "about"
 export type ProfileField = LocationField | "displayName" | "licenceExpiresOn"
 
 const DUPLICATE_UEN = "This UEN is already registered on Bibble. Contact us if you think that's a mistake."
@@ -125,7 +125,7 @@ const locationFields = [
 	"addressLine1",
 	"addressLine2",
 	"postalCode",
-	"planningAreaId",
+	"areaId",
 	"contactPhone",
 	"contactEmail",
 	"about",
@@ -140,7 +140,7 @@ async function saveLocation(
 	const supabase = await createClient()
 	const { error: sellerError } = await supabase
 		.from("sellers")
-		.update({ planning_area_id: data.planningAreaId, about: data.about, ...extra })
+		.update({ area_id: data.areaId, about: data.about, ...extra })
 		.eq("id", sellerId)
 	const { error: detailsError } = await supabase
 		.from("seller_private_details")

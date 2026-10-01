@@ -70,7 +70,7 @@ export function SellerSummary({ seller, editLinks = false }: { seller: CurrentSe
 							? [seller.addressLine1, seller.addressLine2, `Singapore ${seller.postalCode}`].filter(Boolean).join(", ")
 							: null,
 					},
-					{ label: "Shown to buyers as", value: formatLocation(seller.planningArea) },
+					{ label: "Shown to buyers as", value: formatLocation(seller.area) },
 					{ label: "Phone", value: seller.contactPhone && formatPhone(seller.contactPhone) },
 					{ label: "Email", value: seller.contactEmail },
 					{ label: "About", value: seller.about },

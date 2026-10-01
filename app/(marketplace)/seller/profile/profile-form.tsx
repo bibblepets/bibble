@@ -5,10 +5,10 @@ import { FormAlert } from "@/components/forms/form-alert"
 import { SubmitButton } from "@/components/forms/submit-button"
 import { LocationFields } from "@/components/seller/location-fields"
 import { updateSellerProfile } from "@/lib/sellers/actions"
-import type { CurrentSeller, PlanningArea } from "@/lib/sellers/queries"
+import type { Area, CurrentSeller } from "@/lib/sellers/queries"
 import { useActionState } from "react"
 
-export function ProfileForm({ seller, planningAreas }: { seller: CurrentSeller; planningAreas: PlanningArea[] }) {
+export function ProfileForm({ seller, areas }: { seller: CurrentSeller; areas: Area[] }) {
 	const [state, action, pending] = useActionState(updateSellerProfile, {})
 	const errors = state.fieldErrors ?? {}
 
@@ -35,7 +35,7 @@ export function ProfileForm({ seller, planningAreas }: { seller: CurrentSeller; 
 					error={errors.licenceExpiresOn}
 				/>
 			</div>
-			<LocationFields seller={seller} planningAreas={planningAreas} values={state.values} errors={errors} />
+			<LocationFields seller={seller} areas={areas} values={state.values} errors={errors} />
 			<div className="sm:w-60">
 				<SubmitButton pending={pending}>Save changes</SubmitButton>
 			</div>

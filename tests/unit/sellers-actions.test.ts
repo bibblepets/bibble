@@ -228,7 +228,7 @@ const location = {
 	addressLine1: "201 Tampines Street 21",
 	addressLine2: "",
 	postalCode: "521201",
-	planningAreaId: "28",
+	areaId: "28",
 	contactPhone: "6789 1234",
 	contactEmail: "dave@bibble.test",
 	about: "",
@@ -243,7 +243,7 @@ describe("saveLocationStep", () => {
 		expect(await run(() => actions.saveLocationStep({}, form(location)))).toEqual({
 			redirectedTo: "/seller/onboarding/documents",
 		})
-		expect(db.calls).toContainEqual(["sellers", "update", { planning_area_id: 28, about: null }])
+		expect(db.calls).toContainEqual(["sellers", "update", { area_id: 28, about: null }])
 		expect(db.calls).toContainEqual([
 			"seller_private_details",
 			"update",
@@ -354,7 +354,7 @@ describe("updateSellerProfile", () => {
 		expect(db.calls).toContainEqual([
 			"sellers",
 			"update",
-			{ planning_area_id: 28, about: null, display_name: "Happy Paws Pets", licence_expires_on: future },
+			{ area_id: 28, about: null, display_name: "Happy Paws Pets", licence_expires_on: future },
 		])
 	})
 
