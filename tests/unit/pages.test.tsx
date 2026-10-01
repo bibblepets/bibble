@@ -1,7 +1,7 @@
+import Home from "@/app/(marketplace)/page"
 import AuthError from "@/app/auth/error/page"
 import ErrorPage from "@/app/error"
 import NotFound from "@/app/not-found"
-import Home from "@/app/page"
 import { fireEvent, render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
