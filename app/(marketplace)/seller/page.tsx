@@ -1,8 +1,11 @@
+import { ListingsSummary } from "@/components/listings/listings-summary"
 import { SellerSummary } from "@/components/seller/seller-summary"
 import { SetupChecklist } from "@/components/seller/setup-checklist"
 import { StatusBanner } from "@/components/seller/status-banner"
 import { buttonVariants } from "@/components/ui/button"
 import { todayInSingapore } from "@/lib/dates"
+import { listSellerListings } from "@/lib/listings/queries"
+import { sellerCanList } from "@/lib/listings/rules"
 import { isEditableInWizard, resumeStep } from "@/lib/sellers/progress"
 import { getSellerFeedback, requireSeller } from "@/lib/sellers/queries"
 import { daysUntil } from "@/lib/sellers/status"
@@ -23,7 +26,10 @@ function hasReason(status: string) {
 export default async function SellerDashboardPage() {
 	const seller = await requireSeller("/seller")
 	const inWizard = isEditableInWizard(seller.status)
-	const feedback = hasReason(seller.status) ? await getSellerFeedback(seller.id) : null
+	const [feedback, listings] = await Promise.all([
+		hasReason(seller.status) ? getSellerFeedback(seller.id) : null,
+		listSellerListings(seller.id),
+	])
 	const daysLeft = seller.licenceExpiresOn ? daysUntil(seller.licenceExpiresOn, todayInSingapore()) : null
 
 	return (
@@ -64,6 +70,10 @@ export default async function SellerDashboardPage() {
 						.
 					</p>
 				</section>
+			)}
+
+			{seller.status !== "suspended" && (
+				<ListingsSummary listings={listings} canList={sellerCanList(seller, todayInSingapore())} />
 			)}
 
 			<div className="rounded-2xl border p-6">

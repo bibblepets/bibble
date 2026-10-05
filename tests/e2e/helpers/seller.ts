@@ -1,6 +1,6 @@
-import { expect, type APIRequestContext, type Page } from "@playwright/test"
+import { expect, type APIRequestContext, type Browser, type Page } from "@playwright/test"
 import path from "node:path"
-import { signUpConfirmed } from "./auth"
+import { logIn, signUpConfirmed } from "./auth"
 import { uniqueEmail } from "./mailpit"
 
 export const fixture = (name: string) => path.join(__dirname, "..", "fixtures", name)
@@ -56,4 +56,21 @@ export async function onboardSeller(page: Page, request: APIRequestContext, labe
 	await expect(page.getByRole("status", { name: "Verification status" })).toContainText("We're reviewing")
 
 	return { tradingName }
+}
+
+/** Has carol (the seeded admin) approve a pending seller through the admin console, in her own browser context. */
+export async function approveSeller(browser: Browser, tradingName: string) {
+	const admin = await (await browser.newContext()).newPage()
+	await logIn(admin, "carol@bibble.test")
+	await expect(admin).toHaveURL("/")
+	await admin.goto("/admin/sellers?status=pending")
+	await admin.getByRole("link", { name: tradingName }).click()
+	const panel = admin.getByRole("region", { name: "Decision" })
+	await expect(panel.getByRole("checkbox")).toHaveCount(6)
+	for (const checkbox of await panel.getByRole("checkbox").all()) {
+		await checkbox.check()
+	}
+	await panel.getByRole("button", { name: "Approve" }).click()
+	await expect(admin.getByRole("region", { name: "History" })).toContainText("Approved")
+	await admin.context().close()
 }

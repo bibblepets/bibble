@@ -20,8 +20,14 @@ describe("initialsFor", () => {
 		expect(initialsFor("   ")).toBe("?")
 	})
 
-	it("keeps characters outside the Basic Multilingual Plane intact", () => {
-		expect(initialsFor("🐶 Buddy")).toBe("🐶B")
+	it("skips punctuation and symbols", () => {
+		expect(initialsFor("Poodle (Toy)")).toBe("PT")
+		expect(initialsFor("🐶 Buddy")).toBe("B")
+		expect(initialsFor("— & —")).toBe("?")
+	})
+
+	it("keeps letters outside the Basic Multilingual Plane intact", () => {
+		expect(initialsFor("𝒜lpha bravo")).toBe("𝒜B")
 	})
 })
 

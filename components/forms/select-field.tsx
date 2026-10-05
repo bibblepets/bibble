@@ -14,7 +14,15 @@ export function SelectField({ name, label, error, hint, className, children, ...
 	return (
 		<FieldShell name={name} label={label} error={error} hint={hint}>
 			{(control) => (
-				<select name={name} className={cn(controlClassName, "h-11", className)} {...control} {...props}>
+				<select
+					// Remount when the default changes (e.g. after a save comes back from the server): native selects
+					// ignore defaultValue changes after mount, and React's post-action form reset would use the stale one.
+					key={String(props.defaultValue ?? "")}
+					name={name}
+					className={cn(controlClassName, "h-11", className)}
+					{...control}
+					{...props}
+				>
 					{children}
 				</select>
 			)}

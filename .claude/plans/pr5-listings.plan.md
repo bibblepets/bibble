@@ -18,6 +18,15 @@ The schema keeps the agreed extensible shape:
 - **`categories`:** carries the rules (vertical, species, sale or adoption, whether review is needed).
 - **AVS rules:** checked by the database when a listing is submitted.
 
+> **As built (5b):**
+>
+> - **Editor:** sections are stacked cards rather than a separate left nav. The submit checklist in the side panel links to each section, and each section shows a complete or incomplete tick.
+> - **Create listing:** `/seller/listings/new` became a Server Action button (`createListing`) on the dashboard and listings page.
+> - **Uploads:** `DocumentUpload` was generalised into `components/forms/file-upload.tsx` (`FileUpload`: any bucket, folder and record action). The seller wrapper keeps its API.
+> - **Form fix:** `SelectField` and `TextareaField` now remount when their default changes, like `Field`. Without this, a section's dropdowns went blank after a successful save, because React's post-action form reset used the stale default.
+> - **Placeholder initials:** `initialsFor` now skips punctuation and symbols ("Poodle (Toy)" → "PT").
+> - **Known e2e log noise:** the full listing journey sometimes logs "destination stream closed early" from the server at test teardown. It comes from Next.js link prefetches being aborted when Playwright closes the page; a step-by-step replay of the same journey logs nothing.
+
 > **As built (5a):**
 >
 > - **Thresholds:** the AVS thresholds are `constant` declarations at the top of `submit_listing_for_review`, not a separate function. `lib/listings/rules.ts` mirrors them, and a unit test reads the migration to keep the two in sync.
