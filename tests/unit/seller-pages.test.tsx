@@ -51,6 +51,10 @@ const actions = vi.hoisted(() => ({
 }))
 vi.mock("@/lib/sellers/actions", () => actions)
 
+const listings = vi.hoisted(() => ({ rows: [] as unknown[] }))
+vi.mock("@/lib/listings/queries", () => ({ listSellerListings: async () => listings.rows }))
+vi.mock("@/lib/listings/actions", () => ({ createListing: vi.fn(async () => ({})) }))
+
 const refresh = vi.hoisted(() => vi.fn())
 vi.mock("next/navigation", () => ({
 	redirect: (path: string) => {

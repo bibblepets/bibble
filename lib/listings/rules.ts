@@ -1,3 +1,4 @@
+import type { SellerStatus } from "@/lib/sellers/progress"
 import type { SellerType } from "@/lib/sellers/schema"
 
 /**
@@ -178,4 +179,16 @@ function sourceIsValid(listing: ListingRuleInput, sellerType: SellerType, readyD
 /** Sections that still have something to fix. */
 export function incompleteSections(issues: ListingIssue[]): Set<EditorSection> {
 	return new Set(issues.flatMap((issue) => (issue.section ? [issue.section] : [])))
+}
+
+/** Whether the seller may submit dog listings now: verified, licence in date, licensed for dogs. Mirrors seller_can_list(). */
+export function sellerCanList(
+	seller: { status: SellerStatus; licenceExpiresOn: string | null; species: { slug: string }[] },
+	today: string
+): boolean {
+	return (
+		seller.status === "verified" &&
+		Boolean(seller.licenceExpiresOn && seller.licenceExpiresOn >= today) &&
+		seller.species.some((species) => species.slug === "dog")
+	)
 }

@@ -13,12 +13,17 @@ const gradients = [
 
 export type Placeholder = { initials: string; from: string; to: string }
 
-/** Up to two uppercase initials from the first two words of `label`, or "?" when there are none. */
+/**
+ * Up to two uppercase initials from the first two words of `label` that contain a letter or digit, e.g. "PT" for
+ * "Poodle (Toy)". Returns "?" when there are none.
+ */
 export function initialsFor(label: string): string {
-	const words = label.trim().split(/\s+/).filter(Boolean)
-	const initials = words
+	const initials = label
+		.split(/\s+/)
+		.map((word) => /[\p{L}\p{N}]/u.exec(word)?.[0])
+		.filter((initial): initial is string => Boolean(initial))
 		.slice(0, 2)
-		.map((word) => Array.from(word)[0].toLocaleUpperCase("en-SG"))
+		.map((initial) => initial.toLocaleUpperCase("en-SG"))
 		.join("")
 	return initials || "?"
 }

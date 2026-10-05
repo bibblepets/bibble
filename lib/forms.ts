@@ -1,7 +1,11 @@
 import type { z } from "zod"
 
-/** Result of a form Server Action, consumed with `useActionState`. A successful action redirects instead. */
+/**
+ * Result of a form Server Action, consumed with `useActionState`. A successful action either redirects or, for forms
+ * that stay on the page, returns `saved: true`.
+ */
 export type ActionState<Field extends string = string> = {
+	saved?: boolean
 	fieldErrors?: Partial<Record<Field, string>>
 	formError?: string
 	/** Submitted values to put back into the form after an error. Never includes passwords. */
