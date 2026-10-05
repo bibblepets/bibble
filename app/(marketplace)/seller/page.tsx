@@ -4,7 +4,7 @@ import { StatusBanner } from "@/components/seller/status-banner"
 import { buttonVariants } from "@/components/ui/button"
 import { todayInSingapore } from "@/lib/dates"
 import { isEditableInWizard, resumeStep } from "@/lib/sellers/progress"
-import { requireSeller } from "@/lib/sellers/queries"
+import { getSellerFeedback, requireSeller } from "@/lib/sellers/queries"
 import { daysUntil } from "@/lib/sellers/status"
 import { stepPath } from "@/lib/sellers/wizard"
 import { cn } from "@/lib/utils"
@@ -15,9 +15,15 @@ export const metadata: Metadata = { title: "Your seller account" }
 
 const EXPIRY_WARNING_DAYS = 30
 
+/** Statuses that come with a message from Bibble. */
+function hasReason(status: string) {
+	return status === "rejected" || status === "suspended"
+}
+
 export default async function SellerDashboardPage() {
 	const seller = await requireSeller("/seller")
 	const inWizard = isEditableInWizard(seller.status)
+	const feedback = hasReason(seller.status) ? await getSellerFeedback(seller.id) : null
 	const daysLeft = seller.licenceExpiresOn ? daysUntil(seller.licenceExpiresOn, todayInSingapore()) : null
 
 	return (
@@ -34,7 +40,7 @@ export default async function SellerDashboardPage() {
 				)}
 			</div>
 
-			<StatusBanner status={seller.status}>
+			<StatusBanner status={seller.status} reason={feedback?.message}>
 				{inWizard && (
 					<>
 						<SetupChecklist seller={seller} />

@@ -35,8 +35,16 @@ function Section({ title, editHref, rows }: { title: string; editHref?: string; 
 	)
 }
 
-/** Read-only view of a seller's details. Pass `editLinks` in the wizard to jump back to each step. */
-export function SellerSummary({ seller, editLinks = false }: { seller: CurrentSeller; editLinks?: boolean }) {
+type SellerSummaryProps = {
+	seller: CurrentSeller
+	/** Link each section to its wizard step. */
+	editLinks?: boolean
+	/** Link each document, e.g. to the admin document viewer. */
+	documentHref?: (documentId: string) => string
+}
+
+/** Read-only view of a seller's details. */
+export function SellerSummary({ seller, editLinks = false, documentHref }: SellerSummaryProps) {
 	const edit = (step: string) => (editLinks ? `/seller/onboarding/${step}` : undefined)
 
 	return (
@@ -81,9 +89,23 @@ export function SellerSummary({ seller, editLinks = false }: { seller: CurrentSe
 				editHref={edit("documents")}
 				rows={documentKinds.map((kind) => {
 					const doc = seller.documents[kind]
+					const text = doc && `${doc.fileName} (${formatBytes(doc.sizeBytes)})`
 					return {
 						label: documentLabels[kind].title,
-						value: doc ? `${doc.fileName} (${formatBytes(doc.sizeBytes)})` : null,
+						value:
+							doc && documentHref ? (
+								<a
+									href={documentHref(doc.id)}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="font-medium underline underline-offset-4"
+								>
+									{text}
+									<span className="sr-only"> (opens in a new tab)</span>
+								</a>
+							) : (
+								text
+							),
 					}
 				})}
 			/>

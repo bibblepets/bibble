@@ -18,7 +18,7 @@ const result = vi.hoisted(() => ({ current: { data: null as unknown, error: null
 const calls = vi.hoisted(() => [] as unknown[][])
 vi.mock("@/lib/supabase/server", () => {
 	const builder: Record<string, unknown> = {}
-	for (const method of ["from", "select", "eq", "order"]) {
+	for (const method of ["from", "select", "eq", "order", "rpc"]) {
 		builder[method] = (...args: unknown[]) => {
 			calls.push([method, ...args])
 			return builder
@@ -27,10 +27,11 @@ vi.mock("@/lib/supabase/server", () => {
 	builder.maybeSingle = async () => result.current
 	builder.then = (resolve: (value: unknown) => void) => resolve(result.current)
 	// Wrapped so awaiting createClient() doesn't resolve the thenable builder itself.
-	return { createClient: async () => ({ from: builder.from }) }
+	return { createClient: async () => ({ from: builder.from, rpc: builder.rpc }) }
 })
 
-const { getCurrentSeller, listAreas, listSpecies, requireSeller } = await import("@/lib/sellers/queries")
+const { getCurrentSeller, getSellerById, getSellerFeedback, listAreas, listSpecies, requireSeller } =
+	await import("@/lib/sellers/queries")
 
 const row = {
 	role: "owner",
@@ -119,6 +120,36 @@ describe("getCurrentSeller", () => {
 	it("throws on query errors", async () => {
 		result.current = { data: null, error: { message: "boom" } }
 		await expect(getCurrentSeller()).rejects.toThrow("Failed to load seller: boom")
+	})
+})
+
+describe("getSellerById", () => {
+	it("loads a seller through its owner membership", async () => {
+		expect(await getSellerById("seller-1")).toMatchObject({ id: "seller-1" })
+		expect(calls).toContainEqual(["eq", "seller_id", "seller-1"])
+		expect(calls).toContainEqual(["eq", "role", "owner"])
+	})
+})
+
+describe("getSellerFeedback", () => {
+	it("returns the latest decision", async () => {
+		result.current = { data: { decision: "rejected", message: "Fix it", created_at: "2026-10-02" }, error: null }
+		expect(await getSellerFeedback("seller-1")).toEqual({
+			decision: "rejected",
+			message: "Fix it",
+			createdAt: "2026-10-02",
+		})
+		expect(calls).toContainEqual(["rpc", "get_seller_feedback", { p_seller_id: "seller-1" }])
+	})
+
+	it("returns null without a decision", async () => {
+		result.current = { data: null, error: null }
+		expect(await getSellerFeedback("seller-1")).toBeNull()
+	})
+
+	it("throws on errors", async () => {
+		result.current = { data: null, error: { message: "down" } }
+		await expect(getSellerFeedback("seller-1")).rejects.toThrow("Failed to load seller feedback: down")
 	})
 })
 

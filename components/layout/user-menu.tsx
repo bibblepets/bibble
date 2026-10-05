@@ -21,7 +21,9 @@ const triggerClassName =
 	"hover:shadow-md focus-visible:ring-ring/50 flex items-center gap-2 rounded-full border py-1 pr-1 pl-3 transition-shadow outline-none focus-visible:ring-3 aria-expanded:shadow-md"
 
 /** Airbnb-style menu button with an avatar. */
-export function UserMenu({ user, hasSeller = false }: { user: CurrentUser | null; hasSeller?: boolean }) {
+type UserMenuProps = { user: CurrentUser | null; hasSeller?: boolean; isAdmin?: boolean }
+
+export function UserMenu({ user, hasSeller = false, isAdmin = false }: UserMenuProps) {
 	const name = user?.displayName ?? user?.email
 
 	return (
@@ -50,6 +52,7 @@ export function UserMenu({ user, hasSeller = false }: { user: CurrentUser | null
 						) : (
 							<DropdownMenuItem render={<Link href={navLinks.becomeSeller} />}>Become a seller</DropdownMenuItem>
 						)}
+						{isAdmin && <DropdownMenuItem render={<Link href="/admin" />}>Admin</DropdownMenuItem>}
 						<DropdownMenuSeparator />
 						<DropdownMenuItem onClick={() => void logOut()}>Log out</DropdownMenuItem>
 					</>

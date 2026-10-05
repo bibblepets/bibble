@@ -191,6 +191,54 @@ export type Database = {
 					},
 				]
 			}
+			seller_reviews: {
+				Row: {
+					checklist: string[]
+					created_at: string
+					decision: string
+					id: string
+					internal_note: string | null
+					message: string | null
+					reviewer_id: string | null
+					seller_id: string
+				}
+				Insert: {
+					checklist?: string[]
+					created_at?: string
+					decision: string
+					id?: string
+					internal_note?: string | null
+					message?: string | null
+					reviewer_id?: string | null
+					seller_id: string
+				}
+				Update: {
+					checklist?: string[]
+					created_at?: string
+					decision?: string
+					id?: string
+					internal_note?: string | null
+					message?: string | null
+					reviewer_id?: string | null
+					seller_id?: string
+				}
+				Relationships: [
+					{
+						foreignKeyName: "seller_reviews_reviewer_id_fkey"
+						columns: ["reviewer_id"]
+						isOneToOne: false
+						referencedRelation: "profiles"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "seller_reviews_seller_id_fkey"
+						columns: ["seller_id"]
+						isOneToOne: false
+						referencedRelation: "sellers"
+						referencedColumns: ["id"]
+					},
+				]
+			}
 			seller_species: {
 				Row: {
 					seller_id: string
@@ -312,9 +360,55 @@ export type Database = {
 			[_ in never]: never
 		}
 		Functions: {
+			admin_correct_seller: {
+				Args: {
+					p_internal_note: string
+					p_legal_name: string
+					p_licence_no: string
+					p_seller_id: string
+					p_seller_type: string
+					p_species: string[]
+					p_uen: string
+				}
+				Returns: undefined
+			}
+			admin_seller_owner: {
+				Args: { p_seller_id: string }
+				Returns: {
+					display_name: string
+					email: string
+					user_id: string
+				}[]
+			}
+			admin_seller_status_counts: {
+				Args: Record<PropertyKey, never>
+				Returns: {
+					status: string
+					total: number
+				}[]
+			}
 			create_seller: { Args: { p_seller_type: string; p_species: string[] }; Returns: string }
+			get_seller_feedback: {
+				Args: { p_seller_id: string }
+				Returns: {
+					created_at: string
+					decision: string
+					message: string
+				}[]
+			}
 			is_platform_admin: { Args: Record<PropertyKey, never>; Returns: boolean }
 			is_seller_member: { Args: { target_seller_id: string }; Returns: boolean }
+			review_seller: {
+				Args: {
+					p_checklist?: string[]
+					p_decision: string
+					p_internal_note?: string
+					p_message?: string
+					p_seller_id: string
+				}
+				Returns: undefined
+			}
+			seller_approval_checklist: { Args: Record<PropertyKey, never>; Returns: string[] }
 			seller_can_list: { Args: { target_seller_id: string; target_species_id: number }; Returns: boolean }
 			submit_seller_for_verification: { Args: { p_seller_id: string }; Returns: undefined }
 		}

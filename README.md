@@ -84,7 +84,7 @@ tests/            unit/ (Vitest) and e2e/ (Playwright)
    Add pgTAP tests under `supabase/tests/database/` for every new policy, grant and function, and run `npm run db:test`.
 4. Commit the migration together with `types/database.ts`. CI fails if the types are stale.
 
-**Platform admins** verify sellers and review listings. There's deliberately no UI for granting admin access. Run this in the SQL editor of the hosted project:
+**Platform admins** verify sellers at `/admin` (an **Admin** link appears in their user menu; everyone else gets a 404). Locally, `carol@bibble.test` is an admin and `eve@bibble.test` has a seller waiting for review (eve's seeded documents have no files behind them, so they won't open). There's deliberately no UI for granting admin access. Run this in the SQL editor of the hosted project:
 
 ```sql
 insert into public.platform_admins (user_id) select id from auth.users where email = 'someone@bibble.sg';

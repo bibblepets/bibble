@@ -42,19 +42,18 @@ const sellerColumns = `
 	)
 `
 
-/** The signed-in user's seller account, or null. Memoised per request. */
-export const getCurrentSeller = cache(async (): Promise<CurrentSeller | null> => {
-	const user = await getCurrentUser()
-	if (!user) {
-		return null
-	}
-
+/**
+ * Loads a seller through a membership row: the signed-in user's own (by user_id), or a seller's owner (by
+ * seller_id, which RLS only allows for members and admins).
+ */
+async function loadSeller(filter: { user_id: string } | { seller_id: string }): Promise<CurrentSeller | null> {
 	const supabase = await createClient()
-	const { data, error } = await supabase
-		.from("seller_members")
-		.select(sellerColumns)
-		.eq("user_id", user.id)
-		.maybeSingle()
+	const query = supabase.from("seller_members").select(sellerColumns)
+	const { data, error } = await (
+		"user_id" in filter
+			? query.eq("user_id", filter.user_id)
+			: query.eq("seller_id", filter.seller_id).eq("role", "owner")
+	).maybeSingle()
 
 	if (error) {
 		throw new Error(`Failed to load seller: ${error.message}`)
@@ -104,6 +103,27 @@ export const getCurrentSeller = cache(async (): Promise<CurrentSeller | null> =>
 		submittedAt: seller.submitted_at,
 		verifiedAt: seller.verified_at,
 	}
+}
+
+/** The signed-in user's seller account, or null. Memoised per request. */
+export const getCurrentSeller = cache(async (): Promise<CurrentSeller | null> => {
+	const user = await getCurrentUser()
+	return user ? loadSeller({ user_id: user.id }) : null
+})
+
+/** Any seller by id, as its owner sees it. Returns null unless the caller is a member or an admin (RLS). */
+export const getSellerById = cache((sellerId: string) => loadSeller({ seller_id: sellerId }))
+
+export type SellerFeedback = { decision: string; message: string | null; createdAt: string }
+
+/** The latest admin decision on the seller and its message, without internal notes. */
+export const getSellerFeedback = cache(async (sellerId: string): Promise<SellerFeedback | null> => {
+	const supabase = await createClient()
+	const { data, error } = await supabase.rpc("get_seller_feedback", { p_seller_id: sellerId }).maybeSingle()
+	if (error) {
+		throw new Error(`Failed to load seller feedback: ${error.message}`)
+	}
+	return data ? { decision: data.decision, message: data.message, createdAt: data.created_at } : null
 })
 
 /** The signed-in user's seller, sending them to log in or to onboarding when they have none. */
