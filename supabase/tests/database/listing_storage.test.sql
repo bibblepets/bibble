@@ -1,5 +1,5 @@
--- Storage policies for the private listing-documents bucket. Checks are scoped to this test's listing folder, since a
--- local database may hold uploads from e2e runs.
+-- Storage policies for the private listing-documents bucket. The test creates its own listing so its folder starts
+-- empty, whatever uploads a local database already holds.
 begin;
 create extension if not exists pgtap with schema extensions;
 select plan(7);
@@ -9,12 +9,13 @@ values ('00000000-0000-0000-0000-0000000000e2', 'stranger@test.local', 'authenti
 
 select is((select public from storage.buckets where id = 'listing-documents'), false, 'the bucket is private');
 
--- dave owns the seeded pet shop and its draft listing.
+-- dave owns the seeded pet shop; he starts a fresh draft for this test.
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"44444444-4444-4444-4444-444444444444","role":"authenticated"}', true);
+select set_config('test.id', public.create_listing('aaaaaaaa-0000-0000-0000-000000000002', 'dogs')::text, true);
 select lives_ok(
 	$$ insert into storage.objects (bucket_id, name, owner_id)
-	values ('listing-documents', 'bbbbbbbb-0000-0000-0000-000000000006/card.pdf', '44444444-4444-4444-4444-444444444444') $$,
+	values ('listing-documents', current_setting('test.id') || '/card.pdf', '44444444-4444-4444-4444-444444444444') $$,
 	'members can upload into their listing''s folder'
 );
 select throws_ok(
@@ -26,7 +27,7 @@ select throws_ok(
 select set_config('request.jwt.claims', '{"sub":"00000000-0000-0000-0000-0000000000e2","role":"authenticated"}', true);
 select is(
 	(select count(*)::int from storage.objects where bucket_id = 'listing-documents'
-		and name like 'bbbbbbbb-0000-0000-0000-000000000006/%'),
+		and name like current_setting('test.id') || '/%'),
 	0, 'other users cannot read the files'
 );
 
@@ -41,7 +42,7 @@ set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"33333333-3333-3333-3333-333333333333","role":"authenticated"}', true);
 select is(
 	(select count(*)::int from storage.objects where bucket_id = 'listing-documents'
-		and name like 'bbbbbbbb-0000-0000-0000-000000000006/%'),
+		and name like current_setting('test.id') || '/%'),
 	1, 'admins can read listing files'
 );
 
@@ -52,8 +53,8 @@ delete from storage.objects where bucket_id = 'listing-documents';
 reset role;
 select is(
 	(select name from storage.objects where bucket_id = 'listing-documents'
-		and name like 'bbbbbbbb-0000-0000-0000-000000000006/%'),
-	'bbbbbbbb-0000-0000-0000-000000000006/card.pdf', 'members cannot rename or delete uploads'
+		and name like current_setting('test.id') || '/%'),
+	current_setting('test.id') || '/card.pdf', 'members cannot rename or delete uploads'
 );
 
 select * from finish();
