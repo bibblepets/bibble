@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
+	applicationName: "Bibble",
 	title: {
 		default: "Bibble",
 		template: "%s | Bibble",

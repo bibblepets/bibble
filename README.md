@@ -33,7 +33,14 @@ npm run dev                    # http://localhost:3000
 | Mailpit (auth email) | http://127.0.0.1:54324                                  |
 | Postgres             | postgresql://postgres:postgres@127.0.0.1:54322/postgres |
 
-Seeded dev users: `alice@bibble.test` and `bob@bibble.test`, both with password `password123`.
+Seeded dev users, all with password `password123`:
+
+| User                | Role                                                |
+| ------------------- | --------------------------------------------------- |
+| `alice@bibble.test` | Owner of Pawsome Kennels, a verified breeder (dogs) |
+| `bob@bibble.test`   | Buyer with no seller account                        |
+| `carol@bibble.test` | Platform admin                                      |
+| `dave@bibble.test`  | Owner of Happy Paws Pet Shop, a verified pet shop   |
 
 ## Scripts
 
@@ -52,6 +59,7 @@ Seeded dev users: `alice@bibble.test` and `bob@bibble.test`, both with password 
 | `db:migration <name>`     | Create a new migration file                         |
 | `db:types`                | Regenerate `types/database.ts` from the local DB    |
 | `db:lint`                 | Lint the database schema                            |
+| `db:test`                 | pgTAP tests in `supabase/tests/database`            |
 
 A Husky pre-commit hook runs ESLint and Prettier on staged files.
 
@@ -73,9 +81,35 @@ tests/            unit/ (Vitest) and e2e/ (Playwright)
 1. `npm run db:migration add_pets`: creates `supabase/migrations/<timestamp>_add_pets.sql`.
 2. Write the SQL. **Every table needs RLS enabled and explicit policies.**
 3. `npm run db:reset` applies it locally. `npm run db:types` regenerates types.
+   Add pgTAP tests under `supabase/tests/database/` for every new policy, grant and function, and run `npm run db:test`.
 4. Commit the migration together with `types/database.ts`. CI fails if the types are stale.
 
+**Platform admins** verify sellers at `/admin` (an **Admin** link appears in their user menu; everyone else gets a 404). Locally, `carol@bibble.test` is an admin and `eve@bibble.test` has a seller waiting for review (eve's seeded documents have no files behind them, so they won't open). There's deliberately no UI for granting admin access. Run this in the SQL editor of the hosted project:
+
+```sql
+insert into public.platform_admins (user_id) select id from auth.users where email = 'someone@bibble.sg';
+```
+
 Migrations go to production automatically when you merge to `main`. Keep them backwards-compatible, because the previous deployment keeps serving traffic until the new one is live.
+
+## Authentication
+
+Email and password sign-up, with email confirmation required before logging in.
+
+- **Locally**, confirmation and password-reset emails go to Mailpit (http://127.0.0.1:54324). The e2e tests read them from there too. Seeded users are already confirmed.
+- **Email links** use `token_hash` and are verified by `app/auth/confirm`, so a link works even when opened on a different device. The templates live in `supabase/templates/` and are wired up in `supabase/config.toml`.
+- **Protecting pages and Server Actions:** call `requireUser(returnTo)` from `lib/auth/session.ts` in each one. Layouts don't re-run on navigation, so they must not be the only check.
+
+**Hosted project settings.** `supabase/config.toml` only configures the local stack. Push the auth settings to the hosted project with `npx supabase config push --project-ref <ref>`, or set them in the dashboard to match:
+
+- **Authentication → Sign In / Providers → Email:**
+  - confirm email: on
+  - minimum password length: 8
+  - password requirements: letters and digits
+- **Authentication → Emails → Templates:** use the HTML from `supabase/templates/` for "Confirm signup" and "Reset password", with the same subjects as in `config.toml`.
+- **Authentication → URL Configuration:** see step 5 of [One-time setup](#one-time-setup). Email links use the **Site URL**, so a confirmation email sent from a preview deploy links to production.
+
+> **Before public launch, set up custom SMTP** (Authentication → Emails → SMTP Settings). Supabase's built-in email only delivers to members of your Supabase project's team, and only a few emails an hour. Real users won't receive confirmation emails until custom SMTP is set up.
 
 ## CI/CD
 

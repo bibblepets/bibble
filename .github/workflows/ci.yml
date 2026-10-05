@@ -75,6 +75,10 @@ jobs:
       - name: Lint database schema
         run: npm run db:lint
 
+      # pgTAP tests in supabase/tests/database: RLS, grants, functions and Storage policies.
+      - name: Test database
+        run: npm run db:test
+
       - name: Check generated types are up to date
         run: |
           npm run db:types

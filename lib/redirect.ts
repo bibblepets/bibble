@@ -19,3 +19,16 @@ export function safeRedirectUrl(next: string | null, origin: string, fallback = 
 	}
 	return new URL(fallback, origin)
 }
+
+// Any fixed origin works: only the path survives, and off-origin targets fall back first.
+const PLACEHOLDER_ORIGIN = "http://bibble.invalid"
+
+/**
+ * Like `safeRedirectUrl`, but returns a same-origin path (with query and hash) for `redirect()` in
+ * Server Actions, where the request origin isn't at hand. Only relative targets are
+ * accepted: absolute URLs, even to our own origin, fall back.
+ */
+export function safeRedirectPath(next: string | null, fallback = "/"): string {
+	const target = safeRedirectUrl(next, PLACEHOLDER_ORIGIN, fallback)
+	return target.pathname + target.search + target.hash
+}

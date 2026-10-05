@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+	<body
+		style="
+			margin: 0;
+			padding: 32px 16px;
+			background: #f5f7fa;
+			font-family: Helvetica, Arial, sans-serif;
+			color: #1a1a1a;
+		"
+	>
+		<table
+			role="presentation"
+			width="100%"
+			cellpadding="0"
+			cellspacing="0"
+			style="max-width: 480px; margin: 0 auto; background: #ffffff; border-radius: 12px"
+		>
+			<tr>
+				<td style="padding: 32px">
+					<p style="margin: 0 0 24px; font-size: 24px; font-weight: 700; color: #0ea9ee">bibble</p>
+					<h1 style="margin: 0 0 12px; font-size: 20px">Confirm your email</h1>
+					<p style="margin: 0 0 24px; line-height: 1.5">
+						Thanks for joining Bibble! Confirm your email address to finish creating your account.
+					</p>
+					<a
+						href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/"
+						style="
+							display: inline-block;
+							padding: 12px 20px;
+							border-radius: 8px;
+							background: #0077b6;
+							color: #ffffff;
+							font-weight: 600;
+							text-decoration: none;
+						"
+						>Confirm email</a
+					>
+					<p style="margin: 24px 0 0; font-size: 13px; line-height: 1.5; color: #666666">
+						If you didn't create a Bibble account, you can ignore this email.
+					</p>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
