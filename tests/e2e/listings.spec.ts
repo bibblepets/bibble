@@ -78,6 +78,26 @@ test("a verified pet shop creates a complete listing and submits it for review",
 	await documents.locator("input[type=file]").setInputFiles(fixture("avs-licence.pdf"))
 	await expect(documents).toContainText("avs-licence.pdf")
 
+	// Photos: required to submit, resized and stripped of metadata in the browser.
+	await expect(checklist(page)).toContainText("Add at least one photo.")
+	const photos = section(page, "Photos")
+	await photos.locator("input[type=file]").setInputFiles([fixture("puppy-1.png"), fixture("puppy-2.jpg")])
+	const photoList = photos.getByRole("list", { name: "Photos" }).getByRole("img")
+	await expect(photoList).toHaveCount(2)
+	const firstCover = (await photoList.first().getAttribute("src"))!
+	await photos.getByRole("button", { name: "Make photo 2 the cover" }).click()
+	await expect(photoList.first()).not.toHaveAttribute("src", firstCover)
+	await photos.getByRole("button", { name: "Remove photo 2" }).click()
+	await expect(photoList).toHaveCount(1)
+
+	// The remaining photo is the JPEG that had EXIF; what's stored is a clean WebP.
+	const coverSrc = new URL((await photoList.first().getAttribute("src"))!, page.url()).searchParams.get("url")!
+	const stored = await page.request.get(coverSrc)
+	expect(stored.headers()["content-type"]).toBe("image/webp")
+	const bytes = await stored.body()
+	expect(bytes.includes("Exif")).toBe(false)
+	expect(bytes.includes("GPSTEST")).toBe(false)
+
 	await expect(statusPanel(page)).toContainText("Ready to submit")
 	await statusPanel(page).getByRole("button", { name: "Submit for review" }).click()
 	await expect(statusPanel(page)).toContainText("In review")

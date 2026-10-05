@@ -41,7 +41,7 @@ export function formatAge(dateOfBirth: string, today: string): string {
 	return `${Math.floor(months / 12)} years`
 }
 
-export type EditorSection = "animal" | "listing" | "health" | "source" | "documents"
+export type EditorSection = "photos" | "animal" | "listing" | "health" | "source" | "documents"
 
 export type ListingIssueCode =
 	| "missing_details"
@@ -51,6 +51,7 @@ export type ListingIssueCode =
 	| "vaccinations_incomplete"
 	| "deworming_incomplete"
 	| "invalid_source"
+	| "missing_photos"
 	| "missing_vaccination_card"
 	| "missing_import_permit"
 	| "seller_cannot_list"
@@ -74,6 +75,7 @@ export type ListingRuleInput = {
 	arrivalDate: string | null
 	healthRecords: { kind: "vaccination" | "deworming"; givenOn: string }[]
 	documentKinds: readonly string[]
+	imageCount: number
 }
 
 /**
@@ -146,6 +148,10 @@ export function submitIssues(
 				? "Breeders can only sell animals they bred."
 				: "Give the breeder's licence number, or the import permit and an arrival date at least 72 hours before handover."
 		)
+	}
+
+	if (listing.imageCount === 0) {
+		add("missing_photos", "photos", "Add at least one photo.")
 	}
 
 	if (!listing.documentKinds.includes("vaccination_card")) {

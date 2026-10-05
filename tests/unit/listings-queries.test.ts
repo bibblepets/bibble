@@ -58,6 +58,10 @@ const editRow = {
 		{ id: "d1", kind: "vaccination_card", file_name: "old.pdf", size_bytes: 10, created_at: "2026-10-01" },
 		{ id: "d2", kind: "vaccination_card", file_name: "new.pdf", size_bytes: 20, created_at: "2026-10-02" },
 	],
+	listing_images: [
+		{ id: "i2", storage_path: "l1/b.webp", position: 1, width: 900, height: 1200 },
+		{ id: "i1", storage_path: "l1/a.webp", position: 0, width: 1600, height: 1200 },
+	],
 }
 
 beforeEach(() => {
@@ -85,8 +89,20 @@ describe("listSellerListings", () => {
 					price_cents: 450000,
 					updated_at: "2026-10-05",
 					details: [{ date_of_birth: "2026-07-29", breed: { name: "Cavalier" }, cross: { name: "Poodle (Toy)" } }],
+					listing_images: [
+						{ storage_path: "l1/b.webp", position: 1 },
+						{ storage_path: "l1/a.webp", position: 0 },
+					],
 				},
-				{ id: "l2", title: null, status: "draft", price_cents: null, updated_at: "2026-10-04", details: [] },
+				{
+					id: "l2",
+					title: null,
+					status: "draft",
+					price_cents: null,
+					updated_at: "2026-10-04",
+					details: [],
+					listing_images: [],
+				},
 			],
 			error: null,
 		}
@@ -100,6 +116,7 @@ describe("listSellerListings", () => {
 				crossBreedName: "Poodle (Toy)",
 				dateOfBirth: "2026-07-29",
 				updatedAt: "2026-10-05",
+				coverUrl: "http://127.0.0.1:54321/storage/v1/object/public/listing-images/l1/a.webp",
 			},
 			{
 				id: "l2",
@@ -110,6 +127,7 @@ describe("listSellerListings", () => {
 				crossBreedName: null,
 				dateOfBirth: null,
 				updatedAt: "2026-10-04",
+				coverUrl: null,
 			},
 		])
 		expect(calls).toContainEqual(["eq", "seller_id", "s1"])
@@ -136,11 +154,21 @@ describe("getListingForEdit", () => {
 		})
 		expect(listing?.healthRecords.map((record) => record.id)).toEqual(["h1", "h2"])
 		expect(listing?.documents.vaccination_card.fileName).toBe("new.pdf")
+		expect(listing?.images.map((image) => image.id)).toEqual(["i1", "i2"])
+		expect(listing?.images[0].url).toBe("http://127.0.0.1:54321/storage/v1/object/public/listing-images/l1/a.webp")
+		expect(listing?.imageCount).toBe(2)
 	})
 
 	it("tolerates missing detail rows", async () => {
 		result.current = {
-			data: { ...editRow, details: [], private: null, pet_health_records: [], listing_documents: [] },
+			data: {
+				...editRow,
+				details: [],
+				private: null,
+				pet_health_records: [],
+				listing_documents: [],
+				listing_images: [],
+			},
 			error: null,
 		}
 		expect(await getListingForEdit("l1")).toMatchObject({

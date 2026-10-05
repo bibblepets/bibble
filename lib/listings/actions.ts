@@ -9,6 +9,7 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { LISTING_DOCUMENTS_BUCKET, listingDocumentKinds, type ListingDocumentKind } from "./documents"
 import { listingErrorMessage } from "./errors"
+import { IMAGE_CONTENT_TYPES, LISTING_IMAGES_BUCKET, MAX_IMAGE_BYTES, MAX_IMAGE_EDGE } from "./images"
 import { animalSchema, healthRecordSchema, listingSchema, microchipSchema, sourceSchema } from "./schema"
 import { listingPath, requireOwnListing } from "./session"
 
@@ -267,4 +268,87 @@ export async function deleteDraft(listingId: string): Promise<{ error?: string }
 	}
 	revalidatePath("/seller", "layout")
 	redirect("/seller/listings")
+}
+
+/**
+ * Records a photo the browser has already resized and uploaded. Type and size are read back from Storage; if the
+ * database refuses it (e.g. a sixth photo), the uploaded object is removed again.
+ */
+export async function addListingImage(
+	listingId: string,
+	upload: { storagePath: string; width: number; height: number }
+): Promise<{ error?: string }> {
+	await requireOwnListing(listingId)
+	const { storagePath, width, height } = upload
+	const objectName = storagePath.slice(listingId.length + 1)
+	if (
+		!storagePath.startsWith(`${listingId}/`) ||
+		!/^[\w-]+\.(webp|jpe?g|png)$/i.test(objectName) ||
+		![width, height].every((side) => Number.isInteger(side) && side > 0 && side <= MAX_IMAGE_EDGE)
+	) {
+		return { error: "That upload doesn't look right. Please try again." }
+	}
+
+	const supabase = await createClient()
+	const bucket = supabase.storage.from(LISTING_IMAGES_BUCKET)
+	const { data: info, error: infoError } = await bucket.info(storagePath)
+	if (infoError || !info) {
+		return { error: "We couldn't find your upload. Please try again." }
+	}
+	const contentType = info.contentType ?? ""
+	if (!(IMAGE_CONTENT_TYPES as readonly string[]).includes(contentType) || (info.size ?? 0) > MAX_IMAGE_BYTES) {
+		await bucket.remove([storagePath])
+		return { error: "Upload a photo in JPG, PNG or WebP, up to 5 MB." }
+	}
+
+	const { error } = await supabase.rpc("add_listing_image", {
+		p_listing_id: listingId,
+		p_storage_path: storagePath,
+		p_width: width,
+		p_height: height,
+	})
+	if (error) {
+		await bucket.remove([storagePath])
+		return { error: listingErrorMessage(error) }
+	}
+	revalidatePath(listingPath(listingId))
+	return {}
+}
+
+/** Removes a photo, then its file. */
+export async function removeListingImage(listingId: string, imageId: string): Promise<{ error?: string }> {
+	await requireOwnListing(listingId)
+	const supabase = await createClient()
+	const { data: storagePath, error } = await supabase.rpc("remove_listing_image", { p_image_id: imageId })
+	if (error) {
+		return { error: listingErrorMessage(error) }
+	}
+	// A leftover file is harmless (unlinked, random name), so a failed removal isn't reported.
+	await supabase.storage.from(LISTING_IMAGES_BUCKET).remove([storagePath])
+	revalidatePath(listingPath(listingId))
+	return {}
+}
+
+/** Moves a photo one place earlier or later, or to the front as the cover. */
+export async function moveListingImage(
+	listingId: string,
+	imageId: string,
+	move: "earlier" | "later" | "cover"
+): Promise<{ error?: string }> {
+	const { listing } = await requireOwnListing(listingId)
+	const ids = listing.images.map((image) => image.id)
+	const from = ids.indexOf(imageId)
+	if (from === -1) {
+		return { error: listingErrorMessage({ message: "image_not_found" }) }
+	}
+	const to = move === "cover" ? 0 : move === "earlier" ? Math.max(0, from - 1) : Math.min(ids.length - 1, from + 1)
+	ids.splice(to, 0, ...ids.splice(from, 1))
+
+	const supabase = await createClient()
+	const { error } = await supabase.rpc("reorder_listing_images", { p_listing_id: listingId, p_image_ids: ids })
+	if (error) {
+		return { error: listingErrorMessage(error) }
+	}
+	revalidatePath(listingPath(listingId))
+	return {}
 }

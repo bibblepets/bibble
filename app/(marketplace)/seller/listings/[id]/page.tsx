@@ -4,6 +4,7 @@ import { HealthSection } from "@/components/listings/editor/health-section"
 import { ListingActions } from "@/components/listings/editor/listing-actions"
 import { ListingDocuments } from "@/components/listings/editor/listing-documents"
 import { ListingInfoForm } from "@/components/listings/editor/listing-info-form"
+import { PhotosSection } from "@/components/listings/editor/photos-section"
 import { SourceForm } from "@/components/listings/editor/source-form"
 import { todayInSingapore } from "@/lib/dates"
 import { listBreeds } from "@/lib/listings/queries"
@@ -16,6 +17,7 @@ import Link from "next/link"
 export const metadata: Metadata = { title: "Edit listing" }
 
 const sections: { id: Section; title: string }[] = [
+	{ id: "photos", title: "Photos" },
 	{ id: "animal", title: "About the puppy" },
 	{ id: "listing", title: "Title, price and description" },
 	{ id: "health", title: "Health" },
@@ -58,13 +60,23 @@ export default async function ListingEditorPage({ params }: PageProps<"/seller/l
 							title={title}
 							complete={!incomplete.has(sectionId)}
 							description={
-								sectionId === "documents"
-									? "Only you and Bibble's verification team can see these."
-									: sectionId === "source"
-										? "AVS rules: breeders sell only animals they bred; pet shops buy from licensed breeders or import with a permit."
-										: undefined
+								sectionId === "photos"
+									? "Up to 5 photos of the puppy. The first one is the cover."
+									: sectionId === "documents"
+										? "Only you and Bibble's verification team can see these."
+										: sectionId === "source"
+											? "AVS rules: breeders sell only animals they bred; pet shops buy from licensed breeders or import with a permit."
+											: undefined
 							}
 						>
+							{sectionId === "photos" && (
+								<PhotosSection
+									listingId={listing.id}
+									title={listing.title}
+									images={listing.images}
+									editable={editable}
+								/>
+							)}
 							{sectionId === "animal" && <AnimalForm listing={listing} breeds={breeds} editable={editable} />}
 							{sectionId === "listing" && <ListingInfoForm listing={listing} editable={editable} />}
 							{sectionId === "health" && <HealthSection listing={listing} editable={editable} />}

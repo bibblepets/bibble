@@ -13,6 +13,10 @@ const messages: Record<string, string> = {
 	vaccinations_incomplete: "Add at least 2 vaccinations, the last one at least 7 days before the ready date.",
 	deworming_incomplete: "Add at least 2 dewormings.",
 	invalid_source: "Check where the animal comes from.",
+	missing_photos: "Add at least one photo.",
+	too_many_images: "A listing can have up to 5 photos.",
+	image_not_found: "That photo has already been removed.",
+	invalid_image_order: "The photos changed while you were reordering them. Reload and try again.",
 	missing_vaccination_card: "Upload the vaccination card.",
 	missing_import_permit: "Upload the import permit.",
 }

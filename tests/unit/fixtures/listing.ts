@@ -32,6 +32,8 @@ export function makeListing(overrides: Partial<ListingForEdit> = {}): ListingFor
 		healthRecords: [],
 		documents: {},
 		documentKinds: [],
+		images: [],
+		imageCount: 0,
 		...overrides,
 	}
 }

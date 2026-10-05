@@ -31,7 +31,15 @@ vi.mock("@/lib/supabase/server", () => ({
 			db.calls.push(["rpc", name, args])
 			return db.results[`rpc.${name}`] ?? { data: null, error: null }
 		},
-		storage: { from: () => ({ info: async () => db.info }) },
+		storage: {
+			from: (bucket: string) => ({
+				info: async () => db.info,
+				async remove(paths: string[]) {
+					db.calls.push(["storage", bucket, "remove", paths])
+					return { error: null }
+				},
+			}),
+		},
 	}),
 }))
 
@@ -298,5 +306,86 @@ describe("status changes", () => {
 	it("refuses other sellers' listings", async () => {
 		state.listing = null
 		await expect(actions.changeListingStatus(LISTING_ID, "submit")).rejects.toThrow("NEXT_NOT_FOUND")
+	})
+})
+
+describe("photos", () => {
+	const upload = { storagePath: `${LISTING_ID}/0b9d6a2e-1c2f-4e2a-9d8b-2d1a3c4b5e6f.webp`, width: 1600, height: 1200 }
+
+	beforeEach(() => {
+		db.info = { data: { size: 200_000, contentType: "image/webp" }, error: null }
+	})
+
+	it("records an uploaded photo", async () => {
+		expect(await actions.addListingImage(LISTING_ID, upload)).toEqual({})
+		expect(db.calls).toContainEqual([
+			"rpc",
+			"add_listing_image",
+			{ p_listing_id: LISTING_ID, p_storage_path: upload.storagePath, p_width: 1600, p_height: 1200 },
+		])
+	})
+
+	it.each([
+		["another folder", { storagePath: "other/x.webp" }],
+		["a bad name", { storagePath: `${LISTING_ID}/x.gif` }],
+		["bad dimensions", { width: 0 }],
+		["oversized dimensions", { height: 5000 }],
+	])("refuses %s", async (_label, override) => {
+		expect((await actions.addListingImage(LISTING_ID, { ...upload, ...override })).error).toMatch(/doesn't look right/)
+	})
+
+	it("refuses missing files", async () => {
+		db.info = { data: null, error: { message: "not found" } }
+		expect((await actions.addListingImage(LISTING_ID, upload)).error).toMatch(/couldn't find/)
+	})
+
+	it("removes uploads that aren't photos or that the database refuses", async () => {
+		db.info = { data: { size: 10, contentType: "image/gif" }, error: null }
+		expect((await actions.addListingImage(LISTING_ID, upload)).error).toMatch(/JPG, PNG or WebP/)
+		expect(db.calls).toContainEqual(["storage", "listing-images", "remove", [upload.storagePath]])
+
+		db.calls = []
+		db.info = { data: { size: 10, contentType: "image/webp" }, error: null }
+		db.results["rpc.add_listing_image"] = { error: { message: "too_many_images" } }
+		expect((await actions.addListingImage(LISTING_ID, upload)).error).toBe("A listing can have up to 5 photos.")
+		expect(db.calls).toContainEqual(["storage", "listing-images", "remove", [upload.storagePath]])
+	})
+
+	it("removes a photo and its file", async () => {
+		db.results["rpc.remove_listing_image"] = { data: `${LISTING_ID}/a.webp`, error: null }
+		expect(await actions.removeListingImage(LISTING_ID, "i1")).toEqual({})
+		expect(db.calls).toContainEqual(["storage", "listing-images", "remove", [`${LISTING_ID}/a.webp`]])
+
+		db.results["rpc.remove_listing_image"] = { error: { message: "listing_locked" } }
+		expect((await actions.removeListingImage(LISTING_ID, "i1")).error).toMatch(/can't be edited/)
+	})
+
+	describe("moving", () => {
+		const images = ["i1", "i2", "i3"].map((id, position) => ({ id, url: "", position, width: 1, height: 1 }))
+
+		beforeEach(() => {
+			state.listing = makeListing({ images, imageCount: 3 })
+		})
+
+		it.each([
+			["i3", "cover", ["i3", "i1", "i2"]],
+			["i2", "earlier", ["i2", "i1", "i3"]],
+			["i2", "later", ["i1", "i3", "i2"]],
+			["i1", "earlier", ["i1", "i2", "i3"]],
+			["i3", "later", ["i1", "i2", "i3"]],
+		] as const)("moves %s %s", async (id, move, order) => {
+			expect(await actions.moveListingImage(LISTING_ID, id, move)).toEqual({})
+			expect(db.calls).toContainEqual([
+				"rpc",
+				"reorder_listing_images",
+				{ p_listing_id: LISTING_ID, p_image_ids: order },
+			])
+		})
+
+		it("reports unknown photos and refusals", async () => {
+			expect((await actions.moveListingImage(LISTING_ID, "nope", "cover")).error).toMatch(/already been removed/)
+			db.results["rpc.reorder_listing_images"] = { error: { message: "invalid_image_order" } }
+			expect((await actions.moveListingImage(LISTING_ID, "i2", "cover")).error).toMatch(/Reload/)
+		})
 	})
 })

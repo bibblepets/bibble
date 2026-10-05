@@ -44,6 +44,7 @@ const actions = vi.hoisted(() => ({
 }))
 vi.mock("@/lib/listings/actions", () => actions)
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn() }) }))
+vi.mock("next/image", () => import("./mocks/next-image"))
 vi.mock("@/lib/supabase/client", () => ({ createClient: () => ({ storage: { from: () => ({ upload: vi.fn() }) } }) }))
 
 const params = { params: Promise.resolve({ id: LISTING_ID }), searchParams: Promise.resolve({}) }
@@ -72,6 +73,8 @@ function completeListing(overrides: Partial<ListingForEdit> = {}) {
 			vaccination_card: { id: "d1", kind: "vaccination_card", fileName: "card.pdf", sizeBytes: 100, createdAt: "" },
 		},
 		documentKinds: ["vaccination_card"],
+		images: [{ id: "i1", url: "https://cdn.test/l/1.webp", position: 0, width: 1600, height: 1200 }],
+		imageCount: 1,
 		...overrides,
 	})
 }
@@ -94,6 +97,7 @@ describe("Listings page", () => {
 		crossBreedName: null,
 		dateOfBirth: "2026-07-01",
 		updatedAt: "2026-10-05",
+		coverUrl: null,
 		...overrides,
 	})
 
@@ -149,7 +153,8 @@ describe("Listing editor", () => {
 		const checklist = screen.getByRole("list", { name: "Before you can submit" })
 		expect(within(checklist).getByRole("link", { name: /microchip/ })).toHaveAttribute("href", "#health")
 		expect(screen.getByRole("button", { name: "Submit for review" })).toBeDisabled()
-		expect(screen.getAllByLabelText("Incomplete")).toHaveLength(5)
+		expect(screen.getAllByLabelText("Incomplete")).toHaveLength(6)
+		expect(within(checklist).getByRole("link", { name: "Add at least one photo." })).toHaveAttribute("href", "#photos")
 		expect(screen.getByRole("button", { name: "Delete draft" })).toBeInTheDocument()
 	})
 
@@ -178,7 +183,11 @@ describe("Listing editor", () => {
 		const user = userEvent.setup()
 		render(await ListingEditorPage(params as never))
 
-		expect(screen.getAllByLabelText("Complete")).toHaveLength(5)
+		expect(screen.getAllByLabelText("Complete")).toHaveLength(6)
+		expect(screen.getByRole("img", { name: "Photo 1 of Sweet Beagle boy" })).toHaveAttribute(
+			"src",
+			"https://cdn.test/l/1.webp"
+		)
 		expect(screen.getByText("Ready to submit")).toBeInTheDocument()
 		expect(screen.getByLabelText("Breed")).toHaveValue("13")
 		expect(screen.getByLabelText("Price (SGD)")).toHaveValue("3200")
@@ -383,6 +392,7 @@ describe("ListingsSummary", () => {
 			crossBreedName: null,
 			dateOfBirth: null,
 			updatedAt: "",
+			coverUrl: null,
 		}
 		render(
 			<ListingsSummary
