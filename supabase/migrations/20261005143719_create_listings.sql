@@ -115,7 +115,6 @@ from (
 		('mastiff', 'Mastiff', 2),
 		('miniature-pinscher', 'Miniature Pinscher', null),
 		('miniature-schnauzer', 'Miniature Schnauzer', null),
-		('mixed-breed-local', 'Mixed breed (local)', null),
 		('neapolitan-mastiff', 'Neapolitan Mastiff', 1),
 		('newfoundland', 'Newfoundland', null),
 		('norfolk-terrier', 'Norfolk Terrier', null),
@@ -145,6 +144,8 @@ from (
 		('shih-tzu', 'Shih Tzu', null),
 		('siberian-husky', 'Siberian Husky', null),
 		('silky-terrier', 'Silky Terrier', null),
+		-- Singapore's local mixed-breed dogs.
+		('singapore-special', 'Singapore Special', null),
 		('staffordshire-bull-terrier', 'Staffordshire Bull Terrier', 1),
 		('tibetan-mastiff', 'Tibetan Mastiff', 2),
 		('tibetan-spaniel', 'Tibetan Spaniel', null),

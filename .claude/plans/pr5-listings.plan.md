@@ -62,7 +62,7 @@ categories (id, slug, name, icon, sort_order,
 breeds (id, species_id, slug, name,
         hdb_approved bool null,            -- null until the official HDB list is loaded (agreed)
         specified_part smallint null)      -- AVS specified dogs: 1 = cannot be sold, 2 = conditions apply
-  seed: ~100 common dog breeds + "Mixed breed (local)"; Part 1 and Part 2 breeds flagged
+  seed: ~100 common dog breeds + "Singapore Special" (local mixed breed); Part 1 and Part 2 breeds flagged
 
 listings (id, seller_id, category_id, vertical,
           title 5–80, description ≤ 2000, price_cents > 0, currency 'SGD',
@@ -90,7 +90,7 @@ listing_documents (id, listing_id, kind 'vaccination_card' | 'import_permit', st
 
 - **Location comes from the seller.** Listings show the seller's area ("Tampines, East"), since animals are at the licensed premises, so there's no area column on listings.
 - **Species comes from the category.** A trigger checks that the breed and cross breed belong to the category's species. `vertical` is copied from the category on insert and checked, so the composite FK guarantees pet details attach only to animal listings.
-- **Crosses:** `breed_id` plus an optional `cross_breed_id` covers purebreds, crosses (Cavapoo = Cavalier King Charles Spaniel × Poodle) and local mixed breeds ("Mixed breed (local)"). A listing is Part 1 if **either** breed is, which covers "and their crosses".
+- **Crosses:** `breed_id` plus an optional `cross_breed_id` covers purebreds, crosses (Cavapoo = Cavalier King Charles Spaniel × Poodle) and local mixed breeds ("Singapore Special"). A listing is Part 1 if **either** breed is, which covers "and their crosses".
 - **Private vs public details.** The microchip number and source paperwork go in `pet_listing_private`, because RLS can't hide individual columns. Breed, age, sex, health records and so on are public once the listing is visible.
 - **Who sees what:**
   - Everyone sees listings that are `published`, `reserved` or `sold` **and** whose seller is verified. A suspended seller's listings disappear automatically.
