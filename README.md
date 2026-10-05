@@ -35,12 +35,12 @@ npm run dev                    # http://localhost:3000
 
 Seeded dev users, all with password `password123`:
 
-| User                | Role                                                |
-| ------------------- | --------------------------------------------------- |
-| `alice@bibble.test` | Owner of Pawsome Kennels, a verified breeder (dogs) |
-| `bob@bibble.test`   | Buyer with no seller account                        |
-| `carol@bibble.test` | Platform admin                                      |
-| `dave@bibble.test`  | Owner of Happy Paws Pet Shop, a verified pet shop   |
+| User                | Role                                                                                      |
+| ------------------- | ----------------------------------------------------------------------------------------- |
+| `alice@bibble.test` | Owner of Pawsome Kennels, a verified breeder (dogs), with 3 listings (2 live, 1 reserved) |
+| `bob@bibble.test`   | Buyer with no seller account                                                              |
+| `carol@bibble.test` | Platform admin                                                                            |
+| `dave@bibble.test`  | Owner of Happy Paws Pet Shop, a verified pet shop, with 3 listings (live, sold, draft)    |
 
 ## Scripts
 
