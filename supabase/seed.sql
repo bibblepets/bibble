@@ -96,3 +96,76 @@ values
 		'aaaaaaaa-0000-0000-0000-000000000003', 'acra_bizfile', 'aaaaaaaa-0000-0000-0000-000000000003/seed-bizfile.pdf',
 		'acra-bizfile.pdf', 'application/pdf', 2048, '55555555-5555-5555-5555-555555555555'
 	);
+
+-- Listings: alice (breeder) and dave (pet shop) have dogs on the marketplace, plus one of dave's drafts.
+-- Dates are relative to today so the puppies stay a realistic age. Vaccination cards are rows only (no files).
+insert into public.listings (
+	id, seller_id, category_id, title, description, price_cents, status, submitted_at, published_at
+)
+select
+	v.id::uuid, v.seller_id::uuid, (select id from public.categories where slug = 'dogs'), v.title, v.description,
+	v.price_cents, v.status, case when v.status <> 'draft' then now() - interval '3 days' end,
+	case when v.status <> 'draft' then now() - interval '2 days' end
+from (
+	values
+		('bbbbbbbb-0000-0000-0000-000000000001', 'aaaaaaaa-0000-0000-0000-000000000001', 'Playful Shih Tzu boy',
+			'Gentle, well-socialised Shih Tzu raised in our family kennel. Used to children and household sounds.',
+			380000, 'published'),
+		('bbbbbbbb-0000-0000-0000-000000000002', 'aaaaaaaa-0000-0000-0000-000000000001', 'Cavapoo girl, family-raised',
+			'Affectionate Cavalier x Toy Poodle cross with a soft apricot coat. Low-shedding and great with families.',
+			450000, 'published'),
+		('bbbbbbbb-0000-0000-0000-000000000003', 'aaaaaaaa-0000-0000-0000-000000000001', 'Pomeranian boy, bright orange',
+			'Confident little Pomeranian who loves people. Parents can be viewed at our licensed premises.',
+			420000, 'reserved'),
+		('bbbbbbbb-0000-0000-0000-000000000004', 'aaaaaaaa-0000-0000-0000-000000000002', 'Golden Retriever puppy',
+			'Sweet-natured Golden Retriever from a licensed local breeder. Microchipped, vaccinated and dewormed.',
+			360000, 'published'),
+		('bbbbbbbb-0000-0000-0000-000000000005', 'aaaaaaaa-0000-0000-0000-000000000002', 'Red Toy Poodle',
+			'Lively Toy Poodle with a rich red coat. Comes with vaccination records and a care pack.', 480000, 'sold'),
+		('bbbbbbbb-0000-0000-0000-000000000006', 'aaaaaaaa-0000-0000-0000-000000000002', 'Corgi puppy', null, null, 'draft')
+) as v (id, seller_id, title, description, price_cents, status);
+
+insert into public.pet_listing_details (listing_id, breed_id, cross_breed_id, sex, date_of_birth, ready_date, colour, weight_kg)
+select
+	v.id::uuid, (select id from public.breeds where slug = v.breed), (select id from public.breeds where slug = v.cross_breed),
+	v.sex, current_date - v.age_days, current_date - v.age_days + v.ready_after_days, v.colour, v.weight_kg
+from (
+	values
+		('bbbbbbbb-0000-0000-0000-000000000001', 'shih-tzu', null, 'male', 70, 70, 'Gold and white', 2.1),
+		('bbbbbbbb-0000-0000-0000-000000000002', 'cavalier-king-charles-spaniel', 'poodle-toy', 'female', 68, 70, 'Apricot', 2.4),
+		('bbbbbbbb-0000-0000-0000-000000000003', 'pomeranian', null, 'male', 75, 75, 'Orange', 1.3),
+		('bbbbbbbb-0000-0000-0000-000000000004', 'golden-retriever', null, 'female', 72, 72, 'Golden', 6.5),
+		('bbbbbbbb-0000-0000-0000-000000000005', 'poodle-toy', null, 'male', 80, 70, 'Red', 1.8),
+		('bbbbbbbb-0000-0000-0000-000000000006', 'pembroke-welsh-corgi', null, 'female', 40, null, null, null)
+) as v (id, breed, cross_breed, sex, age_days, ready_after_days, colour, weight_kg);
+
+insert into public.pet_listing_private (listing_id, microchip_no, source, source_licence_no)
+values
+	('bbbbbbbb-0000-0000-0000-000000000001', '900085000000001', 'bred_on_premises', null),
+	('bbbbbbbb-0000-0000-0000-000000000002', '900085000000002', 'bred_on_premises', null),
+	('bbbbbbbb-0000-0000-0000-000000000003', '900085000000003', 'bred_on_premises', null),
+	('bbbbbbbb-0000-0000-0000-000000000004', '900085000000004', 'licensed_breeder', 'BR25001'),
+	('bbbbbbbb-0000-0000-0000-000000000005', '900085000000005', 'licensed_breeder', 'BR25001'),
+	('bbbbbbbb-0000-0000-0000-000000000006', null, null, null);
+
+-- Two vaccinations and two dewormings for every listing on the marketplace.
+insert into public.pet_health_records (listing_id, kind, given_on, product, clinic)
+select d.listing_id, r.kind, d.date_of_birth + r.at_days, r.product, 'Mount Pleasant Vet Centre'
+from public.pet_listing_details d
+join public.listings l on l.id = d.listing_id
+cross join (
+	values
+		('deworming', 14, 'Drontal Puppy'),
+		('deworming', 28, 'Drontal Puppy'),
+		('vaccination', 42, 'Nobivac DHP'),
+		('vaccination', 56, 'Nobivac DHPPi')
+) as r (kind, at_days, product)
+where l.status <> 'draft';
+
+insert into public.listing_documents (listing_id, kind, storage_path, file_name, content_type, size_bytes, uploaded_by)
+select
+	l.id, 'vaccination_card', l.id || '/seed-vaccination-card.pdf', 'vaccination-card.pdf', 'application/pdf', 1024,
+	m.user_id
+from public.listings l
+join public.seller_members m on m.seller_id = l.seller_id
+where l.status <> 'draft';

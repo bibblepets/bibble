@@ -62,14 +62,14 @@ favourites (user_id, listing_id, created_at)
 
 ## PRs
 
-| #   | PR                                                   | Depends on | Plan                                                               |
-| --- | ---------------------------------------------------- | ---------- | ------------------------------------------------------------------ |
-| 1   | Brand and app shell                                  | –          | [pr1-brand-shell.plan.md](pr1-brand-shell.plan.md) (merged, #6)    |
-| 2   | Authentication                                       | 1          | [pr2-auth.plan.md](pr2-auth.plan.md) (merged, #7)                  |
-| 3a  | Seller schema, Storage and pgTAP in CI               | 2          | [pr3-sellers.plan.md](pr3-sellers.plan.md) (merged, #9)            |
-| 3b  | Seller onboarding wizard and dashboard               | 3a         | [pr3-sellers.plan.md](pr3-sellers.plan.md) (in review, #10)        |
-| 4   | Admin console and seller verification                | 3          | [pr4-admin-sellers.plan.md](pr4-admin-sellers.plan.md) (in review) |
-| 5   | Listings model and seller CRUD                       | 3          | pending                                                            |
-| 6   | Listing review workflow                              | 4, 5       | pending                                                            |
-| 7   | Public marketplace (category bar, grid, detail page) | 5          | pending                                                            |
-| 8   | Favourites, plus the full-journey e2e test           | 7          | pending                                                            |
+| #   | PR                                                   | Depends on | Plan                                                                 |
+| --- | ---------------------------------------------------- | ---------- | -------------------------------------------------------------------- |
+| 1   | Brand and app shell                                  | –          | [pr1-brand-shell.plan.md](pr1-brand-shell.plan.md) (merged, #6)      |
+| 2   | Authentication                                       | 1          | [pr2-auth.plan.md](pr2-auth.plan.md) (merged, #7)                    |
+| 3a  | Seller schema, Storage and pgTAP in CI               | 2          | [pr3-sellers.plan.md](pr3-sellers.plan.md) (merged, #9)              |
+| 3b  | Seller onboarding wizard and dashboard               | 3a         | [pr3-sellers.plan.md](pr3-sellers.plan.md) (merged, #10)             |
+| 4   | Admin console and seller verification                | 3          | [pr4-admin-sellers.plan.md](pr4-admin-sellers.plan.md) (merged, #12) |
+| 5   | Listings model and seller CRUD                       | 3          | [pr5-listings.plan.md](pr5-listings.plan.md) (5a in review)          |
+| 6   | Listing review workflow                              | 4, 5       | pending                                                              |
+| 7   | Public marketplace (category bar, grid, detail page) | 5          | pending                                                              |
+| 8   | Favourites, plus the full-journey e2e test           | 7          | pending                                                              |

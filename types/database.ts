@@ -41,6 +41,335 @@ export type Database = {
 				}
 				Relationships: []
 			}
+			breeds: {
+				Row: {
+					hdb_approved: boolean | null
+					id: number
+					name: string
+					slug: string
+					species_id: number
+					specified_part: number | null
+				}
+				Insert: {
+					hdb_approved?: boolean | null
+					id?: never
+					name: string
+					slug: string
+					species_id: number
+					specified_part?: number | null
+				}
+				Update: {
+					hdb_approved?: boolean | null
+					id?: never
+					name?: string
+					slug?: string
+					species_id?: number
+					specified_part?: number | null
+				}
+				Relationships: [
+					{
+						foreignKeyName: "breeds_species_id_fkey"
+						columns: ["species_id"]
+						isOneToOne: false
+						referencedRelation: "species"
+						referencedColumns: ["id"]
+					},
+				]
+			}
+			categories: {
+				Row: {
+					icon: string
+					id: number
+					listing_type: string | null
+					name: string
+					requires_review: boolean
+					slug: string
+					sort_order: number
+					species_id: number | null
+					status: string
+					vertical: string
+				}
+				Insert: {
+					icon: string
+					id?: never
+					listing_type?: string | null
+					name: string
+					requires_review?: boolean
+					slug: string
+					sort_order: number
+					species_id?: number | null
+					status: string
+					vertical: string
+				}
+				Update: {
+					icon?: string
+					id?: never
+					listing_type?: string | null
+					name?: string
+					requires_review?: boolean
+					slug?: string
+					sort_order?: number
+					species_id?: number | null
+					status?: string
+					vertical?: string
+				}
+				Relationships: [
+					{
+						foreignKeyName: "categories_species_id_fkey"
+						columns: ["species_id"]
+						isOneToOne: false
+						referencedRelation: "species"
+						referencedColumns: ["id"]
+					},
+				]
+			}
+			listing_documents: {
+				Row: {
+					content_type: string
+					created_at: string
+					file_name: string
+					id: string
+					kind: string
+					listing_id: string
+					size_bytes: number
+					storage_path: string
+					uploaded_by: string
+				}
+				Insert: {
+					content_type: string
+					created_at?: string
+					file_name: string
+					id?: string
+					kind: string
+					listing_id: string
+					size_bytes: number
+					storage_path: string
+					uploaded_by: string
+				}
+				Update: {
+					content_type?: string
+					created_at?: string
+					file_name?: string
+					id?: string
+					kind?: string
+					listing_id?: string
+					size_bytes?: number
+					storage_path?: string
+					uploaded_by?: string
+				}
+				Relationships: [
+					{
+						foreignKeyName: "listing_documents_listing_id_fkey"
+						columns: ["listing_id"]
+						isOneToOne: false
+						referencedRelation: "listings"
+						referencedColumns: ["id"]
+					},
+				]
+			}
+			listings: {
+				Row: {
+					category_id: number
+					created_at: string
+					currency: string
+					description: string | null
+					id: string
+					price_cents: number | null
+					published_at: string | null
+					seller_id: string
+					status: string
+					status_changed_at: string
+					submitted_at: string | null
+					title: string | null
+					updated_at: string
+					vertical: string
+				}
+				Insert: {
+					category_id: number
+					created_at?: string
+					currency?: string
+					description?: string | null
+					id?: string
+					price_cents?: number | null
+					published_at?: string | null
+					seller_id: string
+					status?: string
+					status_changed_at?: string
+					submitted_at?: string | null
+					title?: string | null
+					updated_at?: string
+					vertical: string
+				}
+				Update: {
+					category_id?: number
+					created_at?: string
+					currency?: string
+					description?: string | null
+					id?: string
+					price_cents?: number | null
+					published_at?: string | null
+					seller_id?: string
+					status?: string
+					status_changed_at?: string
+					submitted_at?: string | null
+					title?: string | null
+					updated_at?: string
+					vertical?: string
+				}
+				Relationships: [
+					{
+						foreignKeyName: "listings_category_id_fkey"
+						columns: ["category_id"]
+						isOneToOne: false
+						referencedRelation: "categories"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "listings_seller_id_fkey"
+						columns: ["seller_id"]
+						isOneToOne: false
+						referencedRelation: "sellers"
+						referencedColumns: ["id"]
+					},
+				]
+			}
+			pet_health_records: {
+				Row: {
+					clinic: string | null
+					created_at: string
+					given_on: string
+					id: string
+					kind: string
+					listing_id: string
+					product: string
+				}
+				Insert: {
+					clinic?: string | null
+					created_at?: string
+					given_on: string
+					id?: string
+					kind: string
+					listing_id: string
+					product: string
+				}
+				Update: {
+					clinic?: string | null
+					created_at?: string
+					given_on?: string
+					id?: string
+					kind?: string
+					listing_id?: string
+					product?: string
+				}
+				Relationships: [
+					{
+						foreignKeyName: "pet_health_records_listing_id_fkey"
+						columns: ["listing_id"]
+						isOneToOne: false
+						referencedRelation: "listings"
+						referencedColumns: ["id"]
+					},
+				]
+			}
+			pet_listing_details: {
+				Row: {
+					breed_id: number | null
+					colour: string | null
+					cross_breed_id: number | null
+					date_of_birth: string | null
+					height_cm: number | null
+					listing_id: string
+					ready_date: string | null
+					sex: string | null
+					sterilised: boolean
+					vertical: string
+					weight_kg: number | null
+				}
+				Insert: {
+					breed_id?: number | null
+					colour?: string | null
+					cross_breed_id?: number | null
+					date_of_birth?: string | null
+					height_cm?: number | null
+					listing_id: string
+					ready_date?: string | null
+					sex?: string | null
+					sterilised?: boolean
+					vertical?: string
+					weight_kg?: number | null
+				}
+				Update: {
+					breed_id?: number | null
+					colour?: string | null
+					cross_breed_id?: number | null
+					date_of_birth?: string | null
+					height_cm?: number | null
+					listing_id?: string
+					ready_date?: string | null
+					sex?: string | null
+					sterilised?: boolean
+					vertical?: string
+					weight_kg?: number | null
+				}
+				Relationships: [
+					{
+						foreignKeyName: "pet_listing_details_breed_id_fkey"
+						columns: ["breed_id"]
+						isOneToOne: false
+						referencedRelation: "breeds"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "pet_listing_details_cross_breed_id_fkey"
+						columns: ["cross_breed_id"]
+						isOneToOne: false
+						referencedRelation: "breeds"
+						referencedColumns: ["id"]
+					},
+					{
+						foreignKeyName: "pet_listing_details_listing_id_vertical_fkey"
+						columns: ["listing_id", "vertical"]
+						isOneToOne: false
+						referencedRelation: "listings"
+						referencedColumns: ["id", "vertical"]
+					},
+				]
+			}
+			pet_listing_private: {
+				Row: {
+					arrival_date: string | null
+					import_permit_no: string | null
+					listing_id: string
+					microchip_no: string | null
+					source: string | null
+					source_licence_no: string | null
+				}
+				Insert: {
+					arrival_date?: string | null
+					import_permit_no?: string | null
+					listing_id: string
+					microchip_no?: string | null
+					source?: string | null
+					source_licence_no?: string | null
+				}
+				Update: {
+					arrival_date?: string | null
+					import_permit_no?: string | null
+					listing_id?: string
+					microchip_no?: string | null
+					source?: string | null
+					source_licence_no?: string | null
+				}
+				Relationships: [
+					{
+						foreignKeyName: "pet_listing_private_listing_id_fkey"
+						columns: ["listing_id"]
+						isOneToOne: true
+						referencedRelation: "listings"
+						referencedColumns: ["id"]
+					},
+				]
+			}
 			platform_admins: {
 				Row: {
 					created_at: string
@@ -387,6 +716,8 @@ export type Database = {
 					total: number
 				}[]
 			}
+			archive_listing: { Args: { p_listing_id: string }; Returns: undefined }
+			create_listing: { Args: { p_category: string; p_seller_id: string }; Returns: string }
 			create_seller: { Args: { p_seller_type: string; p_species: string[] }; Returns: string }
 			get_seller_feedback: {
 				Args: { p_seller_id: string }
@@ -396,6 +727,9 @@ export type Database = {
 					message: string
 				}[]
 			}
+			is_listing_editable: { Args: { p_listing_id: string }; Returns: boolean }
+			is_listing_member: { Args: { p_listing_id: string }; Returns: boolean }
+			is_listing_public: { Args: { p_listing_id: string }; Returns: boolean }
 			is_platform_admin: { Args: Record<PropertyKey, never>; Returns: boolean }
 			is_seller_member: { Args: { target_seller_id: string }; Returns: boolean }
 			review_seller: {
@@ -408,8 +742,11 @@ export type Database = {
 				}
 				Returns: undefined
 			}
+			revise_listing: { Args: { p_listing_id: string }; Returns: undefined }
 			seller_approval_checklist: { Args: Record<PropertyKey, never>; Returns: string[] }
 			seller_can_list: { Args: { target_seller_id: string; target_species_id: number }; Returns: boolean }
+			set_listing_availability: { Args: { p_listing_id: string; p_status: string }; Returns: undefined }
+			submit_listing_for_review: { Args: { p_listing_id: string }; Returns: undefined }
 			submit_seller_for_verification: { Args: { p_seller_id: string }; Returns: undefined }
 		}
 		Enums: {
