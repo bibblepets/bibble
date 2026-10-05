@@ -167,6 +167,44 @@ export type Database = {
 					},
 				]
 			}
+			listing_images: {
+				Row: {
+					created_at: string
+					height: number
+					id: string
+					listing_id: string
+					position: number
+					storage_path: string
+					width: number
+				}
+				Insert: {
+					created_at?: string
+					height: number
+					id?: string
+					listing_id: string
+					position: number
+					storage_path: string
+					width: number
+				}
+				Update: {
+					created_at?: string
+					height?: number
+					id?: string
+					listing_id?: string
+					position?: number
+					storage_path?: string
+					width?: number
+				}
+				Relationships: [
+					{
+						foreignKeyName: "listing_images_listing_id_fkey"
+						columns: ["listing_id"]
+						isOneToOne: false
+						referencedRelation: "listings"
+						referencedColumns: ["id"]
+					},
+				]
+			}
 			listings: {
 				Row: {
 					category_id: number
@@ -689,6 +727,10 @@ export type Database = {
 			[_ in never]: never
 		}
 		Functions: {
+			add_listing_image: {
+				Args: { p_height: number; p_listing_id: string; p_storage_path: string; p_width: number }
+				Returns: string
+			}
 			admin_correct_seller: {
 				Args: {
 					p_internal_note: string
@@ -732,6 +774,9 @@ export type Database = {
 			is_listing_public: { Args: { p_listing_id: string }; Returns: boolean }
 			is_platform_admin: { Args: Record<PropertyKey, never>; Returns: boolean }
 			is_seller_member: { Args: { target_seller_id: string }; Returns: boolean }
+			listing_images_guard: { Args: { p_listing_id: string }; Returns: undefined }
+			remove_listing_image: { Args: { p_image_id: string }; Returns: string }
+			reorder_listing_images: { Args: { p_image_ids: string[]; p_listing_id: string }; Returns: undefined }
 			review_seller: {
 				Args: {
 					p_checklist?: string[]

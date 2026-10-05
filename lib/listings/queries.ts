@@ -2,6 +2,7 @@ import "server-only"
 
 import { createClient } from "@/lib/supabase/server"
 import { cache } from "react"
+import { listingImageUrl } from "./images"
 import type { ListingStatus } from "./status"
 
 export type Breed = { id: number; name: string; specifiedPart: number | null }
@@ -29,6 +30,8 @@ export type SellerListingRow = {
 	crossBreedName: string | null
 	dateOfBirth: string | null
 	updatedAt: string
+	/** Public URL of the cover photo, if any. */
+	coverUrl: string | null
 }
 
 /** A seller's listings, most recently updated first. RLS limits this to members and admins. */
@@ -38,6 +41,7 @@ export const listSellerListings = cache(async (sellerId: string): Promise<Seller
 		.from("listings")
 		.select(
 			`id, title, status, price_cents, updated_at,
+			listing_images ( storage_path, position ),
 			details:pet_listing_details (
 				date_of_birth,
 				breed:breeds!pet_listing_details_breed_id_fkey ( name ),
@@ -51,6 +55,7 @@ export const listSellerListings = cache(async (sellerId: string): Promise<Seller
 	}
 	return data.map((row) => {
 		const details = row.details[0]
+		const cover = row.listing_images.find((image) => image.position === 0)
 		return {
 			id: row.id,
 			title: row.title,
@@ -60,6 +65,7 @@ export const listSellerListings = cache(async (sellerId: string): Promise<Seller
 			crossBreedName: details?.cross?.name ?? null,
 			dateOfBirth: details?.date_of_birth ?? null,
 			updatedAt: row.updated_at,
+			coverUrl: cover ? listingImageUrl(cover.storage_path) : null,
 		}
 	})
 })
@@ -71,6 +77,8 @@ export type HealthRecord = {
 	product: string
 	clinic: string | null
 }
+
+export type ListingImage = { id: string; url: string; position: number; width: number; height: number }
 
 export type ListingDocument = { id: string; kind: string; fileName: string; sizeBytes: number; createdAt: string }
 
@@ -103,6 +111,9 @@ export type ListingForEdit = {
 	/** The newest document of each kind. */
 	documents: Record<string, ListingDocument>
 	documentKinds: string[]
+	/** Photos in display order; the first is the cover. */
+	images: ListingImage[]
+	imageCount: number
 }
 
 const breedColumns = "id, name, specified_part"
@@ -122,7 +133,8 @@ export const getListingForEdit = cache(async (listingId: string): Promise<Listin
 			),
 			private:pet_listing_private ( microchip_no, source, source_licence_no, import_permit_no, arrival_date ),
 			pet_health_records ( id, kind, given_on, product, clinic ),
-			listing_documents ( id, kind, file_name, size_bytes, created_at )`
+			listing_documents ( id, kind, file_name, size_bytes, created_at ),
+			listing_images ( id, storage_path, position, width, height )`
 		)
 		.eq("id", listingId)
 		.maybeSingle()
@@ -183,5 +195,15 @@ export const getListingForEdit = cache(async (listingId: string): Promise<Listin
 			.toSorted((a, b) => a.givenOn.localeCompare(b.givenOn)),
 		documents,
 		documentKinds: Object.keys(documents),
+		images: row.listing_images
+			.map((image) => ({
+				id: image.id,
+				url: listingImageUrl(image.storage_path),
+				position: image.position,
+				width: image.width,
+				height: image.height,
+			}))
+			.toSorted((a, b) => a.position - b.position),
+		imageCount: row.listing_images.length,
 	}
 })

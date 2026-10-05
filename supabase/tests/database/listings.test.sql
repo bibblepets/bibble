@@ -1,7 +1,7 @@
 -- Listings: creation, visibility, locking, AVS checks on submit, availability, revise, archive and delete.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(58);
+select plan(59);
 
 -- Fixtures (as postgres): a verified pet shop owned by `owner`, a pending seller owned by `newbie`, and a stranger.
 insert into auth.users (id, email, aud, role)
@@ -162,6 +162,11 @@ select throws_ok(
 update public.pet_listing_private set arrival_date = current_date - 10 where listing_id = current_setting('test.id')::uuid;
 select throws_ok(
 	$$ select public.submit_listing_for_review(current_setting('test.id')::uuid) $$,
+	'P0001', 'missing_photos', 'at least one photo is required'
+);
+select public.add_listing_image(current_setting('test.id')::uuid, current_setting('test.id') || '/photo.webp', 1600, 1200);
+select throws_ok(
+	$$ select public.submit_listing_for_review(current_setting('test.id')::uuid) $$,
 	'P0001', 'missing_vaccination_card', 'the vaccination card is required'
 );
 insert into public.listing_documents (listing_id, kind, storage_path, file_name, content_type, size_bytes, uploaded_by)
@@ -310,6 +315,8 @@ select throws_ok(
 );
 update public.pet_listing_private set source = 'bred_on_premises', source_licence_no = null
 where listing_id = 'bbbbbbbb-0000-0000-0000-000000000001';
+select public.add_listing_image('bbbbbbbb-0000-0000-0000-000000000001',
+	'bbbbbbbb-0000-0000-0000-000000000001/photo.webp', 1600, 1200);
 select lives_ok(
 	$$ select public.submit_listing_for_review('bbbbbbbb-0000-0000-0000-000000000001') $$,
 	'the seeded breeder listing satisfies every rule'

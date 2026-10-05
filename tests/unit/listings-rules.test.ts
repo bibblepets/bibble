@@ -40,6 +40,7 @@ const complete: ListingRuleInput = {
 		{ kind: "vaccination", givenOn: "2026-09-21" },
 	],
 	documentKinds: ["vaccination_card"],
+	imageCount: 1,
 }
 
 const codes = (listing: Partial<ListingRuleInput>, seller = shop) =>
@@ -103,6 +104,7 @@ describe("submitIssues", () => {
 				source: null,
 				healthRecords: [],
 				documentKinds: [],
+				imageCount: 0,
 			},
 			{ sellerType: "pet_shop", canList: false },
 			today
@@ -115,9 +117,10 @@ describe("submitIssues", () => {
 			"missing_details",
 			"vaccinations_incomplete",
 			"deworming_incomplete",
+			"missing_photos",
 			"missing_vaccination_card",
 		])
-		expect([...incompleteSections(issues)]).toEqual(["animal", "listing", "health", "source", "documents"])
+		expect([...incompleteSections(issues)]).toEqual(["animal", "listing", "health", "source", "photos", "documents"])
 	})
 
 	it.each([
@@ -143,6 +146,7 @@ describe("submitIssues", () => {
 		["a breeder licence missing", { sourceLicenceNo: null }, "invalid_source"],
 		["a pet shop claiming it bred the animal", { source: "bred_on_premises" }, "invalid_source"],
 		["no vaccination card", { documentKinds: [] }, "missing_vaccination_card"],
+		["no photos", { imageCount: 0 }, "missing_photos"],
 	])("flags %s", (_label, listing, code) => {
 		expect(codes(listing)).toContain(code)
 	})

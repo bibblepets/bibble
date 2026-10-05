@@ -8,6 +8,7 @@ import { formatPrice, listingFilters, type ListingFilter } from "@/lib/listings/
 import { requireSeller } from "@/lib/sellers/queries"
 import { cn } from "@/lib/utils"
 import type { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
 
 export const metadata: Metadata = { title: "Your listings" }
@@ -69,11 +70,21 @@ export default async function SellerListingsPage({ searchParams }: PageProps<"/s
 						return (
 							<li key={row.id}>
 								<Link href={`/seller/listings/${row.id}`} className="hover:bg-muted/50 flex items-center gap-4 p-4">
-									<PetPlaceholder
-										label={breed || "New listing"}
-										seed={row.id}
-										className="size-16 shrink-0 [&_span]:text-lg"
-									/>
+									{row.coverUrl ? (
+										<Image
+											src={row.coverUrl}
+											alt=""
+											width={64}
+											height={64}
+											className="size-16 shrink-0 rounded-xl object-cover"
+										/>
+									) : (
+										<PetPlaceholder
+											label={breed || "New listing"}
+											seed={row.id}
+											className="size-16 shrink-0 [&_span]:text-lg"
+										/>
+									)}
 									<div className="min-w-0 flex-1">
 										<p className="truncate font-semibold">{row.title ?? "Untitled draft"}</p>
 										<p className="text-muted-foreground truncate text-sm">
